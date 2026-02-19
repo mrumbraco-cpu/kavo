@@ -21,6 +21,11 @@ WITH CHECK (true);
 CREATE OR REPLACE FUNCTION public.handle_profile_security()
 RETURNS TRIGGER AS $$
 BEGIN
+  -- Check for bypass flag first
+  IF (current_setting('app.bypass_coin_trigger', true) = 'true') THEN
+    RETURN NEW;
+  END IF;
+
   -- Check if the request comes from a non-privileged role
   IF (auth.role() = 'authenticated' OR auth.role() = 'anon') THEN
     

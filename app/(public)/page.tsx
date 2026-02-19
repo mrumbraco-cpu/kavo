@@ -2,15 +2,15 @@ import Link from "next/link";
 
 export default function Home() {
     return (
-        <main className="flex min-h-screen flex-col items-center">
+        <div className="flex flex-col items-center">
             {/* Hero Section */}
-            <section className="relative w-full h-[90vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-white">
+            <section className="relative w-full min-h-[88vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-white">
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-premium-100 rounded-full blur-[120px] opacity-40 animate-premium-float"></div>
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-50 rounded-full blur-[120px] opacity-30 animate-premium-float" style={{ animationDelay: '1.5s' }}></div>
+                    <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-premium-100 rounded-full blur-[120px] opacity-40 animate-float"></div>
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-50 rounded-full blur-[120px] opacity-30 animate-float" style={{ animationDelay: '1.5s' }}></div>
                 </div>
 
-                <div className="relative z-10 max-w-5xl animate-premium-fade-up">
+                <div className="relative z-10 max-w-5xl animate-fade-up">
                     <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-premium-950 mb-8 leading-[1.1]">
                         Chia sẻ không gian <br />
                         <span className="text-premium-700">Linh hoạt & Đẳng cấp</span>
@@ -68,7 +68,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Premium Categories Section */}
+            {/* Categories Section */}
             <section className="w-full py-32 md:py-48 px-4 bg-white">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
@@ -76,19 +76,18 @@ export default function Home() {
                             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-premium-900 leading-tight">Mọi không gian <br />đều mang giá trị di sản</h2>
                             <p className="text-lg text-premium-500 font-light">Từ những workshop nghệ thuật đến các sự kiện doanh nghiệp cao cấp, chúng tôi kết nối bạn với những không gian xứng tầm.</p>
                         </div>
-                        <div className="hidden md:block w-32 h-px bg-premium-100 mb-6"></div>
                     </div>
 
                     <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
                         {['Workshop', 'Lớp học', 'Studio', 'Họp nhóm', 'Sự kiện'].map((item, index) => (
-                            <div key={index} className="flex flex-col items-center justify-center aspect-square rounded-[2.5rem] border border-premium-50 bg-premium-50/30 hover:bg-white hover:border-accent-gold hover:shadow-xl transition-all duration-500 group cursor-pointer">
+                            <Link key={index} href={`/search?suitable_for=${encodeURIComponent(item)}`} className="flex flex-col items-center justify-center aspect-square rounded-[2.5rem] border border-premium-50 bg-premium-50/30 hover:bg-white hover:border-accent-gold hover:shadow-xl transition-all duration-500 group cursor-pointer">
                                 <div className="w-16 h-16 bg-white rounded-3xl shadow-sm mb-6 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-premium-900 group-hover:text-white">
                                     <span className="text-2xl opacity-50">
                                         {item[0]}
                                     </span>
                                 </div>
-                                <span className="font-heading font-bold text-premium-700 group-hover:text-premium-900 transition-colors uppercase tracking-widest text-xs">{item}</span>
-                            </div>
+                                <span className="font-bold text-premium-700 group-hover:text-premium-900 transition-colors uppercase tracking-widest text-xs">{item}</span>
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -101,16 +100,22 @@ export default function Home() {
                     <div className="absolute bottom-0 left-0 w-[50%] h-full bg-premium-800/20 blur-[150px]"></div>
                 </div>
                 <div className="max-w-4xl mx-auto text-center relative z-10">
-                    <h2 className="text-5xl md:text-7xl font-bold mb-10 leading-tight animate-premium-fade-in">Sẵn sàng nâng tầm <br />kết nối?</h2>
+                    <h2 className="text-5xl md:text-7xl font-bold mb-10 leading-tight animate-fade-in">Sẵn sàng nâng tầm <br />kết nối?</h2>
                     <p className="text-xl text-premium-400 mb-14 font-light max-w-2xl mx-auto leading-relaxed">
-                        Tham gia cộng đồng tinh hoa, nơi mọi không gian và dự án đều được trân trọng và kết nối một cách chuyên nghiệp nhất.
+                        Tham gia cộng đồng, nơi mọi không gian và dự án đều được kết nối một cách chuyên nghiệp nhất.
                     </p>
                     <div className="flex flex-wrap justify-center gap-8">
                         <Link
-                            href="/auth/register"
+                            href="/search"
                             className="px-14 py-6 bg-accent-gold text-premium-950 rounded-full font-bold text-xl hover:bg-yellow-500 transition-all hover:scale-105 shadow-2xl shadow-accent-gold/20"
                         >
-                            Bắt đầu hành trình
+                            Khám phá ngay
+                        </Link>
+                        <Link
+                            href="/auth/register"
+                            className="px-14 py-6 bg-white/10 border border-white/20 text-white rounded-full font-bold text-xl hover:bg-white/20 transition-all hover:scale-105"
+                        >
+                            Đăng không gian
                         </Link>
                     </div>
                     <p className="mt-16 text-premium-600 text-sm font-light tracking-wide uppercase">
@@ -118,33 +123,6 @@ export default function Home() {
                     </p>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="w-full py-20 px-4 border-t border-premium-100 bg-white">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-12 mb-16">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-premium-900 rounded-xl rotate-45 flex items-center justify-center">
-                                <span className="text-white text-xl font-bold -rotate-45">S</span>
-                            </div>
-                            <span className="text-2xl font-heading font-black text-premium-900 tracking-tighter uppercase">SPSHARE</span>
-                        </div>
-                        <div className="flex gap-12 text-premium-500 font-medium tracking-widest text-xs uppercase">
-                            <Link href="#" className="hover:text-premium-900 transition-colors">Điều khoản</Link>
-                            <Link href="#" className="hover:text-premium-900 transition-colors">Bảo mật</Link>
-                            <Link href="#" className="hover:text-premium-900 transition-colors">Liên hệ chuyên gia</Link>
-                        </div>
-                    </div>
-                    <div className="pt-12 border-t border-premium-50 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <div className="text-premium-300 text-xs font-light tracking-widest uppercase">
-                            © 2026 SPSHARE. PREMIUM CONNECTION PLATFORM.
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-8 h-px bg-premium-100"></div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </main>
+        </div>
     );
 }
