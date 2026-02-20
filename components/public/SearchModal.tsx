@@ -45,6 +45,32 @@ const LOCATION_ICONS: Record<string, any> = {
     'Khác': Building,
 };
 
+const normalizeString = (str: string) => {
+    return str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '');
+};
+
+const formatCurrencyInput = (val: string) => {
+    if (!val) return '';
+    const digits = val.replace(/\D/g, '');
+    if (!digits) return '';
+    return new Intl.NumberFormat('vi-VN').format(Number(digits));
+};
+
+const PRICE_PRESETS = [
+    { label: 'Dưới 50K', min: '0', max: '50000' },
+    { label: '50K - 100K', min: '50000', max: '100000' },
+    { label: '100K - 200K', min: '100000', max: '200000' },
+    { label: '200K - 500K', min: '200000', max: '500000' },
+    { label: '500K - 1M', min: '500000', max: '1000000' },
+    { label: '1M - 2M', min: '1000000', max: '2000000' },
+    { label: '2M - 5M', min: '2000000', max: '5000000' },
+    { label: 'Trên 5M', min: '5000000', max: '' },
+];
+
 export default function SearchModal() {
     const {
         isModalOpen,
@@ -88,8 +114,8 @@ export default function SearchModal() {
         setDraftFilters({
             geoSystem: confirmedFilters.geoSystem,
             province: '',
-            district: '',
-            ward: '',
+            district: [],
+            ward: [],
             query: '',
             spaceTypes: [],
             locationTypes: [],
@@ -102,7 +128,7 @@ export default function SearchModal() {
         });
     };
 
-    const canSubmit = draftFilters.province !== '';
+    const canSubmit = draftFilters.province !== '' && (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
 
     const provinces = draftFilters.geoSystem === 'old' ? PROVINCES_OLD : PROVINCES_NEW;
     const districtData = draftFilters.geoSystem === 'old'
@@ -110,34 +136,29 @@ export default function SearchModal() {
         : (draftFilters.province ? WARDS_NEW_BY_PROVINCE[draftFilters.province] ?? [] : []);
 
     const filteredProvinces = provinces.filter(p =>
-        p.toLowerCase().includes(locationSearch.toLowerCase())
+        normalizeString(p).includes(normalizeString(locationSearch))
     );
 
     const filteredDistricts = districtData.filter(d =>
-        d.toLowerCase().includes(locationSearch.toLowerCase())
+        normalizeString(d).includes(normalizeString(locationSearch))
     );
 
     const handleSelectProvince = (p: string) => {
         set('province', p);
-        set('district', '');
-        set('ward', '');
+        set('district', []);
+        set('ward', []);
         setLocationStep('district');
         setLocationSearch('');
     };
 
     const handleToggleDistrict = (d: string) => {
-        // According to SEARCH_AND_FILTER_BEHAVIOR, district is optional for old, ward is REQUIRED for new.
-        // Wait, the current SearchFilters state only has one district/ward string. 
-        // Let's check the types/search.ts.
-        // It says string, not string[]. 
-        // But the UI in the image shows multi-select.
-        // I should probably update the SearchFilters to support multiple districts/wards or just pick one for now to stay safe with existing API.
-        // Actually, SEARCH_AND_FILTER_BEHAVIOR.md says "District (OPTIONAL)" and "Ward (REQUIRED)".
-        // I'll stick to single select for now as per current SearchFilters type to avoid breaking other things.
-        if (draftFilters.geoSystem === 'old') {
-            set('district', d === draftFilters.district ? '' : d);
+        const key = draftFilters.geoSystem === 'old' ? 'district' : 'ward';
+        const current = draftFilters[key] as string[];
+        if (current.includes(d)) {
+            set(key, current.filter(x => x !== d) as any);
         } else {
-            set('ward', d === draftFilters.ward ? '' : d);
+            if (current.length >= 5) return;
+            set(key, [...current, d] as any);
         }
     };
 
@@ -149,9 +170,7 @@ export default function SearchModal() {
             draftFilters.suitableFor.length +
             draftFilters.amenities.length +
             draftFilters.timeOfDay.length +
-            (draftFilters.query ? 1 : 0) +
-            (draftFilters.province ? 1 : 0) +
-            (draftFilters.district || draftFilters.ward ? 1 : 0)
+            (draftFilters.query ? 1 : 0)
         );
     };
 
@@ -187,8 +206,8 @@ export default function SearchModal() {
                                     onClick={() => {
                                         set('geoSystem', 'old');
                                         set('province', '');
-                                        set('district', '');
-                                        set('ward', '');
+                                        set('district', []);
+                                        set('ward', []);
                                     }}
                                     className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${draftFilters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
                                 >
@@ -198,8 +217,8 @@ export default function SearchModal() {
                                     onClick={() => {
                                         set('geoSystem', 'new');
                                         set('province', '');
-                                        set('district', '');
-                                        set('ward', '');
+                                        set('district', []);
+                                        set('ward', []);
                                     }}
                                     className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${draftFilters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
                                 >
@@ -242,10 +261,10 @@ export default function SearchModal() {
                                         <div className="text-[10px] font-bold text-premium-400 uppercase tracking-tight">
                                             {draftFilters.geoSystem === 'old' ? 'Quận/Huyện' : 'Phường/Xã/Quận'}
                                         </div>
-                                        <div className="text-sm font-bold text-premium-900">
+                                        <div className="text-sm font-bold text-premium-900 truncate max-w-[180px]">
                                             {draftFilters.geoSystem === 'old'
-                                                ? (draftFilters.district || 'Chọn Quận/Huyện')
-                                                : (draftFilters.ward || 'Chọn Phường/Xã/Quận')
+                                                ? (draftFilters.district.length > 0 ? draftFilters.district.join(', ') : 'Chọn Quận/Huyện')
+                                                : (draftFilters.ward.length > 0 ? draftFilters.ward.join(', ') : 'Chọn Phường/Xã/Quận')
                                             }
                                         </div>
                                     </div>
@@ -274,10 +293,7 @@ export default function SearchModal() {
                                     ...draftFilters.suitableFor,
                                     ...draftFilters.amenities,
                                     ...draftFilters.timeOfDay,
-                                    ...(draftFilters.query ? [draftFilters.query] : []),
-                                    ...(draftFilters.province ? [draftFilters.province] : []),
-                                    ...(draftFilters.district ? [draftFilters.district] : []),
-                                    ...(draftFilters.ward ? [draftFilters.ward] : [])
+                                    ...(draftFilters.query ? [draftFilters.query] : [])
                                 ].map((item, i) => (
                                     <span
                                         key={i}
@@ -287,9 +303,9 @@ export default function SearchModal() {
                                         <button
                                             onClick={() => {
                                                 if (draftFilters.query === item) set('query', '');
-                                                else if (draftFilters.province === item) { set('province', ''); set('district', ''); set('ward', ''); }
-                                                else if (draftFilters.district === item) set('district', '');
-                                                else if (draftFilters.ward === item) set('ward', '');
+                                                else if (draftFilters.province === item) { set('province', ''); set('district', []); set('ward', []); }
+                                                else if (draftFilters.district.includes(item)) handleToggleDistrict(item);
+                                                else if (draftFilters.ward.includes(item)) handleToggleDistrict(item);
                                                 else if (draftFilters.spaceTypes.includes(item)) toggleArray('spaceTypes', item);
                                                 else if (draftFilters.locationTypes.includes(item)) toggleArray('locationTypes', item);
                                                 else if (draftFilters.suitableFor.includes(item)) toggleArray('suitableFor', item);
@@ -395,28 +411,62 @@ export default function SearchModal() {
 
                     {/* Price Range */}
                     <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Khoảng giá (VNĐ)</h3>
-                        <div className="flex items-center gap-4">
-                            <div className="flex-1 relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-premium-300">Từ</span>
-                                <input
-                                    type="number"
-                                    placeholder="Giá tối thiểu"
-                                    value={draftFilters.priceMin}
-                                    onChange={e => set('priceMin', e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-premium-50/50 border border-premium-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-premium-900"
-                                />
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider">Khoảng giá</h3>
+                            <ChevronDown className="w-4 h-4 text-premium-400" />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-premium-400 uppercase ml-1">Từ</label>
+                                <div className="relative group">
+                                    <input
+                                        type="text"
+                                        placeholder="0"
+                                        value={formatCurrencyInput(draftFilters.priceMin)}
+                                        onChange={e => set('priceMin', e.target.value.replace(/\D/g, ''))}
+                                        className="w-full pl-4 pr-10 py-3 bg-white border border-premium-100 rounded-xl text-sm font-bold text-premium-900 focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-premium-300">đ</span>
+                                </div>
                             </div>
-                            <div className="w-4 h-px bg-premium-200" />
-                            <div className="flex-1 relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-premium-300">Đến</span>
-                                <input
-                                    type="number"
-                                    placeholder="Giá tối đa"
-                                    value={draftFilters.priceMax}
-                                    onChange={e => set('priceMax', e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-premium-50/50 border border-premium-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-premium-900"
-                                />
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-bold text-premium-400 uppercase ml-1">Đến</label>
+                                <div className="relative group">
+                                    <input
+                                        type="text"
+                                        placeholder="Không giới hạn"
+                                        value={formatCurrencyInput(draftFilters.priceMax)}
+                                        onChange={e => set('priceMax', e.target.value.replace(/\D/g, ''))}
+                                        className="w-full pl-4 pr-10 py-3 bg-white border border-premium-100 rounded-xl text-sm font-bold text-premium-900 focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-premium-300">đ</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="text-[10px] font-bold text-premium-400 uppercase tracking-wider mb-3 ml-1">Khoảng giá phổ biến</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {PRICE_PRESETS.map((preset) => {
+                                    const isSelected = draftFilters.priceMin === preset.min && draftFilters.priceMax === preset.max;
+                                    return (
+                                        <button
+                                            key={preset.label}
+                                            type="button"
+                                            onClick={() => {
+                                                set('priceMin', preset.min);
+                                                set('priceMax', preset.max);
+                                            }}
+                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all text-left ${isSelected
+                                                    ? 'bg-premium-900 text-white border-premium-900'
+                                                    : 'bg-premium-50/50 text-premium-600 border-transparent hover:bg-premium-100 hover:text-premium-900'
+                                                }`}
+                                        >
+                                            {preset.label}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -549,8 +599,8 @@ export default function SearchModal() {
                             ) : (
                                 filteredDistricts.map(d => {
                                     const isSelected = draftFilters.geoSystem === 'old'
-                                        ? draftFilters.district === d
-                                        : draftFilters.ward === d;
+                                        ? draftFilters.district.includes(d)
+                                        : draftFilters.ward.includes(d);
                                     return (
                                         <button
                                             key={d}
@@ -566,10 +616,30 @@ export default function SearchModal() {
                         </div>
 
                         {/* Sub-footer */}
-                        <div className="px-8 py-6 bg-premium-50/50 border-t border-premium-100 flex items-center justify-center">
-                            <p className="text-xs text-premium-400 font-medium italic">
-                                {locationStep === 'province' ? "Vui lòng chọn khu vực yêu thích của bạn" : "Nhấn để chọn và tiếp tục"}
-                            </p>
+                        <div className="px-8 py-6 bg-premium-50/50 border-t border-premium-100 flex items-center justify-between gap-4">
+                            <div className="flex-1">
+                                {locationStep === 'district' && (
+                                    <p className="text-xs text-premium-500 font-medium">
+                                        Đã chọn {draftFilters.geoSystem === 'old' ? draftFilters.district.length : draftFilters.ward.length}/5
+                                        {draftFilters.geoSystem === 'new' && (
+                                            <span className="text-red-500 ml-1 ml-1">* Bắt buộc</span>
+                                        )}
+                                    </p>
+                                )}
+                                {locationStep === 'province' && (
+                                    <p className="text-xs text-premium-400 font-medium italic">Vui lòng chọn khu vực yêu thích của bạn</p>
+                                )}
+                            </div>
+
+                            {locationStep === 'district' && (
+                                <button
+                                    onClick={() => setLocationStep('none')}
+                                    disabled={draftFilters.geoSystem === 'new' && draftFilters.ward.length === 0}
+                                    className="px-8 py-2.5 bg-premium-900 text-white rounded-xl font-bold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                >
+                                    Xác nhận
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Listing } from '@/types/listing';
 
 // Types are now handled via types/goong.d.ts
@@ -25,6 +25,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     const markersRef = useRef<Map<string, goongjs.Marker>>(new Map());
     const isInitializedRef = useRef(false);
     const scriptLoadedRef = useRef(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const getMarkerColor = useCallback((id: string, hovered: string | null): string => {
         if (id === hovered) return MARKER_HOVERED_COLOR;
@@ -156,8 +157,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         map.on('load', () => {
             mapRef.current = map;
             map.resize();
-            syncMarkers();
-            fitMarkers();
+            setIsLoaded(true);
         });
     }, [syncMarkers, fitMarkers]);
 
@@ -197,12 +197,35 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return () => resizeObserver.disconnect();
     }, []);
 
-    // Sync markers and fit bounds
+    // Sync markers (visuals) only when data changes or map is ready
     useEffect(() => {
-        if (!isInitializedRef.current) return;
+        if (!isLoaded) return;
         syncMarkers();
+    }, [isLoaded, syncMarkers]);
+
+    // Fit bounds ONLY when map is ready or results change
+    useEffect(() => {
+        if (!isLoaded) return;
         fitMarkers();
-    }, [syncMarkers, fitMarkers]);
+    }, [isLoaded, allListings, fitMarkers]);
+
+    // Smart hover re-center: Only move map if the marker is NOT in the current view
+    useEffect(() => {
+        if (!isLoaded || !hoveredListingId || !mapRef.current) return;
+
+        const listing = allListings.find(l => l.id === hoveredListingId);
+        if (listing && listing.latitude && listing.longitude) {
+            const map = mapRef.current;
+            const bounds = map.getBounds();
+            const coords: [number, number] = [listing.longitude, listing.latitude];
+
+            // User Rule: Only re-center if the marker is OUTSIDE the current viewport.
+            // Requirement update: re-center by fitting bounds for all results instead of zooming to one marker.
+            if (!bounds.contains(coords)) {
+                fitMarkers();
+            }
+        }
+    }, [isLoaded, hoveredListingId, allListings, fitMarkers]);
 
     return (
         <div className="relative w-full h-full">

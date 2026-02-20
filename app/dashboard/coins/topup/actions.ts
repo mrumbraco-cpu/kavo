@@ -6,7 +6,7 @@ import { headers } from 'next/headers'
 import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function createPaymentRequest(amount: number) {
+export async function createPaymentRequest(amount: number, nextPath?: string) {
     try {
         const user = await requireAuth()
 
@@ -28,14 +28,16 @@ export async function createPaymentRequest(amount: number) {
         // Simplify description to ASCII only, no spaces
         const description = `Nap_xu_${amount}_VND`
 
+        const nextQuery = nextPath ? `&next=${encodeURIComponent(nextPath)}` : ''
+
         const { endpoint, payload } = createPaymentUrl({
             amount,
             orderId,
             description,
             userId: user.id,
-            successUrl: `${baseUrl}/dashboard/coins/topup/success?order_id=${orderId}`,
-            errorUrl: `${baseUrl}/dashboard/coins/topup/error?order_id=${orderId}`,
-            cancelUrl: `${baseUrl}/dashboard/coins/topup?status=cancelled&order_id=${orderId}`,
+            successUrl: `${baseUrl}/dashboard/coins/topup/success?order_id=${orderId}${nextQuery}`,
+            errorUrl: `${baseUrl}/dashboard/coins/topup/error?order_id=${orderId}${nextQuery}`,
+            cancelUrl: `${baseUrl}/dashboard/coins/topup?status=cancelled&order_id=${orderId}${nextQuery}`,
         })
 
         return {

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { Mail, Lock, AlertCircle, Loader2, ArrowRight, UserPlus } from 'lucide-react'
 import { registerAction } from '@/app/auth/register/actions'
@@ -30,14 +30,16 @@ const GoogleIcon = () => (
     </svg>
 )
 
-export default function RegisterForm() {
+function RegisterContent() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const searchParams = useSearchParams()
     const supabase = createBrowserSupabaseClient()
+    const next = searchParams.get('next') || '/dashboard'
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -63,7 +65,7 @@ export default function RegisterForm() {
         } else if (result.redirect) {
             router.push(result.redirect)
         } else {
-            router.push(`/auth/login?message=${encodeURIComponent(result.message || '')}`)
+            router.push(`/auth/login?message=${encodeURIComponent(result.message || '')}&next=${encodeURIComponent(next)}`)
         }
     }
 
@@ -75,7 +77,7 @@ export default function RegisterForm() {
             const { error: oauthError } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
                 },
             })
             if (oauthError) throw oauthError
@@ -175,7 +177,7 @@ export default function RegisterForm() {
                 <div className="mt-8 pt-6 border-t border-gray-100 text-center">
                     <p className="text-gray-600 text-sm">
                         Đã có tài khoản?{' '}
-                        <Link href="/auth/login" className="font-bold text-blue-600 hover:underline">
+                        <Link href={`/auth/login${next !== '/dashboard' ? `?next=${encodeURIComponent(next)}` : ''}`} className="font-bold text-blue-600 hover:underline">
                             Đăng nhập
                         </Link>
                     </p>
@@ -186,5 +188,17 @@ export default function RegisterForm() {
                 Bằng cách đăng ký, bạn đồng ý với Điều khoản & Chính sách của chúng tôi.
             </p>
         </div>
+    )
+}
+
+export default function RegisterForm() {
+    return (
+        <Suspense fallback={
+            <div className="w-full max-w-md flex justify-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-gray-300" />
+            </div>
+        }>
+            <RegisterContent />
+        </Suspense>
     )
 }

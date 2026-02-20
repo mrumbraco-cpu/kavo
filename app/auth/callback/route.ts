@@ -8,10 +8,8 @@ export async function GET(request: Request) {
     const origin = requestUrl.origin
 
     const code = requestUrl.searchParams.get('code')
-    const next = requestUrl.searchParams.get('next') ?? '/dashboard'
-
-    // Prevent open redirect
-    const nextPath = next.startsWith('/') ? next : '/dashboard'
+    const nextParam = requestUrl.searchParams.get('next')
+    const nextPath = nextParam && nextParam.startsWith('/') && nextParam !== '/' ? nextParam : '/dashboard'
 
     if (code) {
         const supabase = await createServerSupabaseClient()

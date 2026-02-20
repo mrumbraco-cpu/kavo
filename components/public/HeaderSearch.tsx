@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearch } from '@/lib/context/SearchContext';
+import { usePathname } from 'next/navigation';
 import {
     MapPin,
     SlidersHorizontal
@@ -8,6 +9,9 @@ import {
 
 export default function HeaderSearch() {
     const { filters, setModalOpen } = useSearch();
+    const pathname = usePathname();
+
+    if (pathname !== '/search') return null;
 
     return (
         <div className="hidden lg:flex items-center p-1 bg-premium-50 border border-premium-100 rounded-2xl shadow-sm hover:shadow-md transition-all">

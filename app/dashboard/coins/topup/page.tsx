@@ -38,7 +38,9 @@ export default function TopupPage() {
 
                     if (result.success) {
                         // Actually success! Redirect to success page
-                        router.push(`/dashboard/coins/topup/success?order_id=${orderId}`)
+                        const next = searchParams.get('next')
+                        const nextQuery = next ? `&next=${encodeURIComponent(next)}` : ''
+                        router.push(`/dashboard/coins/topup/success?order_id=${orderId}${nextQuery}`)
                         return
                     }
                     else {
@@ -60,7 +62,8 @@ export default function TopupPage() {
         setIsLoading(true)
         setError(null)
         try {
-            const result = await createPaymentRequest(parseInt(amount))
+            const next = searchParams.get('next')
+            const result = await createPaymentRequest(parseInt(amount), next || undefined)
             if (result.success && result.endpoint) {
                 // Determine if we need to POST (payload exists) or GET (link only)
                 // SePay SDK usually returns a full Checkout URL (GET) if no payload is separate.
@@ -113,13 +116,23 @@ export default function TopupPage() {
 
     return (
         <div className="max-w-2xl mx-auto px-4 py-8">
-            <Link
-                href="/dashboard/coins"
-                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
-            >
-                <ArrowLeft className="w-4 h-4 mr-1" />
-                Quay lại ví của bạn
-            </Link>
+            {searchParams.get('next') ? (
+                <Link
+                    href={searchParams.get('next') || '/dashboard/coins'}
+                    className="inline-flex items-center text-sm text-premium-600 hover:text-premium-900 mb-6 transition-colors font-medium"
+                >
+                    <ArrowLeft className="w-4 h-4 mr-1" />
+                    Quay lại xem không gian
+                </Link>
+            ) : (
+                <Link
+                    href="/dashboard/coins"
+                    className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
+                >
+                    <ArrowLeft className="w-4 h-4 mr-1" />
+                    Quay lại ví của bạn
+                </Link>
+            )}
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6 border-b border-gray-100">

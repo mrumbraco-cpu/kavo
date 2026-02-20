@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 
 interface Props {
@@ -11,6 +11,8 @@ interface Props {
 
 export default function PublicNavbarActions({ user, profile }: Props) {
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const handleLogout = async () => {
         const supabase = createBrowserSupabaseClient();
@@ -18,17 +20,26 @@ export default function PublicNavbarActions({ user, profile }: Props) {
         router.refresh();
     };
 
+    const isListingDetail = pathname.startsWith('/listings/');
+
     if (!user) {
+        if (isListingDetail) return null;
+
+        // Only set 'next' if we're not on the home page, so home page login goes to dashboard
+        const nextParam = pathname !== '/'
+            ? `?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}`
+            : '';
+
         return (
             <div className="flex items-center gap-3">
                 <Link
-                    href="/auth/login"
+                    href={`/auth/login${nextParam}`}
                     className="text-sm font-medium text-premium-700 hover:text-premium-900 transition-colors"
                 >
                     Đăng nhập
                 </Link>
                 <Link
-                    href="/auth/register"
+                    href={`/auth/register${nextParam}`}
                     className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors"
                 >
                     Đăng ký

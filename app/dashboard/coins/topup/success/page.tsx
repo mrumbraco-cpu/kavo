@@ -11,6 +11,7 @@ function SuccessContent() {
     const router = useRouter()
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
     const [message, setMessage] = useState('')
+    const next = searchParams.get('next')
 
     useEffect(() => {
         const verify = async () => {
@@ -59,7 +60,7 @@ function SuccessContent() {
                 <p className="text-red-500 mt-2 mb-6">{message}</p>
                 <div className="flex justify-center gap-4">
                     <Link
-                        href="/dashboard/coins/topup"
+                        href={`/dashboard/coins/topup${next ? `?next=${encodeURIComponent(next)}` : ''}`}
                         className="px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
                     >
                         Thử lại
@@ -83,10 +84,10 @@ function SuccessContent() {
             <h2 className="text-xl font-semibold text-gray-900">Nạp xu thành công!</h2>
             <p className="text-gray-500 mt-2 mb-6">Số dư xu của bạn đã được cập nhật.</p>
             <Link
-                href="/dashboard/coins"
+                href={next || "/dashboard/coins"}
                 className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all"
             >
-                Kiểm tra ví ngay
+                {next ? 'Quay lại xem không gian' : 'Kiểm tra ví ngay'}
             </Link>
         </div>
     )

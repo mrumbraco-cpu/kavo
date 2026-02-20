@@ -2,8 +2,8 @@ export interface SearchFilters {
     // Geography
     geoSystem: 'old' | 'new';
     province: string;
-    district: string;
-    ward: string;
+    district: string[];
+    ward: string[];
     // Text
     query: string;
     // Filters
@@ -20,8 +20,8 @@ export interface SearchFilters {
 export const DEFAULT_FILTERS: SearchFilters = {
     geoSystem: 'old',
     province: '',
-    district: '',
-    ward: '',
+    district: [],
+    ward: [],
     query: '',
     spaceTypes: [],
     locationTypes: [],

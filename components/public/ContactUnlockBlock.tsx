@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { unlockContactAction } from '@/app/(public)/listings/[id]/actions';
 
 interface Props {
@@ -24,6 +25,8 @@ export default function ContactUnlockBlock({
     coinBalance,
     canUnlock,
 }: Props) {
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [state, setState] = useState<'locked' | 'unlocked' | 'loading' | 'error'>(
         alreadyUnlocked ? 'unlocked' : 'locked'
     );
@@ -66,10 +69,16 @@ export default function ContactUnlockBlock({
                         <h3 className="font-semibold text-premium-900 mb-1">Thông tin liên hệ</h3>
                         <p className="text-sm text-premium-500 mb-4">Đăng nhập để xem thông tin liên hệ của chủ không gian này.</p>
                         <div className="flex gap-3">
-                            <a href="/auth/login" className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors">
+                            <a
+                                href={`/auth/login${pathname !== '/' ? `?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}` : ''}`}
+                                className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors"
+                            >
                                 Đăng nhập
                             </a>
-                            <a href="/auth/register" className="px-4 py-2 bg-white text-premium-700 border border-premium-200 text-sm font-medium rounded-full hover:border-premium-400 transition-colors">
+                            <a
+                                href={`/auth/register${pathname !== '/' ? `?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}` : ''}`}
+                                className="px-4 py-2 bg-white text-premium-700 border border-premium-200 text-sm font-medium rounded-full hover:border-premium-400 transition-colors"
+                            >
                                 Đăng ký
                             </a>
                         </div>
@@ -181,7 +190,7 @@ export default function ContactUnlockBlock({
                         Bạn cần tối thiểu {UNLOCK_COST} xu để mở khóa. Hiện tại: {coinBalance} xu.
                     </div>
                     <a
-                        href="/dashboard/wallet"
+                        href={`/dashboard/coins/topup?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}`}
                         className="block w-full py-3 bg-accent-gold text-premium-950 rounded-xl font-semibold text-center hover:bg-yellow-500 transition-colors"
                     >
                         🪙 Nạp xu ngay

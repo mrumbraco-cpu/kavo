@@ -7,8 +7,8 @@ export async function GET(request: NextRequest) {
 
     const geoSystem = searchParams.get('geoSystem') || 'old';
     const province = searchParams.get('province') || '';
-    const district = searchParams.get('district') || '';
-    const ward = searchParams.get('ward') || '';
+    const districts = searchParams.get('district')?.split(',').filter(Boolean) || [];
+    const wards = searchParams.get('ward')?.split(',').filter(Boolean) || [];
     const query = searchParams.get('query') || '';
     const spaceTypes = searchParams.get('spaceTypes')?.split(',').filter(Boolean) || [];
     const locationTypes = searchParams.get('locationTypes')?.split(',').filter(Boolean) || [];
@@ -35,6 +35,9 @@ export async function GET(request: NextRequest) {
     if (!province) {
         return NextResponse.json({ error: 'Province is required' }, { status: 400 });
     }
+    if (geoSystem === 'new' && wards.length === 0) {
+        return NextResponse.json({ error: 'Ward is required for New system' }, { status: 400 });
+    }
 
     let dbQuery = supabase
         .from('listings')
@@ -45,11 +48,11 @@ export async function GET(request: NextRequest) {
     // --- Geography filters ---
     if (geoSystem === 'old') {
         if (province) dbQuery = dbQuery.eq('province_old', province);
-        if (district) dbQuery = dbQuery.eq('district_old', district);
+        if (districts.length > 0) dbQuery = dbQuery.in('district_old', districts);
     } else {
         // new admin
         if (province) dbQuery = dbQuery.eq('province_new', province);
-        if (ward) dbQuery = dbQuery.eq('ward_new', ward);
+        if (wards.length > 0) dbQuery = dbQuery.in('ward_new', wards);
     }
 
     // --- Hard exclusion: not_suitable_for (must match ALL values in notSuitableFor cannot appear) ---

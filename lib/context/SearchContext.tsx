@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { SearchFilters, DEFAULT_FILTERS, SearchResult } from '@/types/search';
 import { Listing } from '@/types/listing';
@@ -16,6 +16,7 @@ interface SearchContextType {
     executeSearch: (filters: SearchFilters) => Promise<void>;
     isModalOpen: boolean;
     setModalOpen: (open: boolean) => void;
+    isInitialized: boolean;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -30,6 +31,29 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const [error, setError] = useState<string | null>(null);
     const [hasSearched, setHasSearched] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    // Initialize from localStorage on mount
+    useEffect(() => {
+        const saved = localStorage.getItem('search_filters');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Merge with DEFAULT_FILTERS to ensure all keys exist
+                setFilters({ ...DEFAULT_FILTERS, ...parsed });
+            } catch (e) {
+                console.error('Failed to parse saved filters', e);
+            }
+        }
+        setIsInitialized(true);
+    }, []);
+
+    // Save to localStorage whenever filters change
+    useEffect(() => {
+        if (filters !== DEFAULT_FILTERS) {
+            localStorage.setItem('search_filters', JSON.stringify(filters));
+        }
+    }, [filters]);
 
     const executeSearch = useCallback(async (searchFilters: SearchFilters) => {
         setIsLoading(true);
@@ -40,8 +64,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             const params = new URLSearchParams({
                 geoSystem: searchFilters.geoSystem,
                 province: searchFilters.province,
-                ...(searchFilters.district ? { district: searchFilters.district } : {}),
-                ...(searchFilters.ward ? { ward: searchFilters.ward } : {}),
+                ...(searchFilters.district.length ? { district: searchFilters.district.join(',') } : {}),
+                ...(searchFilters.ward.length ? { ward: searchFilters.ward.join(',') } : {}),
                 ...(searchFilters.query.trim() ? { query: searchFilters.query.trim() } : {}),
                 ...(searchFilters.spaceTypes.length ? { spaceTypes: searchFilters.spaceTypes.join(',') } : {}),
                 ...(searchFilters.locationTypes.length ? { locationTypes: searchFilters.locationTypes.join(',') } : {}),
@@ -87,6 +111,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 executeSearch,
                 isModalOpen,
                 setModalOpen,
+                isInitialized,
             }}
         >
             {children}

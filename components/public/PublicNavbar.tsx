@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import PublicNavbarActions from './PublicNavbarActions';
 import HeaderSearch from './HeaderSearch';
+import NavbarLinks from './NavbarLinks';
 import SearchModal from './SearchModal';
 
 export default async function PublicNavbar() {
@@ -38,22 +39,7 @@ export default async function PublicNavbar() {
 
                         {/* Nav Links & Actions */}
                         <div className="flex items-center gap-6">
-                            <nav className="hidden xl:flex items-center gap-6">
-                                <Link
-                                    href="/search"
-                                    className="text-sm font-medium text-premium-600 hover:text-premium-900 transition-colors"
-                                >
-                                    Khám phá
-                                </Link>
-                                {user && (
-                                    <Link
-                                        href="/dashboard/listings/new"
-                                        className="text-sm font-medium text-premium-600 hover:text-premium-900 transition-colors"
-                                    >
-                                        Đăng tin
-                                    </Link>
-                                )}
-                            </nav>
+                            <NavbarLinks user={user} />
 
                             {/* Auth Actions */}
                             <PublicNavbarActions user={user} profile={profile} />
