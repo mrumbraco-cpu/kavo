@@ -8,6 +8,7 @@ import {
     Users,
     Wallet,
     CreditCard,
+    Coins,
     Settings,
     LogOut,
     ChevronDown,
@@ -80,6 +81,11 @@ export default function AdminSidebar() {
             icon: CreditCard,
             label: 'Topup xu cho ví',
             href: '/admin/topup',
+        },
+        {
+            icon: Coins,
+            label: 'Cài đặt xu',
+            href: '/admin/coins',
         },
         {
             icon: Settings,

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/server'
 import { checkOrderStatus } from '@/lib/sepay'
+import { resolveCoinsForAmount } from '@/lib/coins/resolveCoins'
 
 export async function POST(req: NextRequest) {
     try {
@@ -23,8 +24,6 @@ export async function POST(req: NextRequest) {
 
         console.log('Webhook payload:', body)
 
-        // SePay usually sends 'order_invoice_number' in payload if it's based on form submission
-        // If not, we might look for 'referenceCode' or 'id'
         const orderId = body.order_invoice_number || body.referenceCode || body.id
 
         if (!orderId) {
@@ -35,8 +34,6 @@ export async function POST(req: NextRequest) {
         // Verify with SePay API
         const response = await checkOrderStatus(orderId)
         const orders = response?.data || []
-        // SePay search might return multiple if not unique, but order_invoice_number is unique per our logic.
-        // We match strictly.
         const order = orders.find((o: any) => o.order_invoice_number === orderId || o.order_id === orderId)
 
         if (!order) {
@@ -55,31 +52,38 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, message: 'Missing customer_id in order' }, { status: 400 })
         }
 
-        const amount = parseInt(order.order_amount)
+        const amountVnd = parseInt(order.order_amount)
 
-        // Process transaction using RPC
+        // Resolve coins server-side using tiers + base rate
+        const resolution = await resolveCoinsForAmount(amountVnd)
+        const coinsToCredit = resolution.coins
+
+        console.log(`Coin resolution for ${amountVnd} VNĐ: ${coinsToCredit} xu (source: ${resolution.source})`)
+
         const supabase = createServiceRoleClient()
 
-        // Use RPC to handle transaction + balance update atomically
         const { data: rpcResult, error: rpcError } = await supabase
             .rpc('process_topup_transaction', {
                 p_user_id: userId,
-                p_amount: amount,
+                p_amount: amountVnd,
+                p_coins: coinsToCredit,
                 p_reference: orderId,
                 p_metadata: {
                     sepay_order_id: order.id,
                     description: order.order_description,
-                    source: 'webhook'
+                    source: 'webhook',
+                    resolution_source: resolution.source,
+                    tier_id: resolution.tier_id ?? null,
+                    base_rate_used: resolution.base_rate_used,
                 }
             })
 
         if (rpcError) {
             console.error('RPC Error in Webhook:', rpcError)
-            // Retry later? Webhook usually retries on failure.
             return NextResponse.json({ success: false, message: 'RPC Error' }, { status: 500 })
         }
 
-        const result = rpcResult as any;
+        const result = rpcResult as any
 
         if (result && !result.success) {
             if (result.message === 'Transaction already processed') {
@@ -90,7 +94,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, message: result.message }, { status: 400 })
         }
 
-        console.log(`Successfully processed Topup for user ${userId} amount ${amount}`)
+        console.log(`Successfully processed Topup for user ${userId}: ${amountVnd} VNĐ → ${coinsToCredit} xu`)
         return NextResponse.json({ success: true, message: 'Processed successfully' })
 
     } catch (error) {
