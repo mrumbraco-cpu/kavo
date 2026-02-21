@@ -7,6 +7,7 @@ import MiniMap from '@/components/public/MiniMap';
 import ContactUnlockBlock from '@/components/public/ContactUnlockBlock';
 import Link from 'next/link';
 import { decrypt } from '@/lib/utils/encryption';
+import FavoriteButton from '@/components/public/FavoriteButton';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -55,6 +56,7 @@ export default async function ListingDetailPage({ params }: Props) {
     let alreadyUnlocked = false;
     let unlockedPhone: string | undefined;
     let unlockedZalo: string | undefined;
+    let isFavorite = false;
 
     if (user) {
         // Get coin balance
@@ -76,6 +78,20 @@ export default async function ListingDetailPage({ params }: Props) {
         if (unlockError) {
             console.error('Error checking unlock status:', unlockError);
         }
+
+        // Check if favorite
+        const { data: favorite, error: favoriteError } = await supabase
+            .from('favorites')
+            .select('user_id')
+            .eq('user_id', user.id)
+            .eq('listing_id', id)
+            .maybeSingle();
+
+        if (favoriteError) {
+            console.error('Error checking favorite status:', favoriteError);
+        }
+
+        isFavorite = !!favorite;
 
         const isOwner = user.id === typedListing.owner_id;
 
@@ -149,9 +165,18 @@ export default async function ListingDetailPage({ params }: Props) {
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-premium-900 mb-3 leading-snug">
-                            {typedListing.title}
-                        </h1>
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-premium-900 leading-snug">
+                                {typedListing.title}
+                            </h1>
+                            <div className="flex-shrink-0 mt-1">
+                                <FavoriteButton
+                                    listingId={id}
+                                    initialIsFavorite={isFavorite}
+                                    isAuthenticated={!!user}
+                                />
+                            </div>
+                        </div>
                         {fullAddress && (
                             <div className="flex items-center gap-1.5 text-premium-500">
                                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

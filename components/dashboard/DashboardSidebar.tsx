@@ -10,7 +10,8 @@ import {
     LogOut,
     Coins,
     LayoutDashboard,
-    Home
+    Home,
+    Unlock
 } from 'lucide-react'
 
 interface MenuItem {
@@ -62,6 +63,11 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
             icon: Heart,
             label: 'Tin đã lưu',
             href: '/dashboard/favorites',
+        },
+        {
+            icon: Unlock,
+            label: 'Khóa liên hệ đã mở',
+            href: '/dashboard/unlocked-listings',
         },
         {
             icon: Settings,

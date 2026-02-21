@@ -2,21 +2,20 @@ import { requireAuth } from '@/lib/auth/requireAuth'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, MapPin, Trash2 } from 'lucide-react'
-import RemoveFavoriteButton from '@/components/dashboard/RemoveFavoriteButton'
+import { Unlock, MapPin } from 'lucide-react'
 
 function formatCurrency(amount: number) {
     if (typeof amount !== 'number') return '0 ₫'
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)
 }
 
-export default async function FavoritesPage() {
+export default async function UnlockedListingsPage() {
     const user = await requireAuth()
     const supabase = await createServerSupabaseClient()
 
-    // Fetch favorites with listing details
-    const { data: favorites } = await supabase
-        .from('favorites')
+    // Fetch unlocked listings
+    const { data: unlockedItems } = await supabase
+        .from('contact_unlocks')
         .select(`
             listing_id,
             created_at,
@@ -40,42 +39,42 @@ export default async function FavoritesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Tin đăng đã lưu</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Tin đã mở khóa</h1>
                 <p className="mt-1 text-sm text-gray-500">
-                    Danh sách các không gian bạn quan tâm
+                    Danh sách các không gian bạn đã mở khóa thông tin liên hệ
                 </p>
             </div>
 
-            {!favorites || favorites.length === 0 ? (
+            {!unlockedItems || unlockedItems.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-2xl border border-gray-200 shadow-sm">
-                    <div className="mx-auto h-12 w-12 text-gray-400 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <Heart className="h-6 w-6" />
+                    <div className="mx-auto h-12 w-12 text-blue-600 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                        <Unlock className="h-6 w-6" />
                     </div>
                     <h3 className="text-base font-semibold text-gray-900">Chưa có tin đăng nào</h3>
                     <p className="mt-1 text-sm text-gray-500">
-                        Bạn chưa lưu tin đăng nào. Hãy khám phá và lưu những không gian yêu thích!
+                        Bạn chưa mở khóa liên hệ của không gian nào.
                     </p>
                     <Link
-                        href="/"
+                        href="/search"
                         className="mt-6 inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-all"
                     >
-                        Khám phá ngay
+                        Khám phá không gian
                     </Link>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {favorites.map((favorite: any, index: number) => {
-                        const listing = favorite.listings
+                    {unlockedItems.map((item: any, index: number) => {
+                        const listing = item.listings
 
                         if (!listing) return null
 
                         return (
                             <div
-                                key={favorite.listing_id}
-                                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
+                                key={`${item.listing_id}-${item.created_at}`}
+                                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all group flex flex-col"
                             >
                                 {/* Image */}
-                                <div className="relative h-48 bg-gray-100">
+                                <div className="relative h-48 bg-gray-100 flex-shrink-0">
                                     {listing.images && listing.images.length > 0 ? (
                                         <Image
                                             src={listing.images[0]}
@@ -94,27 +93,27 @@ export default async function FavoritesPage() {
                                     {/* Status Badge */}
                                     {listing.status !== 'approved' && (
                                         <div className="absolute top-2 left-2">
-                                            <span className="px-2 py-1 text-xs font-semibold rounded-md bg-yellow-100 text-yellow-800">
+                                            <span className="px-2 py-1 text-xs font-semibold rounded-md bg-yellow-100 text-yellow-800 backdrop-blur-sm">
                                                 {listing.status === 'pending' ? 'Chờ duyệt' : 'Không khả dụng'}
                                             </span>
                                         </div>
                                     )}
 
-                                    {/* Favorite Icon */}
+                                    {/* Unlocked Icon */}
                                     <div className="absolute top-2 right-2">
-                                        <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors">
-                                            <Heart className="w-5 h-5 text-red-500 fill-red-500" />
-                                        </button>
+                                        <div className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md text-blue-600">
+                                            <Unlock className="w-4 h-4" />
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-4">
+                                <div className="p-4 flex flex-col flex-1">
                                     <Link
                                         href={`/listings/${listing.id}`}
-                                        className="block"
+                                        className="block mb-2 flex-grow"
                                     >
-                                        <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2 mb-2">
+                                        <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
                                             {listing.title}
                                         </h3>
                                     </Link>
@@ -126,11 +125,13 @@ export default async function FavoritesPage() {
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
                                         <div className="text-sm font-semibold text-gray-900">
                                             {formatCurrency(listing.price_min)} - {formatCurrency(listing.price_max)}
                                         </div>
-                                        <RemoveFavoriteButton listingId={listing.id} />
+                                        <div className="text-xs text-gray-500">
+                                            Mở khóa lúc {new Date(item.created_at).toLocaleDateString('vi-VN')}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

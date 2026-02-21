@@ -12,7 +12,8 @@ import {
     Settings,
     LogOut,
     Coins,
-    Home
+    Home,
+    Unlock
 } from 'lucide-react'
 
 interface DashboardHeaderProps {
@@ -57,6 +58,11 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
             icon: Heart,
             label: 'Tin đã lưu',
             href: '/dashboard/favorites',
+        },
+        {
+            icon: Unlock,
+            label: 'Khóa liên hệ đã mở',
+            href: '/dashboard/unlocked-listings',
         },
         {
             icon: Settings,

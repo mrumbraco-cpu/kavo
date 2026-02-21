@@ -191,7 +191,7 @@ export default function SearchClient() {
                                 </button>
                                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                                     .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
-                                    .map((page, i, arr) => (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1 ? (
+                                    .map((page, i, arr) => (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1 ? (
                                         <div key={page} className="flex items-center gap-2">
                                             {i > 0 && arr[i - 1] !== page - 1 && <span className="text-premium-300">...</span>}
                                             <button
@@ -217,7 +217,7 @@ export default function SearchClient() {
                     </div>
 
                     {/* Map panel */}
-                    <div className={`relative bg-premium-100 transition-all duration-300 
+                    <div className={`relative bg-premium-100 transition-all duration-300 min-w-0 overflow-hidden
                         ${layout === 'map' ? 'w-full flex-1' :
                             layout === 'split' ? 'hidden lg:block lg:flex-1' :
                                 'hidden'}`}
