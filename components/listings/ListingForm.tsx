@@ -71,13 +71,14 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const [spaceType, setSpaceType] = useState(initialListing?.space_type || '')
     const [locationType, setLocationType] = useState(initialListing?.location_type || '')
 
-    // Address & Coordinates State
+    // Geography Administrative State
     const [provinceOld, setProvinceOld] = useState(initialListing?.province_old || '')
     const [districtOld, setDistrictOld] = useState(initialListing?.district_old || '')
-    const [addressOldAdmin, setAddressOldAdmin] = useState(initialListing?.address_old_admin || '')
     const [provinceNew, setProvinceNew] = useState(initialListing?.province_new || '')
     const [wardNew, setWardNew] = useState(initialListing?.ward_new || '')
-    const [addressNewAdmin, setAddressNewAdmin] = useState(initialListing?.address_new_admin || '')
+
+    // Address & Coordinates State
+    const [detailedAddress, setDetailedAddress] = useState(initialListing?.detailed_address || '')
     const [lat, setLat] = useState<number | ''>(initialListing?.latitude || '')
     const [lng, setLng] = useState<number | ''>(initialListing?.longitude || '')
     const [inputMode, setInputMode] = useState<'map' | 'manual'>('map')
@@ -131,10 +132,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                     if (data.locationType) setLocationType(data.locationType)
                     if (data.provinceOld) setProvinceOld(data.provinceOld)
                     if (data.districtOld) setDistrictOld(data.districtOld)
-                    if (data.addressOldAdmin) setAddressOldAdmin(data.addressOldAdmin)
                     if (data.provinceNew) setProvinceNew(data.provinceNew)
                     if (data.wardNew) setWardNew(data.wardNew)
-                    if (data.addressNewAdmin) setAddressNewAdmin(data.addressNewAdmin)
+                    if (data.detailedAddress) setDetailedAddress(data.detailedAddress)
                     if (data.lat) setLat(data.lat)
                     if (data.lng) setLng(data.lng)
                     if (data.description) setDescription(data.description)
@@ -152,6 +152,25 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         }
     }, [mode])
 
+    // Handle reverse geocoding when coordinates change (especially for manual input)
+    useEffect(() => {
+        if (inputMode === 'manual' && typeof lat === 'number' && typeof lng === 'number') {
+            const timer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/api/places?lat=${lat}&lng=${lng}`)
+                    const data = await res.json()
+                    if (data.results && data.results.length > 0) {
+                        setDetailedAddress(data.results[0].formatted_address)
+                    }
+                } catch (error) {
+                    console.error('Manual reverse geocode error:', error)
+                }
+            }, 800) // Debounce for manual input
+
+            return () => clearTimeout(timer)
+        }
+    }, [lat, lng, inputMode])
+
     // Save state to localStorage on change ONLY if creating new
     useEffect(() => {
         if (mode === 'create') {
@@ -164,10 +183,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 locationType,
                 provinceOld,
                 districtOld,
-                addressOldAdmin,
                 provinceNew,
                 wardNew,
-                addressNewAdmin,
+                detailedAddress,
                 lat,
                 lng,
                 description,
@@ -183,9 +201,8 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         }
     }, [
         mode,
-        currentStep, title, phone, zalo, spaceType, locationType,
-        provinceOld, districtOld, addressOldAdmin,
-        provinceNew, wardNew, addressNewAdmin,
+        provinceOld, districtOld, provinceNew, wardNew,
+        detailedAddress,
         lat, lng,
         description, priceMin, priceMax,
         suitableFor, notSuitableFor, amenities, nearbyFeatures, timeSlots
@@ -196,9 +213,10 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         setExistingImagesToKeep(existingUrls)
     }
 
-    const handleLocationSelect = useCallback((latitude: number, longitude: number) => {
+    const handleLocationSelect = useCallback((latitude: number, longitude: number, address: string) => {
         setLat(latitude)
         setLng(longitude)
+        setDetailedAddress(address)
     }, [])
 
     const toggleSuitable = (option: string) => {
@@ -447,10 +465,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         formData.append('location_type', locationType)
         formData.append('province_old', provinceOld)
         formData.append('district_old', districtOld)
-        formData.append('address_old_admin', addressOldAdmin)
         formData.append('province_new', provinceNew)
         formData.append('ward_new', wardNew)
-        formData.append('address_new_admin', addressNewAdmin)
+        formData.append('detailed_address', detailedAddress)
         formData.append('latitude', String(lat))
         formData.append('longitude', String(lng))
         formData.append('description', description)
@@ -655,17 +672,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     </select>
                                 </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Địa chỉ chi tiết (Cũ)</label>
-                                <input
-                                    type="text"
-                                    value={addressOldAdmin}
-                                    onChange={(e) => setAddressOldAdmin(e.target.value)}
-                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                    placeholder="Số nhà, tên đường..."
-                                    maxLength={200}
-                                />
-                            </div>
                         </div>
 
                         {/* New Administrative System */}
@@ -696,92 +702,83 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     </select>
                                 </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Địa chỉ chi tiết (Mới)</label>
-                                <input
-                                    type="text"
-                                    value={addressNewAdmin}
-                                    onChange={(e) => setAddressNewAdmin(e.target.value)}
-                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                    placeholder="Số nhà, tên đường..."
-                                    maxLength={200}
-                                />
-                            </div>
                         </div>
+
+                        {/* Detailed address is captured automatically from the map/coordinates and stored in state */}
 
                         {/* Maps & Coordinates */}
                         <div className="space-y-6">
                             <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
                                 <MapPin className="w-5 h-5 text-blue-600" /> Bản đồ & Tọa độ <span className="text-red-500">*</span>
                             </h4>
-                            <div className="flex items-center gap-4 bg-gray-50 p-2 rounded-xl border border-gray-100 w-fit">
-                                <button
-                                    type="button"
-                                    onClick={() => setInputMode('map')}
-                                    className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${inputMode === 'map' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                                >
-                                    Tìm trên bản đồ
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setInputMode('manual')}
-                                    className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${inputMode === 'manual' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                                >
-                                    Nhập tọa độ
-                                </button>
-                            </div>
 
                             {inputMode === 'map' ? (
-                                <div className="rounded-2xl overflow-hidden ring-1 ring-gray-200 shadow-sm">
-                                    <GoongMapSearch
-                                        onLocationSelect={(latitude, longitude) => {
-                                            setLat(latitude)
-                                            setLng(longitude)
-                                        }}
-                                        initialLat={typeof lat === 'number' ? lat : undefined}
-                                        initialLng={typeof lng === 'number' ? lng : undefined}
-                                    />
+                                <div className="space-y-4">
+                                    <div className="rounded-2xl overflow-hidden ring-1 ring-gray-200 shadow-sm">
+                                        <GoongMapSearch
+                                            onLocationSelect={handleLocationSelect}
+                                            initialLat={typeof lat === 'number' ? lat : undefined}
+                                            initialLng={typeof lng === 'number' ? lng : undefined}
+                                            initialAddress={detailedAddress}
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <button
+                                            type="button"
+                                            onClick={() => setInputMode('manual')}
+                                            className="text-xs font-semibold text-gray-500 hover:text-blue-600 underline underline-offset-4 transition-colors"
+                                        >
+                                            Không tìm thấy vị trí? Nhập tọa độ thủ công
+                                        </button>
+                                    </div>
                                 </div>
                             ) : (
-                                <div className="space-y-4">
-                                    <input
-                                        type="text"
-                                        value={manualCoords}
-                                        onChange={(e) => {
-                                            // Only allow digits, dots, commas, spaces, and minus signs
-                                            const filtered = e.target.value.replace(/[^0-9.,\s\-]/g, '')
-                                            setManualCoords(filtered)
-
-                                            // Parse coordinates: must have format "lat, lng" with comma
-                                            const commaCount = (filtered.match(/,/g) || []).length
-                                            if (commaCount === 1) {
-                                                const parts = filtered.split(',').map(p => p.trim()).filter(Boolean)
-                                                if (parts.length === 2) {
-                                                    const latVal = parseFloat(parts[0])
-                                                    const lngVal = parseFloat(parts[1])
-                                                    if (!isNaN(latVal) && !isNaN(lngVal) &&
-                                                        latVal >= -90 && latVal <= 90 &&
-                                                        lngVal >= -180 && lngVal <= 180) {
-                                                        setLat(latVal)
-                                                        setLng(lngVal)
-                                                    } else {
-                                                        // Invalid range, clear coordinates
-                                                        setLat('')
-                                                        setLng('')
+                                <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
+                                    <div className="flex items-center justify-between">
+                                        <h5 className="text-sm font-bold text-gray-700">Nhập tọa độ thủ công</h5>
+                                        <button
+                                            type="button"
+                                            onClick={() => setInputMode('map')}
+                                            className="text-xs font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-4 transition-colors"
+                                        >
+                                            Quay lại tìm trên bản đồ
+                                        </button>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <input
+                                            type="text"
+                                            value={manualCoords}
+                                            onChange={(e) => {
+                                                const filtered = e.target.value.replace(/[^0-9.,\s\-]/g, '')
+                                                setManualCoords(filtered)
+                                                const commaCount = (filtered.match(/,/g) || []).length
+                                                if (commaCount === 1) {
+                                                    const parts = filtered.split(',').map(p => p.trim()).filter(Boolean)
+                                                    if (parts.length === 2) {
+                                                        const latVal = parseFloat(parts[0])
+                                                        const lngVal = parseFloat(parts[1])
+                                                        if (!isNaN(latVal) && !isNaN(lngVal) &&
+                                                            latVal >= -90 && latVal <= 90 &&
+                                                            lngVal >= -180 && lngVal <= 180) {
+                                                            setLat(latVal)
+                                                            setLng(lngVal)
+                                                        } else {
+                                                            setLat('')
+                                                            setLng('')
+                                                        }
                                                     }
+                                                } else {
+                                                    setLat('')
+                                                    setLng('')
                                                 }
-                                            } else {
-                                                // No comma or multiple commas, clear coordinates
-                                                setLat('')
-                                                setLng('')
-                                            }
-                                        }}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                        placeholder="Ví dụ: 10.780560, 106.699812"
-                                    />
-                                    <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-100 inline-block font-medium">
-                                        Vị trí đã chọn: <span className="font-bold text-blue-600">{(typeof lat === 'number' && typeof lng === 'number') ? `${lat.toFixed(6)}, ${lng.toFixed(6)}` : 'Chưa có'}</span>
-                                    </p>
+                                            }}
+                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                            placeholder="Ví dụ: 10.780560, 106.699812"
+                                        />
+                                        <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-100 inline-block font-medium">
+                                            Vị trí đã chọn: <span className="font-bold text-blue-600">{(typeof lat === 'number' && typeof lng === 'number') ? `${lat.toFixed(6)}, ${lng.toFixed(6)}` : 'Chưa có'}</span>
+                                        </p>
+                                    </div>
                                 </div>
                             )}
                         </div>

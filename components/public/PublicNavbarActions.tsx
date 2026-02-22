@@ -31,7 +31,7 @@ export default function PublicNavbarActions({ user, profile }: Props) {
             : '';
 
         return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
                 <Link
                     href={`/auth/login${nextParam}`}
                     className="text-sm font-medium text-premium-700 hover:text-premium-900 transition-colors"
@@ -39,10 +39,10 @@ export default function PublicNavbarActions({ user, profile }: Props) {
                     Đăng nhập
                 </Link>
                 <Link
-                    href={`/auth/register${nextParam}`}
-                    className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors"
+                    href="/dashboard/listings/new"
+                    className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors shadow-sm hover:shadow-md active:scale-95 transition-all"
                 >
-                    Đăng ký
+                    Đăng tin
                 </Link>
             </div>
         );
@@ -50,6 +50,12 @@ export default function PublicNavbarActions({ user, profile }: Props) {
 
     return (
         <div className="flex items-center gap-4">
+            <Link
+                href="/dashboard/listings/new"
+                className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors shadow-sm hover:shadow-md active:scale-95 transition-all"
+            >
+                Đăng tin
+            </Link>
             {/* Coin balance */}
             {profile && (
                 <Link

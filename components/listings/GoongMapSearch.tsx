@@ -7,9 +7,10 @@ import '@goongmaps/goong-js/dist/goong-js.css'
 import { Search, Loader2, MapPin, LocateFixed } from 'lucide-react'
 
 interface GoongMapSearchProps {
-    onLocationSelect: (lat: number, lng: number) => void
+    onLocationSelect: (lat: number, lng: number, address: string) => void
     initialLat?: number
     initialLng?: number
+    initialAddress?: string
 }
 
 interface SearchResult {
@@ -21,19 +22,34 @@ interface SearchResult {
     }
 }
 
-export default function GoongMapSearch({ onLocationSelect, initialLat, initialLng }: GoongMapSearchProps) {
+export default function GoongMapSearch({ onLocationSelect, initialLat, initialLng, initialAddress }: GoongMapSearchProps) {
     const mapContainerRef = useRef<HTMLDivElement>(null)
     const mapRef = useRef<any>(null)
     const markerRef = useRef<any>(null)
     const isSelectingRef = useRef(false)
     const searchContainerRef = useRef<HTMLDivElement>(null)
 
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(initialAddress || '')
     const [results, setResults] = useState<SearchResult[]>([])
     const [isSearching, setIsSearching] = useState(false)
     const [showResults, setShowResults] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
     const [isLocating, setIsLocating] = useState(false)
+
+    const reverseGeocode = async (lat: number, lng: number) => {
+        try {
+            const res = await fetch(`/api/places?lat=${lat}&lng=${lng}`)
+            const data = await res.json()
+            if (data.results && data.results.length > 0) {
+                const address = data.results[0].formatted_address
+                setQuery(address)
+                return address
+            }
+        } catch (error) {
+            console.error('Reverse geocode error:', error)
+        }
+        return ''
+    }
 
     // Debounce search
     useEffect(() => {
@@ -91,7 +107,7 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
                 if (mapRef.current && markerRef.current) {
                     markerRef.current.setLngLat([lng, lat])
                     mapRef.current.flyTo({ center: [lng, lat], zoom: 16 })
-                    onLocationSelect(lat, lng)
+                    onLocationSelect(lat, lng, description)
                 }
             }
         } catch (error) {
@@ -109,12 +125,13 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
 
         setIsLocating(true)
         navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
                 const { latitude, longitude } = position.coords
                 if (mapRef.current && markerRef.current) {
                     markerRef.current.setLngLat([longitude, latitude])
                     mapRef.current.flyTo({ center: [longitude, latitude], zoom: 16 })
-                    onLocationSelect(latitude, longitude)
+                    const address = await reverseGeocode(latitude, longitude)
+                    onLocationSelect(latitude, longitude, address)
                 }
                 setIsLocating(false)
             },
@@ -172,12 +189,11 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
 
         markerRef.current = marker
 
-        marker.on('dragend', () => {
+        marker.on('dragend', async () => {
             const lngLat = marker.getLngLat()
-            setQuery('')
-            setResults([])
             setShowResults(false)
-            onLocationSelect(lngLat.lat, lngLat.lng)
+            const address = await reverseGeocode(lngLat.lat, lngLat.lng)
+            onLocationSelect(lngLat.lat, lngLat.lng, address)
         })
 
         map.on('load', () => {

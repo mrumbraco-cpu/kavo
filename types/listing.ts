@@ -13,12 +13,11 @@ export interface Listing {
     time_slots: string[];
     price_min: number;
     price_max: number;
-    address_old_admin: string;
-    address_new_admin: string;
     province_old: string;
     district_old: string;
     province_new: string;
     ward_new: string;
+    detailed_address: string;
     latitude: number;
     longitude: number;
     nearby_features: string[];

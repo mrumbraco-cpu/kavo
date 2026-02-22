@@ -21,14 +21,7 @@ export default function NavbarLinks({ user }: Props) {
                     Khám phá
                 </Link>
             )}
-            {user && (
-                <Link
-                    href="/dashboard/listings/new"
-                    className="text-sm font-medium text-premium-600 hover:text-premium-900 transition-colors"
-                >
-                    Đăng tin
-                </Link>
-            )}
+
         </nav>
     );
 }

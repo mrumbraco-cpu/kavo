@@ -41,18 +41,21 @@ export async function GET(request: NextRequest) {
 
     let dbQuery = supabase
         .from('listings')
-        .select('id, title, description, status, is_hidden, space_type, location_type, address_old_admin, province_old, district_old, address_new_admin, province_new, ward_new, price_min, price_max, suitable_for, not_suitable_for, amenities, time_slots, images, latitude, longitude')
+        .select('id, title, description, status, is_hidden, space_type, location_type, province_old, district_old, province_new, ward_new, detailed_address, price_min, price_max, suitable_for, not_suitable_for, amenities, time_slots, images, latitude, longitude')
         .eq('status', 'approved')
         .eq('is_hidden', false);
 
     // --- Geography filters ---
     if (geoSystem === 'old') {
         if (province) dbQuery = dbQuery.eq('province_old', province);
-        if (districts.length > 0) dbQuery = dbQuery.in('district_old', districts);
+        if (districts.length > 0) {
+            dbQuery = dbQuery.in('district_old', districts);
+        }
     } else {
-        // new admin
         if (province) dbQuery = dbQuery.eq('province_new', province);
-        if (wards.length > 0) dbQuery = dbQuery.in('ward_new', wards);
+        if (wards.length > 0) {
+            dbQuery = dbQuery.in('ward_new', wards);
+        }
     }
 
     // --- Hard exclusion: not_suitable_for (must match ALL values in notSuitableFor cannot appear) ---
@@ -86,7 +89,7 @@ export async function GET(request: NextRequest) {
     if (query) {
         const q = `%${query}%`;
         dbQuery = dbQuery.or(
-            `title.ilike.${q},description.ilike.${q},address_old_admin.ilike.${q},address_new_admin.ilike.${q},province_old.ilike.${q},province_new.ilike.${q}`
+            `title.ilike.${q},description.ilike.${q},detailed_address.ilike.${q}`
         );
     }
 

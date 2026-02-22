@@ -26,9 +26,7 @@ export default async function UnlockedListingsPage() {
                 images,
                 price_min,
                 price_max,
-                address_new_admin,
-                ward_new,
-                province_new,
+                detailed_address,
                 status
             )
         `)
@@ -121,7 +119,7 @@ export default async function UnlockedListingsPage() {
                                     <div className="flex items-center text-sm text-gray-500 mb-3">
                                         <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
                                         <span className="line-clamp-1">
-                                            {listing.address_new_admin}, {listing.ward_new}, {listing.province_new}
+                                            {listing.detailed_address}
                                         </span>
                                     </div>
 

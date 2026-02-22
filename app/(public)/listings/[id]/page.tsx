@@ -129,10 +129,7 @@ export default async function ListingDetailPage({ params }: Props) {
         ? typedListing.time_slots.join(' • ')
         : '';
 
-    const address = typedListing.address_old_admin || typedListing.address_new_admin || '';
-    const province = typedListing.province_old || typedListing.province_new || '';
-    const district = typedListing.district_old || typedListing.ward_new || '';
-    const fullAddress = [address, district, province].filter(Boolean).join(', ');
+    const fullAddress = typedListing.detailed_address || '';
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

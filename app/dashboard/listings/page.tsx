@@ -261,21 +261,21 @@ export default async function MyListingsPage({
                                             {listing.title}
                                         </h3>
 
-                                        <div className="flex items-center gap-2 text-slate-400 mb-4 pb-4 border-b border-slate-50">
-                                            <MapPin className="w-3.5 h-3.5 text-blue-500/50" />
-                                            <span className="text-xs font-medium truncate">
-                                                {listing.district_old}, {listing.province_old}
+                                        <div className="flex items-start gap-2 text-slate-500 mb-4 pb-4 border-b border-slate-50 min-h-[48px]">
+                                            <MapPin className="w-3.5 h-3.5 text-blue-500/50 mt-0.5 flex-shrink-0" />
+                                            <span className="text-[11px] font-medium leading-relaxed line-clamp-2">
+                                                {listing.detailed_address}
                                             </span>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-3 mb-6">
-                                            <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
-                                                <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5">Hành chính mới</div>
-                                                <div className="text-[11px] font-bold text-slate-600 truncate">{listing.ward_new}</div>
+                                        <div className="flex items-center justify-between mb-6 bg-slate-50 p-2.5 rounded-2xl border border-slate-100">
+                                            <div className="flex flex-col">
+                                                <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5">Loại hình</div>
+                                                <div className="text-[11px] font-bold text-slate-600 truncate">{listing.space_type}</div>
                                             </div>
-                                            <div className="bg-slate-50 p-2 rounded-xl border border-slate-100 flex flex-col items-end">
-                                                <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5 text-right w-full">Ngày đăng</div>
-                                                <div className="text-[11px] font-bold text-slate-600 truncate flex items-center gap-1">
+                                            <div className="flex flex-col items-end">
+                                                <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5 text-right">Ngày đăng</div>
+                                                <div className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
                                                     <Calendar className="w-3 h-3 text-slate-300" />
                                                     {new Date(listing.created_at).toLocaleDateString('vi-VN')}
                                                 </div>

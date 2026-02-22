@@ -16,15 +16,9 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     const location_type = formData.get('location_type') as string
     const price_min = parseInt(formData.get('price_min') as string) || 0
     const price_max = parseInt(formData.get('price_max') as string) || 0
-    const province_old = formData.get('province_old') as string
-    const district_old = formData.get('district_old') as string
-    const province_new = formData.get('province_new') as string
-    const ward_new = formData.get('ward_new') as string
+    const detailed_address = formData.get('detailed_address') as string
     const latitude = parseFloat(formData.get('latitude') as string)
     const longitude = parseFloat(formData.get('longitude') as string)
-
-    const address_old_admin = formData.get('address_old_admin') as string
-    const address_new_admin = formData.get('address_new_admin') as string
 
     const phone = formData.get('phone') as string
     const zalo = formData.get('zalo') as string
@@ -43,10 +37,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
     if (!space_type) return { success: false, error: 'Loại hình không gian là bắt buộc' }
     if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
-    if (!province_old) return { success: false, error: 'Tỉnh/thành (hệ thống cũ) là bắt buộc' }
-    if (!district_old) return { success: false, error: 'Quận/huyện (hệ thống cũ) là bắt buộc' }
-    if (!province_new) return { success: false, error: 'Tỉnh/thành (hệ thống mới) là bắt buộc' }
-    if (!ward_new) return { success: false, error: 'Phường/xã (hệ thống mới) là bắt buộc' }
+    if (!detailed_address) return { success: false, error: 'Địa chỉ chi tiết là bắt buộc' }
     if (isNaN(latitude)) return { success: false, error: 'Vĩ độ là bắt buộc và phải là số' }
     if (isNaN(longitude)) return { success: false, error: 'Kinh độ là bắt buộc và phải là số' }
 
@@ -64,14 +55,9 @@ export async function createListing(formData: FormData): Promise<{ success: bool
             location_type,
             price_min,
             price_max,
-            province_old,
-            district_old,
-            province_new,
-            ward_new,
+            detailed_address,
             latitude,
             longitude,
-            address_old_admin,
-            address_new_admin,
             suitable_for,
             not_suitable_for,
             amenities,
@@ -80,6 +66,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
             status: 'pending' as ListingStatus,
             images: [] // Initially empty
         })
+
         .select('id')
         .single()
 

@@ -58,12 +58,9 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
     const [locationType, setLocationType] = useState('')
 
     // Address & Coordinates State
-    const [provinceOld, setProvinceOld] = useState('')
-    const [districtOld, setDistrictOld] = useState('')
-    const [addressOldAdmin, setAddressOldAdmin] = useState('')
-    const [provinceNew, setProvinceNew] = useState('')
-    const [wardNew, setWardNew] = useState('')
-    const [addressNewAdmin, setAddressNewAdmin] = useState('')
+    const [detailedAddress, setDetailedAddress] = useState('')
+    const [lat, setLat] = useState<number | ''>('')
+    const [lng, setLng] = useState<number | ''>('')
     const [lat, setLat] = useState<number | ''>('')
     const [lng, setLng] = useState<number | ''>('')
     const [inputMode, setInputMode] = useState<'map' | 'manual'>('map')
@@ -110,12 +107,7 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
                 if (data.zalo) setZalo(data.zalo)
                 if (data.spaceType) setSpaceType(data.spaceType)
                 if (data.locationType) setLocationType(data.locationType)
-                if (data.provinceOld) setProvinceOld(data.provinceOld)
-                if (data.districtOld) setDistrictOld(data.districtOld)
-                if (data.addressOldAdmin) setAddressOldAdmin(data.addressOldAdmin)
-                if (data.provinceNew) setProvinceNew(data.provinceNew)
-                if (data.wardNew) setWardNew(data.wardNew)
-                if (data.addressNewAdmin) setAddressNewAdmin(data.addressNewAdmin)
+                if (data.detailedAddress) setDetailedAddress(data.detailedAddress)
                 if (data.lat) setLat(data.lat)
                 if (data.lng) setLng(data.lng)
                 if (data.description) setDescription(data.description)
@@ -141,12 +133,7 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
             zalo,
             spaceType,
             locationType,
-            provinceOld,
-            districtOld,
-            addressOldAdmin,
-            provinceNew,
-            wardNew,
-            addressNewAdmin,
+            detailedAddress,
             lat,
             lng,
             description,
@@ -161,8 +148,7 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     }, [
         currentStep, title, phone, zalo, spaceType, locationType,
-        provinceOld, districtOld, addressOldAdmin,
-        provinceNew, wardNew, addressNewAdmin,
+        detailedAddress,
         lat, lng,
         description, priceMin, priceMax,
         suitableFor, notSuitableFor, amenities, nearbyFeatures, timeSlots
@@ -172,9 +158,10 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
         setPendingImages(uploads)
     }
 
-    const handleLocationSelect = useCallback((latitude: number, longitude: number) => {
+    const handleLocationSelect = useCallback((latitude: number, longitude: number, address: string) => {
         setLat(latitude)
         setLng(longitude)
+        setDetailedAddress(address)
     }, [])
 
     const toggleSuitable = (option: string) => {
@@ -280,8 +267,8 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
                 return false
             }
         } else if (step === 2) {
-            if (!provinceOld || !districtOld || !provinceNew || !wardNew) {
-                alert('Vui lòng chọn đầy đủ địa chỉ ở Bước 2')
+            if (!detailedAddress) {
+                alert('Vui lòng chọn vị trí trên bản đồ để lấy địa chỉ chi tiết')
                 return false
             }
             if (lat === '' || lng === '') {
@@ -343,12 +330,7 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
         formData.append('zalo', zalo)
         formData.append('space_type', spaceType)
         formData.append('location_type', locationType)
-        formData.append('province_old', provinceOld)
-        formData.append('district_old', districtOld)
-        formData.append('address_old_admin', addressOldAdmin)
-        formData.append('province_new', provinceNew)
-        formData.append('ward_new', wardNew)
-        formData.append('address_new_admin', addressNewAdmin)
+        formData.append('detailed_address', detailedAddress)
         formData.append('latitude', String(lat))
         formData.append('longitude', String(lng))
         formData.append('description', description)
@@ -500,81 +482,11 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
 
                         {/* Old Administrative System */}
                         <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700">Hệ thống hành chính cũ</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={provinceOld}
-                                        onChange={(e) => { setProvinceOld(e.target.value); setDistrictOld(''); }}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
-                                    >
-                                        <option value="">-- Chọn Tỉnh/Thành --</option>
-                                        {PROVINCES_OLD.map(p => <option key={p} value={p}>{p}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Quận/Huyện <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={districtOld}
-                                        onChange={(e) => setDistrictOld(e.target.value)}
-                                        disabled={!provinceOld}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
-                                    >
-                                        <option value="">-- Chọn Quận/Huyện --</option>
-                                        {provinceOld && DISTRICTS_OLD_BY_PROVINCE[provinceOld].map(d => <option key={d} value={d}>{d}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Địa chỉ chi tiết (Cũ)</label>
-                                <input
-                                    type="text"
-                                    value={addressOldAdmin}
-                                    onChange={(e) => setAddressOldAdmin(e.target.value)}
-                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                    placeholder="Số nhà, tên đường..."
-                                />
-                            </div>
-                        </div>
-
-                        {/* New Administrative System */}
-                        <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700">Hệ thống hành chính mới</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={provinceNew}
-                                        onChange={(e) => { setProvinceNew(e.target.value); setWardNew(''); }}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
-                                    >
-                                        <option value="">-- Chọn Tỉnh/Thành --</option>
-                                        {PROVINCES_NEW.map(p => <option key={p} value={p}>{p}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Phường/Xã/Quận <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={wardNew}
-                                        onChange={(e) => setWardNew(e.target.value)}
-                                        disabled={!provinceNew}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
-                                    >
-                                        <option value="">-- Chọn Phường/Xã --</option>
-                                        {provinceNew && WARDS_NEW_BY_PROVINCE[provinceNew].map(w => <option key={w} value={w}>{w}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Địa chỉ chi tiết (Mới)</label>
-                                <input
-                                    type="text"
-                                    value={addressNewAdmin}
-                                    onChange={(e) => setAddressNewAdmin(e.target.value)}
-                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                    placeholder="Số nhà, tên đường..."
-                                />
+                            <h4 className="text-md font-bold text-gray-700">Địa chỉ chi tiết</h4>
+                            <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                                <p className="text-sm font-medium text-blue-800">
+                                    {detailedAddress || 'Vui lòng chọn vị trí trên bản đồ để xác định địa chỉ chính xác.'}
+                                </p>
                             </div>
                         </div>
 
@@ -603,12 +515,14 @@ export function ListingForm({ initialProfile }: ListingFormProps) {
                             {inputMode === 'map' ? (
                                 <div className="rounded-2xl overflow-hidden ring-1 ring-gray-200 shadow-sm">
                                     <GoongMapSearch
-                                        onLocationSelect={(latitude, longitude) => {
+                                        onLocationSelect={(latitude, longitude, address) => {
                                             setLat(latitude)
                                             setLng(longitude)
+                                            setDetailedAddress(address)
                                         }}
                                         initialLat={typeof lat === 'number' ? lat : undefined}
                                         initialLng={typeof lng === 'number' ? lng : undefined}
+                                        initialAddress={detailedAddress}
                                     />
                                 </div>
                             ) : (

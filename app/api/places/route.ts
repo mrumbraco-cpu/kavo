@@ -7,6 +7,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const input = searchParams.get('input')
     const place_id = searchParams.get('place_id')
+    const lat = searchParams.get('lat')
+    const lng = searchParams.get('lng')
     const limit = searchParams.get('limit') || '10'
 
     if (!GOONG_API_KEY) {
@@ -22,8 +24,11 @@ export async function GET(request: Request) {
         } else if (input) {
             // Autocomplete API
             url = `${GOONG_BASE_URL}/Place/AutoComplete?input=${encodeURIComponent(input)}&limit=${limit}&api_key=${GOONG_API_KEY}`
+        } else if (lat && lng) {
+            // Reverse Geocoding API
+            url = `${GOONG_BASE_URL}/Geocode?latlng=${lat},${lng}&api_key=${GOONG_API_KEY}`
         } else {
-            return NextResponse.json({ error: 'Missing input or place_id' }, { status: 400 })
+            return NextResponse.json({ error: 'Missing input, place_id, or lat/lng' }, { status: 400 })
         }
 
         const res = await fetch(url)
@@ -39,3 +44,4 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
+

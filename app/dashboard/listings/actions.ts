@@ -31,11 +31,9 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     const district_old = formData.get('district_old') as string
     const province_new = formData.get('province_new') as string
     const ward_new = formData.get('ward_new') as string
+    const detailed_address = formData.get('detailed_address') as string
     const latitude = parseFloat(formData.get('latitude') as string)
     const longitude = parseFloat(formData.get('longitude') as string)
-
-    const address_old_admin = formData.get('address_old_admin') as string
-    const address_new_admin = formData.get('address_new_admin') as string
 
     const phone = formData.get('phone') as string
     const zalo = formData.get('zalo') as string
@@ -54,10 +52,8 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
     if (!space_type) return { success: false, error: 'Loại hình không gian là bắt buộc' }
     if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
-    if (!province_old) return { success: false, error: 'Tỉnh/thành (hệ thống cũ) là bắt buộc' }
-    if (!district_old) return { success: false, error: 'Quận/huyện (hệ thống cũ) là bắt buộc' }
-    if (!province_new) return { success: false, error: 'Tỉnh/thành (hệ thống mới) là bắt buộc' }
-    if (!ward_new) return { success: false, error: 'Phường/xã (hệ thống mới) là bắt buộc' }
+    if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
+    if (!detailed_address) return { success: false, error: 'Địa chỉ chi tiết là bắt buộc' }
     if (isNaN(latitude)) return { success: false, error: 'Vĩ độ là bắt buộc và phải là số' }
     if (isNaN(longitude)) return { success: false, error: 'Kinh độ là bắt buộc và phải là số' }
 
@@ -99,10 +95,9 @@ export async function createListing(formData: FormData): Promise<{ success: bool
             district_old,
             province_new,
             ward_new,
+            detailed_address,
             latitude,
             longitude,
-            address_old_admin,
-            address_new_admin,
             suitable_for,
             not_suitable_for,
             amenities,
@@ -255,11 +250,9 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     const district_old = formData.get('district_old') as string
     const province_new = formData.get('province_new') as string
     const ward_new = formData.get('ward_new') as string
+    const detailed_address = formData.get('detailed_address') as string
     const latitude = parseFloat(formData.get('latitude') as string)
     const longitude = parseFloat(formData.get('longitude') as string)
-
-    const address_old_admin = formData.get('address_old_admin') as string
-    const address_new_admin = formData.get('address_new_admin') as string
 
     const phone = formData.get('phone') as string
     const zalo = formData.get('zalo') as string
@@ -278,6 +271,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
     if (!space_type) return { success: false, error: 'Loại hình không gian là bắt buộc' }
     if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
+    if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
     if (isNaN(latitude) || isNaN(longitude)) return { success: false, error: 'Tọa độ không hợp lệ' }
 
     // RATE LIMITING: Check if user has exceeded submission limit
@@ -354,7 +348,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
 
     const { data: currentListing } = await supabase
         .from('listings')
-        .select('title, address_old_admin, address_new_admin, description, images, owner_id, status')
+        .select('title, detailed_address, description, images, owner_id, status')
         .eq('id', listingId)
         .single();
 
@@ -414,8 +408,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
 
     const hasCriticalChanges =
         title !== currentListing?.title ||
-        address_old_admin !== currentListing?.address_old_admin ||
-        address_new_admin !== currentListing?.address_new_admin ||
+        detailed_address !== currentListing?.detailed_address ||
         description !== currentListing?.description ||
         areImagesDifferent(currentListing?.images || [], finalImageUrls);
 
@@ -436,10 +429,9 @@ export async function updateListing(listingId: string, formData: FormData): Prom
             district_old,
             province_new,
             ward_new,
+            detailed_address,
             latitude,
             longitude,
-            address_old_admin,
-            address_new_admin,
             suitable_for,
             not_suitable_for,
             amenities,
