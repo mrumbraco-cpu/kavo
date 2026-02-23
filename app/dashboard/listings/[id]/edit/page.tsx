@@ -47,6 +47,10 @@ export default async function EditListingPage({ params }: EditListingPageProps) 
         redirect('/dashboard/listings')
     }
 
+    if (listing.status === 'expired' && !isAdmin) {
+        redirect('/dashboard/listings')
+    }
+
     // Fetch contact info separately from listing_contacts table
     const { data: contacts } = await db
         .from('listing_contacts')

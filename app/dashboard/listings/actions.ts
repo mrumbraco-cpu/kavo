@@ -213,12 +213,16 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     // 1. Check ownership
     const { data: existingListing, error: fetchError } = await supabase
         .from('listings')
-        .select('owner_id, is_locked')
+        .select('owner_id, is_locked, status')
         .eq('id', listingId)
         .single()
 
     if (fetchError || !existingListing) {
         return { success: false, error: 'Không tìm thấy tin đăng' }
+    }
+
+    if (existingListing.status === 'expired' && profile?.role !== 'admin') {
+        return { success: false, error: 'Tin đăng đã hết hạn không thể chỉnh sửa. Vui lòng khôi phục tin đăng (Bỏ hết hạn) trước khi thực hiện chỉnh sửa.' }
     }
 
     if (existingListing.owner_id !== user.id) {
@@ -407,12 +411,11 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     };
 
     const hasCriticalChanges =
-        title !== currentListing?.title ||
-        detailed_address !== currentListing?.detailed_address ||
         description !== currentListing?.description ||
         areImagesDifferent(currentListing?.images || [], finalImageUrls);
 
-    if (hasCriticalChanges && currentListing?.status === 'approved') {
+    // Only non-admins trigger a status reset to pending on critical changes
+    if (hasCriticalChanges && currentListing?.status === 'approved' && !isAdmin) {
         newStatus = 'pending';
     }
 
@@ -488,11 +491,13 @@ export async function toggleListingVisibility(listingId: string): Promise<{ succ
     // 0. Check Lock Status
     const { data: profile } = await supabase
         .from('profiles')
-        .select('lock_status')
+        .select('lock_status, role')
         .eq('id', user.id)
         .single()
 
-    if (profile?.lock_status === 'soft' || profile?.lock_status === 'hard') {
+    const isAdmin = profile?.role === 'admin'
+
+    if ((profile?.lock_status === 'soft' || profile?.lock_status === 'hard') && !isAdmin) {
         return { success: false, error: 'Tài khoản của bạn đã bị khóa, không thể thay đổi trạng thái bài đăng.' }
     }
 
@@ -507,7 +512,7 @@ export async function toggleListingVisibility(listingId: string): Promise<{ succ
         return { success: false, error: 'Không tìm thấy tin đăng' }
     }
 
-    if (listing.owner_id !== user.id) {
+    if (listing.owner_id !== user.id && !isAdmin) {
         return { success: false, error: 'Bạn không có quyền thực hiện thao tác này' }
     }
 
@@ -516,10 +521,76 @@ export async function toggleListingVisibility(listingId: string): Promise<{ succ
     }
 
     // 2. Toggle visibility
-    const { error: updateError } = await supabase
+    // Use service role to ensure status is NOT altered by any automated triggers on is_hidden change
+    const serviceRoleDb = createServiceRoleClient()
+    const { error: updateError } = await serviceRoleDb
         .from('listings')
         .update({
             is_hidden: !listing.is_hidden,
+            updated_at: new Date().toISOString()
+        })
+        .eq('id', listingId)
+
+    if (updateError) {
+        return { success: false, error: updateError.message }
+    }
+
+    // 3. Revalidate path to update UI
+    const { revalidatePath } = await import('next/cache')
+    revalidatePath('/dashboard/listings')
+
+    return { success: true }
+}
+
+export async function toggleListingExpiration(listingId: string): Promise<{ success: boolean; error?: string }> {
+    const user = await requireAuth()
+    const supabase = await createServerSupabaseClient()
+
+    // 0. Check Lock Status
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('lock_status, role')
+        .eq('id', user.id)
+        .single()
+
+    const isAdmin = profile?.role === 'admin'
+
+    if ((profile?.lock_status === 'soft' || profile?.lock_status === 'hard') && !isAdmin) {
+        return { success: false, error: 'Tài khoản của bạn đã bị khóa, không thể thay đổi trạng thái bài đăng.' }
+    }
+
+    // 1. Check ownership and current status
+    const { data: listing, error: fetchError } = await supabase
+        .from('listings')
+        .select('owner_id, status, is_locked')
+        .eq('id', listingId)
+        .single()
+
+    if (fetchError || !listing) {
+        return { success: false, error: 'Không tìm thấy tin đăng' }
+    }
+
+    if (listing.owner_id !== user.id && !isAdmin) {
+        return { success: false, error: 'Bạn không có quyền thực hiện thao tác này' }
+    }
+
+    if (listing.is_locked) {
+        return { success: false, error: 'Tin đăng này đã bị khóa bởi Admin và không thể thay đổi trạng thái.' }
+    }
+
+    if (listing.status !== 'approved' && listing.status !== 'expired') {
+        return { success: false, error: 'Chỉ tin đăng đã duyệt hoặc đã hết hạn mới có thể thay đổi trạng thái này.' }
+    }
+
+    // 2. Toggle status
+    const newStatus = listing.status === 'approved' ? 'expired' : 'approved'
+
+    // Use service role to ensure status can be set to 'approved' bypassing standard restrictions
+    const serviceRoleDb = createServiceRoleClient()
+    const { error: updateError } = await serviceRoleDb
+        .from('listings')
+        .update({
+            status: newStatus as ListingStatus,
             updated_at: new Date().toISOString()
         })
         .eq('id', listingId)

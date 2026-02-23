@@ -12,7 +12,8 @@ export interface SearchFilters {
     suitableFor: string[];
     notSuitableFor: string[];
     amenities: string[];
-    timeOfDay: string[]; // NEW: Buổi sáng, trưa, tối...
+    nearbyFeatures: string[];
+    timeOfDay: string[];
     priceMin: string;
     priceMax: string;
 }
@@ -28,6 +29,7 @@ export const DEFAULT_FILTERS: SearchFilters = {
     suitableFor: [],
     notSuitableFor: [],
     amenities: [],
+    nearbyFeatures: [],
     timeOfDay: [],
     priceMin: '',
     priceMax: '',

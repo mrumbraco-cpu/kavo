@@ -72,6 +72,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 ...(searchFilters.suitableFor.length ? { suitableFor: searchFilters.suitableFor.join(',') } : {}),
                 ...(searchFilters.notSuitableFor.length ? { notSuitableFor: searchFilters.notSuitableFor.join(',') } : {}),
                 ...(searchFilters.amenities.length ? { amenities: searchFilters.amenities.join(',') } : {}),
+                ...(searchFilters.nearbyFeatures.length ? { nearbyFeatures: searchFilters.nearbyFeatures.join(',') } : {}),
                 ...(searchFilters.timeOfDay.length ? { timeOfDay: searchFilters.timeOfDay.join(',') } : {}),
                 ...(searchFilters.priceMin ? { priceMin: searchFilters.priceMin } : {}),
                 ...(searchFilters.priceMax ? { priceMax: searchFilters.priceMax } : {}),

@@ -15,7 +15,6 @@ import {
     Moon,
     Calendar,
     ChevronDown,
-    Trash2,
     ArrowLeft,
     Check
 } from 'lucide-react';
@@ -26,7 +25,7 @@ import {
     WARDS_NEW_BY_PROVINCE
 } from '@/lib/constants/geography';
 import { SPACE_TYPES, LOCATION_TYPES, SUITABLE_FOR_OPTIONS } from '@/lib/constants/listing-options';
-import { AMENITIES } from '@/lib/constants/facilities';
+import { AMENITIES, NEARBY_FEATURES } from '@/lib/constants/facilities';
 import { SearchFilters } from '@/types/search';
 
 const TIME_OF_DAY_OPTIONS = [
@@ -50,6 +49,7 @@ const normalizeString = (str: string) => {
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
         .replace(/\s+/g, '');
 };
 
@@ -62,14 +62,57 @@ const formatCurrencyInput = (val: string) => {
 
 const PRICE_PRESETS = [
     { label: 'Dưới 50K', min: '0', max: '50000' },
-    { label: '50K - 100K', min: '50000', max: '100000' },
-    { label: '100K - 200K', min: '100000', max: '200000' },
-    { label: '200K - 500K', min: '200000', max: '500000' },
-    { label: '500K - 1M', min: '500000', max: '1000000' },
-    { label: '1M - 2M', min: '1000000', max: '2000000' },
-    { label: '2M - 5M', min: '2000000', max: '5000000' },
+    { label: '50K – 100K', min: '50000', max: '100000' },
+    { label: '100K – 200K', min: '100000', max: '200000' },
+    { label: '200K – 500K', min: '200000', max: '500000' },
+    { label: '500K – 1M', min: '500000', max: '1000000' },
+    { label: '1M – 2M', min: '1000000', max: '2000000' },
+    { label: '2M – 5M', min: '2000000', max: '5000000' },
     { label: 'Trên 5M', min: '5000000', max: '' },
 ];
+
+// ─── Reusable chip button ────────────────────────────────────────────────────
+function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className={`px-3 py-1.5 rounded-full text-[12px] font-medium border transition-all cursor-pointer whitespace-nowrap ${selected
+                ? 'bg-premium-900 text-white border-premium-900'
+                : 'bg-white text-premium-700 border-premium-200 hover:border-premium-400'
+                }`}
+        >
+            {label}
+        </button>
+    );
+}
+
+// ─── Section wrapper with divider ────────────────────────────────────────────
+function Section({ title, children, collapsible = false, defaultExpanded = true }: { title: string; children: React.ReactNode; collapsible?: boolean; defaultExpanded?: boolean }) {
+    const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+    return (
+        <div className="py-5 border-b border-premium-100 last:border-b-0">
+            {collapsible ? (
+                <button
+                    type="button"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="flex w-full items-center justify-between text-left cursor-pointer group"
+                >
+                    <h3 className="text-sm font-semibold text-premium-900 group-hover:text-premium-700 transition-colors">{title}</h3>
+                    <ChevronDown className={`w-4 h-4 text-premium-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                </button>
+            ) : (
+                <h3 className="text-sm font-semibold text-premium-900 mb-3">{title}</h3>
+            )}
+
+            {(!collapsible || isExpanded) && (
+                <div className={collapsible ? "mt-4 animate-fade-in" : ""}>
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+}
 
 export default function SearchModal() {
     const {
@@ -78,20 +121,21 @@ export default function SearchModal() {
         filters: confirmedFilters,
         executeSearch,
         isLoading,
-        total
     } = useSearch();
 
     const [draftFilters, setDraftFilters] = useState<SearchFilters>(confirmedFilters);
-
     const [locationStep, setLocationStep] = useState<'none' | 'province' | 'district'>('none');
     const [locationSearch, setLocationSearch] = useState('');
 
-    // Sync draft with confirmed when opening
     useEffect(() => {
         if (isModalOpen) {
             setDraftFilters(confirmedFilters);
-            setLocationStep('none');
             setLocationSearch('');
+            if (!confirmedFilters.province) {
+                setLocationStep('province');
+            } else {
+                setLocationStep('none');
+            }
         }
     }, [isModalOpen, confirmedFilters]);
 
@@ -103,11 +147,7 @@ export default function SearchModal() {
 
     const toggleArray = (key: keyof SearchFilters, val: string) => {
         const current = draftFilters[key] as string[];
-        if (current.includes(val)) {
-            set(key, current.filter(x => x !== val) as any);
-        } else {
-            set(key, [...current, val] as any);
-        }
+        set(key, (current.includes(val) ? current.filter(x => x !== val) : [...current, val]) as any);
     };
 
     const handleClearAll = () => {
@@ -122,13 +162,15 @@ export default function SearchModal() {
             suitableFor: [],
             notSuitableFor: [],
             amenities: [],
+            nearbyFeatures: [],
             timeOfDay: [],
             priceMin: '',
             priceMax: '',
         });
     };
 
-    const canSubmit = draftFilters.province !== '' && (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
+    const canSubmit = draftFilters.province !== '' &&
+        (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
 
     const provinces = draftFilters.geoSystem === 'old' ? PROVINCES_OLD : PROVINCES_NEW;
     const districtData = draftFilters.geoSystem === 'old'
@@ -138,7 +180,6 @@ export default function SearchModal() {
     const filteredProvinces = provinces.filter(p =>
         normalizeString(p).includes(normalizeString(locationSearch))
     );
-
     const filteredDistricts = districtData.filter(d =>
         normalizeString(d).includes(normalizeString(locationSearch))
     );
@@ -162,208 +203,156 @@ export default function SearchModal() {
         }
     };
 
-    // Helper to get selected chips text
-    const getSelectedCount = () => {
-        return (
-            draftFilters.spaceTypes.length +
-            draftFilters.locationTypes.length +
-            draftFilters.suitableFor.length +
-            draftFilters.amenities.length +
-            draftFilters.timeOfDay.length +
-            (draftFilters.query ? 1 : 0)
-        );
+    const handleSwitchGeoSystem = (system: 'old' | 'new') => {
+        set('geoSystem', system);
+        set('province', '');
+        set('district', []);
+        set('ward', []);
+        setLocationSearch('');
+        setLocationStep('province');
     };
 
+    const handleCloseSubLayer = () => {
+        if (!draftFilters.province) { setModalOpen(false); }
+        else { setLocationStep('none'); }
+        setLocationSearch('');
+    };
+
+    const handleBackFromProvince = () => {
+        if (!draftFilters.province) { setModalOpen(false); }
+        else { setLocationStep('none'); }
+        setLocationSearch('');
+    };
+
+    const handleBackFromDistrict = () => {
+        setLocationStep('province');
+        setLocationSearch('');
+    };
+
+    const selectedDistrictText = draftFilters.geoSystem === 'old'
+        ? (draftFilters.district.length > 0 ? draftFilters.district.join(', ') : 'Tất cả')
+        : (draftFilters.ward.length > 0 ? draftFilters.ward.join(', ') : 'Chọn phường/xã');
+
+    const districtLabel = draftFilters.geoSystem === 'old' ? 'Quận/Huyện' : 'Phường/Xã';
+
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-8">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-premium-900/60 backdrop-blur-sm animate-fade-in"
+                className="absolute inset-0 bg-black/40 backdrop-blur-[2px] animate-fade-in"
                 onClick={() => setModalOpen(false)}
             />
 
-            {/* Modal Content */}
-            <div className="relative w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden animate-fade-up">
-                {/* Header */}
-                <div className="flex items-center justify-between px-8 py-6 border-b border-premium-100">
-                    <h2 className="text-xl font-bold text-premium-900">Bộ lọc</h2>
+            {/* Modal */}
+            <div className="relative w-full sm:max-w-lg bg-white sm:rounded-2xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-fade-up rounded-t-2xl">
+
+                {/* ── Header ── */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-premium-100 flex-shrink-0">
                     <button
                         onClick={() => setModalOpen(false)}
-                        className="p-2 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors cursor-pointer"
                     >
-                        <X className="w-6 h-6" />
+                        <X className="w-5 h-5" />
+                    </button>
+                    <h2 className="text-sm font-semibold text-premium-900 absolute left-1/2 -translate-x-1/2">Bộ lọc</h2>
+                    <button
+                        onClick={handleClearAll}
+                        className="text-xs font-semibold text-premium-600 hover:text-premium-900 underline cursor-pointer transition-colors"
+                    >
+                        Xóa tất cả
                     </button>
                 </div>
 
-                {/* Body */}
-                <div className="flex-1 overflow-y-auto p-8 space-y-10">
-                    {/* Geography Selection */}
-                    <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider">Khu vực</h3>
-                            <div className="flex bg-premium-100 p-1 rounded-xl">
+                {/* ── Body ── */}
+                <div className="flex-1 overflow-y-auto px-5">
+
+                    {/* Khu vực */}
+                    <div className="py-5 border-b border-premium-100">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-sm font-semibold text-premium-900">Khu vực</h3>
+                            {/* Geo toggle */}
+                            <div className="flex bg-premium-100 p-0.5 rounded-lg">
                                 <button
-                                    onClick={() => {
-                                        set('geoSystem', 'old');
-                                        set('province', '');
-                                        set('district', []);
-                                        set('ward', []);
-                                    }}
-                                    className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${draftFilters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
+                                    onClick={() => { set('geoSystem', 'old'); set('province', ''); set('district', []); set('ward', []); }}
+                                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-700'}`}
                                 >
                                     Cũ
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        set('geoSystem', 'new');
-                                        set('province', '');
-                                        set('district', []);
-                                        set('ward', []);
-                                    }}
-                                    className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${draftFilters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
+                                    onClick={() => { set('geoSystem', 'new'); set('province', ''); set('district', []); set('ward', []); }}
+                                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-700'}`}
                                 >
                                     Mới
                                 </button>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-2">
+                            {/* Province button */}
                             <button
-                                onClick={() => {
-                                    setLocationSearch('');
-                                    setLocationStep('province');
-                                }}
-                                className="flex items-center justify-between px-4 py-3.5 bg-premium-50/50 border border-premium-100 rounded-2xl text-left hover:border-premium-300 transition-all cursor-pointer group"
+                                onClick={() => { setLocationSearch(''); setLocationStep('province'); }}
+                                className="flex items-center justify-between px-3 py-2.5 border border-premium-200 rounded-xl text-left hover:border-premium-400 transition-all cursor-pointer group"
                             >
-                                <div className="flex items-center gap-3">
-                                    <MapPin className="w-5 h-5 text-premium-300 group-hover:text-premium-900 transition-colors" />
-                                    <div>
-                                        <div className="text-[10px] font-bold text-premium-400 uppercase tracking-tight">Tỉnh/Thành phố</div>
-                                        <div className="text-sm font-bold text-premium-900">{draftFilters.province || 'Toàn quốc'}</div>
+                                <div className="min-w-0">
+                                    <div className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide mb-0.5">Tỉnh/Thành</div>
+                                    <div className={`text-xs font-semibold truncate ${draftFilters.province ? 'text-premium-900' : 'text-red-400'}`}>
+                                        {draftFilters.province || '* Bắt buộc'}
                                     </div>
                                 </div>
-                                <ChevronDown className="w-4 h-4 text-premium-300" />
+                                <ChevronDown className="w-3.5 h-3.5 text-premium-300 flex-shrink-0 ml-1" />
                             </button>
 
+                            {/* District/Ward button */}
                             <button
-                                onClick={() => {
-                                    if (draftFilters.province) {
-                                        setLocationSearch('');
-                                        setLocationStep('district');
-                                    }
-                                }}
+                                onClick={() => { if (draftFilters.province) { setLocationSearch(''); setLocationStep('district'); } }}
                                 disabled={!draftFilters.province}
-                                className="flex items-center justify-between px-4 py-3.5 bg-premium-50/50 border border-premium-100 rounded-2xl text-left hover:border-premium-300 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center justify-between px-3 py-2.5 border border-premium-200 rounded-xl text-left hover:border-premium-400 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed"
                             >
-                                <div className="flex items-center gap-3">
-                                    <Home className="w-5 h-5 text-premium-300 group-hover:text-premium-900 transition-colors" />
-                                    <div>
-                                        <div className="text-[10px] font-bold text-premium-400 uppercase tracking-tight">
-                                            {draftFilters.geoSystem === 'old' ? 'Quận/Huyện' : 'Phường/Xã/Quận'}
-                                        </div>
-                                        <div className="text-sm font-bold text-premium-900 truncate max-w-[180px]">
-                                            {draftFilters.geoSystem === 'old'
-                                                ? (draftFilters.district.length > 0 ? draftFilters.district.join(', ') : 'Chọn Quận/Huyện')
-                                                : (draftFilters.ward.length > 0 ? draftFilters.ward.join(', ') : 'Chọn Phường/Xã/Quận')
-                                            }
-                                        </div>
+                                <div className="min-w-0">
+                                    <div className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide mb-0.5">
+                                        {districtLabel}
+                                        {draftFilters.geoSystem === 'new' && <span className="text-red-400 ml-0.5">*</span>}
+                                    </div>
+                                    <div className="text-xs font-semibold text-premium-900 truncate">
+                                        {selectedDistrictText}
                                     </div>
                                 </div>
-                                <ChevronDown className="w-4 h-4 text-premium-300" />
+                                <ChevronDown className="w-3.5 h-3.5 text-premium-300 flex-shrink-0 ml-1" />
                             </button>
                         </div>
                     </div>
 
-                    {/* Selected Chips */}
-                    {getSelectedCount() > 0 && (
-                        <div>
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider">Đã chọn</h3>
-                                <button
-                                    onClick={handleClearAll}
-                                    className="text-sm text-premium-500 hover:text-red-500 font-medium transition-colors cursor-pointer"
-                                >
-                                    Xóa tất cả
-                                </button>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {[
-                                    ...draftFilters.spaceTypes,
-                                    ...draftFilters.locationTypes,
-                                    ...draftFilters.suitableFor,
-                                    ...draftFilters.amenities,
-                                    ...draftFilters.timeOfDay,
-                                    ...(draftFilters.query ? [draftFilters.query] : [])
-                                ].map((item, i) => (
-                                    <span
-                                        key={i}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-premium-100 text-premium-700 text-xs font-semibold rounded-full border border-premium-200"
-                                    >
-                                        {item}
-                                        <button
-                                            onClick={() => {
-                                                if (draftFilters.query === item) set('query', '');
-                                                else if (draftFilters.province === item) { set('province', ''); set('district', []); set('ward', []); }
-                                                else if (draftFilters.district.includes(item)) handleToggleDistrict(item);
-                                                else if (draftFilters.ward.includes(item)) handleToggleDistrict(item);
-                                                else if (draftFilters.spaceTypes.includes(item)) toggleArray('spaceTypes', item);
-                                                else if (draftFilters.locationTypes.includes(item)) toggleArray('locationTypes', item);
-                                                else if (draftFilters.suitableFor.includes(item)) toggleArray('suitableFor', item);
-                                                else if (draftFilters.amenities.includes(item)) toggleArray('amenities', item);
-                                                else if (draftFilters.timeOfDay.includes(item)) toggleArray('timeOfDay', item);
-                                            }}
-                                            className="hover:text-premium-950 transition-colors"
-                                        >
-                                            <X className="w-3.5 h-3.5" />
-                                        </button>
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Keywords */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Từ khóa</h3>
+                    {/* Từ khóa */}
+                    <Section title="Từ khóa">
                         <div className="relative">
-                            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-premium-300" />
+                            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
                             <input
                                 type="text"
-                                placeholder="Tiêu đề hoặc địa chỉ, tên đường..."
+                                placeholder="Tiêu đề, địa chỉ, tên đường..."
                                 value={draftFilters.query}
                                 onChange={e => set('query', e.target.value)}
-                                className="w-full pl-12 pr-4 py-3.5 bg-premium-50/50 border border-premium-100 rounded-2xl text-premium-900 placeholder:text-premium-300 focus:outline-none focus:ring-2 focus:ring-premium-900/5 transition-all"
+                                className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 placeholder:text-premium-300 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400 transition-all"
                             />
                         </div>
-                    </div>
+                    </Section>
 
-                    {/* Space Types */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Loại hình không gian</h3>
+                    {/* Loại hình không gian */}
+                    <Section title="Loại hình không gian">
                         <div className="flex flex-wrap gap-2">
-                            {SPACE_TYPES.map(type => {
-                                const isSelected = draftFilters.spaceTypes.includes(type);
-                                return (
-                                    <button
-                                        key={type}
-                                        type="button"
-                                        onClick={() => toggleArray('spaceTypes', type)}
-                                        className={`px-4 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer ${isSelected
-                                            ? 'bg-premium-900 text-white border-premium-900'
-                                            : 'bg-white text-premium-600 border-premium-200 hover:border-premium-400'
-                                            }`}
-                                    >
-                                        {type}
-                                    </button>
-                                );
-                            })}
+                            {SPACE_TYPES.map(type => (
+                                <Chip
+                                    key={type}
+                                    label={type}
+                                    selected={draftFilters.spaceTypes.includes(type)}
+                                    onClick={() => toggleArray('spaceTypes', type)}
+                                />
+                            ))}
                         </div>
-                    </div>
+                    </Section>
 
-                    {/* Location Types */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Vị trí mặt bằng</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {/* Vị trí mặt bằng */}
+                    <Section title="Vị trí mặt bằng">
+                        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                             {LOCATION_TYPES.map((type) => {
                                 const Icon = LOCATION_ICONS[type] || Building;
                                 const isSelected = draftFilters.locationTypes.includes(type);
@@ -372,23 +361,24 @@ export default function SearchModal() {
                                         key={type}
                                         type="button"
                                         onClick={() => toggleArray('locationTypes', type)}
-                                        className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2 ${isSelected
-                                            ? 'bg-premium-50 border-premium-900 text-premium-900'
-                                            : 'bg-white border-premium-100 text-premium-500 hover:border-premium-300'
+                                        className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all cursor-pointer gap-1.5 ${isSelected
+                                            ? 'border-premium-900 bg-premium-50'
+                                            : 'border-premium-200 hover:border-premium-400'
                                             }`}
                                     >
-                                        <Icon className={`w-6 h-6 ${isSelected ? 'text-premium-900' : 'text-premium-300'}`} />
-                                        <span className="text-[10px] font-bold uppercase tracking-tight">{type}</span>
+                                        <Icon className={`w-5 h-5 ${isSelected ? 'text-premium-900' : 'text-premium-400'}`} />
+                                        <span className={`text-[10px] font-semibold text-center leading-tight ${isSelected ? 'text-premium-900' : 'text-premium-500'}`}>
+                                            {type}
+                                        </span>
                                     </button>
                                 );
                             })}
                         </div>
-                    </div>
+                    </Section>
 
-                    {/* Time of Day */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Thời gian thuê trong ngày</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    {/* Thời gian */}
+                    <Section title="Thời gian thuê">
+                        <div className="grid grid-cols-5 gap-2">
                             {TIME_OF_DAY_OPTIONS.map((opt) => {
                                 const isSelected = draftFilters.timeOfDay.includes(opt.label);
                                 return (
@@ -396,208 +386,238 @@ export default function SearchModal() {
                                         key={opt.label}
                                         type="button"
                                         onClick={() => toggleArray('timeOfDay', opt.label)}
-                                        className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all cursor-pointer gap-2 ${isSelected
-                                            ? 'bg-premium-900 text-white border-premium-900'
-                                            : 'bg-white border-premium-100 text-premium-500 hover:border-premium-300'
+                                        className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-xl border transition-all cursor-pointer gap-1 ${isSelected
+                                            ? 'border-premium-900 bg-premium-50 text-premium-900'
+                                            : 'border-premium-200 text-premium-400 hover:border-premium-400'
                                             }`}
                                     >
-                                        <opt.icon className="w-5 h-5" />
-                                        <span className="text-[10px] font-bold">{opt.label}</span>
+                                        <opt.icon className="w-4 h-4" />
+                                        <span className={`text-[9px] font-semibold text-center leading-tight ${isSelected ? 'text-premium-900' : 'text-premium-500'}`}>
+                                            {opt.label}
+                                        </span>
                                     </button>
                                 );
                             })}
                         </div>
-                    </div>
+                    </Section>
 
-                    {/* Price Range */}
-                    <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider">Khoảng giá</h3>
-                            <ChevronDown className="w-4 h-4 text-premium-400" />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-bold text-premium-400 uppercase ml-1">Từ</label>
-                                <div className="relative group">
+                    {/* Khoảng giá */}
+                    <Section title="Khoảng giá">
+                        {/* Manual input */}
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                            <div>
+                                <label className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide block mb-1">Từ</label>
+                                <div className="relative">
                                     <input
                                         type="text"
                                         placeholder="0"
                                         value={formatCurrencyInput(draftFilters.priceMin)}
                                         onChange={e => set('priceMin', e.target.value.replace(/\D/g, ''))}
-                                        className="w-full pl-4 pr-10 py-3 bg-white border border-premium-100 rounded-xl text-sm font-bold text-premium-900 focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                                        className="w-full pl-3 pr-6 py-2 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400"
                                     />
-                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-premium-300">đ</span>
+                                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-premium-300">đ</span>
                                 </div>
                             </div>
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-bold text-premium-400 uppercase ml-1">Đến</label>
-                                <div className="relative group">
+                            <div>
+                                <label className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide block mb-1">Đến</label>
+                                <div className="relative">
                                     <input
                                         type="text"
                                         placeholder="Không giới hạn"
                                         value={formatCurrencyInput(draftFilters.priceMax)}
                                         onChange={e => set('priceMax', e.target.value.replace(/\D/g, ''))}
-                                        className="w-full pl-4 pr-10 py-3 bg-white border border-premium-100 rounded-xl text-sm font-bold text-premium-900 focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                                        className="w-full pl-3 pr-6 py-2 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400"
                                     />
-                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-premium-300">đ</span>
+                                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-premium-300">đ</span>
                                 </div>
                             </div>
                         </div>
-
-                        <div>
-                            <h4 className="text-[10px] font-bold text-premium-400 uppercase tracking-wider mb-3 ml-1">Khoảng giá phổ biến</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                                {PRICE_PRESETS.map((preset) => {
-                                    const isSelected = draftFilters.priceMin === preset.min && draftFilters.priceMax === preset.max;
-                                    return (
-                                        <button
-                                            key={preset.label}
-                                            type="button"
-                                            onClick={() => {
-                                                set('priceMin', preset.min);
-                                                set('priceMax', preset.max);
-                                            }}
-                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all text-left ${isSelected
-                                                    ? 'bg-premium-900 text-white border-premium-900'
-                                                    : 'bg-premium-50/50 text-premium-600 border-transparent hover:bg-premium-100 hover:text-premium-900'
-                                                }`}
-                                        >
-                                            {preset.label}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Suitable For */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Phù hợp cho kinh doanh</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {SUITABLE_FOR_OPTIONS.map(opt => {
-                                const isSelected = draftFilters.suitableFor.includes(opt);
+                        {/* Presets */}
+                        <div className="flex flex-wrap gap-1.5">
+                            {PRICE_PRESETS.map((preset) => {
+                                const isSelected = draftFilters.priceMin === preset.min && draftFilters.priceMax === preset.max;
                                 return (
                                     <button
-                                        key={opt}
+                                        key={preset.label}
                                         type="button"
-                                        onClick={() => toggleArray('suitableFor', opt)}
-                                        className={`px-4 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer ${isSelected
-                                            ? 'bg-premium-900 text-white border-premium-900 shadow-lg shadow-premium-900/20'
-                                            : 'bg-white text-premium-600 border-premium-200 hover:border-premium-400'
-                                            }`}
-                                    >
-                                        {opt}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Amenities */}
-                    <div>
-                        <h3 className="text-sm font-bold text-premium-900 uppercase tracking-wider mb-4">Tiện ích</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {AMENITIES.map(opt => {
-                                const isSelected = draftFilters.amenities.includes(opt);
-                                return (
-                                    <button
-                                        key={opt}
-                                        type="button"
-                                        onClick={() => toggleArray('amenities', opt)}
-                                        className={`px-4 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer ${isSelected
+                                        onClick={() => { set('priceMin', preset.min); set('priceMax', preset.max); }}
+                                        className={`px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${isSelected
                                             ? 'bg-premium-900 text-white border-premium-900'
                                             : 'bg-white text-premium-600 border-premium-200 hover:border-premium-400'
                                             }`}
                                     >
-                                        {opt}
+                                        {preset.label}
                                     </button>
                                 );
                             })}
                         </div>
-                    </div>
+                    </Section>
+
+                    {/* Phù hợp cho */}
+                    <Section title="Phù hợp cho" collapsible defaultExpanded={false}>
+                        <div className="flex flex-wrap gap-2">
+                            {SUITABLE_FOR_OPTIONS.map(opt => (
+                                <Chip
+                                    key={opt}
+                                    label={opt}
+                                    selected={draftFilters.suitableFor.includes(opt)}
+                                    onClick={() => toggleArray('suitableFor', opt)}
+                                />
+                            ))}
+                        </div>
+                    </Section>
+
+                    {/* Tiện ích */}
+                    <Section title="Tiện ích" collapsible defaultExpanded={false}>
+                        <div className="flex flex-wrap gap-2">
+                            {AMENITIES.map(opt => (
+                                <Chip
+                                    key={opt}
+                                    label={opt}
+                                    selected={draftFilters.amenities.includes(opt)}
+                                    onClick={() => toggleArray('amenities', opt)}
+                                />
+                            ))}
+                        </div>
+                    </Section>
+
+                    {/* Gần khu vực */}
+                    <Section title="Gần khu vực" collapsible defaultExpanded={false}>
+                        <div className="flex flex-wrap gap-2">
+                            {NEARBY_FEATURES.map(opt => (
+                                <Chip
+                                    key={opt}
+                                    label={opt}
+                                    selected={draftFilters.nearbyFeatures.includes(opt)}
+                                    onClick={() => toggleArray('nearbyFeatures', opt)}
+                                />
+                            ))}
+                        </div>
+                    </Section>
+
+                    {/* bottom breathing room */}
+                    <div className="h-2" />
                 </div>
 
-                {/* Footer */}
-                <div className="px-8 py-6 bg-premium-50/50 border-t border-premium-100 flex items-center justify-between">
-                    <button
-                        onClick={handleClearAll}
-                        className="text-premium-600 font-bold text-sm hover:text-red-500 flex items-center gap-2 transition-colors cursor-pointer"
-                    >
-                        Xóa tất cả
-                    </button>
+                {/* ── Footer ── */}
+                <div className="px-5 py-4 border-t border-premium-100 flex items-center justify-between flex-shrink-0 bg-white">
+                    <span className="text-xs text-premium-400 font-medium">
+                        {draftFilters.province
+                            ? `${draftFilters.province}${draftFilters.geoSystem === 'old' && draftFilters.district.length > 0 ? ` · ${draftFilters.district.length} quận` : ''}${draftFilters.geoSystem === 'new' && draftFilters.ward.length > 0 ? ` · ${draftFilters.ward.length} phường` : ''}`
+                            : 'Chưa chọn khu vực'
+                        }
+                    </span>
                     <button
                         onClick={() => executeSearch(draftFilters)}
                         disabled={!canSubmit || isLoading}
-                        className="px-8 py-3.5 bg-premium-900 text-white rounded-2xl font-bold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-premium-900/10 cursor-pointer flex items-center gap-2"
+                        className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-2"
                     >
                         {isLoading ? (
                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                            `Xem kết quả`
+                            'Xem kết quả'
                         )}
                     </button>
                 </div>
-                {/* Location Selection Sub-modal Layer */}
+
+                {/* ================================================================
+                    Location Sub-layer (Province / District picker)
+                ================================================================ */}
                 {locationStep !== 'none' && (
-                    <div className="absolute inset-0 bg-white z-[110] flex flex-col animate-fade-in">
+                    <div className="absolute inset-0 bg-white z-[110] flex flex-col sm:rounded-2xl rounded-t-2xl animate-fade-in">
+
                         {/* Sub-header */}
-                        <div className="flex items-center justify-between px-8 py-6 border-b border-premium-100">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => {
-                                        if (locationStep === 'district') setLocationStep('province');
-                                        else setLocationStep('none');
-                                        setLocationSearch('');
-                                    }}
-                                    className="p-2 -ml-2 rounded-full hover:bg-premium-100 text-premium-600 transition-colors"
-                                >
-                                    <ArrowLeft className="w-5 h-5" />
-                                </button>
-                                <h2 className="text-xl font-bold text-premium-900">
-                                    {locationStep === 'province'
-                                        ? `Chọn tỉnh/thành phố (${draftFilters.geoSystem})`
-                                        : draftFilters.province
-                                    }
-                                </h2>
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-premium-100 flex-shrink-0">
+                            <button
+                                onClick={locationStep === 'district' ? handleBackFromDistrict : handleBackFromProvince}
+                                className="p-1.5 rounded-full hover:bg-premium-100 text-premium-600 transition-colors cursor-pointer"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </button>
+                            <div className="absolute left-1/2 -translate-x-1/2 text-center">
+                                <p className="text-sm font-semibold text-premium-900">
+                                    {locationStep === 'province' ? 'Chọn tỉnh/thành phố' : draftFilters.province}
+                                </p>
+                                {locationStep === 'district' && (
+                                    <p className="text-[10px] text-premium-400 mt-0.5">
+                                        {draftFilters.geoSystem === 'old' ? 'Quận/Huyện (tùy chọn)' : 'Phường/Xã (bắt buộc)'}
+                                    </p>
+                                )}
                             </div>
                             <button
-                                onClick={() => setLocationStep('none')}
-                                className="p-2 rounded-full hover:bg-premium-100 text-premium-400"
+                                onClick={handleCloseSubLayer}
+                                className="p-1.5 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors cursor-pointer"
                             >
-                                <X className="w-6 h-6" />
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        {/* Sub-search */}
-                        <div className="px-8 pt-6">
+                        {/* Geo toggle — only in province step */}
+                        {locationStep === 'province' && (
+                            <div className="px-5 pt-4 pb-2 flex-shrink-0">
+                                <div className="flex bg-premium-100 p-0.5 rounded-xl w-fit">
+                                    <button
+                                        onClick={() => handleSwitchGeoSystem('old')}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'old'
+                                            ? 'bg-white text-premium-900 shadow-sm'
+                                            : 'text-premium-400 hover:text-premium-700'
+                                            }`}
+                                    >
+                                        🏛 Hành chính cũ
+                                    </button>
+                                    <button
+                                        onClick={() => handleSwitchGeoSystem('new')}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'new'
+                                            ? 'bg-white text-premium-900 shadow-sm'
+                                            : 'text-premium-400 hover:text-premium-700'
+                                            }`}
+                                    >
+                                        🗺 Hành chính mới
+                                    </button>
+                                </div>
+                                <p className="text-[10px] text-premium-400 mt-1.5 ml-0.5">
+                                    {draftFilters.geoSystem === 'new'
+                                        ? 'Hệ mới: phường/xã bắt buộc chọn'
+                                        : 'Hệ cũ: quận/huyện tùy chọn'}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Search input */}
+                        <div className="px-5 pt-3 pb-2 flex-shrink-0">
                             <div className="relative">
-                                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
+                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
                                 <input
                                     type="text"
-                                    placeholder={locationStep === 'province' ? "Tìm tỉnh/thành phố..." : "Tìm quận/huyện/phường..."}
+                                    placeholder={locationStep === 'province' ? 'Tìm tỉnh/thành phố...' : 'Tìm quận/huyện/phường...'}
                                     value={locationSearch}
                                     onChange={e => setLocationSearch(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-premium-50 border border-premium-100 rounded-xl text-sm focus:outline-none"
+                                    autoFocus
+                                    className="w-full pl-9 pr-3 py-2.5 bg-premium-50 border border-premium-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-premium-400"
                                 />
                             </div>
                         </div>
 
-                        {/* Sub-list */}
-                        <div className="flex-1 overflow-y-auto p-8 space-y-1">
+                        {/* List */}
+                        <div className="flex-1 overflow-y-auto px-3 py-1">
                             {locationStep === 'province' ? (
-                                filteredProvinces.map(p => (
+                                filteredProvinces.length > 0 ? filteredProvinces.map(p => (
                                     <button
                                         key={p}
                                         onClick={() => handleSelectProvince(p)}
-                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${draftFilters.province === p ? 'bg-premium-50 text-premium-900' : 'hover:bg-premium-50 text-premium-600'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-left transition-all cursor-pointer ${draftFilters.province === p
+                                            ? 'bg-premium-50 text-premium-900'
+                                            : 'hover:bg-premium-50 text-premium-600'
+                                            }`}
                                     >
-                                        <span className="text-sm font-bold">{p}</span>
+                                        <span className="text-sm font-medium">{p}</span>
                                         {draftFilters.province === p && <Check className="w-4 h-4 text-premium-900" />}
                                     </button>
-                                ))
+                                )) : (
+                                    <div className="text-center py-10 text-premium-400 text-sm">Không tìm thấy tỉnh/thành phố</div>
+                                )
                             ) : (
-                                filteredDistricts.map(d => {
+                                filteredDistricts.length > 0 ? filteredDistricts.map(d => {
                                     const isSelected = draftFilters.geoSystem === 'old'
                                         ? draftFilters.district.includes(d)
                                         : draftFilters.ward.includes(d);
@@ -605,29 +625,34 @@ export default function SearchModal() {
                                         <button
                                             key={d}
                                             onClick={() => handleToggleDistrict(d)}
-                                            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${isSelected ? 'bg-premium-50 text-premium-900' : 'hover:bg-premium-50 text-premium-600'}`}
+                                            className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-left transition-all cursor-pointer ${isSelected
+                                                ? 'bg-premium-50 text-premium-900'
+                                                : 'hover:bg-premium-50 text-premium-600'
+                                                }`}
                                         >
-                                            <span className="text-sm font-bold">{d}</span>
+                                            <span className="text-sm font-medium">{d}</span>
                                             {isSelected && <Check className="w-4 h-4 text-premium-900" />}
                                         </button>
                                     );
-                                })
+                                }) : (
+                                    <div className="text-center py-10 text-premium-400 text-sm">Không tìm thấy kết quả</div>
+                                )
                             )}
                         </div>
 
                         {/* Sub-footer */}
-                        <div className="px-8 py-6 bg-premium-50/50 border-t border-premium-100 flex items-center justify-between gap-4">
-                            <div className="flex-1">
+                        <div className="px-5 py-4 border-t border-premium-100 flex items-center justify-between flex-shrink-0 bg-white">
+                            <div>
+                                {locationStep === 'province' && !draftFilters.province && (
+                                    <p className="text-xs text-red-400 font-medium">⚠ Vui lòng chọn tỉnh/thành để tiếp tục</p>
+                                )}
                                 {locationStep === 'district' && (
-                                    <p className="text-xs text-premium-500 font-medium">
+                                    <p className="text-xs text-premium-500">
                                         Đã chọn {draftFilters.geoSystem === 'old' ? draftFilters.district.length : draftFilters.ward.length}/5
                                         {draftFilters.geoSystem === 'new' && (
-                                            <span className="text-red-500 ml-1 ml-1">* Bắt buộc</span>
+                                            <span className="text-red-400 ml-1">· bắt buộc ≥ 1</span>
                                         )}
                                     </p>
-                                )}
-                                {locationStep === 'province' && (
-                                    <p className="text-xs text-premium-400 font-medium italic">Vui lòng chọn khu vực yêu thích của bạn</p>
                                 )}
                             </div>
 
@@ -635,9 +660,17 @@ export default function SearchModal() {
                                 <button
                                     onClick={() => setLocationStep('none')}
                                     disabled={draftFilters.geoSystem === 'new' && draftFilters.ward.length === 0}
-                                    className="px-8 py-2.5 bg-premium-900 text-white rounded-xl font-bold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                    className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
                                 >
                                     Xác nhận
+                                </button>
+                            )}
+                            {locationStep === 'province' && draftFilters.province && (
+                                <button
+                                    onClick={() => setLocationStep('none')}
+                                    className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 transition-all cursor-pointer"
+                                >
+                                    Tiếp tục →
                                 </button>
                             )}
                         </div>

@@ -64,27 +64,33 @@ export default function AdminListingButtons({ id, status, isHidden, isLocked }: 
                 </button>
             )}
 
-            <button
-                onClick={handleToggleExpired}
-                disabled={isPending}
-                className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-white text-[11px] font-bold transition-all shadow-sm ${status === 'expired'
-                    ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-100'
-                    : 'bg-red-600 hover:bg-red-700 shadow-red-100'
-                    }`}
-            >
-                {status === 'expired' ? 'Bỏ hết hạn' : 'Hết hạn'}
-            </button>
+            {/* Expired/Un-expire: Only for approved or expired */}
+            {(status === 'approved' || status === 'expired') && (
+                <button
+                    onClick={handleToggleExpired}
+                    disabled={isPending}
+                    className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-white text-[11px] font-bold transition-all shadow-sm ${status === 'expired'
+                        ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-100'
+                        : 'bg-red-600 hover:bg-red-700 shadow-red-100'
+                        }`}
+                >
+                    {status === 'expired' ? 'Bỏ hết hạn' : 'Hết hạn'}
+                </button>
+            )}
 
-            <button
-                onClick={handleToggleVisibility}
-                disabled={isPending}
-                className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-white text-[11px] font-bold transition-all shadow-sm ${isHidden
-                    ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-100'
-                    : 'bg-slate-500 hover:bg-slate-600 shadow-slate-100'
-                    }`}
-            >
-                {isHidden ? 'Hiện tin' : 'Ẩn tin'}
-            </button>
+            {/* Visibility: Only for approved */}
+            {status === 'approved' && (
+                <button
+                    onClick={handleToggleVisibility}
+                    disabled={isPending}
+                    className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-white text-[11px] font-bold transition-all shadow-sm ${isHidden
+                        ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-100'
+                        : 'bg-slate-500 hover:bg-slate-600 shadow-slate-100'
+                        }`}
+                >
+                    {isHidden ? 'Hiện tin' : 'Ẩn tin'}
+                </button>
+            )}
 
             <button
                 onClick={handleToggleLock}

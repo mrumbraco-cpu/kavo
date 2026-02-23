@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { ListingStatus } from '@/types/listing'
 import VisibilityToggle from './VisibilityToggle'
+import ExpirationToggle from './ExpirationToggle'
 
 function formatCurrency(amount: number) {
     if (typeof amount !== 'number') return '0 ₫'
@@ -291,13 +292,27 @@ export default async function MyListingsPage({
                                             </div>
                                         ) : (
                                             <>
-                                                <Link
-                                                    href={`/dashboard/listings/${listing.id}/edit`}
-                                                    className="flex-1 h-11 rounded-xl bg-blue-50 text-blue-600 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-blue-600 hover:text-white transition-all duration-300 border border-blue-100 shadow-sm"
-                                                >
-                                                    <Edit className="w-4 h-4" /> Sửa
-                                                </Link>
-                                                <VisibilityToggle listingId={listing.id} isHidden={listing.is_hidden} />
+                                                {listing.status === 'expired' ? (
+                                                    <div
+                                                        className="flex-1 h-11 rounded-xl bg-slate-50 text-slate-400 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border border-slate-100 opacity-60 cursor-not-allowed"
+                                                        title="Tin đã hết hạn, không thể sửa. Vui lòng khôi phục trước."
+                                                    >
+                                                        <Edit className="w-4 h-4" /> Sửa
+                                                    </div>
+                                                ) : (
+                                                    <Link
+                                                        href={`/dashboard/listings/${listing.id}/edit`}
+                                                        className="flex-1 h-11 rounded-xl bg-blue-50 text-blue-600 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-blue-600 hover:text-white transition-all duration-300 border border-blue-100 shadow-sm"
+                                                    >
+                                                        <Edit className="w-4 h-4" /> Sửa
+                                                    </Link>
+                                                )}
+                                                {listing.status === 'approved' && (
+                                                    <VisibilityToggle listingId={listing.id} isHidden={listing.is_hidden} />
+                                                )}
+                                                {(listing.status === 'approved' || listing.status === 'expired') && (
+                                                    <ExpirationToggle listingId={listing.id} status={listing.status} />
+                                                )}
                                                 {listing.status === 'approved' && (
                                                     <Link
                                                         href={`/listings/${listing.id}`}

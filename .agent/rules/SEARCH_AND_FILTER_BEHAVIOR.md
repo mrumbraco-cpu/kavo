@@ -35,7 +35,7 @@ Input changes alone MUST NOT trigger search.
 One input applies to:
 - Listing title
 - Listing description
-- Address fields (old + new)
+- Listing Detailed Address
 
 Search is:
 - Accent-insensitive

@@ -30,7 +30,7 @@ import {
 import { Profile } from '@/types/profile'
 import { Listing } from '@/types/listing'
 import dynamic from 'next/dynamic'
-import { ChevronDown, ChevronUp, Check, Info, MapPin, Settings } from 'lucide-react'
+import { ChevronDown, ChevronUp, Check, Info, MapPin, Settings, Search as SearchIcon, ArrowLeft, X, Home } from 'lucide-react'
 import { decrypt } from '@/lib/utils/encryption' // Client side decrypt? No. Values passed prop should be decrypted if needed?
 // Phone and Zalo are encrypted in listing_contacts but initialListing has them? No, listing has owner_id.
 // Wait, Listing type doesn't have phone/zalo. They are in listing_contacts.
@@ -46,6 +46,14 @@ const ImageUpload = dynamic(() => import('@/components/listings/ImageUpload'), {
     ssr: false,
     loading: () => <div className="w-full h-32 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">Đang tải trình tải ảnh...</div>
 })
+
+const normalizeString = (str: string) => {
+    return str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '');
+};
 
 interface ListingFormProps {
     initialProfile?: Profile;
@@ -65,7 +73,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const fromAdmin = searchParams.get('from') === 'admin' || pathname.startsWith('/admin')
 
     // Basic Info State
-    const [title, setTitle] = useState(initialListing?.title || '')
     const [phone, setPhone] = useState(initialPhone || initialProfile?.phone || '')
     const [zalo, setZalo] = useState(initialZalo || initialProfile?.zalo || '')
     const [spaceType, setSpaceType] = useState(initialListing?.space_type || '')
@@ -117,6 +124,10 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const [showNearby, setShowNearby] = useState(!!initialListing?.nearby_features?.length)
     const [showRentalTime, setShowRentalTime] = useState(!!initialListing?.time_slots?.length)
 
+    // Geography Modal State
+    const [geoModalStep, setGeoModalStep] = useState<'none' | 'old-province' | 'old-district' | 'new-province' | 'new-ward'>('none')
+    const [geoSearch, setGeoSearch] = useState('')
+
     // Load state from localStorage on mount ONLY if creating new
     useEffect(() => {
         if (mode === 'create') {
@@ -125,7 +136,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 try {
                     const data = JSON.parse(savedData)
                     if (data.currentStep) setCurrentStep(data.currentStep)
-                    if (data.title) setTitle(data.title)
                     if (data.phone) setPhone(data.phone)
                     if (data.zalo) setZalo(data.zalo)
                     if (data.spaceType) setSpaceType(data.spaceType)
@@ -176,7 +186,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         if (mode === 'create') {
             const data = {
                 currentStep,
-                title,
                 phone,
                 zalo,
                 spaceType,
@@ -341,12 +350,8 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     const validateStep = (step: number) => {
         if (step === 1) {
-            if (!title || !phone || !spaceType || !locationType) {
+            if (!phone || !spaceType || !locationType) {
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc ở Bước 1')
-                return false
-            }
-            if (title.length > 100) {
-                alert('Tiêu đề không được vượt quá 100 ký tự')
                 return false
             }
             if (!/^\d{10}$/.test(phone)) {
@@ -407,9 +412,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     const prevStep = (e: React.MouseEvent) => {
         e.preventDefault()
-        if (validateStep(currentStep)) {
-            // usually allow going back freely
-        }
         setCurrentStep(prev => prev - 1)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -452,13 +454,15 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         const formData = new FormData()
 
         // Append all states to formData
+        const generatedTitle = `${spaceType} ${locationType} tại ${districtOld}`
+
         pendingImages.forEach(file => { formData.append('images', file) })
         // Append existing images to keep as a separate field, maybe comma separated or multiple entries
         // Backend expects 'images' for uploads. We need a way to tellbackend about KEPT images.
         // We will append 'kept_images' for existing ones.
         existingImagesToKeep.forEach(url => { formData.append('kept_images', url) })
 
-        formData.append('title', title)
+        formData.append('title', generatedTitle)
         formData.append('phone', phone)
         formData.append('zalo', zalo)
         formData.append('space_type', spaceType)
@@ -572,17 +576,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                         </div>
 
                         <div className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Tiêu đề <span className="text-red-500">*</span></label>
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                                    placeholder="VD: Văn phòng rộng rãi tại Quận 1"
-                                    maxLength={100}
-                                />
-                            </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
@@ -646,63 +639,189 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
                         {/* Old Administrative System */}
                         <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700">Hệ thống hành chính cũ</h4>
+                            <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
+                                <div className="w-2 h-4 bg-blue-400 rounded-full"></div>
+                                Hệ thống hành chính cũ
+                            </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={provinceOld}
-                                        onChange={(e) => { setProvinceOld(e.target.value); setDistrictOld(''); }}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
+                                    <button
+                                        type="button"
+                                        onClick={() => { setGeoSearch(''); setGeoModalStep('old-province'); }}
+                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group"
                                     >
-                                        <option value="">-- Chọn Tỉnh/Thành --</option>
-                                        {PROVINCES_OLD.map(p => <option key={p} value={p}>{p}</option>)}
-                                    </select>
+                                        <div className="flex items-center gap-3">
+                                            <MapPin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`font-medium ${provinceOld ? 'text-gray-900' : 'text-gray-400'}`}>
+                                                {provinceOld || '-- Chọn Tỉnh/Thành --'}
+                                            </span>
+                                        </div>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </button>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Quận/Huyện <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={districtOld}
-                                        onChange={(e) => setDistrictOld(e.target.value)}
+                                    <button
+                                        type="button"
                                         disabled={!provinceOld}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
+                                        onClick={() => { setGeoSearch(''); setGeoModalStep('old-district'); }}
+                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
                                     >
-                                        <option value="">-- Chọn Quận/Huyện --</option>
-                                        {provinceOld && DISTRICTS_OLD_BY_PROVINCE[provinceOld].map(d => <option key={d} value={d}>{d}</option>)}
-                                    </select>
+                                        <div className="flex items-center gap-3">
+                                            <Home className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`font-medium ${districtOld ? 'text-gray-900' : 'text-gray-400'}`}>
+                                                {districtOld || '-- Chọn Quận/Huyện --'}
+                                            </span>
+                                        </div>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* New Administrative System */}
                         <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700">Hệ thống hành chính mới</h4>
+                            <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
+                                <div className="w-2 h-4 bg-green-400 rounded-full"></div>
+                                Hệ thống hành chính mới
+                            </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={provinceNew}
-                                        onChange={(e) => { setProvinceNew(e.target.value); setWardNew(''); }}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
+                                    <button
+                                        type="button"
+                                        onClick={() => { setGeoSearch(''); setGeoModalStep('new-province'); }}
+                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group"
                                     >
-                                        <option value="">-- Chọn Tỉnh/Thành --</option>
-                                        {PROVINCES_NEW.map(p => <option key={p} value={p}>{p}</option>)}
-                                    </select>
+                                        <div className="flex items-center gap-3">
+                                            <MapPin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`font-medium ${provinceNew ? 'text-gray-900' : 'text-gray-400'}`}>
+                                                {provinceNew || '-- Chọn Tỉnh/Thành --'}
+                                            </span>
+                                        </div>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </button>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Phường/Xã/Quận <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={wardNew}
-                                        onChange={(e) => setWardNew(e.target.value)}
+                                    <button
+                                        type="button"
                                         disabled={!provinceNew}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700 disabled:bg-gray-50 disabled:text-gray-400"
+                                        onClick={() => { setGeoSearch(''); setGeoModalStep('new-ward'); }}
+                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
                                     >
-                                        <option value="">-- Chọn Phường/Xã --</option>
-                                        {provinceNew && WARDS_NEW_BY_PROVINCE[provinceNew].map(w => <option key={w} value={w}>{w}</option>)}
-                                    </select>
+                                        <div className="flex items-center gap-3">
+                                            <Home className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`font-medium ${wardNew ? 'text-gray-900' : 'text-gray-400'}`}>
+                                                {wardNew || '-- Chọn Phường/Xã --'}
+                                            </span>
+                                        </div>
+                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Geography Picker Modal */}
+                        {geoModalStep !== 'none' && (
+                            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                                <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-fade-in" onClick={() => setGeoModalStep('none')} />
+                                <div className="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl flex flex-col max-h-[80vh] overflow-hidden animate-fade-up">
+                                    {/* Header */}
+                                    <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+                                        <div className="flex items-center gap-4">
+                                            {(geoModalStep === 'old-district' || geoModalStep === 'new-ward') && (
+                                                <button
+                                                    onClick={() => setGeoModalStep(geoModalStep === 'old-district' ? 'old-province' : 'new-province')}
+                                                    className="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-600 transition-colors"
+                                                >
+                                                    <ArrowLeft className="w-5 h-5" />
+                                                </button>
+                                            )}
+                                            <h2 className="text-lg font-bold text-gray-900">
+                                                {geoModalStep.includes('province') ? 'Chọn Tỉnh / Thành phố' : (geoModalStep === 'old-district' ? 'Chọn Quận / Huyện' : 'Chọn Phường / Xã')}
+                                            </h2>
+                                        </div>
+                                        <button onClick={() => setGeoModalStep('none')} className="p-2 rounded-full hover:bg-gray-100 text-gray-400">
+                                            <X className="w-6 h-6" />
+                                        </button>
+                                    </div>
+
+                                    {/* Search */}
+                                    <div className="px-6 pt-4">
+                                        <div className="relative">
+                                            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Tìm kiếm nhanh..."
+                                                value={geoSearch}
+                                                onChange={e => setGeoSearch(e.target.value)}
+                                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                                autoFocus
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* List */}
+                                    <div className="flex-1 overflow-y-auto p-6 space-y-1">
+                                        {(geoModalStep === 'old-province' || geoModalStep === 'new-province') && (
+                                            (geoModalStep === 'old-province' ? PROVINCES_OLD : PROVINCES_NEW)
+                                                .filter(p => normalizeString(p).includes(normalizeString(geoSearch)))
+                                                .map(p => (
+                                                    <button
+                                                        key={p}
+                                                        onClick={() => {
+                                                            if (geoModalStep === 'old-province') {
+                                                                setProvinceOld(p);
+                                                                setDistrictOld('');
+                                                                setGeoModalStep('old-district');
+                                                            } else {
+                                                                setProvinceNew(p);
+                                                                setWardNew('');
+                                                                setGeoModalStep('new-ward');
+                                                            }
+                                                            setGeoSearch('');
+                                                        }}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                    >
+                                                        <span className="text-sm font-semibold">{p}</span>
+                                                        {(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p && <Check className="w-4 h-4" />}
+                                                    </button>
+                                                ))
+                                        )}
+                                        {geoModalStep === 'old-district' && (
+                                            (DISTRICTS_OLD_BY_PROVINCE[provinceOld] || [])
+                                                .filter(d => normalizeString(d).includes(normalizeString(geoSearch)))
+                                                .map(d => (
+                                                    <button
+                                                        key={d}
+                                                        onClick={() => { setDistrictOld(d); setGeoModalStep('none'); }}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${districtOld === d ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                    >
+                                                        <span className="text-sm font-semibold">{d}</span>
+                                                        {districtOld === d && <Check className="w-4 h-4" />}
+                                                    </button>
+                                                ))
+                                        )}
+                                        {geoModalStep === 'new-ward' && (
+                                            (WARDS_NEW_BY_PROVINCE[provinceNew] || [])
+                                                .filter(w => normalizeString(w).includes(normalizeString(geoSearch)))
+                                                .map(w => (
+                                                    <button
+                                                        key={w}
+                                                        onClick={() => { setWardNew(w); setGeoModalStep('none'); }}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${wardNew === w ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                    >
+                                                        <span className="text-sm font-semibold">{w}</span>
+                                                        {wardNew === w && <Check className="w-4 h-4" />}
+                                                    </button>
+                                                ))
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Detailed address is captured automatically from the map/coordinates and stored in state */}
 

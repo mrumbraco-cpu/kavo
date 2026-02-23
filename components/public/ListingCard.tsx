@@ -39,7 +39,8 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
                         src={thumbnail}
                         alt={listing.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        className={`object-cover group-hover:scale-105 transition-transform duration-500 ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
+                            }`}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         unoptimized
                     />
@@ -56,6 +57,17 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
                         <span className="px-2.5 py-1 bg-black/60 text-white text-xs font-medium rounded-full backdrop-blur-sm">
                             {listing.space_type}
                         </span>
+                    </div>
+                )}
+
+                {/* Status Watermark */}
+                {listing.status === 'expired' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] group-hover:bg-black/50 transition-colors">
+                        <div className="px-4 py-2 border-2 border-white/50 rounded-lg transform -rotate-12 bg-rose-600/80 shadow-xl">
+                            <span className="text-white text-sm font-black uppercase tracking-widest whitespace-nowrap">
+                                Tin đăng hết hạn
+                            </span>
+                        </div>
                     </div>
                 )}
             </div>

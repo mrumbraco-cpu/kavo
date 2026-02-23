@@ -56,20 +56,6 @@ export default function PublicNavbarActions({ user, profile }: Props) {
             >
                 Đăng tin
             </Link>
-            {/* Coin balance */}
-            {profile && (
-                <Link
-                    href="/dashboard/wallet"
-                    className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full hover:bg-amber-100 transition-colors"
-                >
-                    <svg className="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                        <circle cx="10" cy="10" r="8" />
-                        <text x="10" y="14" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">₫</text>
-                    </svg>
-                    <span className="text-sm font-semibold text-amber-700">{profile.coin_balance}</span>
-                </Link>
-            )}
-
             {/* User dropdown */}
             <div className="relative group">
                 <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-premium-50 transition-colors cursor-pointer">
@@ -84,45 +70,83 @@ export default function PublicNavbarActions({ user, profile }: Props) {
                 </button>
 
                 {/* Dropdown */}
-                <div className="absolute right-0 top-full mt-1 w-52 bg-white rounded-xl shadow-xl border border-premium-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="absolute right-0 top-full mt-1 w-64 bg-white rounded-xl shadow-xl border border-premium-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     {profile?.role === 'admin' && (
-                        <Link
-                            href="/admin"
-                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
-                        >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            Quản trị
-                        </Link>
+                        <>
+                            <Link
+                                href="/admin"
+                                className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                Quản trị hệ thống
+                            </Link>
+                            <hr className="my-1 border-premium-100" />
+                        </>
                     )}
+
+                    {/* 1. Tài khoản xu */}
                     <Link
-                        href="/dashboard"
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
+                        href="/dashboard/coins"
+                        className="flex items-center justify-between px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
                     >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                        </svg>
-                        Dashboard
+                        <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Tài khoản xu
+                        </div>
+                        <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold rounded leading-none">
+                            {profile?.coin_balance ?? 0}
+                        </span>
                     </Link>
+
+                    {/* 2. Danh sách tin đăng */}
                     <Link
                         href="/dashboard/listings"
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        Listings của tôi
+                        Danh sách tin đăng
                     </Link>
+
+                    {/* 3. Tin đã lưu */}
                     <Link
-                        href="/dashboard/wallet"
+                        href="/dashboard/favorites"
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
-                        Ví xu
+                        Tin đã lưu
                     </Link>
+
+                    {/* 4. Khóa liên hệ đã mở */}
+                    <Link
+                        href="/dashboard/unlocked-listings"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                        </svg>
+                        Khóa liên hệ đã mở
+                    </Link>
+
+                    {/* 5. Cập nhật tài khoản */}
+                    <Link
+                        href="/dashboard/profile"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Cập nhật tài khoản
+                    </Link>
+
                     <hr className="my-1 border-premium-100" />
                     <button
                         onClick={handleLogout}
