@@ -38,23 +38,23 @@ export default function VisibilityToggle({ listingId, isHidden }: VisibilityTogg
         <button
             onClick={handleToggle}
             disabled={isLoading}
-            className={`h-11 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border shadow-sm ${isHidden
+            className={`h-9 px-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 border shadow-sm ${isHidden
                 ? 'text-red-600 bg-red-50 hover:bg-red-600 hover:text-white border-red-100'
-                : 'text-slate-600 bg-slate-50 hover:bg-slate-900 hover:text-white border-slate-100 hover:border-slate-900 shadow-slate-100'
+                : 'text-slate-600 bg-slate-50 hover:bg-slate-900 hover:text-white border-slate-100'
                 } disabled:opacity-50`}
             title={isHidden ? 'Nhấp để hiển thị lại' : 'Nhấp để tạm ẩn tin'}
         >
             {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : isHidden ? (
                 <>
-                    <Eye className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Hiện tin</span>
+                    <Eye className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Hiện tin</span>
                 </>
             ) : (
                 <>
-                    <EyeOff className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Ẩn tin</span>
+                    <EyeOff className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Ẩn tin</span>
                 </>
             )}
         </button>

@@ -318,7 +318,7 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                 </table>
             </div>
 
-            {/* DETERMINISTIC PAGINATION */}
+            {/* ROBUST PAGINATION */}
             {totalPages > 1 && (
                 <div className="mt-8 flex justify-center items-center gap-4">
                     <Link
@@ -333,14 +333,52 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                     >
                         Trước
                     </Link>
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Trang</span>
-                        <div className="flex items-center justify-center min-w-[32px] h-[32px] text-sm font-black text-blue-600 bg-blue-50 rounded-lg border border-blue-100">
-                            {page}
-                        </div>
-                        <span className="text-xs font-bold text-slate-400">/</span>
-                        <span className="text-sm font-bold text-slate-700">{totalPages}</span>
+
+                    <div className="hidden sm:flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
+                        {(() => {
+                            const pages = [];
+                            const visibleThreshold = 2; // Show 2 pages before and after current
+
+                            for (let i = 1; i <= totalPages; i++) {
+                                // Logic: Always show first, last, current, and pages near current
+                                if (
+                                    i === 1 ||
+                                    i === totalPages ||
+                                    (i >= page - visibleThreshold && i <= page + visibleThreshold)
+                                ) {
+                                    pages.push(
+                                        <Link
+                                            key={i}
+                                            href={{
+                                                pathname: '/admin/listings',
+                                                query: { ...params, page: i }
+                                            }}
+                                            className={`min-w-[40px] h-10 px-3 rounded-xl flex items-center justify-center text-sm font-black transition-all ${page === i
+                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 scale-105'
+                                                : 'text-slate-500 hover:text-slate-900 hover:bg-white'
+                                                }`}
+                                        >
+                                            {i}
+                                        </Link>
+                                    );
+                                } else if (
+                                    i === page - visibleThreshold - 1 ||
+                                    i === page + visibleThreshold + 1
+                                ) {
+                                    // Add ellipses
+                                    pages.push(
+                                        <span key={`el-${i}`} className="px-1 text-slate-400 font-bold">...</span>
+                                    );
+                                }
+                            }
+                            return pages;
+                        })()}
                     </div>
+
+                    <div className="sm:hidden flex items-center gap-2">
+                        <span className="text-sm font-bold text-slate-700">Trang {page} / {totalPages}</span>
+                    </div>
+
                     <Link
                         href={{
                             pathname: '/admin/listings',

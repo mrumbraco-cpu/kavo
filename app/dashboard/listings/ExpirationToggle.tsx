@@ -39,23 +39,23 @@ export default function ExpirationToggle({ listingId, status }: ExpirationToggle
         <button
             onClick={handleToggle}
             disabled={isLoading}
-            className={`h-11 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border shadow-sm ${isExpired
+            className={`h-9 px-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 border shadow-sm ${isExpired
                 ? 'text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white border-emerald-100'
                 : 'text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border-rose-100'
                 } disabled:opacity-50`}
             title={isExpired ? 'Nhấp để khôi phục (Bỏ hết hạn)' : 'Nhấp để đánh dấu Hết hạn'}
         >
             {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : isExpired ? (
                 <>
-                    <RotateCcw className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Khôi phục</span>
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Khôi phục</span>
                 </>
             ) : (
                 <>
-                    <AlertCircle className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Hết hạn</span>
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Hết hạn</span>
                 </>
             )}
         </button>

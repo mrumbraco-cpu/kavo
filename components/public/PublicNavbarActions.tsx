@@ -21,6 +21,7 @@ export default function PublicNavbarActions({ user, profile }: Props) {
     };
 
     const isListingDetail = pathname.startsWith('/listings/');
+    const isSearchPage = pathname === '/search';
 
     if (!user) {
         if (isListingDetail) return null;
@@ -32,6 +33,23 @@ export default function PublicNavbarActions({ user, profile }: Props) {
 
         return (
             <div className="flex items-center gap-4">
+                {isSearchPage && (
+                    <div className="relative group/post">
+                        {/* Floating badge */}
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg whitespace-nowrap z-10 animate-bounce border border-white pointer-events-none">
+                            Thưởng 10 xu
+                        </div>
+                        <Link
+                            href={`/auth/login?next=${encodeURIComponent('/dashboard/listings/new')}`}
+                            className="px-5 py-2 bg-premium-900 text-white text-sm font-semibold rounded-full hover:bg-premium-800 transition-all hover:shadow-md active:scale-95 flex items-center gap-2"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                            Đăng tin
+                        </Link>
+                    </div>
+                )}
                 <Link
                     href={`/auth/login${nextParam}`}
                     className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-full text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all"
@@ -47,12 +65,23 @@ export default function PublicNavbarActions({ user, profile }: Props) {
 
     return (
         <div className="flex items-center gap-4">
-            <Link
-                href="/dashboard/listings/new"
-                className="px-4 py-2 bg-premium-900 text-white text-sm font-medium rounded-full hover:bg-premium-800 transition-colors shadow-sm hover:shadow-md active:scale-95 transition-all"
-            >
-                Đăng tin
-            </Link>
+            {isSearchPage && (
+                <div className="relative group/post">
+                    {/* Floating badge */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg whitespace-nowrap z-10 animate-bounce border border-white pointer-events-none">
+                        Thưởng 10 xu
+                    </div>
+                    <Link
+                        href="/dashboard/listings/new"
+                        className="px-5 py-2 bg-premium-900 text-white text-sm font-semibold rounded-full hover:bg-premium-800 transition-all hover:shadow-md active:scale-95 flex items-center gap-2"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        Đăng tin
+                    </Link>
+                </div>
+            )}
             {/* User dropdown */}
             <div className="relative group">
                 <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-premium-50 transition-colors cursor-pointer">
