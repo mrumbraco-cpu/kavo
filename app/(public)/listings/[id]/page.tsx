@@ -196,11 +196,11 @@ export default async function ListingDetailPage({ params }: Props) {
                         {/* Badges + Address */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
                             <div className="flex flex-wrap gap-1.5">
-                                {typedListing.space_type && (
-                                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                                        {typedListing.space_type}
+                                {typedListing.space_type?.map((type, idx) => (
+                                    <span key={idx} className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                                        {type}
                                     </span>
-                                )}
+                                ))}
                                 {typedListing.location_type && (
                                     <span className="px-2.5 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded-full">
                                         {typedListing.location_type}
@@ -225,7 +225,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
                         {/* Price section */}
                         <div className="pb-8 border-b border-gray-100">
-                            <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Mức giá</p>
+                            <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Giá thuê theo buổi</p>
                             {typedListing.price_min > 0 || typedListing.price_max > 0 ? (
                                 <p className="text-3xl font-bold text-gray-900">
                                     {typedListing.price_min === typedListing.price_max
@@ -234,7 +234,7 @@ export default async function ListingDetailPage({ params }: Props) {
                                     }
                                 </p>
                             ) : (
-                                <p className="text-2xl font-medium text-gray-500 italic">Giá thương lượng trực tiếp</p>
+                                <p className="text-3xl font-bold text-gray-900">Miễn phí</p>
                             )}
                             {parsedTimeSlots.length > 0 && (
                                 <div className="mt-3 flex flex-col gap-1.5">
@@ -338,9 +338,7 @@ export default async function ListingDetailPage({ params }: Props) {
                                 <div className="rounded-2xl overflow-hidden border border-gray-100">
                                     <MiniMap latitude={typedListing.latitude} longitude={typedListing.longitude} />
                                 </div>
-                                <p className="text-xs text-gray-400 mt-3 leading-relaxed">
-                                    * Vị trí hiển thị là vị trí tham chiếu. Địa chỉ chính xác sẽ được cung cấp khi bạn liên hệ với chủ không gian.
-                                </p>
+
                             </div>
                         )}
                     </div>

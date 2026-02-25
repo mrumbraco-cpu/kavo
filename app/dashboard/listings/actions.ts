@@ -23,7 +23,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
         return { success: false, error: 'Tài khoản của bạn đã bị khóa tính năng đăng bài.' }
     }
     const description = formData.get('description') as string
-    const space_type = formData.get('space_type') as string
+    const space_type = (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
     const location_type = formData.get('location_type') as string
     const price_min = parseInt(formData.get('price_min') as string) || 0
     const price_max = parseInt(formData.get('price_max') as string) || 0
@@ -50,7 +50,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     // Validation
     if (!title) return { success: false, error: 'Tiêu đề là bắt buộc' }
     if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
-    if (!space_type) return { success: false, error: 'Loại hình không gian là bắt buộc' }
+    if (space_type.length === 0) return { success: false, error: 'Loại hình không gian là bắt buộc' }
     if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
     if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
     if (!detailed_address) return { success: false, error: 'Địa chỉ chi tiết là bắt buộc' }
@@ -246,7 +246,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     // 2. Extract Data
     const title = formData.get('title') as string
     const description = formData.get('description') as string
-    const space_type = formData.get('space_type') as string
+    const space_type = (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
     const location_type = formData.get('location_type') as string
     const price_min = parseInt(formData.get('price_min') as string) || 0
     const price_max = parseInt(formData.get('price_max') as string) || 0
@@ -273,7 +273,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     // Validation
     if (!title) return { success: false, error: 'Tiêu đề là bắt buộc' }
     if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
-    if (!space_type) return { success: false, error: 'Loại hình không gian là bắt buộc' }
+    if (space_type.length === 0) return { success: false, error: 'Loại hình không gian là bắt buộc' }
     if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
     if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
     if (isNaN(latitude) || isNaN(longitude)) return { success: false, error: 'Tọa độ không hợp lệ' }

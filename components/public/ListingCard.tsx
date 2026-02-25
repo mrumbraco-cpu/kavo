@@ -33,7 +33,7 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
             onMouseLeave={() => onHover?.(null)}
         >
             {/* Image */}
-            <div className="relative w-full aspect-[4/3] bg-premium-50 overflow-hidden">
+            <div className="relative w-full aspect-video bg-premium-50 overflow-hidden">
                 {thumbnail ? (
                     <Image
                         src={thumbnail}
@@ -52,11 +52,18 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
                     </div>
                 )}
                 {/* Space type badge */}
-                {listing.space_type && (
-                    <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 bg-black/60 text-white text-xs font-medium rounded-full backdrop-blur-sm">
-                            {listing.space_type}
-                        </span>
+                {listing.space_type && listing.space_type.length > 0 && (
+                    <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                        {listing.space_type.slice(0, 2).map((type, i) => (
+                            <span key={i} className="px-2 py-0.5 bg-black/60 text-white text-[10px] font-medium rounded-full backdrop-blur-sm whitespace-nowrap">
+                                {type}
+                            </span>
+                        ))}
+                        {listing.space_type.length > 2 && (
+                            <span className="px-2 py-0.5 bg-black/60 text-white text-[10px] font-medium rounded-full backdrop-blur-sm">
+                                +{listing.space_type.length - 2}
+                            </span>
+                        )}
                     </div>
                 )}
 
@@ -85,7 +92,7 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         <span className="text-xs truncate">
-                            {detailedAddress}
+                            Gần {detailedAddress}
                         </span>
                     </div>
                 )}
@@ -96,7 +103,7 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
                             {formatPrice(listing.price_min, listing.price_max)}
                         </span>
                     ) : (
-                        <span className="text-sm text-premium-400 italic">Thương lượng</span>
+                        <span className="text-sm font-bold text-emerald-600">Miễn phí</span>
                     )}
                     {listing.location_type && (
                         <span className="text-xs text-premium-400">{listing.location_type}</span>

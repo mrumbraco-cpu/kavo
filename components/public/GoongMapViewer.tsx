@@ -19,6 +19,19 @@ const MARKER_PRIMARY_COLOR = '#0f172a';   // premium-900
 const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 
+function formatPrice(min: number, max: number): string {
+    const fmt = (n: number) => {
+        if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}tr`;
+        if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
+        return `${n}`;
+    };
+    if (min === max) {
+        if (min === 0) return 'Miễn phí';
+        return `${fmt(min)} ₫`;
+    }
+    return `${fmt(min)} – ${fmt(max)} ₫`;
+}
+
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<goongjs.Map | null>(null);
@@ -49,18 +62,57 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     }, []);
 
     const buildPopupHTML = (listing: Listing): string => {
-        const thumb = listing.images?.[0] ?? '';
-        const price = listing.price_min > 0
-            ? `${(listing.price_min / 1000).toFixed(0)}k – ${(listing.price_max / 1000).toFixed(0)}k ₫`
-            : 'Thương lượng';
+        const thumb = listing.images?.[0] ?? null;
+        const priceDisplay = formatPrice(listing.price_min, listing.price_max);
+        const isFree = priceDisplay === 'Miễn phí';
+
+        const spaceBadges = (listing.space_type && Array.isArray(listing.space_type) && listing.space_type.length > 0)
+            ? `
+                <div style="position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:4px;z-index:10;">
+                    ${listing.space_type.slice(0, 2).map(type => `
+                        <span style="padding:2px 8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;font-weight:500;border-radius:9999px;backdrop-filter:blur(4px);white-space:nowrap;">
+                            ${type}
+                        </span>
+                    `).join('')}
+                    ${listing.space_type.length > 2 ? `
+                        <span style="padding:2px 8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;font-weight:500;border-radius:9999px;backdrop-filter:blur(4px);">
+                            +${listing.space_type.length - 2}
+                        </span>
+                    ` : ''}
+                </div>
+            ` : '';
+
         return `
-            <div style="min-width:200px;font-family:sans-serif;">
-                ${thumb ? `<img src="${thumb}" style="width:100%;height:100px;object-fit:cover;border-radius:6px 6px 0 0;margin:-8px -8px 8px;width:calc(100% + 16px);" alt="" />` : ''}
-                <div style="padding:${thumb ? '0' : '0'}">
-                    <div style="font-weight:600;font-size:13px;color:#0f172a;margin-bottom:4px;line-height:1.3;">${listing.title}</div>
-                    ${listing.space_type ? `<span style="font-size:11px;padding:2px 8px;background:#f1f5f9;border-radius:100px;color:#475569;">${listing.space_type}</span>` : ''}
-                    <div style="font-size:12px;color:#334155;font-weight:600;margin-top:8px;">${price}</div>
-                    <a href="/listings/${listing.id}" style="display:block;margin-top:8px;padding:6px;background:#0f172a;color:white;text-align:center;border-radius:6px;font-size:12px;text-decoration:none;font-weight:500;">Xem chi tiết →</a>
+            <div style="width:260px;display:flex;flex-direction:column;background:white;font-family:inherit;">
+                <!-- Image Section -->
+                <div style="position:relative;width:100%;aspect-ratio:16/9;background:#f8fafc;overflow:hidden;">
+                    ${thumb ? `
+                        <img src="${thumb}" style="width:100%;height:100%;object-fit:cover;" alt="" />
+                    ` : `
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:40px;height:40px;color:#e2e8f0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                    `}
+                    ${spaceBadges}
+                </div>
+
+                <!-- Content Section -->
+                <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+                    <h3 style="font-weight:500;color:#0f172a;font-size:14px;line-height:1.4;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em;">
+                        ${listing.title}
+                    </h3>
+
+                    <!-- Footer Section -->
+                    <div style="margin-top:4px;padding-top:12px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+                        <span style="font-size:14px;font-weight:700;color:${isFree ? '#10b981' : '#0f172a'};">
+                            ${priceDisplay}
+                        </span>
+                        <a href="/listings/${listing.id}" style="padding:6px 12px;background:#0f172a;color:white;font-size:11px;font-weight:700;border-radius:8px;text-decoration:none;transition:background 0.2s;">
+                            Xem chi tiết
+                        </a>
+                    </div>
                 </div>
             </div>
         `;
@@ -97,8 +149,12 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             } else {
                 // Create new marker
                 const el = createMarkerEl(color, scale);
-                const popup = new window.goongjs.Popup({ closeButton: true, closeOnClick: false, offset: 15 })
-                    .setHTML(buildPopupHTML(listing));
+                const popup = new (window.goongjs.Popup as any)({
+                    closeButton: true,
+                    closeOnClick: false,
+                    offset: 20,
+                    maxWidth: 'none'
+                }).setHTML(buildPopupHTML(listing));
 
                 const marker = new window.goongjs.Marker({ element: el })
                     .setLngLat([listing.longitude, listing.latitude])
@@ -226,6 +282,91 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             }
         }
     }, [isLoaded, hoveredListingId, allListings, fitMarkers]);
+
+    // Inject global styles for Goong Map Popups to eliminate white space and fix design
+    useEffect(() => {
+        const styleId = 'goong-map-custom-styles';
+        if (typeof document === 'undefined') return;
+
+        let style = document.getElementById(styleId) as HTMLStyleElement;
+        if (!style) {
+            style = document.createElement('style');
+            style.id = styleId;
+            document.head.appendChild(style);
+        }
+
+        style.innerHTML = `
+            /* Core reset for the popup bubble */
+            .goongjs-popup-content, 
+            .mapboxgl-popup-content {
+                padding: 0 !important;
+                margin: 0 !important;
+                border-radius: 16px !important;
+                overflow: hidden !important;
+                border: none !important;
+                background: white !important;
+                box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+                width: auto !important;
+                max-width: none !important;
+            }
+
+            /* Fix for common internal wrappers that cause white gaps */
+            .goongjs-popup-content > div,
+            .mapboxgl-popup-content > div {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Move close button to overlay the image/content */
+            .goongjs-popup-close-button,
+            .mapboxgl-popup-close-button {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                color: white !important;
+                background: rgba(0, 0, 0, 0.4) !important;
+                width: 28px !important;
+                height: 28px !important;
+                border-radius: 50% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                z-index: 100 !important;
+                border: 2px solid rgba(255, 255, 255, 0.2) !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                backdrop-filter: blur(4px) !important;
+                transition: all 0.2s !important;
+                outline: none !important;
+            }
+
+            .goongjs-popup-close-button:hover,
+            .mapboxgl-popup-close-button:hover {
+                background: rgba(0, 0, 0, 0.7) !important;
+                transform: scale(1.1);
+                color: white !important;
+            }
+
+            /* Hide the arrow tip because it creates an offset gap */
+            .goongjs-popup-tip,
+            .mapboxgl-popup-tip {
+                display: none !important;
+                border: none !important;
+            }
+
+            /* Ensure the popup container itself has no hidden expansion */
+            .goongjs-popup, .mapboxgl-popup {
+                z-index: 30 !important;
+            }
+        `;
+
+        return () => {
+            const el = document.getElementById(styleId);
+            if (el) el.remove();
+        };
+    }, []);
 
     return (
         <div className="relative w-full h-full">

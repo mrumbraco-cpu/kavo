@@ -272,7 +272,9 @@ export default async function MyListingsPage({
                                         <div className="flex items-center justify-between mb-6 bg-slate-50 p-2.5 rounded-2xl border border-slate-100">
                                             <div className="flex flex-col">
                                                 <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5">Loại hình</div>
-                                                <div className="text-[11px] font-bold text-slate-600 truncate">{listing.space_type}</div>
+                                                <div className="text-[11px] font-bold text-slate-600 truncate">
+                                                    {Array.isArray(listing.space_type) ? listing.space_type.join(', ') : listing.space_type}
+                                                </div>
                                             </div>
                                             <div className="flex flex-col items-end">
                                                 <div className="text-[8px] font-black text-slate-400 uppercase mb-0.5 text-right">Ngày đăng</div>

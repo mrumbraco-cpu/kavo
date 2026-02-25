@@ -75,7 +75,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     // Basic Info State
     const [phone, setPhone] = useState(initialPhone || initialProfile?.phone || '')
     const [zalo, setZalo] = useState(initialZalo || initialProfile?.zalo || '')
-    const [spaceType, setSpaceType] = useState(initialListing?.space_type || '')
+    const [spaceTypes, setSpaceTypes] = useState<string[]>(initialListing?.space_type || [])
     const [locationType, setLocationType] = useState(initialListing?.location_type || '')
 
     // Geography Administrative State
@@ -117,12 +117,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     // Collapsible sections state (Step 3 only)
     const [showDescription, setShowDescription] = useState(!!initialListing?.description)
     const [showImages, setShowImages] = useState(!!initialListing?.images?.length)
-    const [showPricing, setShowPricing] = useState(!!initialListing?.price_min || !!initialListing?.price_max)
     const [showSuitable, setShowSuitable] = useState(!!initialListing?.suitable_for?.length)
     const [showNotSuitable, setShowNotSuitable] = useState(!!initialListing?.not_suitable_for?.length)
-    const [showAmenities, setShowAmenities] = useState(!!initialListing?.amenities?.length)
     const [showNearby, setShowNearby] = useState(!!initialListing?.nearby_features?.length)
-    const [showRentalTime, setShowRentalTime] = useState(!!initialListing?.time_slots?.length)
 
     // Geography Modal State
     const [geoModalStep, setGeoModalStep] = useState<'none' | 'old-province' | 'old-district' | 'new-province' | 'new-ward'>('none')
@@ -138,7 +135,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                     if (data.currentStep) setCurrentStep(data.currentStep)
                     if (data.phone) setPhone(data.phone)
                     if (data.zalo) setZalo(data.zalo)
-                    if (data.spaceType) setSpaceType(data.spaceType)
+                    if (data.spaceTypes) setSpaceTypes(data.spaceTypes)
                     if (data.locationType) setLocationType(data.locationType)
                     if (data.provinceOld) setProvinceOld(data.provinceOld)
                     if (data.districtOld) setDistrictOld(data.districtOld)
@@ -188,7 +185,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 currentStep,
                 phone,
                 zalo,
-                spaceType,
+                spaceTypes,
                 locationType,
                 provinceOld,
                 districtOld,
@@ -214,6 +211,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         detailedAddress,
         lat, lng,
         description, priceMin, priceMax,
+        spaceTypes,
         suitableFor, notSuitableFor, amenities, nearbyFeatures, timeSlots
     ])
 
@@ -242,6 +240,20 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     const toggleNearbyFeature = (option: string) => {
         setNearbyFeatures(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
+    };
+
+    const toggleSpaceType = (option: string) => {
+        if (spaceTypes.includes(option)) {
+            setSpaceTypes(prev => prev.filter(o => o !== option));
+            return;
+        }
+
+        if (spaceTypes.length >= 3) {
+            alert('Bạn chỉ có thể chọn tối đa 3 loại hình không gian.');
+            return;
+        }
+
+        setSpaceTypes(prev => [...prev, option]);
     };
 
     const addTimeSlot = () => {
@@ -350,7 +362,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     const validateStep = (step: number) => {
         if (step === 1) {
-            if (!phone || !spaceType || !locationType) {
+            if (!phone || spaceTypes.length === 0 || !locationType) {
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc ở Bước 1')
                 return false
             }
@@ -360,6 +372,34 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
             }
             if (zalo && !/^\d{10}$/.test(zalo) && !zalo.startsWith('http')) {
                 alert('Zalo phải là số điện thoại 10 số hoặc đường dẫn liên kết')
+                return false
+            }
+            if (amenities.length === 0) {
+                alert('Vui lòng chọn ít nhất một tiện ích')
+                return false
+            }
+            if (timeSlots.length === 0) {
+                alert('Vui lòng thêm ít nhất một khung giờ cho thuê')
+                return false
+            }
+            if (!priceMin && !priceMax) {
+                alert('Vui lòng nhập ít nhất giá thấp nhất hoặc giá cao nhất')
+                return false
+            }
+            // Price numeric validation
+            const minV = parseFloat(priceMin)
+            const maxV = parseFloat(priceMax)
+
+            if (!isNaN(minV) && minV < 0) {
+                alert('Giá thấp nhất không thể nhỏ hơn 0')
+                return false
+            }
+            if (!isNaN(maxV) && maxV < 0) {
+                alert('Giá cao nhất không thể nhỏ hơn 0')
+                return false
+            }
+            if (!isNaN(minV) && !isNaN(maxV) && maxV < minV) {
+                alert('Giá cao nhất phải lớn hơn hoặc bằng giá thấp nhất')
                 return false
             }
         } else if (step === 2) {
@@ -382,21 +422,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 return false
             }
         } else if (step === 3) {
-            const minV = parseFloat(priceMin)
-            const maxV = parseFloat(priceMax)
-
-            if (!isNaN(minV) && minV < 0) {
-                alert('Giá thấp nhất không thể nhỏ hơn 0')
-                return false
-            }
-            if (!isNaN(maxV) && maxV < 0) {
-                alert('Giá cao nhất không thể nhỏ hơn 0')
-                return false
-            }
-            if (!isNaN(minV) && !isNaN(maxV) && maxV < minV) {
-                alert('Giá cao nhất phải lớn hơn hoặc bằng giá thấp nhất')
-                return false
-            }
             return true
         }
         return true
@@ -454,7 +479,20 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         const formData = new FormData()
 
         // Append all states to formData
-        const generatedTitle = `${spaceType} ${locationType} tại ${districtOld}`
+        // Append all states to formData
+        const prefixParts = [
+            spaceTypes.join(', '),
+            locationType
+        ].filter(Boolean).join(', ').toLowerCase();
+
+        let generatedTitle = prefixParts;
+        if (districtOld) {
+            generatedTitle += (generatedTitle ? ' tại ' : '') + districtOld;
+        }
+
+        if (generatedTitle.length > 0) {
+            generatedTitle = generatedTitle.charAt(0).toUpperCase() + generatedTitle.slice(1);
+        }
 
         pendingImages.forEach(file => { formData.append('images', file) })
         // Append existing images to keep as a separate field, maybe comma separated or multiple entries
@@ -465,7 +503,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         formData.append('title', generatedTitle)
         formData.append('phone', phone)
         formData.append('zalo', zalo)
-        formData.append('space_type', spaceType)
+        formData.append('space_type', spaceTypes.join(','))
         formData.append('location_type', locationType)
         formData.append('province_old', provinceOld)
         formData.append('district_old', districtOld)
@@ -601,28 +639,162 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            <div className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Loại hình không gian <span className="text-red-500">*</span></label>
-                                    <select
-                                        value={spaceType}
-                                        onChange={(e) => setSpaceType(e.target.value)}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
-                                    >
-                                        <option value="">-- Chọn loại hình --</option>
-                                        {SPACE_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
-                                    </select>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Loại hình không gian <span className="text-red-500">*</span> (Tối đa 3)</label>
+                                    <div className="p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                        <div className="max-h-48 overflow-y-auto custom-scrollbar pr-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                {SPACE_TYPES.map(option => (
+                                                    <label key={option} className="flex items-center space-x-3 cursor-pointer group leading-none">
+                                                        <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${spaceTypes.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
+                                                            {spaceTypes.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={spaceTypes.includes(option)}
+                                                                onChange={() => toggleSpaceType(option)}
+                                                                className="hidden"
+                                                            />
+                                                        </div>
+                                                        <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Loại vị trí <span className="text-red-500">*</span></label>
                                     <select
                                         value={locationType}
                                         onChange={(e) => setLocationType(e.target.value)}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
+                                        className="block w-full px-4 py-3 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
                                     >
                                         <option value="">-- Chọn vị trí --</option>
                                         {LOCATION_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
                                     </select>
+                                </div>
+                            </div>
+
+                            {/* Moved from Step 3: Pricing */}
+                            <div className="space-y-4">
+                                <label className="block text-sm font-semibold text-gray-700">Giá thuê tham khảo (VNĐ) <span className="text-red-500">*</span></label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-500 mb-1">Giá thấp nhất</label>
+                                        <input
+                                            type="number"
+                                            value={priceMin}
+                                            onChange={(e) => setPriceMin(e.target.value)}
+                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium"
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-500 mb-1">Giá cao nhất</label>
+                                        <input
+                                            type="number"
+                                            value={priceMax}
+                                            onChange={(e) => setPriceMax(e.target.value)}
+                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium"
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Moved from Step 3: Amenities */}
+                            <div className="space-y-4">
+                                <label className="block text-sm font-semibold text-gray-700">Tiện ích <span className="text-red-500">*</span></label>
+                                <div className="p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                    <div className="max-h-60 overflow-y-auto custom-scrollbar pr-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            {AMENITIES.map(option => (
+                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group leading-none">
+                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${amenities.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                        {amenities.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={amenities.includes(option)}
+                                                            onChange={() => toggleAmenity(option)}
+                                                            className="hidden"
+                                                        />
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Moved from Step 3: Rental Time Slots */}
+                            <div className="space-y-4">
+                                <label className="block text-sm font-semibold text-gray-700">Thời gian cho thuê <span className="text-red-500">*</span></label>
+                                <div className="space-y-6">
+                                    <div className="bg-gray-50 p-4 sm:p-6 rounded-2xl space-y-4 border border-gray-100">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Hình thức</label>
+                                                <select
+                                                    value={curSlotType}
+                                                    onChange={(e) => setCurSlotType(e.target.value as TimeSlotType)}
+                                                    className="block w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white font-medium text-sm"
+                                                >
+                                                    <option value="daily">Mỗi ngày</option>
+                                                    <option value="single">Ngày cụ thể</option>
+                                                    <option value="range">Khoảng ngày</option>
+                                                    <option value="weekly">Hàng tuần</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Buổi / Khung giờ</label>
+                                                <select
+                                                    value={curSession}
+                                                    onChange={(e) => setCurSession(e.target.value as Session)}
+                                                    className="block w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white font-medium text-sm"
+                                                >
+                                                    {SESSIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Chi tiết thời gian</label>
+                                            {renderTimeSlotInput()}
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={addTimeSlot}
+                                            className="w-full flex justify-center py-3 px-4 bg-white border-2 border-dashed border-blue-400 rounded-xl text-sm font-bold text-blue-600 hover:bg-blue-50 hover:border-blue-500 transition-all shadow-sm"
+                                        >
+                                            + Thêm vào danh sách
+                                        </button>
+                                    </div>
+
+                                    {timeSlots.length > 0 && (
+                                        <div className="space-y-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                            <h5 className="text-sm font-bold text-gray-700">Danh sách đã thêm:</h5>
+                                            <div className="flex flex-wrap gap-2">
+                                                {timeSlots.map((slot, index) => {
+                                                    const display = formatTimeSlot(slot);
+                                                    return (
+                                                        <div key={index} className="flex items-center gap-2 bg-white border border-blue-100 px-3 py-2 rounded-xl text-sm font-medium text-blue-700 animate-in zoom-in-95 shadow-sm">
+                                                            <span>{display}</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => removeTimeSlot(index)}
+                                                                className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 hover:bg-red-500 hover:text-white transition-all underline-none outline-none"
+                                                            >
+                                                                ×
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -958,121 +1130,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 )}
                             </div>
 
-                            {/* Pricing - Collapsible */}
-                            <div className="py-1">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPricing(!showPricing)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
-                                >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Giá thuê tham khảo</span>
-                                    {showPricing ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                                </button>
-                                {showPricing && (
-                                    <div className="pb-4 px-2">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-1">Giá thấp nhất (VNĐ)</label>
-                                                <input
-                                                    type="number"
-                                                    value={priceMin}
-                                                    onChange={(e) => setPriceMin(e.target.value)}
-                                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white"
-                                                    placeholder="0"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-1">Giá cao nhất (VNĐ)</label>
-                                                <input
-                                                    type="number"
-                                                    value={priceMax}
-                                                    onChange={(e) => setPriceMax(e.target.value)}
-                                                    className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white"
-                                                    placeholder="0"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* Rental Time - Collapsible */}
-                            <div className="py-1">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowRentalTime(!showRentalTime)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
-                                >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Thời gian cho thuê</span>
-                                    {showRentalTime ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                                </button>
-                                {showRentalTime && (
-                                    <div className="pb-4 px-2">
-                                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                                            {/* Type Selector */}
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                                                <div className="space-y-1">
-                                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Hình thức</label>
-                                                    <select
-                                                        value={curSlotType}
-                                                        onChange={(e) => setCurSlotType(e.target.value as TimeSlotType)}
-                                                        className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm sm:text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                                    >
-                                                        {TIME_SLOT_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
-                                                    </select>
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Khung giờ</label>
-                                                    <select
-                                                        value={curSession}
-                                                        onChange={(e) => setCurSession(e.target.value as Session)}
-                                                        className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm sm:text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                                    >
-                                                        {SESSIONS.map(s => <option key={s} value={s}>{s}</option>)}
-                                                    </select>
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider">Chọn thời gian</label>
-                                                    {renderTimeSlotInput()}
-                                                </div>
-                                            </div>
 
-                                            <button
-                                                type="button"
-                                                onClick={addTimeSlot}
-                                                className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm shadow-sm transition-colors"
-                                            >
-                                                Thêm khung giờ
-                                            </button>
 
-                                            {/* List of Time Slots */}
-                                            {timeSlots.length > 0 && (
-                                                <div className="mt-4 space-y-2">
-                                                    {timeSlots.map((slot, idx) => (
-                                                        <div key={idx} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-blue-200 transition-colors group">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                                                                <div className="text-sm font-semibold text-gray-700">
-                                                                    {formatTimeSlot(slot)}
-                                                                </div>
-                                                            </div>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => removeTimeSlot(idx)}
-                                                                className="text-red-500 hover:text-red-700 p-1"
-                                                            >
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
 
                             {/* Suitable For */}
                             <div className="py-1">
@@ -1138,37 +1198,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 )}
                             </div>
 
-                            {/* Amenities */}
-                            <div className="py-1">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowAmenities(!showAmenities)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
-                                >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Tiện ích</span>
-                                    {showAmenities ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                                </button>
-                                {showAmenities && (
-                                    <div className="pb-4 px-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {AMENITIES.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group">
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${amenities.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {amenities.includes(option) && <Check className="w-3 h-3 text-white" />}
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={amenities.includes(option)}
-                                                            onChange={() => toggleAmenity(option)}
-                                                            className="hidden"
-                                                        />
-                                                    </div>
-                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+
 
                             {/* Nearby Features */}
                             <div className="py-1">

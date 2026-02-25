@@ -82,10 +82,10 @@ export async function GET(request: NextRequest) {
         dbQuery = dbQuery.not('not_suitable_for', 'cs', `{${suitableFor.map(v => `"${v}"`).join(',')}}`);
     }
 
-    // --- Space type filter ---
-    // space_type is a single-value field; .in() = OR logic (listing needs to match any 1 selected type)
+    // --- Space type filter (partial match = OR logic) ---
+    // Listing only needs to have AT LEAST ONE of the selected space types (overlap = &&).
     if (spaceTypes.length > 0) {
-        dbQuery = dbQuery.in('space_type', spaceTypes);
+        dbQuery = dbQuery.overlaps('space_type', spaceTypes);
     }
 
     // --- Location type filter ---
@@ -150,11 +150,14 @@ export async function GET(request: NextRequest) {
     // cannot call it as a filter on text columns directly. In-memory is the correct approach
     // for a connection-only marketplace with moderate listing counts per province.
     if (query.trim()) {
-        const normalizedQuery = normalizeVietnamese(query.trim());
+        // normalizeVietnamese collapses whitespace to single spaces;
+        // stripSpaces then removes ALL spaces so comparison is fully whitespace-insensitive.
+        // e.g. user types "cafevu" or "ca fe vu" → both match listing "cafe vu"
+        const normalizedQuery = stripSpaces(normalizeVietnamese(query));
         results = results.filter(listing => {
-            const titleNorm = normalizeVietnamese(listing.title ?? '');
-            const descNorm = normalizeVietnamese(listing.description ?? '');
-            const addrNorm = normalizeVietnamese(listing.detailed_address ?? '');
+            const titleNorm = stripSpaces(normalizeVietnamese(listing.title ?? ''));
+            const descNorm = stripSpaces(normalizeVietnamese(listing.description ?? ''));
+            const addrNorm = stripSpaces(normalizeVietnamese(listing.detailed_address ?? ''));
             return (
                 titleNorm.includes(normalizedQuery) ||
                 descNorm.includes(normalizedQuery) ||
@@ -200,7 +203,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Normalize Vietnamese text for accent-insensitive and whitespace-insensitive search.
+ * Normalize Vietnamese text for accent-insensitive search.
  * - Removes Vietnamese diacritics (tone marks + base modifications)
  * - Converts to lowercase
  * - Collapses all whitespace to single spaces and trims
@@ -223,4 +226,13 @@ function normalizeVietnamese(text: string): string {
         // Collapse all whitespace (including multiple spaces, tabs) to single space
         .replace(/\s+/g, ' ')
         .trim();
+}
+
+/**
+ * Strip all whitespace from a pre-normalized string for whitespace-insensitive comparison.
+ * Call this AFTER normalizeVietnamese() so the text is already lowercased & accent-stripped.
+ * e.g. "cafe vu" → "cafevu", "van  phong" → "vanphong"
+ */
+function stripSpaces(text: string): string {
+    return text.replace(/\s/g, '');
 }

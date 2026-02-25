@@ -5,7 +5,7 @@ export interface Listing {
     owner_id: string;
     title: string;
     description: string;
-    space_type: string;
+    space_type: string[];
     suitable_for: string[];
     not_suitable_for: string[];
     location_type: string;

@@ -23,7 +23,7 @@ declare namespace goongjs {
         togglePopup(): void;
     }
     class Popup {
-        constructor(options?: { closeButton?: boolean; closeOnClick?: boolean; offset?: number });
+        constructor(options?: { closeButton?: boolean; closeOnClick?: boolean; offset?: number; maxWidth?: string });
         setHTML(html: string): this;
         addTo(map: Map): this;
         remove(): void;
