@@ -562,8 +562,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 </p>
                 {mode === 'edit' && (
                     <div className="mt-2 p-2 bg-yellow-50 text-yellow-800 rounded-lg text-sm inline-block border border-yellow-200">
-                        Lưu ý: Mọi chỉnh sửa sẽ khiến tin đăng chuyển về trạng thái &quot;Chờ duyệt&quot;
-                    </div>
+                        Lưu ý: bài viết với đầy đủ thông tin sẽ hiển thị nhiều gấp 10 lần so với các bài đăng sơ sài.                    </div>
                 )}
             </div>
 

@@ -1,23 +1,16 @@
+'use client';
+
 import Link from 'next/link';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
 import PublicNavbarActions from './PublicNavbarActions';
 import HeaderSearch from './HeaderSearch';
-import NavbarLinks from './NavbarLinks';
 import SearchModal from './SearchModal';
 
-export default async function PublicNavbar() {
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
+interface PublicNavbarProps {
+    user: any;
+    profile: any;
+}
 
-    let profile = null;
-    if (user) {
-        const { data } = await supabase
-            .from('profiles')
-            .select('role, coin_balance')
-            .eq('id', user.id)
-            .single();
-        profile = data;
-    }
+export default function PublicNavbar({ user, profile }: PublicNavbarProps) {
 
     return (
         <>
@@ -36,6 +29,9 @@ export default async function PublicNavbar() {
                                     SpaceShare
                                 </span>
                             </Link>
+
+                            {/* Desktop Search Display */}
+                            <HeaderSearch />
                         </div>
 
                         {/* Nav Links & Actions */}
