@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { Listing } from '@/types/listing';
+import { getListingUrl } from '@/lib/utils/url';
 
 // Types are now handled via types/goong.d.ts
 
@@ -109,7 +110,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                         <span style="font-size:14px;font-weight:700;color:${isFree ? '#10b981' : '#0f172a'};">
                             ${priceDisplay}
                         </span>
-                        <a href="/listings/${listing.id}" style="padding:6px 12px;background:#0f172a;color:white;font-size:11px;font-weight:700;border-radius:8px;text-decoration:none;transition:background 0.2s;">
+                        <a href="${getListingUrl(listing)}" style="padding:6px 12px;background:#0f172a;color:white;font-size:11px;font-weight:700;border-radius:8px;text-decoration:none;transition:background 0.2s;">
                             Xem chi tiết
                         </a>
                     </div>

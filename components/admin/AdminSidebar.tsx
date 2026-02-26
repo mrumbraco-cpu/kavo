@@ -14,7 +14,8 @@ import {
     ChevronDown,
     PlusCircle,
     UserCircle,
-    Building2
+    Building2,
+    Flag
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -86,6 +87,11 @@ export default function AdminSidebar() {
             icon: Coins,
             label: 'Cài đặt xu',
             href: '/admin/coins',
+        },
+        {
+            icon: Flag,
+            label: 'Báo cáo nội dung',
+            href: '/admin/reports',
         },
         {
             icon: Settings,

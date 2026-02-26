@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { toggleFavoriteAction } from '@/app/(public)/listings/[id]/actions';
+import { toggleFavoriteAction } from '@/app/(public)/listings/[slug]/actions';
 
 export default function RemoveFavoriteButton({ listingId }: { listingId: string }) {
     const [isLoading, setIsLoading] = useState(false);

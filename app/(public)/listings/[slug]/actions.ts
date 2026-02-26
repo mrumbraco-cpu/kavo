@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { decrypt } from '@/lib/utils/encryption';
 import { revalidatePath } from 'next/cache';
+import { REPORT_REASONS } from '@/lib/constants/report-reasons';
 
 export async function unlockContactAction(listingId: string) {
     const supabase = await createServerSupabaseClient();
@@ -34,7 +35,7 @@ export async function unlockContactAction(listingId: string) {
         };
 
         // 4. Revalidate the page so the server-side state updates
-        revalidatePath(`/listings/${listingId}`);
+        revalidatePath('/listings/[slug]', 'page');
 
         return {
             success: true,
@@ -79,7 +80,7 @@ export async function toggleFavoriteAction(listingId: string) {
 
             if (deleteError) throw deleteError;
 
-            revalidatePath(`/listings/${listingId}`);
+            revalidatePath('/listings/[slug]', 'page');
             revalidatePath('/dashboard/favorites');
             return { success: true, isFavorite: false };
         } else {
@@ -109,7 +110,7 @@ export async function toggleFavoriteAction(listingId: string) {
 
             if (insertError) throw insertError;
 
-            revalidatePath(`/listings/${listingId}`);
+            revalidatePath('/listings/[slug]', 'page');
             revalidatePath('/dashboard/favorites');
             return { success: true, isFavorite: true };
         }
@@ -121,3 +122,90 @@ export async function toggleFavoriteAction(listingId: string) {
         };
     }
 }
+
+export async function submitReportAction(listingId: string, reason: string, description?: string) {
+    const supabase = await createServerSupabaseClient();
+
+    // 1. Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return { success: false, error: 'Vui lòng đăng nhập để báo cáo.' };
+    }
+
+    // 1b. Validate reason
+    const isValidReason = REPORT_REASONS.some(r => r.value === reason);
+    if (!isValidReason) {
+        return { success: false, error: 'Lý do báo cáo không hợp lệ.' };
+    }
+
+    try {
+        // 2. Time-based rate limit: 1 report every 2 minutes
+        const { data: lastReport } = await supabase
+            .from('listing_reports')
+            .select('created_at')
+            .eq('reporter_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (lastReport) {
+            const lastTime = new Date(lastReport.created_at).getTime();
+            const now = new Date().getTime();
+            const diffMinutes = (now - lastTime) / (1000 * 60);
+
+            if (diffMinutes < 2) {
+                return {
+                    success: false,
+                    error: `Vui lòng đợi ${Math.ceil(2 - diffMinutes)} phút nữa trước khi gửi báo cáo tiếp theo.`
+                };
+            }
+        }
+
+        // 3. Anti-spam check: prevent reporting same listing twice while one is pending
+        const { data: existingReport } = await supabase
+            .from('listing_reports')
+            .select('id')
+            .eq('listing_id', listingId)
+            .eq('reporter_id', user.id)
+            .eq('status', 'pending')
+            .maybeSingle();
+
+        if (existingReport) {
+            return { success: false, error: 'Bạn đã báo cáo tin này và đang chờ xử lý.' };
+        }
+
+        // 4. Overall rate limit: max 5 pending reports per user
+        const { count } = await supabase
+            .from('listing_reports')
+            .select('id', { count: 'exact', head: true })
+            .eq('reporter_id', user.id)
+            .eq('status', 'pending');
+
+        if (count !== null && count >= 5) {
+            return { success: false, error: 'Bạn đã gửi quá nhiều báo cáo đang chờ xử lý. Vui lòng đợi kết quả từ quản trị viên.' };
+        }
+
+        // 5. Insert report
+        const { error } = await supabase
+            .from('listing_reports')
+            .insert({
+                listing_id: listingId,
+                reporter_id: user.id,
+                reason,
+                description: description?.trim().slice(0, 1000)
+            });
+
+        if (error) {
+            if (error.code === '23505') { // Unique violation
+                return { success: false, error: 'Bạn đã báo cáo tin này và đang chờ xử lý.' };
+            }
+            throw error;
+        }
+
+        return { success: true };
+    } catch (err: any) {
+        console.error('Submit report failed:', err);
+        return { success: false, error: 'Đã xảy ra lỗi khi gửi báo cáo.' };
+    }
+}
+

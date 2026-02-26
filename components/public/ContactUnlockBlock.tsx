@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { unlockContactAction } from '@/app/(public)/listings/[id]/actions';
+import { unlockContactAction } from '@/app/(public)/listings/[slug]/actions';
 
 interface Props {
     listingId: string;

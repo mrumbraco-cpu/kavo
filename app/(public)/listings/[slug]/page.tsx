@@ -8,13 +8,18 @@ import ContactUnlockBlock from '@/components/public/ContactUnlockBlock';
 import Link from 'next/link';
 import { decrypt } from '@/lib/utils/encryption';
 import FavoriteButton from '@/components/public/FavoriteButton';
+import ShareButton from '@/components/public/ShareButton';
+import ReportButton from '@/components/public/ReportButton';
+
+import { parseListingIdFromSlug } from '@/lib/utils/url';
 
 interface Props {
-    params: Promise<{ id: string }>;
+    params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { id } = await params;
+    const { slug } = await params;
+    const id = parseListingIdFromSlug(slug);
     const supabase = await createServerSupabaseClient();
     const { data } = await supabase
         .from('listings')
@@ -33,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ListingDetailPage({ params }: Props) {
-    const { id } = await params;
+    const { slug } = await params;
+    const id = parseListingIdFromSlug(slug);
     const supabase = await createServerSupabaseClient();
 
     const { data: listing, error } = await supabase
@@ -184,7 +190,8 @@ export default async function ListingDetailPage({ params }: Props) {
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
                                 {typedListing.title}
                             </h1>
-                            <div className="flex-shrink-0 pt-1">
+                            <div className="flex-shrink-0 pt-1 flex items-center gap-2">
+                                <ShareButton title={typedListing.title} />
                                 <FavoriteButton
                                     listingId={id}
                                     initialIsFavorite={isFavorite}
@@ -196,16 +203,18 @@ export default async function ListingDetailPage({ params }: Props) {
                         {/* Badges + Address */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
                             <div className="flex flex-wrap gap-1.5">
-                                {typedListing.space_type?.map((type, idx) => (
-                                    <span key={idx} className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                                        {type}
-                                    </span>
-                                ))}
-                                {typedListing.location_type && (
-                                    <span className="px-2.5 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded-full">
-                                        {typedListing.location_type}
-                                    </span>
-                                )}
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded border border-emerald-100 uppercase tracking-widest shadow-sm shadow-emerald-700/5">
+                                    <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    </svg>
+                                    Đã xác thực
+                                </span>
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-100 uppercase tracking-widest shadow-sm shadow-blue-700/5">
+                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Còn hiệu lực
+                                </span>
                             </div>
                             {fullAddress && (
                                 <div className="flex items-center gap-1 text-sm text-gray-500">
@@ -366,6 +375,11 @@ export default async function ListingDetailPage({ params }: Props) {
                                         <span className="font-semibold text-gray-500">SPSHARE</span> chỉ là kênh kết nối. Mọi thỏa thuận và thanh toán đều diễn ra trực tiếp với chủ không gian.
                                     </p>
                                 </div>
+                            </div>
+
+                            {/* Report Button */}
+                            <div className="flex justify-center">
+                                <ReportButton listingId={id} isAuthenticated={!!user} />
                             </div>
 
                             {/* Back to search */}

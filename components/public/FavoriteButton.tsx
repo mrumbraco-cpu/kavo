@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Heart } from 'lucide-react';
-import { toggleFavoriteAction } from '@/app/(public)/listings/[id]/actions';
+import { toggleFavoriteAction } from '@/app/(public)/listings/[slug]/actions';
 
 interface FavoriteButtonProps {
     listingId: string;
@@ -57,8 +57,8 @@ export default function FavoriteButton({ listingId, initialIsFavorite, isAuthent
         >
             <Heart
                 className={`w-5 h-5 transition-all duration-300 transform group-hover:scale-110 ${isFavorite
-                        ? 'text-red-500 fill-red-500'
-                        : 'text-gray-500 group-hover:text-red-400'
+                    ? 'text-red-500 fill-red-500'
+                    : 'text-gray-500 group-hover:text-red-400'
                     }`}
             />
         </button>

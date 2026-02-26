@@ -20,6 +20,7 @@ export async function toggleExpired(id: string, currentStatus: string): Promise<
     }
 
     revalidatePath('/admin/listings');
+    revalidatePath('/listings/[slug]', 'page');
     return true;
 }
 
@@ -38,6 +39,7 @@ export async function approveListing(id: string): Promise<boolean> {
     }
 
     revalidatePath('/admin/listings');
+    revalidatePath('/listings/[slug]', 'page');
     return true;
 }
 
@@ -56,6 +58,7 @@ export async function toggleVisibility(id: string, currentIsHidden: boolean): Pr
     }
 
     revalidatePath('/admin/listings');
+    revalidatePath('/listings/[slug]', 'page');
     return true;
 }
 
@@ -74,5 +77,6 @@ export async function toggleLock(id: string, currentIsLocked: boolean): Promise<
     }
 
     revalidatePath('/admin/listings');
+    revalidatePath('/listings/[slug]', 'page');
     return true;
 }

@@ -21,6 +21,7 @@ import {
     Building2,
     Globe
 } from 'lucide-react'
+import { getListingUrl } from '@/lib/utils/url'
 import { ListingStatus } from '@/types/listing'
 import VisibilityToggle from './VisibilityToggle'
 import ExpirationToggle from './ExpirationToggle'
@@ -315,7 +316,7 @@ export default async function MyListingsPage({
                                                     )}
                                                     {listing.status === 'approved' && (
                                                         <Link
-                                                            href={`/listings/${listing.id}`}
+                                                            href={getListingUrl(listing)}
                                                             target="_blank"
                                                             className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center transition-all hover:bg-black shadow-sm"
                                                             title="Xem thực tế"

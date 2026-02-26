@@ -22,10 +22,9 @@ export default function PublicNavbarActions({ user, profile }: Props) {
 
     const isListingDetail = pathname.startsWith('/listings/');
     const isSearchPage = pathname === '/search';
+    const showPostButton = isSearchPage || isListingDetail;
 
     if (!user) {
-        if (isListingDetail) return null;
-
         // Only set 'next' if we're not on the home page, so home page login goes to dashboard
         const nextParam = pathname !== '/'
             ? `?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}`
@@ -33,7 +32,7 @@ export default function PublicNavbarActions({ user, profile }: Props) {
 
         return (
             <div className="flex items-center gap-4">
-                {isSearchPage && (
+                {showPostButton && (
                     <div className="relative group/post">
                         {/* Floating badge */}
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg whitespace-nowrap z-10 animate-bounce border border-white pointer-events-none">
@@ -50,22 +49,24 @@ export default function PublicNavbarActions({ user, profile }: Props) {
                         </Link>
                     </div>
                 )}
-                <Link
-                    href={`/auth/login${nextParam}`}
-                    className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-full text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all"
-                >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Đăng nhập
-                </Link>
+                {!isListingDetail && (
+                    <Link
+                        href={`/auth/login${nextParam}`}
+                        className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-full text-sm font-medium text-slate-700 hover:bg-slate-50 transition-all"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Đăng nhập
+                    </Link>
+                )}
             </div>
         );
     }
 
     return (
         <div className="flex items-center gap-4">
-            {isSearchPage && (
+            {showPostButton && (
                 <div className="relative group/post">
                     {/* Floating badge */}
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow-lg whitespace-nowrap z-10 animate-bounce border border-white pointer-events-none">

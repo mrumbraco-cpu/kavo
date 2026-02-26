@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { getListingUrl } from '@/lib/utils/url';
 import { Listing } from '@/types/listing';
 
 interface ListingCardProps {
@@ -26,7 +27,7 @@ export default function ListingCard({ listing, isHighlighted = false, onHover }:
 
     return (
         <Link
-            href={`/listings/${listing.id}`}
+            href={getListingUrl(listing)}
             className={`group flex flex-col rounded-2xl overflow-hidden border transition-all duration-200 hover:shadow-lg cursor-pointer ${isHighlighted
                 ? 'border-accent-gold shadow-md shadow-accent-gold/10 ring-1 ring-accent-gold/30'
                 : 'border-premium-100 bg-white hover:border-premium-200'
