@@ -552,24 +552,24 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     ]
 
     return (
-        <div className="w-full max-w-4xl mx-auto mb-12 px-2 sm:px-0">
-            <div className="text-center space-y-2 mb-10">
-                <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+        <div className="w-full max-w-3xl mx-auto mb-8 px-2 sm:px-0">
+            <div className="text-center space-y-1 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
                     {mode === 'edit' ? 'Chỉnh sửa tin đăng' : 'Đăng tin không gian mới'}
                 </h2>
-                <p className="text-gray-500">
+                <p className="text-sm text-gray-500">
                     {mode === 'edit' ? 'Cập nhật thông tin chi tiết' : 'Cung cấp thông tin chi tiết qua 3 bước đơn giản'}
                 </p>
                 {mode === 'edit' && (
-                    <div className="mt-2 p-2 bg-yellow-50 text-yellow-800 rounded-lg text-sm inline-block border border-yellow-200">
+                    <div className="mt-2 p-2 bg-yellow-50 text-yellow-800 rounded-lg text-[11px] inline-block border border-yellow-200">
                         Lưu ý: bài viết với đầy đủ thông tin sẽ hiển thị nhiều gấp 10 lần so với các bài đăng sơ sài.                    </div>
                 )}
             </div>
 
             {/* Step Indicator */}
-            <div className="relative mb-8 sm:mb-12 px-4">
+            <div className="relative mb-6 sm:mb-8 px-4">
                 {/* Background Progress Line */}
-                <div className="absolute top-6 left-6 right-6 h-1 bg-gray-100 rounded-full overflow-hidden">
+                <div className="absolute top-5 left-6 right-6 h-1 bg-gray-100 rounded-full overflow-hidden">
                     <div
                         className="h-full bg-blue-600 transition-all duration-700 ease-out"
                         style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
@@ -588,11 +588,11 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 }
                             }}
                         >
-                            <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${currentStep >= step.id ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'bg-gray-200 text-gray-400'
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${currentStep >= step.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-gray-200 text-gray-400'
                                 }`}>
-                                {currentStep > step.id ? <Check className="w-6 h-6" /> : step.icon}
+                                {currentStep > step.id ? <Check className="w-5 h-5" /> : <div className="scale-90">{step.icon}</div>}
                             </div>
-                            <span className={`mt-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-colors duration-300 ${currentStep >= step.id ? 'text-blue-600' : 'text-gray-400'
+                            <span className={`mt-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${currentStep >= step.id ? 'text-blue-600' : 'text-gray-400'
                                 }`}>
                                 <span className="hidden sm:inline">{step.name}</span>
                                 <span className="sm:hidden">B{idx + 1}</span>
@@ -602,52 +602,52 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-10 p-4 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 p-4 sm:p-6 bg-white rounded-2xl shadow-xl border border-gray-100">
 
                 {/* STEP 1: BASIC INFORMATION */}
                 {currentStep === 1 && (
-                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex items-center gap-3 mb-2 pb-3 border-b border-blue-50">
-                            <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
-                            <h3 className="text-xl font-bold text-gray-800">Thông tin cơ bản</h3>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center gap-3 mb-1 pb-2 border-b border-blue-50">
+                            <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                            <h3 className="text-lg font-bold text-gray-800">Thông tin cơ bản</h3>
                         </div>
 
                         <div className="space-y-6">
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Số điện thoại <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Số điện thoại <span className="text-red-500">*</span></label>
                                     <input
                                         type="text"
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                        className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm font-medium"
                                         placeholder="090..."
                                         maxLength={10}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Zalo</label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Zalo</label>
                                     <input
                                         type="text"
                                         value={zalo}
                                         onChange={(e) => setZalo(e.target.value)}
-                                        className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                        className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm font-medium"
                                         placeholder="090... hoặc link"
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Loại hình không gian <span className="text-red-500">*</span> (Tối đa 3)</label>
-                                    <div className="p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
-                                        <div className="max-h-48 overflow-y-auto custom-scrollbar pr-2">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Loại hình không gian <span className="text-red-500">*</span> (Tối đa 3)</label>
+                                    <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
+                                        <div className="max-h-40 overflow-y-auto custom-scrollbar pr-2">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 {SPACE_TYPES.map(option => (
-                                                    <label key={option} className="flex items-center space-x-3 cursor-pointer group leading-none">
-                                                        <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${spaceTypes.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
-                                                            {spaceTypes.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                                    <label key={option} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                        <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${spaceTypes.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
+                                                            {spaceTypes.includes(option) && <Check className="w-2.5 h-2.5 text-white" />}
                                                             <input
                                                                 type="checkbox"
                                                                 checked={spaceTypes.includes(option)}
@@ -655,7 +655,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                                 className="hidden"
                                                             />
                                                         </div>
-                                                        <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                        <span className="text-[13px] font-medium text-gray-600">{option}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -663,11 +663,11 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Loại vị trí <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Loại vị trí <span className="text-red-500">*</span></label>
                                     <select
                                         value={locationType}
                                         onChange={(e) => setLocationType(e.target.value)}
-                                        className="block w-full px-4 py-3 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium text-gray-700"
+                                        className="block w-full px-3 py-2.5 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none bg-white text-sm font-semibold text-gray-700"
                                     >
                                         <option value="">-- Chọn vị trí --</option>
                                         {LOCATION_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
@@ -677,25 +677,25 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
                             {/* Moved from Step 3: Pricing */}
                             <div className="space-y-4">
-                                <label className="block text-sm font-semibold text-gray-700">Giá thuê tham khảo (VNĐ) <span className="text-red-500">*</span></label>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Giá thuê tham khảo (VNĐ) <span className="text-red-500">*</span></label>
+                                <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50/50 rounded-xl border border-gray-100">
                                     <div>
-                                        <label className="block text-xs font-semibold text-gray-500 mb-1">Giá thấp nhất</label>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Giá thấp nhất</label>
                                         <input
                                             type="number"
                                             value={priceMin}
                                             onChange={(e) => setPriceMin(e.target.value)}
-                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium"
+                                            className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none bg-white text-sm font-bold"
                                             placeholder="0"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-semibold text-gray-500 mb-1">Giá cao nhất</label>
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Giá cao nhất</label>
                                         <input
                                             type="number"
                                             value={priceMax}
                                             onChange={(e) => setPriceMax(e.target.value)}
-                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white font-medium"
+                                            className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none bg-white text-sm font-bold"
                                             placeholder="0"
                                         />
                                     </div>
@@ -704,14 +704,14 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
                             {/* Moved from Step 3: Amenities */}
                             <div className="space-y-4">
-                                <label className="block text-sm font-semibold text-gray-700">Tiện ích <span className="text-red-500">*</span></label>
-                                <div className="p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
-                                    <div className="max-h-60 overflow-y-auto custom-scrollbar pr-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tiện ích <span className="text-red-500">*</span></label>
+                                <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
+                                    <div className="max-h-52 overflow-y-auto custom-scrollbar pr-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {AMENITIES.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group leading-none">
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${amenities.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {amenities.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${amenities.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                        {amenities.includes(option) && <Check className="w-2.5 h-2.5 text-white" />}
                                                         <input
                                                             type="checkbox"
                                                             checked={amenities.includes(option)}
@@ -719,7 +719,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -729,16 +729,16 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
                             {/* Moved from Step 3: Rental Time Slots */}
                             <div className="space-y-4">
-                                <label className="block text-sm font-semibold text-gray-700">Thời gian cho thuê <span className="text-red-500">*</span></label>
-                                <div className="space-y-6">
-                                    <div className="bg-gray-50 p-4 sm:p-6 rounded-2xl space-y-4 border border-gray-100">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Thời gian cho thuê <span className="text-red-500">*</span></label>
+                                <div className="space-y-4">
+                                    <div className="bg-gray-50/50 p-4 rounded-xl space-y-3 border border-gray-100">
+                                        <div className="grid grid-cols-2 gap-3">
                                             <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Hình thức</label>
+                                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Hình thức</label>
                                                 <select
                                                     value={curSlotType}
                                                     onChange={(e) => setCurSlotType(e.target.value as TimeSlotType)}
-                                                    className="block w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white font-medium text-sm"
+                                                    className="block w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white text-[13px] font-bold"
                                                 >
                                                     <option value="daily">Mỗi ngày</option>
                                                     <option value="single">Ngày cụ thể</option>
@@ -747,11 +747,11 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Buổi / Khung giờ</label>
+                                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Buổi / Khung giờ</label>
                                                 <select
                                                     value={curSession}
                                                     onChange={(e) => setCurSession(e.target.value as Session)}
-                                                    className="block w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white font-medium text-sm"
+                                                    className="block w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white text-[13px] font-bold"
                                                 >
                                                     {SESSIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                                 </select>
@@ -759,32 +759,31 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1 text-xs">Chi tiết thời gian</label>
                                             {renderTimeSlotInput()}
                                         </div>
 
                                         <button
                                             type="button"
                                             onClick={addTimeSlot}
-                                            className="w-full flex justify-center py-3 px-4 bg-white border-2 border-dashed border-blue-400 rounded-xl text-sm font-bold text-blue-600 hover:bg-blue-50 hover:border-blue-500 transition-all shadow-sm"
+                                            className="w-full flex justify-center py-2.5 px-4 bg-white border-2 border-dashed border-blue-200 rounded-xl text-xs font-bold text-blue-600 hover:bg-blue-50 hover:border-blue-400 transition-all"
                                         >
                                             + Thêm vào danh sách
                                         </button>
                                     </div>
 
                                     {timeSlots.length > 0 && (
-                                        <div className="space-y-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
-                                            <h5 className="text-sm font-bold text-gray-700">Danh sách đã thêm:</h5>
-                                            <div className="flex flex-wrap gap-2">
+                                        <div className="space-y-2 p-3 bg-gray-50/30 rounded-xl border border-gray-100">
+                                            <h5 className="text-[10px] font-bold text-gray-400 uppercase px-1">Danh sách đã thêm:</h5>
+                                            <div className="flex flex-wrap gap-1.5">
                                                 {timeSlots.map((slot, index) => {
                                                     const display = formatTimeSlot(slot);
                                                     return (
-                                                        <div key={index} className="flex items-center gap-2 bg-white border border-blue-100 px-3 py-2 rounded-xl text-sm font-medium text-blue-700 animate-in zoom-in-95 shadow-sm">
+                                                        <div key={index} className="flex items-center gap-1.5 bg-white border border-blue-100 pl-2.5 pr-1.5 py-1.5 rounded-lg text-xs font-bold text-blue-600 shadow-sm">
                                                             <span>{display}</span>
                                                             <button
                                                                 type="button"
                                                                 onClick={() => removeTimeSlot(index)}
-                                                                className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 hover:bg-red-500 hover:text-white transition-all underline-none outline-none"
+                                                                className="w-4 h-4 flex items-center justify-center rounded-md bg-gray-50 text-gray-400 hover:bg-red-500 hover:text-white transition-all"
                                                             >
                                                                 ×
                                                             </button>
@@ -802,93 +801,93 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
                 {/* STEP 2: ADDRESS & LOCATION */}
                 {currentStep === 2 && (
-                    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex items-center gap-3 mb-2 pb-3 border-b border-blue-50">
-                            <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
-                            <h3 className="text-xl font-bold text-gray-800">Địa chỉ & Vị trí</h3>
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center gap-3 mb-1 pb-2 border-b border-blue-50">
+                            <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                            <h3 className="text-lg font-bold text-gray-800">Địa chỉ & Vị trí</h3>
                         </div>
 
                         {/* Old Administrative System */}
-                        <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                                 <div className="w-2 h-4 bg-blue-400 rounded-full"></div>
                                 Hệ thống hành chính cũ
                             </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
                                     <button
                                         type="button"
                                         onClick={() => { setGeoSearch(''); setGeoModalStep('old-province'); }}
-                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group"
+                                        className="flex items-center justify-between w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-500 transition-all cursor-pointer group"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <MapPin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                                            <span className={`font-medium ${provinceOld ? 'text-gray-900' : 'text-gray-400'}`}>
+                                        <div className="flex items-center gap-2.5">
+                                            <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`text-sm font-semibold ${provinceOld ? 'text-gray-900' : 'text-gray-400'}`}>
                                                 {provinceOld || '-- Chọn Tỉnh/Thành --'}
                                             </span>
                                         </div>
-                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                        <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
                                     </button>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Quận/Huyện <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Quận/Huyện <span className="text-red-500">*</span></label>
                                     <button
                                         type="button"
                                         disabled={!provinceOld}
                                         onClick={() => { setGeoSearch(''); setGeoModalStep('old-district'); }}
-                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+                                        className="flex items-center justify-between w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-500 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <Home className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                                            <span className={`font-medium ${districtOld ? 'text-gray-900' : 'text-gray-400'}`}>
+                                        <div className="flex items-center gap-2.5">
+                                            <Home className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`text-sm font-semibold ${districtOld ? 'text-gray-900' : 'text-gray-400'}`}>
                                                 {districtOld || '-- Chọn Quận/Huyện --'}
                                             </span>
                                         </div>
-                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                        <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* New Administrative System */}
-                        <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                                 <div className="w-2 h-4 bg-green-400 rounded-full"></div>
                                 Hệ thống hành chính mới
                             </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
                                     <button
                                         type="button"
                                         onClick={() => { setGeoSearch(''); setGeoModalStep('new-province'); }}
-                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group"
+                                        className="flex items-center justify-between w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-500 transition-all cursor-pointer group"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <MapPin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                                            <span className={`font-medium ${provinceNew ? 'text-gray-900' : 'text-gray-400'}`}>
+                                        <div className="flex items-center gap-2.5">
+                                            <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`text-sm font-semibold ${provinceNew ? 'text-gray-900' : 'text-gray-400'}`}>
                                                 {provinceNew || '-- Chọn Tỉnh/Thành --'}
                                             </span>
                                         </div>
-                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                        <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
                                     </button>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Phường/Xã/Quận <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Phường/Xã/Quận <span className="text-red-500">*</span></label>
                                     <button
                                         type="button"
                                         disabled={!provinceNew}
                                         onClick={() => { setGeoSearch(''); setGeoModalStep('new-ward'); }}
-                                        className="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-300 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+                                        className="flex items-center justify-between w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-left hover:border-blue-500 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <Home className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                                            <span className={`font-medium ${wardNew ? 'text-gray-900' : 'text-gray-400'}`}>
+                                        <div className="flex items-center gap-2.5">
+                                            <Home className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                            <span className={`text-sm font-semibold ${wardNew ? 'text-gray-900' : 'text-gray-400'}`}>
                                                 {wardNew || '-- Chọn Phường/Xã --'}
                                             </span>
                                         </div>
-                                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                                        <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
                                     </button>
                                 </div>
                             </div>
@@ -997,9 +996,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                         {/* Detailed address is captured automatically from the map/coordinates and stored in state */}
 
                         {/* Maps & Coordinates */}
-                        <div className="space-y-6">
-                            <h4 className="text-md font-bold text-gray-700 flex items-center gap-2">
-                                <MapPin className="w-5 h-5 text-blue-600" /> Bản đồ & Tọa độ <span className="text-red-500">*</span>
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-blue-600" /> Bản đồ & Tọa độ <span className="text-red-500">*</span>
                             </h4>
 
                             {inputMode === 'map' ? (
@@ -1062,11 +1061,11 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                     setLng('')
                                                 }
                                             }}
-                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                                            className="block w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm font-medium"
                                             placeholder="Ví dụ: 10.780560, 106.699812"
                                         />
-                                        <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-100 inline-block font-medium">
-                                            Vị trí đã chọn: <span className="font-bold text-blue-600">{(typeof lat === 'number' && typeof lng === 'number') ? `${lat.toFixed(6)}, ${lng.toFixed(6)}` : 'Chưa có'}</span>
+                                        <p className="text-[11px] text-gray-500 bg-blue-50/50 p-2 rounded-lg border border-blue-100 inline-block font-bold">
+                                            Vị trí đã chọn: <span className="text-blue-600">{(typeof lat === 'number' && typeof lng === 'number') ? `${lat.toFixed(6)}, ${lng.toFixed(6)}` : 'Chưa có'}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -1078,9 +1077,9 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 {/* STEP 3: OPTIONAL DETAILS */}
                 {currentStep === 3 && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex items-center gap-3 mb-6 pb-3 border-b border-blue-50">
-                            <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
-                            <h3 className="text-xl font-bold text-gray-800">Thông tin tùy chọn</h3>
+                        <div className="flex items-center gap-3 mb-2 pb-2 border-b border-blue-50">
+                            <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                            <h3 className="text-lg font-bold text-gray-800">Thông tin tùy chọn</h3>
                         </div>
 
                         <div className="divide-y divide-gray-100">
@@ -1089,10 +1088,10 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <button
                                     type="button"
                                     onClick={() => setShowDescription(!showDescription)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Mô tả</span>
-                                    {showDescription ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Mô tả</span>
+                                    {showDescription ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showDescription && (
                                     <div className="pb-4 px-2">
@@ -1100,7 +1099,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
                                             rows={5}
-                                            className="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none"
+                                            className="block w-full px-3 py-2 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-[13px] leading-relaxed"
                                             placeholder="Mô tả chi tiết về không gian của bạn..."
                                             maxLength={5000}
                                         />
@@ -1113,10 +1112,10 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <button
                                     type="button"
                                     onClick={() => setShowImages(!showImages)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Hình ảnh (Tối đa 6 ảnh)</span>
-                                    {showImages ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Hình ảnh (Tối đa 6 ảnh)</span>
+                                    {showImages ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showImages && (
                                     <div className="pb-4 px-2">
@@ -1138,14 +1137,14 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <button
                                     type="button"
                                     onClick={() => setShowSuitable(!showSuitable)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Phù hợp cho</span>
-                                    {showSuitable ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Phù hợp cho</span>
+                                    {showSuitable ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showSuitable && (
                                     <div className="pb-4 px-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                             {SUITABLE_FOR_OPTIONS.map(option => (
                                                 <label key={option} className="flex items-center space-x-3 cursor-pointer group">
                                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${suitableFor.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
@@ -1157,7 +1156,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1170,14 +1169,14 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <button
                                     type="button"
                                     onClick={() => setShowNotSuitable(!showNotSuitable)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="font-bold text-gray-700 group-hover:text-red-600 transition-colors">Không phù hợp cho</span>
-                                    {showNotSuitable ? <ChevronUp className="w-5 h-5 text-red-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Không phù hợp cho</span>
+                                    {showNotSuitable ? <ChevronUp className="w-4 h-4 text-red-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showNotSuitable && (
                                     <div className="pb-4 px-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                             {NOT_SUITABLE_FOR_OPTIONS.map(option => (
                                                 <label key={option} className="flex items-center space-x-3 cursor-pointer group">
                                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${notSuitableFor.includes(option) ? 'bg-red-600 border-red-600' : 'border-gray-300 group-hover:border-red-400'}`}>
@@ -1189,7 +1188,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1204,14 +1203,14 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <button
                                     type="button"
                                     onClick={() => setShowNearby(!showNearby)}
-                                    className="w-full flex items-center justify-between py-4 px-2 hover:bg-gray-50/50 transition-colors group"
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Tiện ích xung quanh</span>
-                                    {showNearby ? <ChevronUp className="w-5 h-5 text-blue-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Tiện ích xung quanh</span>
+                                    {showNearby ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showNearby && (
                                     <div className="pb-4 px-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                             {NEARBY_FEATURES.map(option => (
                                                 <label key={option} className="flex items-center space-x-3 cursor-pointer group">
                                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${nearbyFeatures.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
@@ -1223,7 +1222,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-600 truncate">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1240,18 +1239,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                         type="button"
                         onClick={prevStep}
                         disabled={currentStep === 1}
-                        className={`px-6 py-3 rounded-xl font-bold flex items-center transition-all ${currentStep === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'
+                        className={`px-4 py-2.5 rounded-xl font-bold flex items-center transition-all text-sm ${currentStep === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'
                             }`}
                     >
                         Quay lại
                     </button>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-2">
                         {mode === 'edit' && currentStep < 3 && (
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-green-600 text-white px-6 sm:px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-200 disabled:bg-gray-400 disabled:shadow-none min-w-[140px]"
+                                className="bg-green-600 text-white px-5 sm:px-6 py-2.5 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-200 disabled:bg-gray-400 disabled:shadow-none min-w-[120px] text-sm"
                             >
                                 {isSubmitting ? 'Đang xử lý...' : 'Cập nhật tin'}
                             </button>
@@ -1261,7 +1260,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
+                                className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 text-sm"
                             >
                                 Tiếp theo
                             </button>
@@ -1270,7 +1269,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 type="submit"
                                 disabled={isSubmitting}
                                 className={`${mode === 'edit' ? 'bg-green-600 hover:bg-green-700 shadow-green-200' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
-                                    } text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg disabled:bg-gray-400 disabled:shadow-none min-w-[140px]`}
+                                    } text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg disabled:bg-gray-400 disabled:shadow-none min-w-[120px] text-sm`}
                             >
                                 {isSubmitting ? 'Đang xử lý...' : (mode === 'edit' ? 'Cập nhật tin' : 'Đăng tin ngay')}
                             </button>

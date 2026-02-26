@@ -126,8 +126,6 @@ export default async function MyListingsPage({
         approved: allUserListings?.filter(l => l.status === 'approved' && !l.is_hidden).length || 0,
         pending: allUserListings?.filter(l => l.status === 'pending').length || 0,
         expired: allUserListings?.filter(l => l.status === 'expired').length || 0,
-        hidden: allUserListings?.filter(l => l.is_hidden).length || 0,
-        locked: allUserListings?.filter(l => l.is_locked).length || 0,
     }
 
     // Get paginated listings
@@ -170,14 +168,12 @@ export default async function MyListingsPage({
             </div>
 
             {/* Stats Dashboard */}
-            <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-10 px-4 sm:px-0">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 px-4 sm:px-0">
                 {[
                     { label: 'Tổng tin đăng', value: stats.total, icon: LayoutGrid, color: 'blue' },
                     { label: 'Đang hiển thị', value: stats.approved, icon: Globe, color: 'emerald' },
                     { label: 'Chờ phê duyệt', value: stats.pending, icon: Clock, color: 'amber' },
                     { label: 'Hết hạn', value: stats.expired, icon: AlertCircle, color: 'rose' },
-                    { label: 'Đang ẩn', value: stats.hidden, icon: EyeOff, color: 'slate' },
-                    { label: 'Khóa soạn', value: stats.locked, icon: Lock, color: 'red' },
                 ].map((stat, idx) => (
                     <div key={idx} className="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 hover:border-blue-100">
                         <div className="flex items-center gap-2.5 mb-2">

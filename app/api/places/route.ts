@@ -11,6 +11,14 @@ export async function GET(request: Request) {
     const lng = searchParams.get('lng')
     const limit = searchParams.get('limit') || '10'
 
+    const referer = request.headers.get('referer');
+    const host = request.headers.get('host');
+
+    // Basic Protection: Only allow requests from our own web instance
+    if (!referer || !host || !referer.includes(host)) {
+        return NextResponse.json({ error: 'Unauthorized request' }, { status: 403 });
+    }
+
     if (!GOONG_API_KEY) {
         return NextResponse.json({ error: 'Goong API Key not configured' }, { status: 500 })
     }

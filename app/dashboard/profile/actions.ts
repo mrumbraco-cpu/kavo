@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
+import { profileSchema, passwordSchema } from '@/lib/validations/profile'
 
 export async function updateProfile(formData: FormData) {
     const supabase = await createServerSupabaseClient()
@@ -10,8 +11,17 @@ export async function updateProfile(formData: FormData) {
 
     if (!user) return { error: 'Không tìm thấy người dùng' }
 
-    const phone = formData.get('phone') as string
-    const zalo = formData.get('zalo') as string
+    const rawData = {
+        phone: formData.get('phone') as string,
+        zalo: formData.get('zalo') as string,
+    }
+
+    const validation = profileSchema.safeParse(rawData)
+    if (!validation.success) {
+        return { error: validation.error.issues[0].message }
+    }
+
+    const { phone, zalo } = validation.data
 
     // Update public.profiles table
     const { error } = await supabase
@@ -44,16 +54,17 @@ export async function updatePassword(formData: FormData) {
         return { error: 'Không tìm thấy người dùng' }
     }
 
-    const password = formData.get('password') as string
-    const confirmPassword = formData.get('confirmPassword') as string
-
-    if (password !== confirmPassword) {
-        return { error: 'Mật khẩu xác nhận không khớp' }
+    const rawData = {
+        password: formData.get('password') as string,
+        confirmPassword: formData.get('confirmPassword') as string,
     }
 
-    if (password.length < 6) {
-        return { error: 'Mật khẩu phải có ít nhất 6 ký tự' }
+    const validation = passwordSchema.safeParse(rawData)
+    if (!validation.success) {
+        return { error: validation.error.issues[0].message }
     }
+
+    const { password } = validation.data
 
     const { error } = await supabase.auth.updateUser({
         password: password

@@ -24,9 +24,13 @@ export async function createPaymentRequest(amount: number, nextPath?: string) {
         const protocol = headerList.get('x-forwarded-proto') || (process.env.NODE_ENV === 'development' ? 'http' : 'https')
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`
 
-        const shortId = Date.now().toString().slice(-6) + Math.floor(Math.random() * 100).toString().padStart(2, '0')
-        const orderId = `SP${shortId}`
-        const description = `Nap_xu_${amount}_VND`
+        // Generate SP + 10 digits to match SePay pattern (Total 12 characters: SP0123456789)
+        const timestampPart = Date.now().toString().slice(-8) // 8 digits from timestamp
+        const randomPart = Math.floor(Math.random() * 100).toString().padStart(2, '0') // 2 random digits
+        const orderId = `SP${timestampPart}${randomPart}`
+
+        // Use EXACTLY the orderId as description so SePay's pattern "SP" + 10 digits matches perfectly
+        const description = orderId
 
         const nextQuery = nextPath ? `&next=${encodeURIComponent(nextPath)}` : ''
 

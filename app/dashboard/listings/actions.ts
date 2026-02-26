@@ -5,14 +5,67 @@ import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supab
 import { redirect } from 'next/navigation'
 import { ListingStatus } from '@/types/listing'
 import { encrypt } from '@/lib/utils/encryption'
+import { listingSchema, imageFileSchema } from '@/lib/validations/listing'
+import { z } from 'zod'
+
 
 export async function createListing(formData: FormData): Promise<{ success: boolean; listingId?: string; error?: string }> {
     const user = await requireAuth()
     const supabase = await createServerSupabaseClient()
 
-    const title = formData.get('title') as string
+    const rawFormData = {
+        title: formData.get('title') as string,
+        description: formData.get('description') as string,
+        space_type: (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        location_type: formData.get('location_type') as string,
+        price_min: parseInt(formData.get('price_min') as string) || 0,
+        price_max: parseInt(formData.get('price_max') as string) || 0,
+        province_old: formData.get('province_old') as string,
+        district_old: formData.get('district_old') as string,
+        province_new: formData.get('province_new') as string,
+        ward_new: formData.get('ward_new') as string,
+        detailed_address: formData.get('detailed_address') as string,
+        latitude: parseFloat(formData.get('latitude') as string),
+        longitude: parseFloat(formData.get('longitude') as string),
+        suitable_for: (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        not_suitable_for: (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        amenities: (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        nearby_features: (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        time_slots: (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || [],
+        phone: formData.get('phone') as string,
+        zalo: formData.get('zalo') as string,
+    }
 
-    // Lock Status & Role Check
+    // 1. Zod Validation
+    const validation = listingSchema.safeParse(rawFormData)
+    if (!validation.success) {
+        return { success: false, error: validation.error.issues[0].message }
+    }
+
+    const {
+        title, description, space_type, location_type,
+        price_min, price_max, province_old, district_old,
+        province_new, ward_new, detailed_address,
+        latitude, longitude, suitable_for, not_suitable_for,
+        amenities, nearby_features, time_slots, phone, zalo
+    } = validation.data
+
+    // 2. Image Validation (Prevention of OOM / Junk data)
+    const imageFiles = formData.getAll('images') as File[]
+    const validImages: File[] = []
+
+    for (const file of imageFiles) {
+        if (file.size === 0) continue
+        const imgValidation = imageFileSchema.safeParse(file)
+        if (!imgValidation.success) {
+            return { success: false, error: imgValidation.error.issues[0].message }
+        }
+        validImages.push(file)
+    }
+
+    const imageUrls: string[] = []
+
+    // 3. Lock Status & Role Check
     const { data: profile } = await supabase
         .from('profiles')
         .select('lock_status, role')
@@ -22,44 +75,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
     if ((profile?.lock_status === 'soft' || profile?.lock_status === 'hard') && profile?.role !== 'admin') {
         return { success: false, error: 'Tài khoản của bạn đã bị khóa tính năng đăng bài.' }
     }
-    const description = formData.get('description') as string
-    const space_type = (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const location_type = formData.get('location_type') as string
-    const price_min = parseInt(formData.get('price_min') as string) || 0
-    const price_max = parseInt(formData.get('price_max') as string) || 0
-    const province_old = formData.get('province_old') as string
-    const district_old = formData.get('district_old') as string
-    const province_new = formData.get('province_new') as string
-    const ward_new = formData.get('ward_new') as string
-    const detailed_address = formData.get('detailed_address') as string
-    const latitude = parseFloat(formData.get('latitude') as string)
-    const longitude = parseFloat(formData.get('longitude') as string)
 
-    const phone = formData.get('phone') as string
-    const zalo = formData.get('zalo') as string
-
-    // Multi-select fields (tags)
-    const suitable_for = (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const not_suitable_for = (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const amenities = (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const nearby_features = (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-
-    // Time Slots
-    const time_slots = (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || []
-
-    // Validation
-    if (!title) return { success: false, error: 'Tiêu đề là bắt buộc' }
-    if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
-    if (space_type.length === 0) return { success: false, error: 'Loại hình không gian là bắt buộc' }
-    if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
-    if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
-    if (!detailed_address) return { success: false, error: 'Địa chỉ chi tiết là bắt buộc' }
-    if (isNaN(latitude)) return { success: false, error: 'Vĩ độ là bắt buộc và phải là số' }
-    if (isNaN(longitude)) return { success: false, error: 'Kinh độ là bắt buộc và phải là số' }
-
-    // Images
-    const imageFiles = formData.getAll('images') as File[]
-    const imageUrls: string[] = []
 
     // RATE LIMITING: Check if user has exceeded submission limit
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
@@ -115,8 +131,9 @@ export async function createListing(formData: FormData): Promise<{ success: bool
 
     if (listing) {
         // Upload images if any
-        if (imageFiles.length > 0) {
-            for (const file of imageFiles) {
+        if (validImages.length > 0) {
+            for (const file of validImages) {
+
                 if (file.size === 0) continue
 
                 const buffer = await file.arrayBuffer()
@@ -124,8 +141,10 @@ export async function createListing(formData: FormData): Promise<{ success: bool
                 const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`
 
                 const internalSecret = process.env.INTERNAL_SECRET_KEY;
+                const serviceRoleDb = createServiceRoleClient()
 
-                const { data: uploadData, error: uploadError } = await supabase.functions.invoke('github-image-handler', {
+                const { data: uploadData, error: uploadError } = await serviceRoleDb.functions.invoke('github-image-handler', {
+
                     body: {
                         action: 'upload',
                         listingId: listing.id,
@@ -179,14 +198,16 @@ export async function createListing(formData: FormData): Promise<{ success: bool
             console.error('Error saving listing contacts:', contactError)
         }
 
-        // Record submission for rate limiting
-        await supabase
+        // Record submission for rate limiting (CRITICAL: MUST USE SERVICE ROLE)
+        const serviceRoleDb = createServiceRoleClient()
+        await serviceRoleDb
             .from('listing_submissions')
             .insert({
                 user_id: user.id,
                 listing_id: listing.id,
                 action: 'create'
             })
+
     }
 
     return { success: true, listingId: listing.id }
@@ -226,57 +247,54 @@ export async function updateListing(listingId: string, formData: FormData): Prom
     }
 
     if (existingListing.owner_id !== user.id) {
-        // Check if user is admin
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-
-        if (profile?.role !== 'admin') {
+        // Use previously fetched role
+        if (!isAdmin) {
             return { success: false, error: 'Bạn không có quyền chỉnh sửa tin đăng này' }
         }
     } else {
         // If owner, check if the listing is locked. Admin bypasses this.
-        if (existingListing.is_locked && profile?.role !== 'admin') {
+        if (existingListing.is_locked && !isAdmin) {
             return { success: false, error: 'Tin đăng này đã bị khóa bởi Admin và không thể chỉnh sửa.' }
         }
     }
 
-    // 2. Extract Data
-    const title = formData.get('title') as string
-    const description = formData.get('description') as string
-    const space_type = (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const location_type = formData.get('location_type') as string
-    const price_min = parseInt(formData.get('price_min') as string) || 0
-    const price_max = parseInt(formData.get('price_max') as string) || 0
-    const province_old = formData.get('province_old') as string
-    const district_old = formData.get('district_old') as string
-    const province_new = formData.get('province_new') as string
-    const ward_new = formData.get('ward_new') as string
-    const detailed_address = formData.get('detailed_address') as string
-    const latitude = parseFloat(formData.get('latitude') as string)
-    const longitude = parseFloat(formData.get('longitude') as string)
+    const rawFormData = {
+        title: formData.get('title') as string,
+        description: formData.get('description') as string,
+        space_type: (formData.get('space_type') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        location_type: formData.get('location_type') as string,
+        price_min: parseInt(formData.get('price_min') as string) || 0,
+        price_max: parseInt(formData.get('price_max') as string) || 0,
+        province_old: formData.get('province_old') as string,
+        district_old: formData.get('district_old') as string,
+        province_new: formData.get('province_new') as string,
+        ward_new: formData.get('ward_new') as string,
+        detailed_address: formData.get('detailed_address') as string,
+        latitude: parseFloat(formData.get('latitude') as string),
+        longitude: parseFloat(formData.get('longitude') as string),
+        suitable_for: (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        not_suitable_for: (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        amenities: (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        nearby_features: (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        time_slots: (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || [],
+        phone: formData.get('phone') as string,
+        zalo: formData.get('zalo') as string,
+    }
 
-    const phone = formData.get('phone') as string
-    const zalo = formData.get('zalo') as string
+    // 2. Zod Validation
+    const validation = listingSchema.safeParse(rawFormData)
+    if (!validation.success) {
+        return { success: false, error: validation.error.issues[0].message }
+    }
 
-    // Multi-select fields
-    const suitable_for = (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const not_suitable_for = (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const amenities = (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
-    const nearby_features = (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || []
+    const {
+        title, description, space_type, location_type,
+        price_min, price_max, province_old, district_old,
+        province_new, ward_new, detailed_address,
+        latitude, longitude, suitable_for, not_suitable_for,
+        amenities, nearby_features, time_slots, phone, zalo
+    } = validation.data
 
-    // Time Slots
-    const time_slots = (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || []
-
-    // Validation
-    if (!title) return { success: false, error: 'Tiêu đề là bắt buộc' }
-    if (!phone) return { success: false, error: 'Số điện thoại là bắt buộc' }
-    if (space_type.length === 0) return { success: false, error: 'Loại hình không gian là bắt buộc' }
-    if (!location_type) return { success: false, error: 'Loại vị trí là bắt buộc' }
-    if (!province_old || !district_old || !province_new || !ward_new) return { success: false, error: 'Địa chỉ hành chính là bắt buộc' }
-    if (isNaN(latitude) || isNaN(longitude)) return { success: false, error: 'Tọa độ không hợp lệ' }
 
     // RATE LIMITING: Check if user has exceeded submission limit
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
@@ -298,14 +316,26 @@ export async function updateListing(listingId: string, formData: FormData): Prom
         }
     }
 
-    // 3. Handle Images
+    // 3. Handle Images (Validate first)
     const imageFiles = formData.getAll('images') as File[]
     const keptImages = formData.getAll('kept_images') as string[]
+    const validNewImages: File[] = []
+
+    for (const file of imageFiles) {
+        if (file.size === 0) continue
+        const imgValidation = imageFileSchema.safeParse(file)
+        if (!imgValidation.success) {
+            return { success: false, error: imgValidation.error.issues[0].message }
+        }
+        validNewImages.push(file)
+    }
+
     const finalImageUrls: string[] = [...keptImages]
 
     // Upload new images
-    if (imageFiles.length > 0) {
-        for (const file of imageFiles) {
+    if (validNewImages.length > 0) {
+        for (const file of validNewImages) {
+
             if (file.size === 0) continue
 
             const buffer = await file.arrayBuffer()
@@ -314,7 +344,9 @@ export async function updateListing(listingId: string, formData: FormData): Prom
 
             const internalSecret = process.env.INTERNAL_SECRET_KEY;
 
-            const { data: uploadData, error: uploadError } = await supabase.functions.invoke('github-image-handler', {
+            const serviceRoleDb = createServiceRoleClient()
+
+            const { data: uploadData, error: uploadError } = await serviceRoleDb.functions.invoke('github-image-handler', {
                 body: {
                     action: 'upload',
                     listingId: listingId,
@@ -325,6 +357,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
                     Authorization: `Bearer ${internalSecret}`
                 }
             })
+
 
             if (uploadError) {
                 console.error('Error uploading image:', uploadError)
@@ -370,9 +403,10 @@ export async function updateListing(listingId: string, formData: FormData): Prom
             await Promise.all(imagesToDelete.map(async (imageUrl: string) => {
                 try {
                     // primitive extraction: last part of URL
+                    const serviceRoleDb = createServiceRoleClient()
                     const fileName = imageUrl.split('/').pop();
                     if (fileName) {
-                        await supabase.functions.invoke('github-image-handler', {
+                        await serviceRoleDb.functions.invoke('github-image-handler', {
                             body: {
                                 action: 'delete',
                                 listingId: listingId,
@@ -466,14 +500,16 @@ export async function updateListing(listingId: string, formData: FormData): Prom
         console.error('Error updating contacts:', contactError)
     }
 
-    // Record submission for rate limiting
-    await supabase
+    // Record submission for rate limiting (CRITICAL: MUST USE SERVICE ROLE)
+    const serviceRoleDb = createServiceRoleClient()
+    await serviceRoleDb
         .from('listing_submissions')
         .insert({
             user_id: user.id,
             listing_id: listingId,
             action: 'update'
         })
+
 
     // 6. Revalidate
     const { revalidatePath } = await import('next/cache')

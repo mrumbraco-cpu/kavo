@@ -76,7 +76,7 @@ export const checkOrderStatus = async (orderInvoiceNumber: string) => {
     const auth = Buffer.from(`${sepayConfig.merchantId}:${sepayConfig.secretKey}`).toString('base64');
 
     try {
-        const response = await fetch(`${apiBaseUrl}/order?q=${orderInvoiceNumber}`, {
+        const response = await fetch(`${apiBaseUrl}/order?q=${encodeURIComponent(orderInvoiceNumber)}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Basic ${auth}`,
