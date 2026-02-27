@@ -22,24 +22,10 @@ import {
     Globe
 } from 'lucide-react'
 import { getListingUrl } from '@/lib/utils/url'
-import { ListingStatus } from '@/types/listing'
+import { Listing, ListingStatus } from '@/types/listing'
+import { formatPriceRange, formatDate } from '@/lib/utils/format'
 import VisibilityToggle from './VisibilityToggle'
 import ExpirationToggle from './ExpirationToggle'
-
-function formatPriceRange(min: number, max?: number) {
-    if (typeof min !== 'number') return '0 ₫'
-
-    const fmt = (n: number) => {
-        if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}tr`;
-        if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
-        return `${n}`;
-    };
-
-    if (max && max > min) {
-        return `${fmt(min)} – ${fmt(max)} ₫`;
-    }
-    return `${fmt(min)} ₫`;
-}
 
 function StatusBadge({ status, isHidden, isLocked }: { status: ListingStatus, isHidden?: boolean, isLocked?: boolean }) {
     const badges = []
@@ -73,7 +59,7 @@ function StatusBadge({ status, isHidden, isLocked }: { status: ListingStatus, is
 
     badges.push(
         <span key="status" className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md border shadow-sm ${config.styles}`}>
-            <Icon className="w-3 h-3" /> {config.label}
+            <Icon className="w-3 h-3" aria-hidden="true" /> {config.label}
         </span>
     )
 
@@ -81,7 +67,7 @@ function StatusBadge({ status, isHidden, isLocked }: { status: ListingStatus, is
     if (isHidden) {
         badges.push(
             <span key="hidden" className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md bg-gray-50 text-gray-400 border border-gray-100 shadow-sm">
-                <EyeOff className="w-3 h-3" /> Đang Ẩn
+                <EyeOff className="w-3 h-3" aria-hidden="true" /> Đang Ẩn
             </span>
         )
     }
@@ -90,7 +76,7 @@ function StatusBadge({ status, isHidden, isLocked }: { status: ListingStatus, is
     if (isLocked) {
         badges.push(
             <span key="locked" className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md bg-red-50 text-red-500 border border-red-100 shadow-sm">
-                <Lock className="w-3 h-3" /> Khóa soạn
+                <Lock className="w-3 h-3" aria-hidden="true" /> Khóa soạn
             </span>
         )
     }
@@ -208,7 +194,7 @@ export default async function MyListingsPage({
                     {/* Filter/Search Bar Placeholder - Could be implemented later */}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {listings.map((listing: any, index: number) => (
+                        {listings.map((listing: Listing, index: number) => (
                             <div
                                 key={listing.id}
                                 className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-50/50 transition-all duration-500 overflow-hidden flex flex-col"
@@ -278,7 +264,7 @@ export default async function MyListingsPage({
                                             <div className="flex flex-col ml-auto text-right">
                                                 <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">Ngày đăng</span>
                                                 <span className="text-[10px] font-bold text-slate-500 flex items-center justify-end gap-1">
-                                                    {new Date(listing.created_at).toLocaleDateString('vi-VN')}
+                                                    {formatDate(listing.created_at)}
                                                 </span>
                                             </div>
                                         </div>
@@ -288,7 +274,7 @@ export default async function MyListingsPage({
                                     <div className="flex items-center gap-1.5 pt-1">
                                         {listing.is_locked ? (
                                             <div className="flex-1 h-9 rounded-lg bg-red-50 text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 border border-red-100 opacity-60 cursor-not-allowed">
-                                                <Lock className="w-3.5 h-3.5" /> Khóa
+                                                <Lock className="w-3.5 h-3.5" aria-hidden="true" /> Khóa
                                             </div>
                                         ) : (
                                             <>
@@ -296,14 +282,14 @@ export default async function MyListingsPage({
                                                     <div
                                                         className="flex-1 h-9 rounded-lg bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 border border-slate-100 opacity-60 cursor-not-allowed"
                                                     >
-                                                        <Edit className="w-3.5 h-3.5" /> Sửa
+                                                        <Edit className="w-3.5 h-3.5" aria-hidden="true" /> Sửa
                                                     </div>
                                                 ) : (
                                                     <Link
                                                         href={`/dashboard/listings/${listing.id}/edit`}
                                                         className="flex-1 h-9 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 hover:bg-blue-600 hover:text-white transition-all duration-200 border border-blue-100 shadow-sm"
                                                     >
-                                                        <Edit className="w-3.5 h-3.5" /> Sửa
+                                                        <Edit className="w-3.5 h-3.5" aria-hidden="true" /> Sửa
                                                     </Link>
                                                 )}
 
@@ -321,7 +307,7 @@ export default async function MyListingsPage({
                                                             className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center transition-all hover:bg-black shadow-sm"
                                                             title="Xem thực tế"
                                                         >
-                                                            <Eye className="w-3.5 h-3.5" />
+                                                            <Eye className="w-3.5 h-3.5" aria-hidden="true" />
                                                         </Link>
                                                     )}
                                                 </div>
@@ -343,7 +329,7 @@ export default async function MyListingsPage({
                                     : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:shadow-md'
                                     }`}
                             >
-                                <ChevronLeft className="w-4 h-4" /> Trước
+                                <ChevronLeft className="w-4 h-4" aria-hidden="true" /> Trước
                             </Link>
 
                             <div className="hidden sm:flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
@@ -372,7 +358,7 @@ export default async function MyListingsPage({
                                     : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:shadow-md'
                                     }`}
                             >
-                                Sau <ChevronRight className="w-4 h-4" />
+                                Sau <ChevronRight className="w-4 h-4" aria-hidden="true" />
                             </Link>
                         </div>
                     )}

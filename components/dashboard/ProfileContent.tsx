@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { User, Mail, Shield, Phone, MessageSquare, Lock, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { updateProfile, updatePassword } from '@/app/dashboard/profile/actions'
 import { Profile } from '@/types/profile'
+import { formatDate } from '@/lib/utils/format'
 
 interface ProfileContentProps {
     user: any;
@@ -100,13 +101,13 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                             <h2 className="text-2xl font-bold text-white tracking-tight">{user.email}</h2>
                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2">
                                 <span className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${profile?.role === 'admin'
-                                        ? 'bg-amber-400 text-amber-950'
-                                        : 'bg-white/20 text-white backdrop-blur-md'
+                                    ? 'bg-amber-400 text-amber-950'
+                                    : 'bg-white/20 text-white backdrop-blur-md'
                                     }`}>
                                     {profile?.role === 'admin' ? 'Quản trị viên' : 'Thành viên'}
                                 </span>
                                 <span className="text-blue-100 text-sm opacity-80">
-                                    Gia nhập: {new Date(user.created_at || '').toLocaleDateString('vi-VN')}
+                                    Gia nhập: {formatDate(user.created_at || '')}
                                 </span>
                             </div>
                         </div>
@@ -117,8 +118,8 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                 <div className="p-8">
                     {message && (
                         <div className={`mb-8 p-4 rounded-2xl border flex items-start gap-3 animate-in zoom-in duration-300 ${message.type === 'success'
-                                ? 'bg-green-50 border-green-100 text-green-800'
-                                : 'bg-red-50 border-red-100 text-red-800'
+                            ? 'bg-green-50 border-green-100 text-green-800'
+                            : 'bg-red-50 border-red-100 text-red-800'
                             }`}>
                             {message.type === 'success' ? <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" /> : <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />}
                             <span className="font-medium">{message.text}</span>
@@ -131,15 +132,15 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                             <div>
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block ml-1">Địa chỉ Email</label>
                                 <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-gray-500">
-                                    <Mail className="w-4 h-4" />
+                                    <Mail className="w-4 h-4" aria-hidden="true" />
                                     <span className="text-sm font-medium">{user.email}</span>
                                 </div>
                             </div>
                             <div>
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block ml-1">ID Tài khoản</label>
                                 <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-gray-500">
-                                    <Lock className="w-4 h-4" />
-                                    <span className="text-sm font-mono">{user.id.slice(0, 16)}...</span>
+                                    <Lock className="w-4 h-4" aria-hidden="true" />
+                                    <span className="text-sm font-mono">{user.id.slice(0, 16)}…</span>
                                 </div>
                             </div>
                         </div>
@@ -150,8 +151,9 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                 <h3 className="text-lg font-bold text-gray-900">Thông tin liên hệ</h3>
                                 {!isEditing && (
                                     <button
+                                        type="button"
                                         onClick={() => setIsEditing(true)}
-                                        className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors bg-blue-50 px-4 py-2 rounded-xl"
+                                        className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors bg-blue-50 px-4 py-2 rounded-xl active:scale-95"
                                     >
                                         Chỉnh sửa
                                     </button>
@@ -164,12 +166,13 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                         <div className="space-y-2">
                                             <label className="text-sm font-bold text-gray-700 ml-1">Số điện thoại</label>
                                             <div className="relative">
-                                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
                                                 <input
                                                     type="tel"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
                                                     placeholder="Nhập số điện thoại"
+                                                    autoComplete="tel"
                                                     className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
                                                 />
                                             </div>
@@ -177,12 +180,13 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                         <div className="space-y-2">
                                             <label className="text-sm font-bold text-gray-700 ml-1">Số Zalo</label>
                                             <div className="relative">
-                                                <MessageSquare className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                                <MessageSquare className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
                                                 <input
                                                     type="tel"
                                                     value={zalo}
                                                     onChange={(e) => setZalo(e.target.value)}
                                                     placeholder="Nhập số Zalo"
+                                                    autoComplete="tel"
                                                     className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
                                                 />
                                             </div>
@@ -196,16 +200,16 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                                 setPhone(profile?.phone || '')
                                                 setZalo(profile?.zalo || '')
                                             }}
-                                            className="px-6 py-2.5 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors"
+                                            className="px-6 py-2.5 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors active:scale-95"
                                         >
                                             Hủy bỏ
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="px-8 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50 flex items-center gap-2"
+                                            className="px-8 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50 flex items-center gap-2 active:scale-95"
                                         >
-                                            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                                            {loading && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
                                             Lưu thay đổi
                                         </button>
                                     </div>
@@ -230,8 +234,9 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                 <h3 className="text-lg font-bold text-gray-900">Bảo mật</h3>
                                 {!isChangingPassword && (
                                     <button
+                                        type="button"
                                         onClick={() => setIsChangingPassword(true)}
-                                        className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors bg-gray-100 px-4 py-2 rounded-xl"
+                                        className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors bg-gray-100 px-4 py-2 rounded-xl active:scale-95"
                                     >
                                         Đổi mật khẩu
                                     </button>
@@ -249,6 +254,7 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 required
                                                 placeholder="Tối thiểu 6 ký tự"
+                                                autoComplete="new-password"
                                                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
                                             />
                                         </div>
@@ -260,6 +266,7 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 required
                                                 placeholder="Nhập lại mật khẩu mới"
+                                                autoComplete="new-password"
                                                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
                                             />
                                         </div>
@@ -272,16 +279,16 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                                                 setPassword('')
                                                 setConfirmPassword('')
                                             }}
-                                            className="px-6 py-2.5 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors"
+                                            className="px-6 py-2.5 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors active:scale-95"
                                         >
                                             Hủy bỏ
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="px-8 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 disabled:opacity-50 flex items-center gap-2"
+                                            className="px-8 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 disabled:opacity-50 flex items-center gap-2 active:scale-95"
                                         >
-                                            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                                            {loading && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
                                             Cập nhật mật khẩu
                                         </button>
                                     </div>
@@ -297,7 +304,7 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700"></div>
                 <div className="flex gap-4 relative z-10">
                     <div className="w-12 h-12 rounded-2xl bg-white border border-blue-100 flex items-center justify-center shrink-0 shadow-sm">
-                        <Shield className="w-6 h-6 text-blue-600" />
+                        <Shield className="w-6 h-6 text-blue-600" aria-hidden="true" />
                     </div>
                     <div>
                         <h3 className="text-base font-bold text-blue-900">Bảo mật ưu tiên</h3>

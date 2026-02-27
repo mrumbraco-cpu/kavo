@@ -15,6 +15,7 @@ import {
     Home,
     Unlock
 } from 'lucide-react'
+import { formatCompactPrice } from '@/lib/utils/format'
 
 interface DashboardHeaderProps {
     userEmail: string
@@ -46,7 +47,7 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
             icon: Coins,
             label: 'Tài khoản xu',
             href: '/dashboard/coins',
-            badge: `${coinBalance.toLocaleString('vi-VN')} xu`,
+            badge: `${formatCompactPrice(coinBalance)} xu`,
             badgeColor: 'bg-yellow-100 text-yellow-800'
         },
         {
@@ -98,13 +99,16 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
 
                     {/* Mobile Menu Button */}
                     <button
+                        type="button"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label={isMobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
+                        aria-expanded={isMobileMenuOpen}
                         className="p-2 w-9 h-9 flex items-center justify-center rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-100 transition-colors active:scale-90"
                     >
                         {isMobileMenuOpen ? (
-                            <X className="w-5 h-5 text-gray-700" />
+                            <X className="w-5 h-5 text-gray-700" aria-hidden="true" />
                         ) : (
-                            <Menu className="w-5 h-5 text-gray-700" />
+                            <Menu className="w-5 h-5 text-gray-700" aria-hidden="true" />
                         )}
                     </button>
                 </div>
@@ -132,10 +136,12 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                                     <span className="text-lg font-bold text-gray-900">SPSHARE</span>
                                 </div>
                                 <button
+                                    type="button"
                                     onClick={() => setIsMobileMenuOpen(false)}
+                                    aria-label="Đóng menu"
                                     className="p-2 w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors active:scale-90"
                                 >
-                                    <X className="w-5 h-5 text-gray-400" />
+                                    <X className="w-5 h-5 text-gray-400" aria-hidden="true" />
                                 </button>
                             </div>
 
@@ -163,7 +169,7 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                                     className="flex items-center justify-center gap-3 p-4 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg shadow-blue-200 active:scale-95 transition-all"
                                 >
                                     <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center border border-white/20">
-                                        <PlusCircle className="w-5 h-5 text-white" />
+                                        <PlusCircle className="w-5 h-5 text-white" aria-hidden="true" />
                                     </div>
                                     <span className="text-sm font-black text-white uppercase tracking-wider">Đăng tin mới</span>
                                 </Link>
@@ -186,7 +192,7 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <item.icon className={`w-5 h-5 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+                                            <item.icon className={`w-5 h-5 ${active ? 'text-blue-600' : 'text-gray-400'}`} aria-hidden="true" />
                                             <span>{item.label}</span>
                                         </div>
                                         {item.badge && !active && (
@@ -202,10 +208,11 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                         {/* Logout Section (Fixed Bottom) */}
                         <div className="flex-none p-4 border-t border-gray-100 bg-white">
                             <button
+                                type="button"
                                 onClick={handleLogout}
                                 className="w-full flex items-center justify-center gap-3 px-3 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all font-medium text-sm active:scale-[0.98]"
                             >
-                                <LogOut className="w-5 h-5" />
+                                <LogOut className="w-5 h-5" aria-hidden="true" />
                                 <span>Đăng xuất</span>
                             </button>
                         </div>

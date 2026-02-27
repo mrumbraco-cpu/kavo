@@ -45,15 +45,15 @@ export default function VisibilityToggle({ listingId, isHidden }: VisibilityTogg
             title={isHidden ? 'Nhấp để hiển thị lại' : 'Nhấp để tạm ẩn tin'}
         >
             {isLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
             ) : isHidden ? (
                 <>
-                    <Eye className="w-3.5 h-3.5" />
+                    <Eye className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Hiện tin</span>
                 </>
             ) : (
                 <>
-                    <EyeOff className="w-3.5 h-3.5" />
+                    <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Ẩn tin</span>
                 </>
             )}

@@ -46,15 +46,15 @@ export default function ExpirationToggle({ listingId, status }: ExpirationToggle
             title={isExpired ? 'Nhấp để khôi phục (Bỏ hết hạn)' : 'Nhấp để đánh dấu Hết hạn'}
         >
             {isLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
             ) : isExpired ? (
                 <>
-                    <RotateCcw className="w-3.5 h-3.5" />
+                    <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Khôi phục</span>
                 </>
             ) : (
                 <>
-                    <AlertCircle className="w-3.5 h-3.5" />
+                    <AlertCircle className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">Hết hạn</span>
                 </>
             )}

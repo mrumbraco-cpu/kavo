@@ -13,6 +13,7 @@ import {
     Home,
     Unlock
 } from 'lucide-react'
+import { formatCompactPrice } from '@/lib/utils/format'
 
 interface MenuItem {
     icon: React.ElementType
@@ -51,7 +52,7 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
             icon: Coins,
             label: 'Tài khoản xu',
             href: '/dashboard/coins',
-            badge: `${coinBalance.toLocaleString('vi-VN')} xu`,
+            badge: `${formatCompactPrice(coinBalance)} xu`,
             badgeColor: 'bg-yellow-100 text-yellow-800'
         },
         {
@@ -93,12 +94,12 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
                 <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
                     <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                            <span className="text-white font-black text-xl italic tracking-tighter">SP</span>
+                            <span className="text-white font-black text-xl italic tracking-tighter" aria-hidden="true">SP</span>
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent leading-none">
+                            <span className="text-lg font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent leading-none block">
                                 SPSHARE
-                            </h1>
+                            </span>
                             <p className="text-[10px] text-blue-500 uppercase tracking-wider font-bold mt-1">Dashboard</p>
                         </div>
                     </Link>
@@ -127,7 +128,7 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
                             className="group flex flex-col items-center justify-center gap-2 p-4 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg shadow-blue-200 hover:shadow-xl hover:shadow-blue-300 hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
                         >
                             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md border border-white/30 group-hover:scale-110 transition-transform duration-300">
-                                <PlusCircle className="w-6 h-6 text-white" />
+                                <PlusCircle className="w-6 h-6 text-white" aria-hidden="true" />
                             </div>
                             <span className="text-sm font-black text-white uppercase tracking-wider">Đăng tin mới</span>
                         </Link>
@@ -143,13 +144,13 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${active
+                                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all active:scale-[0.98] ${active
                                     ? 'bg-blue-50 text-blue-700'
                                     : 'text-gray-700 hover:bg-gray-50'
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <item.icon className={`w-5 h-5 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+                                    <item.icon className={`w-5 h-5 ${active ? 'text-blue-600' : 'text-gray-400'}`} aria-hidden="true" />
                                     <span>{item.label}</span>
                                 </div>
                                 {item.badge && !active && (
@@ -165,10 +166,11 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
                 {/* Logout Button */}
                 <div className="p-3 border-t border-gray-100">
                     <button
+                        type="button"
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all active:scale-[0.98]"
                     >
-                        <LogOut className="w-5 h-5" />
+                        <LogOut className="w-5 h-5" aria-hidden="true" />
                         <span>Đăng xuất</span>
                     </button>
                 </div>
