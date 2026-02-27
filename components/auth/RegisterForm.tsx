@@ -88,47 +88,47 @@ function RegisterContent() {
     }
 
     return (
-        <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-3xl p-8 shadow-2xl shadow-gray-200/50">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Bắt đầu ngay</h1>
-                    <p className="text-gray-500">Tạo tài khoản để khám phá các không gian</p>
+        <div className="w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-3 duration-500">
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-2xl p-6 shadow-xl shadow-gray-200/40">
+                <div className="text-center mb-6">
+                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1.5">Bắt đầu ngay</h1>
+                    <p className="text-sm text-gray-500">Tạo tài khoản để khám phá các không gian</p>
                 </div>
 
                 {error && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 text-red-700 text-sm animate-in shake duration-500">
-                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <div className="mb-5 p-3.5 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2.5 text-red-700 text-xs animate-in shake duration-500">
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{error}</span>
                     </div>
                 )}
 
-                <form onSubmit={handleRegister} className="space-y-5">
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700 ml-1">Email</label>
+                <form onSubmit={handleRegister} className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-semibold text-gray-700 ml-0.5">Email</label>
                         <div className="relative group">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 placeholder="name@company.com"
-                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
+                                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all text-sm text-gray-900"
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700 ml-1">Mật khẩu</label>
+                    <div className="space-y-1.5">
+                        <label className="text-[13px] font-semibold text-gray-700 ml-0.5">Mật khẩu</label>
                         <div className="relative group">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="Tối thiểu 6 ký tự"
-                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition-all text-gray-900"
+                                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition-all text-sm text-gray-900"
                             />
                         </div>
                     </div>
@@ -142,24 +142,24 @@ function RegisterContent() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-blue-100 flex items-center justify-center gap-3 group"
+                        className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-100 flex items-center justify-center gap-2 group"
                     >
                         {loading ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
                             <>
                                 Đăng ký tài khoản
-                                <UserPlus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                <UserPlus className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </>
                         )}
                     </button>
 
-                    <div className="relative py-4">
+                    <div className="relative py-2">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-gray-100"></span>
                         </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-4 text-gray-400 font-medium tracking-wider">Hoặc tiếp tục với</span>
+                        <div className="relative flex justify-center text-[11px] uppercase">
+                            <span className="bg-white px-3 text-gray-400 font-medium tracking-wider">Hoặc tiếp tục với</span>
                         </div>
                     </div>
 
@@ -167,17 +167,17 @@ function RegisterContent() {
                         type="button"
                         onClick={handleGoogleLogin}
                         disabled={loading}
-                        className="w-full py-3.5 bg-white border border-gray-200 text-gray-700 rounded-2xl font-bold hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3"
+                        className="w-full py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-[13px] hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5"
                     >
                         <GoogleIcon />
                         Google
                     </button>
                 </form>
 
-                <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-                    <p className="text-gray-600 text-sm">
+                <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+                    <p className="text-gray-500 text-[13px]">
                         Đã có tài khoản?{' '}
-                        <Link href={`/auth/login${next !== '/dashboard' ? `?next=${encodeURIComponent(next)}` : ''}`} className="font-bold text-blue-600 hover:underline">
+                        <Link href={`/auth/login${next !== '/dashboard' ? `?next=${encodeURIComponent(next)}` : ''}`} className="font-bold text-blue-600 hover:text-blue-700">
                             Đăng nhập
                         </Link>
                     </p>

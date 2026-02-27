@@ -9,6 +9,10 @@ export default async function PublicLayout({
     children: React.ReactNode;
 }) {
     const supabase = await createServerSupabaseClient();
+
+    // Fetch user and profile in parallel if possible
+    // Note: auth.getUser() must happen before we know the ID for the profile query
+    // But we can start the profile check once we have the user
     const { data: { user } } = await supabase.auth.getUser();
 
     let profile = null;
@@ -23,11 +27,16 @@ export default async function PublicLayout({
 
     return (
         <SearchProvider>
-            <PublicNavbar user={user} profile={profile} />
-            <main className="pt-16 min-h-screen">
-                {children}
-            </main>
-            <PublicFooter />
+            <div className="flex flex-col min-h-screen">
+                <PublicNavbar user={user} profile={profile} />
+                <main className="flex-1 pt-16 flex flex-col">
+                    {children}
+                </main>
+                <FooterWrapper />
+            </div>
         </SearchProvider>
     );
 }
+
+// Separate client component to handle conditional footer
+import { FooterWrapper } from './FooterWrapper';

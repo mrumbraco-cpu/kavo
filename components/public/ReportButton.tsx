@@ -145,7 +145,7 @@ export default function ReportButton({ listingId, isAuthenticated }: ReportButto
                                         <textarea
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
-                                            placeholder="Cung cấp thêm chi tiết để giúp chúng tôi xử lý nhanh hơn..."
+                                            placeholder="Cung cấp thêm chi tiết để giúp chúng tôi xử lý nhanh hơn…"
                                             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all min-h-[100px] resize-none"
                                             maxLength={1000}
                                         />
@@ -169,7 +169,7 @@ export default function ReportButton({ listingId, isAuthenticated }: ReportButto
                                             {isSubmitting ? (
                                                 <>
                                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                                    Đang gửi...
+                                                    Đang gửi…
                                                 </>
                                             ) : (
                                                 'Gửi báo cáo'

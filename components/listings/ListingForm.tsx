@@ -622,7 +622,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
                                         className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm font-medium"
-                                        placeholder="090..."
+                                        placeholder="090…"
                                         maxLength={10}
                                     />
                                 </div>
@@ -633,7 +633,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         value={zalo}
                                         onChange={(e) => setZalo(e.target.value)}
                                         className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm font-medium"
-                                        placeholder="090... hoặc link"
+                                        placeholder="090… hoặc link"
                                     />
                                 </div>
                             </div>
@@ -924,7 +924,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                             <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                             <input
                                                 type="text"
-                                                placeholder="Tìm kiếm nhanh..."
+                                                placeholder="Tìm kiếm nhanh…"
                                                 value={geoSearch}
                                                 onChange={e => setGeoSearch(e.target.value)}
                                                 className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
@@ -1100,7 +1100,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                             onChange={(e) => setDescription(e.target.value)}
                                             rows={5}
                                             className="block w-full px-3 py-2 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none text-[13px] leading-relaxed"
-                                            placeholder="Mô tả chi tiết về không gian của bạn..."
+                                            placeholder="Mô tả chi tiết về không gian của bạn…"
                                             maxLength={5000}
                                         />
                                     </div>
@@ -1252,7 +1252,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 disabled={isSubmitting}
                                 className="bg-green-600 text-white px-5 sm:px-6 py-2.5 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-200 disabled:bg-gray-400 disabled:shadow-none min-w-[120px] text-sm"
                             >
-                                {isSubmitting ? 'Đang xử lý...' : 'Cập nhật tin'}
+                                {isSubmitting ? 'Đang xử lý…' : 'Cập nhật tin'}
                             </button>
                         )}
 
@@ -1271,7 +1271,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 className={`${mode === 'edit' ? 'bg-green-600 hover:bg-green-700 shadow-green-200' : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
                                     } text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg disabled:bg-gray-400 disabled:shadow-none min-w-[120px] text-sm`}
                             >
-                                {isSubmitting ? 'Đang xử lý...' : (mode === 'edit' ? 'Cập nhật tin' : 'Đăng tin ngay')}
+                                {isSubmitting ? 'Đang xử lý…' : (mode === 'edit' ? 'Cập nhật tin' : 'Đăng tin ngay')}
                             </button>
                         )}
                     </div>

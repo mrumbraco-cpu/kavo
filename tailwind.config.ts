@@ -8,6 +8,10 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+                display: ["var(--font-outfit)", "system-ui", "sans-serif"],
+            },
             colors: {
                 premium: {
                     50: "#f8fafc",
@@ -27,6 +31,10 @@ const config: Config = {
                     silver: "#C0C0C0",
                     bronze: "#CD7F32",
                 },
+                brand: {
+                    primary: "#0f172a", // Same as premium-900
+                    accent: "#D4AF37",  // Same as accent-gold
+                }
             },
             backgroundImage: {
                 "premium-gradient": "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",

@@ -20,18 +20,7 @@ const MARKER_PRIMARY_COLOR = '#0f172a';   // premium-900
 const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 
-function formatPrice(min: number, max: number): string {
-    const fmt = (n: number) => {
-        if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}tr`;
-        if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
-        return `${n}`;
-    };
-    if (min === max) {
-        if (min === 0) return 'Miễn phí';
-        return `${fmt(min)} ₫`;
-    }
-    return `${fmt(min)} – ${fmt(max)} ₫`;
-}
+import { formatPriceRange } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -64,19 +53,19 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
 
     const buildPopupHTML = (listing: Listing): string => {
         const thumb = listing.images?.[0] ?? null;
-        const priceDisplay = formatPrice(listing.price_min, listing.price_max);
+        const priceDisplay = formatPriceRange(listing.price_min, listing.price_max);
         const isFree = priceDisplay === 'Miễn phí';
 
         const spaceBadges = (listing.space_type && Array.isArray(listing.space_type) && listing.space_type.length > 0)
             ? `
                 <div style="position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:4px;z-index:10;">
                     ${listing.space_type.slice(0, 2).map(type => `
-                        <span style="padding:2px 8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;font-weight:500;border-radius:9999px;backdrop-filter:blur(4px);white-space:nowrap;">
+                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#94a3b8;font-size:10px;font-weight:500;border-radius:8px;backdrop-filter:blur(12px);white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
                             ${type}
                         </span>
                     `).join('')}
                     ${listing.space_type.length > 2 ? `
-                        <span style="padding:2px 8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;font-weight:500;border-radius:9999px;backdrop-filter:blur(4px);">
+                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#94a3b8;font-size:10px;font-weight:500;border-radius:8px;backdrop-filter:blur(12px);box-shadow:0 1px 2px rgba(0,0,0,0.05);">
                             +${listing.space_type.length - 2}
                         </span>
                     ` : ''}
@@ -91,7 +80,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                         <img src="${thumb}" style="width:100%;height:100%;object-fit:cover;" alt="" />
                     ` : `
                         <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                            <svg style="width:40px;height:40px;color:#e2e8f0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg style="width:40px;height:40px;color:#e2e8f0;" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                         </div>
@@ -375,7 +364,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             {allListings.length === 0 && (
                 <div className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none">
                     <div className="text-center">
-                        <svg className="w-12 h-12 text-premium-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-12 h-12 text-premium-300 mx-auto mb-3" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 13l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4" />
                         </svg>
                         <p className="text-sm text-premium-400">Tìm kiếm để xem không gian trên bản đồ</p>

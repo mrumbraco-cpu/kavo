@@ -21,9 +21,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             </div>
 
             <div className="relative z-10 w-full flex flex-col items-center">
-                <Link href="/" className="mb-12 flex items-center gap-2 group transition-transform hover:scale-105 active:scale-95">
-                    <div className="w-10 h-10 bg-blue-600 rounded-xl shadow-lg shadow-blue-200"></div>
-                    <span className="text-2xl font-black text-gray-900 tracking-tighter uppercase">SPSHARE</span>
+                <Link href="/" className="mb-8 flex items-center gap-2 group transition-transform hover:scale-105 active:scale-95">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg shadow-lg shadow-blue-200"></div>
+                    <span className="text-xl font-bold text-gray-900 tracking-tighter uppercase">SPSHARE</span>
                 </Link>
 
                 <LoginForm />

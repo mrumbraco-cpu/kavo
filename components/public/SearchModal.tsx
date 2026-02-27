@@ -328,7 +328,7 @@ export default function SearchModal() {
                             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
                             <input
                                 type="text"
-                                placeholder="Tiêu đề, địa chỉ, tên đường..."
+                                placeholder="Tiêu đề, địa chỉ, tên đường…"
                                 value={draftFilters.query}
                                 onChange={e => set('query', e.target.value)}
                                 className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 placeholder:text-premium-300 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400 transition-all"
@@ -589,7 +589,7 @@ export default function SearchModal() {
                                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
                                 <input
                                     type="text"
-                                    placeholder={locationStep === 'province' ? 'Tìm tỉnh/thành phố...' : 'Tìm quận/huyện/phường...'}
+                                    placeholder={locationStep === 'province' ? 'Tìm tỉnh/thành phố…' : 'Tìm quận/huyện/phường…'}
                                     value={locationSearch}
                                     onChange={e => setLocationSearch(e.target.value)}
                                     autoFocus

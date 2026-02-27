@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-
     --color-premium-50: #f8fafc;
     --color-premium-100: #f1f5f9;
     --color-premium-200: #e2e8f0;
@@ -56,39 +55,50 @@
     }
 }
 
-.animate-premium-fade-up {
-    @apply animate-[fade-up_0.5s_ease-out_forwards];
-}
+@layer base {
+    body {
+        @apply text-premium-900 transition-colors duration-300;
+    }
 
-.animate-premium-fade-in {
-    @apply animate-[fade-in_0.3s_ease-out_forwards];
+    ::selection {
+        @apply bg-accent-gold/20 text-premium-900;
+    }
 }
-
-.animate-premium-float {
-    @apply animate-[float_3s_ease-in-out_infinite];
-}
-
-body {
-    color: var(--color-premium-900);
-}
-
 
 @layer utilities {
+    .animate-premium-fade-up {
+        @apply animate-[fade-up_0.5s_ease-out_forwards];
+    }
+
+    .animate-premium-fade-in {
+        @apply animate-[fade-in_0.3s_ease-out_forwards];
+    }
+
+    .animate-premium-float {
+        @apply animate-[float_3s_ease-in-out_infinite];
+    }
+
+    .glass-premium {
+        @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+    }
+
+    .glass-dark {
+        @apply bg-premium-950/70 backdrop-blur-xl border border-white/5 shadow-2xl;
+    }
+
     .custom-scrollbar {
         scrollbar-width: thin;
         scrollbar-color: #94a3b8 #f1f5f9;
-        /* Slate colors for contrast */
+        -webkit-overflow-scrolling: touch;
     }
 
     .custom-scrollbar::-webkit-scrollbar {
         width: 6px;
         height: 6px;
-        display: block;
     }
 
     .custom-scrollbar::-webkit-scrollbar-track {
         background: #f1f5f9;
-        /* Visible track to hint at scrollability */
         border-radius: 10px;
     }
 
@@ -96,10 +106,5 @@ body {
         background-color: #94a3b8;
         border-radius: 20px;
         border: 1px solid #f1f5f9;
-    }
-
-    /* Ensure visibility on touch devices */
-    .custom-scrollbar {
-        -webkit-overflow-scrolling: touch;
     }
 }

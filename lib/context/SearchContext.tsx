@@ -35,7 +35,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
     // Initialize from localStorage on mount
     useEffect(() => {
-        const saved = localStorage.getItem('search_filters');
+        const saved = localStorage.getItem('search_filters_v1');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
@@ -51,7 +51,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     // Save to localStorage whenever filters change
     useEffect(() => {
         if (filters !== DEFAULT_FILTERS) {
-            localStorage.setItem('search_filters', JSON.stringify(filters));
+            localStorage.setItem('search_filters_v1', JSON.stringify(filters));
         }
     }, [filters]);
 
@@ -99,22 +99,32 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    const contextValue = React.useMemo(() => ({
+        filters,
+        setFilters,
+        globalListings,
+        total,
+        isLoading,
+        error,
+        hasSearched,
+        executeSearch,
+        isModalOpen,
+        setModalOpen,
+        isInitialized,
+    }), [
+        filters,
+        globalListings,
+        total,
+        isLoading,
+        error,
+        hasSearched,
+        executeSearch,
+        isModalOpen,
+        isInitialized
+    ]);
+
     return (
-        <SearchContext.Provider
-            value={{
-                filters,
-                setFilters,
-                globalListings,
-                total,
-                isLoading,
-                error,
-                hasSearched,
-                executeSearch,
-                isModalOpen,
-                setModalOpen,
-                isInitialized,
-            }}
-        >
+        <SearchContext.Provider value={contextValue}>
             {children}
         </SearchContext.Provider>
     );

@@ -63,22 +63,33 @@ function CheckboxGroup({
         onChange(selected.includes(opt) ? selected.filter(x => x !== opt) : [...selected, opt]);
     };
     return (
-        <div>
-            <p className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2">{label}</p>
-            <div className="flex flex-wrap gap-1.5">
-                {options.map(opt => (
-                    <button
-                        key={opt}
-                        type="button"
-                        onClick={() => toggle(opt)}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${selected.includes(opt)
-                            ? 'bg-premium-900 text-white border-premium-900'
-                            : 'bg-white text-premium-600 border-premium-200 hover:border-premium-400'
-                            }`}
-                    >
-                        {opt}
-                    </button>
-                ))}
+        <div className="space-y-3">
+            <p className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em]">{label}</p>
+            <div className="flex flex-wrap gap-2">
+                {options.map(opt => {
+                    const isSelected = selected.includes(opt);
+                    const id = `cb-${label.replace(/\s+/g, '-')}-${opt.replace(/\s+/g, '-')}`;
+                    return (
+                        <div key={opt} className="relative">
+                            <input
+                                id={id}
+                                type="checkbox"
+                                className="sr-only"
+                                checked={isSelected}
+                                onChange={() => toggle(opt)}
+                            />
+                            <label
+                                htmlFor={id}
+                                className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all duration-300 cursor-pointer block ${isSelected
+                                    ? 'bg-premium-900 text-white border-premium-900 shadow-md shadow-premium-900/10'
+                                    : 'bg-white text-premium-500 border-premium-100 hover:border-premium-300 hover:bg-premium-50/50'
+                                    }`}
+                            >
+                                {opt}
+                            </label>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
@@ -108,22 +119,15 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             {/* Geography System Toggle */}
-            <div>
-                <p className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2">Hệ thống địa chính</p>
-                <div className="flex rounded-lg border border-premium-200 overflow-hidden">
+            <div className="space-y-3">
+                <p className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em]">Hệ thống địa chính</p>
+                <div className="flex p-1 bg-premium-50 rounded-xl border border-premium-100/50">
                     <button
                         type="button"
                         onClick={() => { set('geoSystem', 'old'); set('province', ''); set('district', ''); set('ward', ''); }}
-                        className={`flex-1 py-2 text-xs font-medium transition-colors cursor-pointer ${filters.geoSystem === 'old' ? 'bg-premium-900 text-white' : 'text-premium-600 hover:bg-premium-50'}`}
-                    >
-                        Hành chính cũ
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => { set('geoSystem', 'new'); set('province', ''); set('district', ''); set('ward', ''); }}
-                        className={`flex-1 py-2 text-xs font-medium transition-colors cursor-pointer ${filters.geoSystem === 'new' ? 'bg-premium-900 text-white' : 'text-premium-600 hover:bg-premium-50'}`}
+                        className={`flex-1 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all duration-300 rounded-lg cursor-pointer ${filters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
                     >
                         Hành chính mới
                     </button>
@@ -131,14 +135,15 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
             </div>
 
             {/* Province (required) */}
-            <div>
-                <label className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2 block">
-                    <span className="text-red-500">*</span> Tỉnh/Thành phố
+            <div className="space-y-3">
+                <label className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em] block">
+                    <span className="text-accent-gold">*</span> Tỉnh/Thành phố
                 </label>
                 <select
                     value={filters.province}
                     onChange={e => { set('province', e.target.value); set('district', ''); set('ward', ''); }}
-                    className="w-full px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
+                    autoComplete="address-level1"
+                    className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                 >
                     <option value="">-- Chọn tỉnh/thành --</option>
                     {provinces.map(p => <option key={p} value={p}>{p}</option>)}
@@ -147,12 +152,13 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
 
             {/* District (old system, optional) */}
             {filters.geoSystem === 'old' && filters.province && (
-                <div>
-                    <label className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2 block">Quận/Huyện (tùy chọn)</label>
+                <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em] block">Quận/Huyện (tùy chọn)</label>
                     <select
                         value={filters.district}
                         onChange={e => set('district', e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
+                        autoComplete="address-level2"
+                        className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                     >
                         <option value="">-- Tất cả quận/huyện --</option>
                         {districts.map(d => <option key={d} value={d}>{d}</option>)}
@@ -162,14 +168,15 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
 
             {/* Ward (new system, required) */}
             {filters.geoSystem === 'new' && filters.province && (
-                <div>
-                    <label className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2 block">
-                        <span className="text-red-500">*</span> Phường/Xã
+                <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <label className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em] block">
+                        <span className="text-accent-gold">*</span> Phường/Xã
                     </label>
                     <select
                         value={filters.ward}
                         onChange={e => set('ward', e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
+                        autoComplete="address-level3"
+                        className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                     >
                         <option value="">-- Chọn phường/xã --</option>
                         {wards.map(w => <option key={w} value={w}>{w}</option>)}
@@ -178,39 +185,51 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
             )}
 
             {/* Separator */}
-            <hr className="border-premium-100" />
+            <div className="h-px bg-gradient-to-r from-transparent via-premium-100 to-transparent" />
 
             {/* Text search */}
-            <div>
-                <label className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2 block">Từ khóa tìm kiếm</label>
-                <input
-                    type="text"
-                    value={filters.query}
-                    onChange={e => set('query', e.target.value)}
-                    placeholder="Tên không gian, mô tả, địa chỉ..."
-                    className="w-full px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 placeholder:text-premium-300 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
-                />
+            <div className="space-y-3">
+                <label className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em] block">Từ khóa tìm kiếm</label>
+                <div className="relative group">
+                    <input
+                        type="text"
+                        value={filters.query}
+                        onChange={e => set('query', e.target.value)}
+                        placeholder="Tên không gian, mô tả, địa chỉ…"
+                        autoComplete="off"
+                        className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 placeholder:text-premium-200 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all"
+                    />
+                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-premium-200 group-focus-within:text-premium-900 transition-colors">
+                        <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
             </div>
 
             {/* Price range */}
-            <div>
-                <p className="text-xs font-semibold text-premium-700 uppercase tracking-wider mb-2">Mức giá (₫)</p>
-                <div className="flex gap-2 items-center">
-                    <input
-                        type="number"
-                        value={filters.priceMin}
-                        onChange={e => set('priceMin', e.target.value)}
-                        placeholder="Từ"
-                        className="flex-1 px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
-                    />
-                    <span className="text-premium-300 text-sm">–</span>
-                    <input
-                        type="number"
-                        value={filters.priceMax}
-                        onChange={e => set('priceMax', e.target.value)}
-                        placeholder="Đến"
-                        className="flex-1 px-3 py-2 rounded-lg border border-premium-200 text-sm text-premium-900 bg-white focus:outline-none focus:ring-1 focus:ring-premium-400"
-                    />
+            <div className="space-y-3">
+                <p className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em]">Mức giá ($)</p>
+                <div className="flex gap-3 items-center">
+                    <div className="relative flex-1">
+                        <input
+                            type="number"
+                            value={filters.priceMin}
+                            onChange={e => set('priceMin', e.target.value)}
+                            placeholder="Từ"
+                            className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                        />
+                    </div>
+                    <span className="text-premium-200 text-sm font-bold">–</span>
+                    <div className="relative flex-1">
+                        <input
+                            type="number"
+                            value={filters.priceMax}
+                            onChange={e => set('priceMax', e.target.value)}
+                            placeholder="Đến"
+                            className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/5 focus:border-premium-900 transition-all"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -224,33 +243,45 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
             <CheckboxGroup label="Phù hợp cho" options={SUITABLE_FOR_OPTIONS} selected={filters.suitableFor} onChange={v => set('suitableFor', v)} />
 
             {/* Not suitable for */}
-            <CheckboxGroup label="Không phù hợp cho (loại trừ)" options={NOT_SUITABLE_FOR_OPTIONS} selected={filters.notSuitableFor} onChange={v => set('notSuitableFor', v)} />
+            <CheckboxGroup label="Địa điểm loại trừ" options={NOT_SUITABLE_FOR_OPTIONS} selected={filters.notSuitableFor} onChange={v => set('notSuitableFor', v)} />
 
             {/* Amenities */}
             <CheckboxGroup label="Tiện ích" options={AMENITIES} selected={filters.amenities} onChange={v => set('amenities', v)} />
 
             {/* Submit */}
-            <button
-                type="submit"
-                disabled={!canSearch || isLoading}
-                className="w-full py-3 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            >
-                {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                        Đang tìm...
-                    </span>
-                ) : (
-                    '🔍 Tìm kiếm'
-                )}
-            </button>
+            <div className="pt-4 sticky bottom-0 bg-white/10 backdrop-blur-sm -mx-2 px-2 pb-2">
+                <button
+                    type="submit"
+                    disabled={!canSearch || isLoading}
+                    className="w-full py-4 bg-premium-900 text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] hover:bg-premium-800 transition-all hover:shadow-xl hover:shadow-premium-900/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-3 overflow-hidden group"
+                >
+                    {isLoading ? (
+                        <span className="flex items-center gap-2">
+                            <svg className="w-5 h-5 animate-spin" aria-hidden="true" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Đang tìm…
+                        </span>
+                    ) : (
+                        <>
+                            <span>Tìm kiếm không gian</span>
+                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </>
+                    )}
+                </button>
 
-            {!canSearch && (
-                <p className="text-xs text-red-400 text-center">Vui lòng chọn tỉnh/thành phố trước khi tìm kiếm</p>
-            )}
+                {!canSearch && (
+                    <div className="mt-3 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider text-accent-gold animate-pulse">
+                        <svg className="w-3 h-3" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Chọn tỉnh/thành phố
+                    </div>
+                )}
+            </div>
         </form>
     );
 }

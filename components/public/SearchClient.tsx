@@ -2,9 +2,21 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useSearch } from '@/lib/context/SearchContext';
+import dynamic from 'next/dynamic';
 import ListingCard from './ListingCard';
-import GoongMapViewer from './GoongMapViewer';
 import { SearchIcon, Map as MapIcon, List as ListIcon, Columns2 } from 'lucide-react';
+
+const GoongMapViewer = dynamic(() => import('./GoongMapViewer'), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full bg-premium-100 animate-pulse flex items-center justify-center">
+            <div className="text-center">
+                <div className="w-10 h-10 border-4 border-premium-200 border-t-premium-900 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-sm font-semibold text-premium-400">Đang tải bản đồ…</p>
+            </div>
+        </div>
+    )
+});
 
 const PAGE_SIZE = 12;
 
@@ -31,6 +43,26 @@ export default function SearchClient() {
     const [currentPage, setCurrentPage] = useState(1);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [layout, setLayout] = useState<'split' | 'map' | 'list'>('list');
+
+    // Prevent double scrollbars on the search page by fixing the body height
+    // ONLY on mobile (below lg: 1024px)
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 1024) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'unset';
+            }
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            document.body.style.overflow = 'unset';
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     // Default layout based on screen size
     useEffect(() => {
@@ -61,8 +93,8 @@ export default function SearchClient() {
                 <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-premium-100 bg-white/80 backdrop-blur-md flex-shrink-0 z-20">
                     <div className="flex items-center gap-2 sm:gap-4 overflow-hidden">
                         {hasSearched && (
-                            <h1 className="text-base sm:text-lg font-bold text-premium-900 whitespace-nowrap overflow-hidden text-ellipsis">
-                                {total} <span className="text-premium-400 font-medium hidden xs:inline">không gian</span>
+                            <h1 className="text-base sm:text-lg font-bold text-premium-900 whitespace-nowrap">
+                                {total} <span className="text-premium-400 font-medium text-xs sm:text-sm">{total > 1 ? 'kết quả' : 'kết quả'}</span>
                             </h1>
                         )}
                         {!hasSearched && !isLoading && (
@@ -127,7 +159,7 @@ export default function SearchClient() {
                                 </div>
                                 <h3 className="text-xl font-bold text-premium-900 mb-2">Bắt đầu tìm kiếm</h3>
                                 <p className="text-premium-500 max-w-xs">
-                                    Sử dụng thanh tìm kiếm phía trên để khám phá các không gian workshop, văn phòng, sự kiện...
+                                    Sử dụng thanh tìm kiếm phía trên để khám phá các không gian workshop, văn phòng, sự kiện…
                                 </p>
                             </div>
                         )}
@@ -135,7 +167,7 @@ export default function SearchClient() {
                         {isLoading && (
                             <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
                                 <div className="w-10 h-10 border-4 border-premium-100 border-t-premium-900 rounded-full animate-spin" />
-                                <p className="text-sm font-semibold text-premium-500">Đang cập nhật kết quả...</p>
+                                <p className="text-sm font-semibold text-premium-500">Đang cập nhật kết quả…</p>
                             </div>
                         )}
 
@@ -168,12 +200,13 @@ export default function SearchClient() {
                                 ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-5'
                                 : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
                                 }`}>
-                                {currentPageListings.map(listing => (
+                                {currentPageListings.map((listing, index) => (
                                     <ListingCard
                                         key={listing.id}
                                         listing={listing}
                                         isHighlighted={listing.id === hoveredId}
                                         onHover={setHoveredId}
+                                        priority={index === 0}
                                     />
                                 ))}
                             </div>
@@ -193,7 +226,7 @@ export default function SearchClient() {
                                     .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
                                     .map((page, i, arr) => (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1 ? (
                                         <div key={page} className="flex items-center gap-2">
-                                            {i > 0 && arr[i - 1] !== page - 1 && <span className="text-premium-300">...</span>}
+                                            {i > 0 && arr[i - 1] !== page - 1 && <span className="text-premium-300">…</span>}
                                             <button
                                                 onClick={() => handlePageChange(page)}
                                                 className={`w-10 h-10 rounded-xl text-sm font-bold transition-all cursor-pointer ${page === currentPage

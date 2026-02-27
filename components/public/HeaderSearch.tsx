@@ -42,7 +42,7 @@ export default function HeaderSearch() {
                     <div className="text-left">
                         <div className="text-[9px] font-black text-premium-300 uppercase tracking-widest leading-none mb-0.5">Tìm kiếm</div>
                         <div className="text-xs font-bold text-premium-500 truncate max-w-[150px]">
-                            {filters.query || 'Loại hình, tiện ích...'}
+                            {filters.query || 'Loại hình, tiện ích…'}
                         </div>
                     </div>
                     <div className="w-8 h-8 flex items-center justify-center bg-premium-900 text-white rounded-full group-hover:bg-black transition-all shadow-sm group-hover:shadow-md active:scale-90 ml-1">

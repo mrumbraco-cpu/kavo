@@ -15,8 +15,10 @@ import {
     LogOut,
     ChevronDown,
     Building2,
-    Coins
+    Coins,
+    ShieldCheck
 } from 'lucide-react'
+import BrandLogo from '../public/BrandLogo'
 
 interface AdminHeaderProps {
     userEmail: string
@@ -48,6 +50,7 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
             if (response.ok) {
                 router.push('/auth/login')
                 router.refresh()
+                window.location.href = '/auth/login'
             }
         } catch (error) {
             console.error('Logout failed:', error)
@@ -108,27 +111,22 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
     return (
         <>
             {/* Mobile Header */}
-            <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm">
+            <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-premium-100/50 shadow-sm">
                 <div className="flex items-center justify-between px-4 py-3">
                     {/* Logo */}
                     <Link href="/admin" className="flex items-center gap-2.5 transition-transform active:scale-95">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
-                            <Building2 className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-tight">
-                            ADMIN PANEL
-                        </span>
+                        <BrandLogo scale={0.8} href={null} />
                     </Link>
 
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-2 w-9 h-9 flex items-center justify-center rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-100 transition-colors active:scale-90"
+                        className="p-2 w-10 h-10 flex items-center justify-center rounded-xl bg-premium-900 text-white shadow-lg shadow-premium-900/10 hover:bg-premium-800 transition-all active:scale-90"
                     >
                         {isMobileMenuOpen ? (
-                            <X className="w-5 h-5 text-gray-700" />
+                            <X className="w-5 h-5" />
                         ) : (
-                            <Menu className="w-5 h-5 text-gray-700" />
+                            <Menu className="w-5 h-5" />
                         )}
                     </button>
                 </div>
@@ -139,7 +137,7 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
                 <>
                     {/* Backdrop */}
                     <div
-                        className="lg:hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 animate-in fade-in duration-300"
+                        className="lg:hidden fixed inset-0 bg-premium-950/40 backdrop-blur-sm z-40 animate-in fade-in duration-300"
                         onClick={() => setIsMobileMenuOpen(false)}
                     />
 
@@ -148,41 +146,40 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
                         {/* Header Section (Fixed Top) */}
                         <div className="flex-none">
                             {/* Logo & Close */}
-                            <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/30">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
-                                        <Building2 className="w-5 h-5 text-white" />
+                            <div className="flex items-center justify-between p-6 border-b border-premium-50 bg-premium-50/30">
+                                <div className="space-y-3">
+                                    <BrandLogo href="/admin" />
+                                    <div className="flex items-center gap-1.5 px-2 py-1 bg-premium-900 rounded-lg w-fit">
+                                        <ShieldCheck className="w-3 h-3 text-accent-gold" />
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">Admin</span>
                                     </div>
-                                    <div className="min-w-0">
-                                        <span className="text-lg font-bold text-gray-900 block leading-none">ADMIN</span>
-                                        <p className="text-[10px] text-gray-500 font-medium mt-1 truncate max-w-[150px]">{userEmail}</p>
-                                    </div>
+                                    <p className="text-[10px] text-premium-400 font-bold uppercase tracking-wider truncate max-w-[200px]">{userEmail}</p>
                                 </div>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="p-2 w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors active:scale-90"
+                                    className="p-2 w-10 h-10 flex items-center justify-center rounded-xl hover:bg-premium-100 transition-colors active:scale-90"
                                 >
-                                    <X className="w-5 h-5 text-gray-400" />
+                                    <X className="w-5 h-5 text-premium-400" />
                                 </button>
                             </div>
                         </div>
 
                         {/* Navigation Section (Scrollable Middle) */}
-                        <nav className="flex-1 overflow-y-auto p-3 space-y-1 custom-scrollbar">
-                            <p className="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Quản lý hệ thống</p>
+                        <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 custom-scrollbar">
+                            <p className="px-3 text-[10px] font-bold text-premium-300 uppercase tracking-widest mb-4">Quản lý hệ thống</p>
                             {menuItems.map((item) => (
                                 <div key={item.label}>
                                     {item.submenu ? (
                                         <>
                                             <button
                                                 onClick={() => toggleMenu(item.label)}
-                                                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${isActive(undefined, item.submenu)
-                                                    ? 'bg-blue-50 text-blue-700'
-                                                    : 'text-gray-700 active:bg-gray-50'
+                                                className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer ${isActive(undefined, item.submenu)
+                                                    ? 'bg-premium-900 text-white shadow-lg shadow-premium-900/10'
+                                                    : 'text-premium-500 active:bg-premium-50'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <item.icon className={`w-5 h-5 ${isActive(undefined, item.submenu) ? 'text-blue-600' : 'text-gray-400'}`} />
+                                                    <item.icon className={`w-5 h-5 ${isActive(undefined, item.submenu) ? 'text-accent-gold' : 'text-premium-400'}`} />
                                                     <span>{item.label}</span>
                                                 </div>
                                                 <ChevronDown
@@ -198,8 +195,8 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
                                                             href={subItem.href}
                                                             onClick={() => setIsMobileMenuOpen(false)}
                                                             className={`block px-3 py-2 rounded-lg text-sm transition-all ${pathname === subItem.href
-                                                                ? 'bg-blue-100/50 text-blue-700 font-bold'
-                                                                : 'text-gray-600 active:bg-gray-50'
+                                                                ? 'text-premium-900 font-bold'
+                                                                : 'text-premium-400 active:bg-premium-50'
                                                                 }`}
                                                         >
                                                             {subItem.label}
@@ -212,12 +209,12 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
                                         <Link
                                             href={item.href!}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${isActive(item.href)
-                                                ? 'bg-blue-50 text-blue-700'
-                                                : 'text-gray-700 active:bg-gray-50'
+                                            className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${isActive(item.href)
+                                                ? 'bg-premium-900 text-white shadow-lg shadow-premium-900/10'
+                                                : 'text-premium-500 active:bg-premium-50'
                                                 }`}
                                         >
-                                            <item.icon className={`w-5 h-5 ${isActive(item.href) ? 'text-blue-600' : 'text-gray-400'}`} />
+                                            <item.icon className={`w-5 h-5 ${isActive(item.href) ? 'text-accent-gold' : 'text-premium-400'}`} />
                                             <span>{item.label}</span>
                                         </Link>
                                     )}
@@ -226,10 +223,10 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
                         </nav>
 
                         {/* Logout Section (Fixed Bottom) */}
-                        <div className="flex-none p-4 border-t border-gray-100 bg-white">
+                        <div className="flex-none p-5 border-t border-premium-50 bg-white">
                             <button
                                 onClick={handleLogout}
-                                className="w-full flex items-center justify-center gap-3 px-3 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all font-medium text-sm active:scale-[0.98]"
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-red-500 text-white rounded-xl shadow-lg shadow-red-500/20 transition-all font-bold text-sm active:scale-[0.98]"
                             >
                                 <LogOut className="w-5 h-5" />
                                 <span>Đăng xuất</span>
