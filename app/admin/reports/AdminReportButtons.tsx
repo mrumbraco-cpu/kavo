@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useTransition } from 'react';
 import { updateReportStatus } from './actions';
 import { toggleVisibility, toggleLock } from '../listings/actions';
 import { CheckCircle2, XCircle, EyeOff, Lock, Eye, Unlock } from 'lucide-react';
@@ -20,32 +20,32 @@ export default function AdminReportButtons({
     listingIsHidden,
     listingIsLocked
 }: AdminReportButtonsProps) {
-    const [isPending, setIsPending] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
-    const handleUpdateStatus = async (status: 'resolved' | 'ignored') => {
+    const handleUpdateStatus = (status: 'resolved' | 'ignored') => {
         const actionText = status === 'resolved' ? 'xử lý' : 'bỏ qua';
         if (!window.confirm(`Xác nhận ${actionText} báo cáo này?`)) return;
 
-        setIsPending(true);
-        const result = await updateReportStatus(reportId, status);
-        if (!result.success) {
-            alert('Lỗi: ' + result.error);
-        }
-        setIsPending(false);
+        startTransition(async () => {
+            const result = await updateReportStatus(reportId, status);
+            if (!result.success) {
+                alert('Lỗi: ' + result.error);
+            }
+        });
     };
 
-    const handleToggleVisibility = async () => {
-        setIsPending(true);
-        const success = await toggleVisibility(listingId, listingIsHidden);
-        if (!success) alert('Lỗi khi thay đổi trạng thái ẩn hiện tin');
-        setIsPending(false);
+    const handleToggleVisibility = () => {
+        startTransition(async () => {
+            const success = await toggleVisibility(listingId, listingIsHidden);
+            if (!success) alert('Lỗi khi thay đổi trạng thái ẩn hiện tin');
+        });
     };
 
-    const handleToggleLock = async () => {
-        setIsPending(true);
-        const success = await toggleLock(listingId, listingIsLocked);
-        if (!success) alert('Lỗi khi thay đổi trạng thái khóa tin');
-        setIsPending(false);
+    const handleToggleLock = () => {
+        startTransition(async () => {
+            const success = await toggleLock(listingId, listingIsLocked);
+            if (!success) alert('Lỗi khi thay đổi trạng thái khóa tin');
+        });
     };
 
     if (reportStatus !== 'pending') {
@@ -68,8 +68,8 @@ export default function AdminReportButtons({
                     disabled={isPending}
                     title={listingIsHidden ? "Hiện tin đăng" : "Ẩn tin đăng"}
                     className={`p-1.5 rounded-md transition-all ${listingIsHidden
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'
                         }`}
                 >
                     {listingIsHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -79,8 +79,8 @@ export default function AdminReportButtons({
                     disabled={isPending}
                     title={listingIsLocked ? "Mở khóa soạn" : "Khóa soạn tin"}
                     className={`p-1.5 rounded-md transition-all ${listingIsLocked
-                            ? 'bg-orange-600 text-white shadow-sm'
-                            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'
+                        ? 'bg-orange-600 text-white shadow-sm'
+                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'
                         }`}
                 >
                     {listingIsLocked ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}

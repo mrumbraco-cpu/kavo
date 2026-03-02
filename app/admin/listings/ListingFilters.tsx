@@ -21,7 +21,8 @@ export default function ListingFilters() {
 
     const [isExpanded, setIsExpanded] = useState(false)
 
-    const handleSearch = () => {
+    const handleSearch = (e?: React.FormEvent) => {
+        if (e) e.preventDefault()
         const params = new URLSearchParams(searchParams.toString())
 
         Object.entries(filters).forEach(([key, value]) => {
@@ -66,16 +67,18 @@ export default function ListingFilters() {
             </div>
 
             <div className={`p-4 transition-all ${isExpanded ? 'block' : 'hidden md:block'}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Owner Email */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email chủ tin</label>
+                        <label htmlFor="filter-email" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Email chủ tin</label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input
+                                id="filter-email"
                                 type="text"
                                 value={filters.email}
                                 onChange={(e) => setFilters({ ...filters, email: e.target.value })}
+                                autoComplete="off"
                                 placeholder="Email..."
                                 className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
                             />
@@ -84,11 +87,14 @@ export default function ListingFilters() {
 
                     {/* Owner Phone */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">SĐT chủ tin</label>
+                        <label htmlFor="filter-phone" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">SĐT chủ tin</label>
                         <input
-                            type="text"
+                            id="filter-phone"
+                            type="tel"
+                            inputMode="tel"
                             value={filters.phone}
                             onChange={(e) => setFilters({ ...filters, phone: e.target.value })}
+                            autoComplete="off"
                             placeholder="Số điện thoại..."
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
                         />
@@ -96,8 +102,9 @@ export default function ListingFilters() {
 
                     {/* Status */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Trạng thái duyệt</label>
+                        <label htmlFor="filter-status" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Trạng thái duyệt</label>
                         <select
+                            id="filter-status"
                             value={filters.status}
                             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white font-medium"
@@ -112,8 +119,9 @@ export default function ListingFilters() {
 
                     {/* Creator Type */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Loại người đăng</label>
+                        <label htmlFor="filter-creator" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Loại người đăng</label>
                         <select
+                            id="filter-creator"
                             value={filters.creator_type}
                             onChange={(e) => setFilters({ ...filters, creator_type: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white font-medium"
@@ -126,10 +134,11 @@ export default function ListingFilters() {
 
                     {/* Date Joined Range */}
                     <div className="space-y-1 lg:col-span-2">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Ngày tạo tin (Từ - Đến)</label>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Ngày tạo tin (Từ - Đến)</label>
                         <div className="flex items-center gap-2">
                             <input
                                 type="date"
+                                aria-label="Từ ngày"
                                 value={filters.date_from}
                                 onChange={(e) => setFilters({ ...filters, date_from: e.target.value })}
                                 className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
@@ -137,6 +146,7 @@ export default function ListingFilters() {
                             <span className="text-slate-400">→</span>
                             <input
                                 type="date"
+                                aria-label="Đến ngày"
                                 value={filters.date_to}
                                 onChange={(e) => setFilters({ ...filters, date_to: e.target.value })}
                                 className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
@@ -146,8 +156,9 @@ export default function ListingFilters() {
 
                     {/* Visibility */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Trạng thái ẩn/hiện</label>
+                        <label htmlFor="filter-hidden" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Trạng thái ẩn/hiện</label>
                         <select
+                            id="filter-hidden"
                             value={filters.is_hidden}
                             onChange={(e) => setFilters({ ...filters, is_hidden: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white font-medium"
@@ -160,8 +171,9 @@ export default function ListingFilters() {
 
                     {/* Lock Status */}
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Trạng thái khóa soạn</label>
+                        <label htmlFor="filter-lock" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Trạng thái khóa soạn</label>
                         <select
+                            id="filter-lock"
                             value={filters.is_locked}
                             onChange={(e) => setFilters({ ...filters, is_locked: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white font-medium"
@@ -175,6 +187,7 @@ export default function ListingFilters() {
                     {/* Actions */}
                     <div className="flex items-end gap-2 lg:col-start-4 lg:justify-end mt-2 sm:mt-0">
                         <button
+                            type="button"
                             onClick={handleReset}
                             className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-2"
                         >
@@ -182,14 +195,14 @@ export default function ListingFilters() {
                             Xóa lọc
                         </button>
                         <button
-                            onClick={handleSearch}
+                            type="submit"
                             className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm shadow-blue-200 flex items-center gap-2"
                         >
                             <Search className="w-4 h-4" />
                             Tìm kiếm
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     )

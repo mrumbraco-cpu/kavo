@@ -58,6 +58,10 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
         .from('profiles')
         .select('*', { count: 'exact' });
 
+    const statsQuery = serviceSupabase
+        .from('profiles')
+        .select('coin_balance, lock_status');
+
     if (roleFilter !== 'all') query = query.eq('role', roleFilter);
     if (email) query = query.ilike('email', `%${email}%`);
     if (phone) query = query.or(`phone.ilike.%${phone}%,zalo.ilike.%${phone}%`);
@@ -66,28 +70,17 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
     if (minBalance && !isNaN(parseInt(minBalance))) query = query.gte('coin_balance', parseInt(minBalance));
     if (lockStatusValue !== 'all') query = query.eq('lock_status', lockStatusValue);
 
-    const { data: users, count, error: queryError } = await query
-        .order('created_at', { ascending: false })
-        .range(from, to);
+    const [
+        { data: users, count, error: queryError },
+        { data: statsData }
+    ] = await Promise.all([
+        query.order('created_at', { ascending: false }).range(from, to),
+        statsQuery
+    ]);
 
     if (queryError) {
         console.error('Admin users query error:', queryError);
     }
-
-    // 2. STATS QUERY - Separate to avoid complex aggregations failing
-    let statsQuery = serviceSupabase
-        .from('profiles')
-        .select('coin_balance, lock_status');
-
-    if (roleFilter !== 'all') statsQuery = statsQuery.eq('role', roleFilter);
-    if (email) statsQuery = statsQuery.ilike('email', `%${email}%`);
-    if (phone) statsQuery = statsQuery.or(`phone.ilike.%${phone}%,zalo.ilike.%${phone}%`);
-    if (dateFrom) statsQuery = statsQuery.gte('created_at', `${dateFrom}T00:00:00`);
-    if (dateTo) statsQuery = statsQuery.lte('created_at', `${dateTo}T23:59:59`);
-    if (minBalance && !isNaN(parseInt(minBalance))) statsQuery = statsQuery.gte('coin_balance', parseInt(minBalance));
-    if (lockStatusValue !== 'all') statsQuery = statsQuery.eq('lock_status', lockStatusValue);
-
-    const { data: statsData } = await statsQuery;
 
     const totalCoins = statsData?.reduce((sum, p) => sum + (p.coin_balance || 0), 0) || 0;
     const softLockedCount = statsData?.filter(p => p.lock_status === 'soft').length || 0;

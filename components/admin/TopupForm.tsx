@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Profile } from '@/types/profile'
 import { topupUserCoins } from '@/app/admin/topup/actions'
@@ -19,7 +19,7 @@ export default function TopupForm({ users, initialUserId }: TopupFormProps) {
     const [amount, setAmount] = useState('')
     const [note, setNote] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
     // Handle initial user from URL
@@ -50,37 +50,35 @@ export default function TopupForm({ users, initialUserId }: TopupFormProps) {
 
     const selectedUser = users.find(u => u.id === selectedUserId)
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        setIsLoading(true)
         setMessage(null)
 
-        try {
-            const params: { userId: string; amount: number; note?: string } = {
-                userId: selectedUserId,
-                amount: parseInt(amount, 10),
-            }
-            if (note) {
-                params.note = note
-            }
-            const result = await topupUserCoins(params)
+        startTransition(async () => {
+            try {
+                const params: { userId: string; amount: number; note?: string } = {
+                    userId: selectedUserId,
+                    amount: parseInt(amount, 10),
+                }
+                if (note) {
+                    params.note = note
+                }
+                const result = await topupUserCoins(params)
 
-
-            if (result.success) {
-                setMessage({ type: 'success', text: result.message })
-                setSelectedUserId('')
-                setAmount('')
-                setNote('')
-                setSearchTerm('')
-                router.refresh()
-            } else {
-                setMessage({ type: 'error', text: result.error || 'Có lỗi xảy ra' })
+                if (result.success) {
+                    setMessage({ type: 'success', text: result.message })
+                    setSelectedUserId('')
+                    setAmount('')
+                    setNote('')
+                    setSearchTerm('')
+                    router.refresh()
+                } else {
+                    setMessage({ type: 'error', text: result.error || 'Có lỗi xảy ra' })
+                }
+            } catch (error) {
+                setMessage({ type: 'error', text: 'Có lỗi xảy ra khi xử lý yêu cầu' })
             }
-        } catch (error) {
-            setMessage({ type: 'error', text: 'Có lỗi xảy ra khi xử lý yêu cầu' })
-        } finally {
-            setIsLoading(false)
-        }
+        });
     }
 
     return (
@@ -94,6 +92,7 @@ export default function TopupForm({ users, initialUserId }: TopupFormProps) {
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
+                            id="user"
                             type="text"
                             placeholder={selectedUserId ? "Đã chọn người dùng" : "Tìm kiếm email..."}
                             value={searchTerm}
@@ -223,10 +222,10 @@ export default function TopupForm({ users, initialUserId }: TopupFormProps) {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    disabled={isLoading || !selectedUserId || !amount}
+                    disabled={isPending || !selectedUserId || !amount}
                     className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
                 >
-                    {isLoading ? 'Đang xử lý...' : 'Xác nhận điều chỉnh'}
+                    {isPending ? 'Đang xử lý...' : 'Xác nhận điều chỉnh'}
                 </button>
             </form>
         </div>

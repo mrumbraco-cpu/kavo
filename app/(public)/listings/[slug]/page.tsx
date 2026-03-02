@@ -203,11 +203,11 @@ export default async function ListingDetailPage({ params }: Props) {
                         {/* Badges + Address */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
                             <div className="flex flex-wrap gap-1.5">
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded border border-emerald-100 uppercase tracking-widest shadow-sm shadow-emerald-700/5">
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm uppercase tracking-tighter">
                                     <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Đã xác thực
+                                    Verified
                                 </span>
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-100 uppercase tracking-widest shadow-sm shadow-blue-700/5">
                                     <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,6 +355,26 @@ export default async function ListingDetailPage({ params }: Props) {
                     {/* ────── RIGHT COLUMN (sticky sidebar) ────────────── */}
                     <div className="lg:block">
                         <div className="sticky top-24 flex flex-col gap-4">
+                            {/* Author Info (Hardcoded) */}
+                            <div className="flex items-center gap-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
+                                <div className="w-12 h-12 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-300 shadow-sm relative shrink-0 overflow-hidden">
+                                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Người đăng bài</p>
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                        <span className="text-sm font-semibold text-gray-900">Người dùng đã xác thực</span>
+                                        <div className="flex items-center justify-center p-0.5 bg-blue-500 rounded-full text-white">
+                                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <ContactUnlockBlock
                                 listingId={id}
                                 isAuthenticated={!!user}

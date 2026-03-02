@@ -1,7 +1,7 @@
 'use client';
 
 import { approveListing, toggleVisibility, toggleLock, toggleExpired } from './actions';
-import { useState } from 'react';
+import { useTransition } from 'react';
 import Link from 'next/link';
 
 interface AdminListingButtonsProps {
@@ -12,35 +12,35 @@ interface AdminListingButtonsProps {
 }
 
 export default function AdminListingButtons({ id, status, isHidden, isLocked }: AdminListingButtonsProps) {
-    const [isPending, setIsPending] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
-    const handleApprove = async () => {
+    const handleApprove = () => {
         if (!window.confirm('Bạn có chắc chắn muốn duyệt tin đăng này?')) return;
-        setIsPending(true);
-        await approveListing(id);
-        setIsPending(false);
+        startTransition(async () => {
+            await approveListing(id);
+        });
     };
 
-    const handleToggleVisibility = async () => {
-        setIsPending(true);
-        await toggleVisibility(id, isHidden);
-        setIsPending(false);
+    const handleToggleVisibility = () => {
+        startTransition(async () => {
+            await toggleVisibility(id, isHidden);
+        });
     };
 
-    const handleToggleLock = async () => {
+    const handleToggleLock = () => {
         const action = isLocked ? 'mở khóa soạn' : 'khóa soạn';
         if (!window.confirm(`Bạn có chắc chắn muốn ${action} tin đăng này?`)) return;
-        setIsPending(true);
-        await toggleLock(id, isLocked);
-        setIsPending(false);
+        startTransition(async () => {
+            await toggleLock(id, isLocked);
+        });
     };
 
-    const handleToggleExpired = async () => {
+    const handleToggleExpired = () => {
         const action = status === 'expired' ? 'bỏ hết hạn' : 'đánh dấu hết hạn';
         if (!window.confirm(`Bạn có chắc chắn muốn ${action} tin đăng này?`)) return;
-        setIsPending(true);
-        await toggleExpired(id, status);
-        setIsPending(false);
+        startTransition(async () => {
+            await toggleExpired(id, status);
+        });
     };
 
     if (status === 'draft') return null;

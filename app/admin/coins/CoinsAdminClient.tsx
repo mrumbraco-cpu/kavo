@@ -65,8 +65,9 @@ function TierFormModal({
                 <form action={formAction} className="p-6 space-y-4">
                     {tier && <input type="hidden" name="id" value={tier.id} />}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tên gói</label>
+                        <label htmlFor="tier-label" className="block text-sm font-medium text-gray-700 mb-1">Tên gói</label>
                         <input
+                            id="tier-label"
                             name="label"
                             required
                             defaultValue={tier?.label}
@@ -76,8 +77,9 @@ function TierFormModal({
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nạp tối thiểu (VNĐ)</label>
+                            <label htmlFor="tier-min" className="block text-sm font-medium text-gray-700 mb-1">Nạp tối thiểu (VNĐ)</label>
                             <input
+                                id="tier-min"
                                 name="min_amount_vnd"
                                 type="number"
                                 required
@@ -89,8 +91,9 @@ function TierFormModal({
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Xu nhận được</label>
+                            <label htmlFor="tier-coins" className="block text-sm font-medium text-gray-700 mb-1">Xu nhận được</label>
                             <input
+                                id="tier-coins"
                                 name="coins_granted"
                                 type="number"
                                 required
@@ -102,8 +105,9 @@ function TierFormModal({
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Thứ tự hiển thị</label>
+                        <label htmlFor="tier-order" className="block text-sm font-medium text-gray-700 mb-1">Thứ tự hiển thị</label>
                         <input
+                            id="tier-order"
                             name="display_order"
                             type="number"
                             defaultValue={tier?.display_order ?? 0}
@@ -171,11 +175,12 @@ export default function CoinsAdminClient({ config, tiers: initialTiers }: Props)
                 <form action={baseRateAction} className="p-6 space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="config-rate" className="block text-sm font-medium text-gray-700 mb-1">
                                 Xu nhận được / 1.000 VNĐ
                             </label>
                             <div className="relative">
                                 <input
+                                    id="config-rate"
                                     name="coins_per_1000vnd"
                                     type="number"
                                     required
@@ -187,11 +192,12 @@ export default function CoinsAdminClient({ config, tiers: initialTiers }: Props)
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="config-min" className="block text-sm font-medium text-gray-700 mb-1">
                                 Số tiền nạp tối thiểu (VNĐ)
                             </label>
                             <div className="relative">
                                 <input
+                                    id="config-min"
                                     name="min_topup_vnd"
                                     type="number"
                                     required

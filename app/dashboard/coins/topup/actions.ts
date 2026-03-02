@@ -21,7 +21,8 @@ export async function createPaymentRequest(amount: number, nextPath?: string) {
 
         const headerList = await headers()
         const host = headerList.get('x-forwarded-host') || headerList.get('host')
-        const protocol = headerList.get('x-forwarded-proto') || (process.env.NODE_ENV === 'development' ? 'http' : 'https')
+        const protocol = headerList.get('x-forwarded-proto') ||
+            (process.env.NODE_ENV === 'development' || host?.includes('localhost') ? 'http' : 'https')
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`
 
         // Generate SP + 10 digits to match SePay pattern (Total 12 characters: SP0123456789)

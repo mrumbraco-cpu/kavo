@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @theme {
     --color-premium-50: #f8fafc;
@@ -16,6 +17,17 @@
     --color-accent-gold: #d4af37;
     --color-accent-silver: #c0c0c0;
     --color-accent-bronze: #cd7f32;
+
+    --color-brand-primary: #0f172a;
+    --color-brand-accent: #d4af37;
+
+    --font-sans: var(--font-inter), "system-ui", "sans-serif";
+    --font-display: var(--font-outfit), "system-ui", "sans-serif";
+
+    --animation-fade-up: fade-up 0.5s ease-out forwards;
+    --animation-fade-in: fade-in 0.3s ease-out forwards;
+    --animation-float: float 3s ease-in-out infinite;
+    --animation-premium-pop: premium-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
     --bg-premium-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     --bg-glass-gradient: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
@@ -53,6 +65,20 @@
             transform: translateY(-10px);
         }
     }
+
+    @keyframes premium-pop {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.4);
+        }
+
+        100% {
+            transform: scale(1.1);
+        }
+    }
 }
 
 @layer base {
@@ -66,18 +92,6 @@
 }
 
 @layer utilities {
-    .animate-premium-fade-up {
-        @apply animate-[fade-up_0.5s_ease-out_forwards];
-    }
-
-    .animate-premium-fade-in {
-        @apply animate-[fade-in_0.3s_ease-out_forwards];
-    }
-
-    .animate-premium-float {
-        @apply animate-[float_3s_ease-in-out_infinite];
-    }
-
     .glass-premium {
         @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
     }

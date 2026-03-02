@@ -14,12 +14,15 @@ export default function FavoriteButton({ listingId, initialIsFavorite, isAuthent
     const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [showLoginHint, setShowLoginHint] = useState(false);
+
     const handleToggle = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (!isAuthenticated) {
-            alert('Vui lòng đăng nhập để lưu tin này.');
+            setShowLoginHint(true);
+            setTimeout(() => setShowLoginHint(false), 3000);
             return;
         }
 
@@ -36,7 +39,6 @@ export default function FavoriteButton({ listingId, initialIsFavorite, isAuthent
             if (!result.success) {
                 // Revert on failure
                 setIsFavorite(previousState);
-                if (result.error) alert(result.error);
             } else {
                 setIsFavorite(result.isFavorite!);
             }
@@ -49,18 +51,26 @@ export default function FavoriteButton({ listingId, initialIsFavorite, isAuthent
     };
 
     return (
-        <button
-            onClick={handleToggle}
-            disabled={isLoading}
-            className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors active:scale-95 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed group"
-            title={isFavorite ? 'Bỏ lưu tin' : 'Lưu tin này'}
-        >
-            <Heart
-                className={`w-5 h-5 transition-all duration-300 transform group-hover:scale-110 ${isFavorite
-                    ? 'text-red-500 fill-red-500'
-                    : 'text-gray-500 group-hover:text-red-400'
-                    }`}
-            />
-        </button>
+        <div className="relative">
+            <button
+                onClick={handleToggle}
+                disabled={isLoading}
+                className="p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-all active:scale-75 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed group"
+                title={isFavorite ? 'Bỏ lưu tin' : 'Lưu tin này'}
+            >
+                <Heart
+                    className={`w-5 h-5 transition-all duration-300 transform group-hover:scale-110 ${isFavorite
+                        ? 'text-red-500 fill-red-500 scale-110 animate-premium-pop'
+                        : 'text-gray-500 group-hover:text-red-400'
+                        }`}
+                />
+            </button>
+
+            {showLoginHint && (
+                <div className="absolute top-full right-0 mt-2 w-48 p-2 bg-premium-900 text-white text-[10px] font-bold rounded-lg shadow-xl z-50 animate-in fade-in slide-in-from-top-1 text-center">
+                    Vui lòng đăng nhập để lưu tin
+                </div>
+            )}
+        </div>
     );
 }

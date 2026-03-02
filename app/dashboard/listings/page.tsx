@@ -43,8 +43,8 @@ function StatusBadge({ status, isHidden, isLocked }: { status: ListingStatus, is
             icon: Clock
         },
         approved: {
-            label: 'Đã duyệt',
-            styles: 'bg-green-50 text-green-700 border-green-100',
+            label: 'Verified',
+            styles: 'bg-emerald-500/90 text-white border-transparent',
             icon: CheckCircle2
         },
         expired: {

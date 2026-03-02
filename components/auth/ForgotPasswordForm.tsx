@@ -41,12 +41,12 @@ export default function ForgotPasswordForm() {
 
     if (success) {
         return (
-            <div className="w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-3 duration-500">
-                <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-2xl p-6 shadow-xl shadow-gray-200/40 text-center">
-                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
+            <div className="w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
+                <div className="w-full text-left">
+                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-5">
                         <CheckCircle2 className="w-8 h-8 text-green-600" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-3">Kiểm tra email của bạn</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-3">Kiểm tra email của bạn</h2>
                     <p className="text-sm text-gray-500 mb-6 leading-relaxed">
                         Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến <strong>{email}</strong>.
                     </p>
@@ -62,7 +62,7 @@ export default function ForgotPasswordForm() {
     }
 
     return (
-        <div className="w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-3 duration-500">
+        <div className="w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
             <Link
                 href="/auth/login"
                 className="inline-flex items-center gap-2 text-[13px] font-bold text-gray-400 hover:text-gray-900 mb-6 transition-colors group"
@@ -71,9 +71,9 @@ export default function ForgotPasswordForm() {
                 Quay lại đăng nhập
             </Link>
 
-            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-2xl p-6 shadow-xl shadow-gray-200/40">
-                <div className="text-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1.5">Quên mật khẩu?</h1>
+            <div className="w-full">
+                <div className="text-left mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">Quên mật khẩu?</h1>
                     <p className="text-sm text-gray-500">Đừng lo, chúng tôi sẽ gởi link khôi phục cho bạn</p>
                 </div>
 

@@ -72,6 +72,10 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
             )
         `, { count: 'exact' });
 
+    const statsQuery = serviceSupabase
+        .from('listings')
+        .select('status, is_hidden, is_locked');
+
     // APPLY FILTERS
     if (targetUserId) query = query.eq('owner_id', targetUserId);
     if (statusFilter !== 'all') query = query.eq('status', statusFilter);
@@ -87,30 +91,17 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
     if (phone) query = query.or(`phone.ilike.%${phone}%,zalo.ilike.%${phone}%`, { foreignTable: 'owner' });
     if (creatorTypeFilter !== 'all') query = query.eq('owner.role', creatorTypeFilter);
 
-    const { data: listings, count, error: queryError } = await query
-        .order('created_at', { ascending: false })
-        .range(from, to);
+    const [
+        { data: listings, count, error: queryError },
+        { data: statsData }
+    ] = await Promise.all([
+        query.order('created_at', { ascending: false }).range(from, to),
+        statsQuery
+    ]);
 
     if (queryError) {
         console.error('Admin listings query error:', queryError);
     }
-
-    // STATS QUERY - Based on same filters but without pagination
-    let statsQuery = serviceSupabase
-        .from('listings')
-        .select('status, is_hidden, is_locked, owner:profiles!listings_owner_id_fkey(role, email, phone, zalo)');
-
-    if (targetUserId) statsQuery = statsQuery.eq('owner_id', targetUserId);
-    if (statusFilter !== 'all') statsQuery = statsQuery.eq('status', statusFilter);
-    if (isHiddenFilter !== 'all') statsQuery = statsQuery.eq('is_hidden', isHiddenFilter === 'true');
-    if (isLockedFilter !== 'all') statsQuery = statsQuery.eq('is_locked', isLockedFilter === 'true');
-    if (dateFrom) statsQuery = statsQuery.gte('created_at', `${dateFrom}T00:00:00`);
-    if (dateTo) statsQuery = statsQuery.lte('created_at', `${dateTo}T23:59:59`);
-    if (email) statsQuery = statsQuery.ilike('owner.email', `%${email}%`);
-    if (phone) statsQuery = statsQuery.or(`phone.ilike.%${phone}%,zalo.ilike.%${phone}%`, { foreignTable: 'owner' });
-    if (creatorTypeFilter !== 'all') statsQuery = statsQuery.eq('owner.role', creatorTypeFilter);
-
-    const { data: statsData } = await statsQuery;
 
     const stats = {
         total: statsData?.length || 0,

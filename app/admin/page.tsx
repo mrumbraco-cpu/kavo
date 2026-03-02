@@ -25,22 +25,17 @@ export default async function AdminDashboardPage() {
     // This is safe because we verified admin role above
     const serviceSupabase = createServiceRoleClient();
 
-    const { count: totalUsers } = await serviceSupabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true });
-
-    const { count: totalListings } = await serviceSupabase
-        .from('listings')
-        .select('*', { count: 'exact', head: true });
-
-    const { count: pendingListings } = await serviceSupabase
-        .from('listings')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending');
-
-    const { data: coinStats } = await serviceSupabase
-        .from('profiles')
-        .select('coin_balance');
+    const [
+        { count: totalUsers },
+        { count: totalListings },
+        { count: pendingListings },
+        { data: coinStats }
+    ] = await Promise.all([
+        serviceSupabase.from('profiles').select('*', { count: 'exact', head: true }),
+        serviceSupabase.from('listings').select('*', { count: 'exact', head: true }),
+        serviceSupabase.from('listings').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        serviceSupabase.from('profiles').select('coin_balance')
+    ]);
 
     const totalCoins = coinStats?.reduce((sum, p) => sum + (p.coin_balance || 0), 0) || 0;
 

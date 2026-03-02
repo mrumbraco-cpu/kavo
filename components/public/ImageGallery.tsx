@@ -32,13 +32,13 @@ export default function ImageGallery({ images, title }: Props) {
                         className="relative w-full aspect-[16/7] cursor-pointer"
                         onClick={() => openLightbox(0)}
                     >
-                        <Image src={images[0]} alt={title} fill className="object-cover" sizes="100vw" unoptimized priority />
+                        <Image src={images[0]} alt={title} fill className="object-cover" sizes="100vw" priority />
                     </div>
                 ) : images.length === 2 ? (
                     <div className="grid grid-cols-2 gap-2 aspect-[16/7]">
                         {images.slice(0, 2).map((src, i) => (
                             <div key={i} className="relative cursor-pointer overflow-hidden" onClick={() => openLightbox(i)}>
-                                <Image src={src} alt={`${title} ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" unoptimized priority={i === 0} />
+                                <Image src={src} alt={`${title} ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" priority={i === 0} />
                             </div>
                         ))}
                     </div>
@@ -49,7 +49,7 @@ export default function ImageGallery({ images, title }: Props) {
                             className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden"
                             onClick={() => openLightbox(0)}
                         >
-                            <Image src={images[0]} alt={title} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" unoptimized priority />
+                            <Image src={images[0]} alt={title} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" priority />
                         </div>
                         {/* Side images */}
                         {images.slice(1, 5).map((src, i) => (
@@ -64,7 +64,6 @@ export default function ImageGallery({ images, title }: Props) {
                                     fill
                                     className="object-cover hover:scale-105 transition-transform duration-300"
                                     sizes="25vw"
-                                    unoptimized
                                 />
                             </div>
                         ))}
@@ -117,7 +116,6 @@ export default function ImageGallery({ images, title }: Props) {
                             fill
                             className="object-contain"
                             sizes="100vw"
-                            unoptimized
                         />
                     </div>
 

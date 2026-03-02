@@ -20,7 +20,8 @@ export default function UserFilters() {
 
     const [isExpanded, setIsExpanded] = useState(false)
 
-    const handleSearch = () => {
+    const handleSearch = (e?: React.FormEvent) => {
+        if (e) e.preventDefault()
         const params = new URLSearchParams(searchParams.toString())
 
         Object.entries(filters).forEach(([key, value]) => {
@@ -66,16 +67,18 @@ export default function UserFilters() {
             </div>
 
             <div className={`p-4 transition-all ${isExpanded ? 'block' : 'hidden md:block'}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Email */}
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Email</label>
+                        <label htmlFor="filter-email" className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Email</label>
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input
+                                id="filter-email"
                                 type="text"
                                 value={filters.email}
                                 onChange={(e) => setFilters({ ...filters, email: e.target.value })}
+                                autoComplete="off"
                                 placeholder="Tìm email..."
                                 className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                             />
@@ -84,11 +87,14 @@ export default function UserFilters() {
 
                     {/* Phone */}
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Số điện thoại</label>
+                        <label htmlFor="filter-phone" className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Số điện thoại</label>
                         <input
-                            type="text"
+                            id="filter-phone"
+                            type="tel"
+                            inputMode="tel"
                             value={filters.phone}
                             onChange={(e) => setFilters({ ...filters, phone: e.target.value })}
+                            autoComplete="off"
                             placeholder="Số điện thoại..."
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                         />
@@ -96,8 +102,9 @@ export default function UserFilters() {
 
                     {/* Lock Status */}
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Trạng thái khóa</label>
+                        <label htmlFor="filter-lock" className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Trạng thái khóa</label>
                         <select
+                            id="filter-lock"
                             value={filters.lock_status}
                             onChange={(e) => setFilters({ ...filters, lock_status: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all bg-white"
@@ -111,11 +118,13 @@ export default function UserFilters() {
 
                     {/* Min Balance */}
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Số dư tối thiểu</label>
+                        <label htmlFor="filter-balance" className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Số dư tối thiểu</label>
                         <div className="relative">
                             <Coins className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-yellow-500" />
                             <input
+                                id="filter-balance"
                                 type="number"
+                                inputMode="numeric"
                                 value={filters.min_balance}
                                 onChange={(e) => setFilters({ ...filters, min_balance: e.target.value })}
                                 placeholder="Ví dụ: 1000"
@@ -126,10 +135,11 @@ export default function UserFilters() {
 
                     {/* Date Joined Range */}
                     <div className="space-y-1 lg:col-span-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Ngày tham gia (Từ - Đến)</label>
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Ngày tham gia (Từ - Đến)</label>
                         <div className="flex items-center gap-2">
                             <input
                                 type="date"
+                                aria-label="Từ ngày"
                                 value={filters.date_from}
                                 onChange={(e) => setFilters({ ...filters, date_from: e.target.value })}
                                 className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
@@ -137,6 +147,7 @@ export default function UserFilters() {
                             <span className="text-slate-400">→</span>
                             <input
                                 type="date"
+                                aria-label="Đến ngày"
                                 value={filters.date_to}
                                 onChange={(e) => setFilters({ ...filters, date_to: e.target.value })}
                                 className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
@@ -146,8 +157,9 @@ export default function UserFilters() {
 
                     {/* Role */}
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px]">Vai trò</label>
+                        <label htmlFor="filter-role" className="text-xs font-bold text-slate-500 uppercase tracking-wider text-[10px] block">Vai trò</label>
                         <select
+                            id="filter-role"
                             value={filters.role}
                             onChange={(e) => setFilters({ ...filters, role: e.target.value })}
                             className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all bg-white"
@@ -161,6 +173,7 @@ export default function UserFilters() {
                     {/* Actions */}
                     <div className="flex items-end gap-2 lg:col-start-4 lg:justify-end mt-2 sm:mt-0">
                         <button
+                            type="button"
                             onClick={handleReset}
                             className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-2"
                         >
@@ -168,14 +181,14 @@ export default function UserFilters() {
                             Xóa lọc
                         </button>
                         <button
-                            onClick={handleSearch}
+                            type="submit"
                             className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm shadow-blue-200 flex items-center gap-2"
                         >
                             <Search className="w-4 h-4" />
                             Tìm kiếm
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     )

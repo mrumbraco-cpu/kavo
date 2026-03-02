@@ -88,10 +88,10 @@ function RegisterContent() {
     }
 
     return (
-        <div className="w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-3 duration-500">
-            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-2xl p-6 shadow-xl shadow-gray-200/40">
-                <div className="text-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1.5">Bắt đầu ngay</h1>
+        <div className="w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
+            <div className="w-full">
+                <div className="text-left mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">Bắt đầu ngay</h1>
                     <p className="text-sm text-gray-500">Tạo tài khoản để khám phá các không gian</p>
                 </div>
 
@@ -101,6 +101,25 @@ function RegisterContent() {
                         <span>{error}</span>
                     </div>
                 )}
+
+                <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    disabled={loading}
+                    className="w-full mb-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-[13px] hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5"
+                >
+                    <GoogleIcon />
+                    Tiếp tục với Google
+                </button>
+
+                <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-gray-100"></span>
+                    </div>
+                    <div className="relative flex justify-center text-[11px] uppercase">
+                        <span className="bg-white px-3 text-gray-400 font-medium tracking-wider">Hoặc tiếp tục với Email</span>
+                    </div>
+                </div>
 
                 <form onSubmit={handleRegister} className="space-y-4">
                     <div className="space-y-1.5">
@@ -152,25 +171,6 @@ function RegisterContent() {
                                 <UserPlus className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </>
                         )}
-                    </button>
-
-                    <div className="relative py-2">
-                        <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-gray-100"></span>
-                        </div>
-                        <div className="relative flex justify-center text-[11px] uppercase">
-                            <span className="bg-white px-3 text-gray-400 font-medium tracking-wider">Hoặc tiếp tục với</span>
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={handleGoogleLogin}
-                        disabled={loading}
-                        className="w-full py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-[13px] hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2.5"
-                    >
-                        <GoogleIcon />
-                        Google
                     </button>
                 </form>
 

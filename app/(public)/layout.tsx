@@ -10,20 +10,13 @@ export default async function PublicLayout({
 }) {
     const supabase = await createServerSupabaseClient();
 
-    // Fetch user and profile in parallel if possible
-    // Note: auth.getUser() must happen before we know the ID for the profile query
-    // But we can start the profile check once we have the user
     const { data: { user } } = await supabase.auth.getUser();
 
-    let profile = null;
-    if (user) {
-        const { data } = await supabase
-            .from('profiles')
-            .select('role, coin_balance')
-            .eq('id', user.id)
-            .single();
-        profile = data;
-    }
+    const profile = user ? (await supabase
+        .from('profiles')
+        .select('role, coin_balance')
+        .eq('id', user.id)
+        .single()).data : null;
 
     return (
         <SearchProvider>

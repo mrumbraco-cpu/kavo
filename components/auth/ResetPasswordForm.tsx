@@ -50,10 +50,10 @@ export default function ResetPasswordForm() {
     }
 
     return (
-        <div className="w-full max-w-[380px] animate-in fade-in slide-in-from-bottom-3 duration-500">
-            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 rounded-2xl p-6 shadow-xl shadow-gray-200/40">
-                <div className="text-center mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-1.5">Đặt lại mật khẩu</h1>
+        <div className="w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
+            <div className="w-full">
+                <div className="text-left mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">Đặt lại mật khẩu</h1>
                     <p className="text-sm text-gray-500">Nhập mật khẩu mới cho tài khoản của bạn</p>
                 </div>
 

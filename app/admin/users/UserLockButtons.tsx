@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useTransition } from 'react'
 import { LockStatus } from '@/types/profile'
 import { updateUserLockStatus } from './actions'
 import { Lock, Unlock, ShieldAlert, Loader2 } from 'lucide-react'
@@ -12,9 +12,9 @@ interface UserLockButtonsProps {
 }
 
 export default function UserLockButtons({ userId, currentStatus, userEmail }: UserLockButtonsProps) {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, startTransition] = useTransition()
 
-    const handleUpdateStatus = async (newStatus: LockStatus) => {
+    const handleUpdateStatus = (newStatus: LockStatus) => {
         if (newStatus === currentStatus) return
 
         let confirmMessage = ''
@@ -24,19 +24,18 @@ export default function UserLockButtons({ userId, currentStatus, userEmail }: Us
 
         if (!window.confirm(confirmMessage)) return
 
-        setIsLoading(true)
-        try {
-            const result = await updateUserLockStatus({ userId, status: newStatus })
-            if (result.success) {
-                window.alert(result.message)
-            } else {
-                window.alert('Lỗi: ' + result.error)
+        startTransition(async () => {
+            try {
+                const result = await updateUserLockStatus({ userId, status: newStatus })
+                if (result.success) {
+                    window.alert(result.message)
+                } else {
+                    window.alert('Lỗi: ' + result.error)
+                }
+            } catch (error) {
+                window.alert('Có lỗi xảy ra khi cập nhật trạng thái')
             }
-        } catch (error) {
-            window.alert('Có lỗi xảy ra khi cập nhật trạng thái')
-        } finally {
-            setIsLoading(false)
-        }
+        });
     }
 
     if (isLoading) {

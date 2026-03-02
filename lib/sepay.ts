@@ -1,9 +1,10 @@
 import { SePayPgClient } from 'sepay-pg-node';
 
+const rawMerchantId = (process.env.SEPAY_MERCHANT_ID || '').trim();
 const sepayConfig = {
-    merchantId: (process.env.SEPAY_MERCHANT_ID || '').trim(),
+    merchantId: rawMerchantId,
     secretKey: (process.env.SEPAY_SECRET_KEY || '').trim(),
-    env: (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox') as 'sandbox' | 'production',
+    env: (process.env.SEPAY_ENV || (rawMerchantId.startsWith('SP-TEST-') ? 'sandbox' : (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox'))) as 'sandbox' | 'production',
 };
 
 // Initialize SePay Client
