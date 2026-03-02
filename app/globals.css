@@ -93,7 +93,7 @@
 
 @layer utilities {
     .glass-premium {
-        @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+        @apply bg-white/70 backdrop-blur-md sm:backdrop-blur-xl border border-white/20 shadow-xl;
     }
 
     .glass-dark {

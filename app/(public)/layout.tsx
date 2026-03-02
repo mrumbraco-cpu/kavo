@@ -1,27 +1,37 @@
 import PublicNavbar from '@/components/public/PublicNavbar';
-import PublicFooter from '@/components/public/PublicFooter';
 import { SearchProvider } from '@/lib/context/SearchContext';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
+import NavAuth from '@/components/public/NavAuth';
+import dynamic from 'next/dynamic';
 
-export default async function PublicLayout({
+const FooterWrapper = dynamic(() => import('./FooterWrapper').then(mod => mod.FooterWrapper), {
+    ssr: true,
+});
+
+/** Skeleton nhỏ cho auth buttons — render ngay khi HTML stream */
+function NavAuthSkeleton() {
+    return (
+        <div className="flex items-center gap-4" aria-hidden="true">
+            <div className="h-9 w-20 bg-premium-100 rounded-xl animate-pulse" />
+        </div>
+    );
+}
+
+export default function PublicLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const supabase = await createServerSupabaseClient();
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    const profile = user ? (await supabase
-        .from('profiles')
-        .select('role, coin_balance')
-        .eq('id', user.id)
-        .single()).data : null;
-
     return (
         <SearchProvider>
             <div className="flex flex-col min-h-screen">
-                <PublicNavbar user={user} profile={profile} />
+                <PublicNavbar
+                    navActions={
+                        <Suspense fallback={<NavAuthSkeleton />}>
+                            <NavAuth />
+                        </Suspense>
+                    }
+                />
                 <main className="flex-1 pt-16 flex flex-col">
                     {children}
                 </main>
@@ -31,5 +41,3 @@ export default async function PublicLayout({
     );
 }
 
-// Separate client component to handle conditional footer
-import { FooterWrapper } from './FooterWrapper';

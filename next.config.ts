@@ -2,7 +2,7 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.cloudflare.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google.com https://*.gstatic.com;
     style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://*.cloudflare.com;
-    img-src 'self' blob: data: https://*.cloudflare.com https://challenges.cloudflare.com https://raw.githubusercontent.com https://*.goong.io https://*.google.com https://*.gstatic.com https://www.transparenttextures.com;
+    img-src 'self' blob: data: https://*.cloudflare.com https://challenges.cloudflare.com https://raw.githubusercontent.com https://*.goong.io https://*.google.com https://*.gstatic.com;
     font-src 'self' data: https://fonts.gstatic.com;
     object-src 'none';
     base-uri 'self';
@@ -18,6 +18,15 @@ const cspHeader = `
 const nextConfig = {
     async headers() {
         return [
+            {
+                source: '/_next/static/(.*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
             {
                 source: '/(.*)',
                 headers: [
@@ -47,6 +56,7 @@ const nextConfig = {
                 '*.ngrok.io'
             ],
         },
+        optimizePackageImports: ['lucide-react'],
     },
 };
 
