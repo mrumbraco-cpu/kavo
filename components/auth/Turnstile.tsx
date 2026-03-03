@@ -32,6 +32,16 @@ export default function Turnstile({ onVerify, onExpire, onError, theme = 'auto' 
     const containerRef = useRef<HTMLDivElement>(null)
     const widgetIdRef = useRef<string | null>(null)
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+    const isLocalDev = typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1' ||
+            window.location.hostname.startsWith('192.168.') ||
+            window.location.hostname.startsWith('10.') ||
+            window.location.hostname.startsWith('172.'));
+
+    // Use testing site key for local development to bypass domain restrictions
+    // Site Key: 1x00000000000000000000AA (Always Pass)
+    const activeSiteKey = isLocalDev ? '1x00000000000000000000AA' : siteKey;
 
     const onVerifyRef = useRef(onVerify)
     const onExpireRef = useRef(onExpire)
@@ -43,7 +53,7 @@ export default function Turnstile({ onVerify, onExpire, onError, theme = 'auto' 
     useEffect(() => { onErrorRef.current = onError }, [onError])
 
     useEffect(() => {
-        if (!siteKey) return
+        if (!activeSiteKey) return
 
         let isMounted = true
         let retryCount = 0
@@ -53,7 +63,7 @@ export default function Turnstile({ onVerify, onExpire, onError, theme = 'auto' 
             if (window.turnstile && containerRef.current && !widgetIdRef.current && isMounted) {
                 try {
                     widgetIdRef.current = window.turnstile.render(containerRef.current, {
-                        sitekey: siteKey,
+                        sitekey: activeSiteKey,
                         callback: (token: string) => onVerifyRef.current(token),
                         'expired-callback': () => onExpireRef.current?.(),
                         'error-callback': () => onErrorRef.current?.(),
@@ -82,9 +92,9 @@ export default function Turnstile({ onVerify, onExpire, onError, theme = 'auto' 
                 widgetIdRef.current = null
             }
         }
-    }, [siteKey, theme])
+    }, [activeSiteKey, theme])
 
-    if (!siteKey) return null
+    if (!activeSiteKey) return null
 
     return (
         <div className="flex justify-center my-4 min-h-[65px]">

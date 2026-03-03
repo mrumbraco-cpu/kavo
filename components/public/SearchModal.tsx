@@ -2,62 +2,82 @@
 
 import { useState, useEffect } from 'react';
 import { useSearch } from '@/lib/context/SearchContext';
-import {
-    X,
-    Search as SearchIcon,
-    Home,
-    Building,
-    MapPin,
-    Building2,
-    Sun,
-    Sunrise,
-    SunMedium,
-    Moon,
-    Calendar,
-    ChevronDown,
-    ArrowLeft,
-    Check
-} from 'lucide-react';
-import {
-    PROVINCES_OLD,
-    DISTRICTS_OLD_BY_PROVINCE,
-    PROVINCES_NEW,
-    WARDS_NEW_BY_PROVINCE
-} from '@/lib/constants/geography';
-import { SPACE_TYPES, LOCATION_TYPES, SUITABLE_FOR_OPTIONS } from '@/lib/constants/listing-options';
 import { AMENITIES, NEARBY_FEATURES } from '@/lib/constants/facilities';
 import { SearchFilters } from '@/types/search';
+import GeographySelector from './GeographySelector';
+import PriceRangeSelector from './PriceRangeSelector';
+import { SPACE_TYPES, LOCATION_TYPES, SUITABLE_FOR_OPTIONS } from '@/lib/constants/listing-options';
 
 const TIME_OF_DAY_OPTIONS = [
-    { label: 'Buổi sáng', icon: Sun },
-    { label: 'Buổi trưa', icon: Sunrise },
-    { label: 'Buổi chiều', icon: SunMedium },
-    { label: 'Buổi tối', icon: Moon },
-    { label: 'Nguyên ngày', icon: Calendar },
+    {
+        label: 'Buổi sáng',
+        icon: (props: any) => (
+            <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        )
+    },
+    {
+        label: 'Buổi trưa',
+        icon: (props: any) => (
+            <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        )
+    },
+    {
+        label: 'Buổi chiều',
+        icon: (props: any) => (
+            <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        )
+    },
+    {
+        label: 'Buổi tối',
+        icon: (props: any) => (
+            <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        )
+    },
+    {
+        label: 'Nguyên ngày',
+        icon: (props: any) => (
+            <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        )
+    },
 ];
 
 const LOCATION_ICONS: Record<string, any> = {
-    'Mặt tiền': Home,
-    'Hẻm xe hơi': Building,
-    'Hẻm xe máy': MapPin,
-    'Trong tòa nhà': Building2,
-    'Khác': Building,
-};
-
-const normalizeString = (str: string) => {
-    return str
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/\s+/g, '');
-};
-
-const formatCurrencyInput = (val: string) => {
-    if (!val) return '';
-    const digits = val.replace(/\D/g, '');
-    if (!digits) return '';
-    return new Intl.NumberFormat('vi-VN').format(Number(digits));
+    'Mặt tiền': (props: any) => (
+        <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+    ),
+    'Hẻm xe hơi': (props: any) => (
+        <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+    ),
+    'Hẻm xe máy': (props: any) => (
+        <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+    ),
+    'Trong tòa nhà': (props: any) => (
+        <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+    ),
+    'Khác': (props: any) => (
+        <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+    ),
 };
 
 const PRICE_PRESETS = [
@@ -71,7 +91,6 @@ const PRICE_PRESETS = [
     { label: 'Trên 5M', min: '5000000', max: '' },
 ];
 
-// ─── Reusable chip button ────────────────────────────────────────────────────
 function Chip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
     return (
         <button
@@ -87,7 +106,6 @@ function Chip({ label, selected, onClick }: { label: string; selected: boolean; 
     );
 }
 
-// ─── Section wrapper with divider ────────────────────────────────────────────
 function Section({ title, children, collapsible = false, defaultExpanded = true }: { title: string; children: React.ReactNode; collapsible?: boolean; defaultExpanded?: boolean }) {
     const [isExpanded, setIsExpanded] = useState(defaultExpanded);
     return (
@@ -99,7 +117,9 @@ function Section({ title, children, collapsible = false, defaultExpanded = true 
                     className="flex w-full items-center justify-between text-left cursor-pointer group"
                 >
                     <h3 className="text-sm font-semibold text-premium-900 group-hover:text-premium-700 transition-colors">{title}</h3>
-                    <ChevronDown className={`w-4 h-4 text-premium-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                    <svg className={`w-4 h-4 text-premium-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
                 </button>
             ) : (
                 <h3 className="text-sm font-semibold text-premium-900 mb-3">{title}</h3>
@@ -124,20 +144,17 @@ export default function SearchModal() {
     } = useSearch();
 
     const [draftFilters, setDraftFilters] = useState<SearchFilters>(confirmedFilters);
-    const [locationStep, setLocationStep] = useState<'none' | 'province' | 'district'>('none');
-    const [locationSearch, setLocationSearch] = useState('');
 
     useEffect(() => {
         if (isModalOpen) {
             setDraftFilters(confirmedFilters);
-            setLocationSearch('');
-            if (!confirmedFilters.province) {
-                setLocationStep('province');
-            } else {
-                setLocationStep('none');
-            }
         }
     }, [isModalOpen, confirmedFilters]);
+
+    const handleApply = () => {
+        executeSearch(draftFilters);
+        setModalOpen(false);
+    };
 
     if (!isModalOpen) return null;
 
@@ -152,48 +169,25 @@ export default function SearchModal() {
 
     const handleClearAll = () => {
         setDraftFilters({
-            geoSystem: confirmedFilters.geoSystem,
+            geoSystem: confirmedFilters.geoSystem || 'old',
             province: '',
             district: [],
             ward: [],
             query: '',
             spaceTypes: [],
             locationTypes: [],
-            suitableFor: [],
-            notSuitableFor: [],
+            timeOfDay: [],
             amenities: [],
             nearbyFeatures: [],
-            timeOfDay: [],
+            suitableFor: [],
+            notSuitableFor: [],
             priceMin: '',
             priceMax: '',
         });
     };
 
-    const canSubmit = draftFilters.province !== '' &&
-        (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
-
-    const provinces = draftFilters.geoSystem === 'old' ? PROVINCES_OLD : PROVINCES_NEW;
-    const districtData = draftFilters.geoSystem === 'old'
-        ? (draftFilters.province ? DISTRICTS_OLD_BY_PROVINCE[draftFilters.province] ?? [] : [])
-        : (draftFilters.province ? WARDS_NEW_BY_PROVINCE[draftFilters.province] ?? [] : []);
-
-    const filteredProvinces = provinces.filter(p =>
-        normalizeString(p).includes(normalizeString(locationSearch))
-    );
-    const filteredDistricts = districtData.filter(d =>
-        normalizeString(d).includes(normalizeString(locationSearch))
-    );
-
-    const handleSelectProvince = (p: string) => {
-        set('province', p);
-        set('district', []);
-        set('ward', []);
-        setLocationStep('district');
-        setLocationSearch('');
-    };
-
     const handleToggleDistrict = (d: string) => {
-        const key = draftFilters.geoSystem === 'old' ? 'district' : 'ward';
+        const key = draftFilters.geoSystem === 'new' ? 'ward' : 'district';
         const current = draftFilters[key] as string[];
         if (current.includes(d)) {
             set(key, current.filter(x => x !== d) as any);
@@ -203,140 +197,89 @@ export default function SearchModal() {
         }
     };
 
-    const handleSwitchGeoSystem = (system: 'old' | 'new') => {
-        set('geoSystem', system);
-        set('province', '');
-        set('district', []);
-        set('ward', []);
-        setLocationSearch('');
-        setLocationStep('province');
-    };
-
-    const handleCloseSubLayer = () => {
-        if (!draftFilters.province) { setModalOpen(false); }
-        else { setLocationStep('none'); }
-        setLocationSearch('');
-    };
-
-    const handleBackFromProvince = () => {
-        if (!draftFilters.province) { setModalOpen(false); }
-        else { setLocationStep('none'); }
-        setLocationSearch('');
-    };
-
-    const handleBackFromDistrict = () => {
-        setLocationStep('province');
-        setLocationSearch('');
-    };
-
-    const selectedDistrictText = draftFilters.geoSystem === 'old'
-        ? (draftFilters.district.length > 0 ? draftFilters.district.join(', ') : 'Tất cả')
-        : (draftFilters.ward.length > 0 ? draftFilters.ward.join(', ') : 'Chọn phường/xã');
-
-    const districtLabel = draftFilters.geoSystem === 'old' ? 'Quận/Huyện' : 'Phường/Xã';
+    const canApply = draftFilters.province !== '' &&
+        (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
 
     return (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4">
-            {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/40 backdrop-blur-[2px] animate-fade-in"
+                className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
                 onClick={() => setModalOpen(false)}
             />
 
-            {/* Modal */}
             <div className="relative w-full sm:max-w-lg bg-white sm:rounded-2xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-fade-up rounded-t-2xl">
-
-                {/* ── Header ── */}
+                {/* Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-premium-100 flex-shrink-0">
                     <button
                         onClick={() => setModalOpen(false)}
-                        className="p-1.5 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors"
                     >
-                        <X className="w-5 h-5" />
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                     <h2 className="text-sm font-semibold text-premium-900 absolute left-1/2 -translate-x-1/2">Bộ lọc</h2>
                     <button
                         onClick={handleClearAll}
-                        className="text-xs font-semibold text-premium-600 hover:text-premium-900 underline cursor-pointer transition-colors"
+                        className="text-xs font-semibold text-premium-600 hover:text-premium-900 underline"
                     >
                         Xóa tất cả
                     </button>
                 </div>
 
-                {/* ── Body ── */}
+                {/* Body */}
                 <div className="flex-1 overflow-y-auto px-5">
+                    <Section title="Khu vực">
+                        <GeographySelector
+                            filters={draftFilters}
+                            onUpdate={set}
+                            onToggleDistrict={handleToggleDistrict}
+                            onProvinceChange={(p) => {
+                                if (draftFilters.province === p) {
+                                    // Toggle off
+                                    setDraftFilters(prev => ({
+                                        ...prev,
+                                        province: '',
+                                        district: [],
+                                        ward: []
+                                    }));
+                                } else {
+                                    // Change province
+                                    setDraftFilters(prev => ({
+                                        ...prev,
+                                        province: p,
+                                        district: [],
+                                        ward: []
+                                    }));
+                                }
+                            }}
+                            onSwitchSystem={(s) => {
+                                setDraftFilters(prev => ({
+                                    ...prev,
+                                    geoSystem: s,
+                                    province: '',
+                                    district: [],
+                                    ward: []
+                                }));
+                            }}
+                        />
+                    </Section>
 
-                    {/* Khu vực */}
-                    <div className="py-5 border-b border-premium-100">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-sm font-semibold text-premium-900">Khu vực</h3>
-                            {/* Geo toggle */}
-                            <div className="flex bg-premium-100 p-0.5 rounded-lg">
-                                <button
-                                    onClick={() => { set('geoSystem', 'old'); set('province', ''); set('district', []); set('ward', []); }}
-                                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-700'}`}
-                                >
-                                    Cũ
-                                </button>
-                                <button
-                                    onClick={() => { set('geoSystem', 'new'); set('province', ''); set('district', []); set('ward', []); }}
-                                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-700'}`}
-                                >
-                                    Mới
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2">
-                            {/* Province button */}
-                            <button
-                                onClick={() => { setLocationSearch(''); setLocationStep('province'); }}
-                                className="flex items-center justify-between px-3 py-2.5 border border-premium-200 rounded-xl text-left hover:border-premium-400 transition-all cursor-pointer group"
-                            >
-                                <div className="min-w-0">
-                                    <div className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide mb-0.5">Tỉnh/Thành</div>
-                                    <div className={`text-xs font-semibold truncate ${draftFilters.province ? 'text-premium-900' : 'text-red-400'}`}>
-                                        {draftFilters.province || '* Bắt buộc'}
-                                    </div>
-                                </div>
-                                <ChevronDown className="w-3.5 h-3.5 text-premium-300 flex-shrink-0 ml-1" />
-                            </button>
-
-                            {/* District/Ward button */}
-                            <button
-                                onClick={() => { if (draftFilters.province) { setLocationSearch(''); setLocationStep('district'); } }}
-                                disabled={!draftFilters.province}
-                                className="flex items-center justify-between px-3 py-2.5 border border-premium-200 rounded-xl text-left hover:border-premium-400 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed"
-                            >
-                                <div className="min-w-0">
-                                    <div className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide mb-0.5">
-                                        {districtLabel}
-                                        {draftFilters.geoSystem === 'new' && <span className="text-red-400 ml-0.5">*</span>}
-                                    </div>
-                                    <div className="text-xs font-semibold text-premium-900 truncate">
-                                        {selectedDistrictText}
-                                    </div>
-                                </div>
-                                <ChevronDown className="w-3.5 h-3.5 text-premium-300 flex-shrink-0 ml-1" />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Từ khóa */}
                     <Section title="Từ khóa">
                         <div className="relative">
-                            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
                             <input
                                 type="text"
                                 placeholder="Tiêu đề, địa chỉ, tên đường…"
                                 value={draftFilters.query}
                                 onChange={e => set('query', e.target.value)}
-                                className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 placeholder:text-premium-300 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400 transition-all"
+                                className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm"
                             />
                         </div>
                     </Section>
 
-                    {/* Loại hình không gian */}
                     <Section title="Loại hình không gian">
                         <div className="flex flex-wrap gap-2">
                             {SPACE_TYPES.map(type => (
@@ -350,11 +293,15 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    {/* Vị trí mặt bằng */}
                     <Section title="Vị trí mặt bằng">
                         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                             {LOCATION_TYPES.map((type) => {
-                                const Icon = LOCATION_ICONS[type] || Building;
+                                const DefaultIcon = (props: any) => (
+                                    <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                );
+                                const Icon = LOCATION_ICONS[type] || DefaultIcon;
                                 const isSelected = draftFilters.locationTypes.includes(type);
                                 return (
                                     <button
@@ -376,7 +323,6 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    {/* Thời gian */}
                     <Section title="Thời gian thuê">
                         <div className="grid grid-cols-5 gap-2">
                             {TIME_OF_DAY_OPTIONS.map((opt) => {
@@ -401,59 +347,17 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    {/* Khoảng giá */}
                     <Section title="Khoảng giá">
-                        {/* Manual input */}
-                        <div className="grid grid-cols-2 gap-2 mb-3">
-                            <div>
-                                <label className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide block mb-1">Từ</label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="0"
-                                        value={formatCurrencyInput(draftFilters.priceMin)}
-                                        onChange={e => set('priceMin', e.target.value.replace(/\D/g, ''))}
-                                        className="w-full pl-3 pr-6 py-2 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400"
-                                    />
-                                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-premium-300">đ</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="text-[10px] font-semibold text-premium-400 uppercase tracking-wide block mb-1">Đến</label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Không giới hạn"
-                                        value={formatCurrencyInput(draftFilters.priceMax)}
-                                        onChange={e => set('priceMax', e.target.value.replace(/\D/g, ''))}
-                                        className="w-full pl-3 pr-6 py-2 bg-white border border-premium-200 rounded-xl text-sm text-premium-900 focus:outline-none focus:ring-1 focus:ring-premium-400 focus:border-premium-400"
-                                    />
-                                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-premium-300">đ</span>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Presets */}
-                        <div className="flex flex-wrap gap-1.5">
-                            {PRICE_PRESETS.map((preset) => {
-                                const isSelected = draftFilters.priceMin === preset.min && draftFilters.priceMax === preset.max;
-                                return (
-                                    <button
-                                        key={preset.label}
-                                        type="button"
-                                        onClick={() => { set('priceMin', preset.min); set('priceMax', preset.max); }}
-                                        className={`px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${isSelected
-                                            ? 'bg-premium-900 text-white border-premium-900'
-                                            : 'bg-white text-premium-600 border-premium-200 hover:border-premium-400'
-                                            }`}
-                                    >
-                                        {preset.label}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                        <PriceRangeSelector
+                            minPrice={draftFilters.priceMin}
+                            maxPrice={draftFilters.priceMax}
+                            onUpdate={(key, val) => {
+                                const filterKey = key === 'min_price' ? 'priceMin' : 'priceMax';
+                                set(filterKey, val);
+                            }}
+                        />
                     </Section>
 
-                    {/* Phù hợp cho */}
                     <Section title="Phù hợp cho" collapsible defaultExpanded={false}>
                         <div className="flex flex-wrap gap-2">
                             {SUITABLE_FOR_OPTIONS.map(opt => (
@@ -467,7 +371,6 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    {/* Tiện ích */}
                     <Section title="Tiện ích" collapsible defaultExpanded={false}>
                         <div className="flex flex-wrap gap-2">
                             {AMENITIES.map(opt => (
@@ -481,7 +384,6 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    {/* Gần khu vực */}
                     <Section title="Gần khu vực" collapsible defaultExpanded={false}>
                         <div className="flex flex-wrap gap-2">
                             {NEARBY_FEATURES.map(opt => (
@@ -494,188 +396,38 @@ export default function SearchModal() {
                             ))}
                         </div>
                     </Section>
-
-                    {/* bottom breathing room */}
-                    <div className="h-2" />
                 </div>
 
-                {/* ── Footer ── */}
-                <div className="px-5 py-4 border-t border-premium-100 flex items-center justify-between flex-shrink-0 bg-white">
-                    <span className="text-xs text-premium-400 font-medium">
-                        {draftFilters.province
-                            ? `${draftFilters.province}${draftFilters.geoSystem === 'old' && draftFilters.district.length > 0 ? ` · ${draftFilters.district.length} quận` : ''}${draftFilters.geoSystem === 'new' && draftFilters.ward.length > 0 ? ` · ${draftFilters.ward.length} phường` : ''}`
-                            : 'Chưa chọn khu vực'
-                        }
-                    </span>
+                {/* Footer */}
+                <div className="p-5 border-t border-premium-100 bg-premium-50/50 flex items-center justify-between gap-4 flex-shrink-0">
+                    <div className="flex items-center gap-3 pl-1">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${draftFilters.province ? 'bg-premium-900 text-white' : 'bg-premium-100 text-premium-400'}`}>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            </svg>
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-[9px] font-bold text-premium-400 uppercase tracking-widest leading-none mb-1">Khu vực</span>
+                            <span className="text-sm font-bold text-premium-900 truncate max-w-[150px]">
+                                {draftFilters.province || 'Toàn quốc'}
+                            </span>
+                        </div>
+                    </div>
                     <button
-                        onClick={() => executeSearch(draftFilters)}
-                        disabled={!canSubmit || isLoading}
-                        className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-2"
+                        onClick={handleApply}
+                        disabled={!canApply || isLoading}
+                        className="flex-1 py-3 px-6 bg-premium-900 text-white rounded-xl font-bold text-sm shadow-lg shadow-premium-900/20 active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                         {isLoading ? (
                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                            'Xem kết quả'
+                            <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                Xem kết quả
+                            </>
                         )}
                     </button>
                 </div>
-
-                {/* ================================================================
-                    Location Sub-layer (Province / District picker)
-                ================================================================ */}
-                {locationStep !== 'none' && (
-                    <div className="absolute inset-0 bg-white z-[110] flex flex-col sm:rounded-2xl rounded-t-2xl animate-fade-in">
-
-                        {/* Sub-header */}
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-premium-100 flex-shrink-0">
-                            <button
-                                onClick={locationStep === 'district' ? handleBackFromDistrict : handleBackFromProvince}
-                                className="p-1.5 rounded-full hover:bg-premium-100 text-premium-600 transition-colors cursor-pointer"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                            </button>
-                            <div className="absolute left-1/2 -translate-x-1/2 text-center">
-                                <p className="text-sm font-semibold text-premium-900">
-                                    {locationStep === 'province' ? 'Chọn tỉnh/thành phố' : draftFilters.province}
-                                </p>
-                                {locationStep === 'district' && (
-                                    <p className="text-[10px] text-premium-400 mt-0.5">
-                                        {draftFilters.geoSystem === 'old' ? 'Quận/Huyện (tùy chọn)' : 'Phường/Xã (bắt buộc)'}
-                                    </p>
-                                )}
-                            </div>
-                            <button
-                                onClick={handleCloseSubLayer}
-                                className="p-1.5 rounded-full hover:bg-premium-100 text-premium-400 hover:text-premium-900 transition-colors cursor-pointer"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        {/* Geo toggle — only in province step */}
-                        {locationStep === 'province' && (
-                            <div className="px-5 pt-4 pb-2 flex-shrink-0">
-                                <div className="flex bg-premium-100 p-0.5 rounded-xl w-fit">
-                                    <button
-                                        onClick={() => handleSwitchGeoSystem('old')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'old'
-                                            ? 'bg-white text-premium-900 shadow-sm'
-                                            : 'text-premium-400 hover:text-premium-700'
-                                            }`}
-                                    >
-                                        🏛 Hành chính cũ
-                                    </button>
-                                    <button
-                                        onClick={() => handleSwitchGeoSystem('new')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${draftFilters.geoSystem === 'new'
-                                            ? 'bg-white text-premium-900 shadow-sm'
-                                            : 'text-premium-400 hover:text-premium-700'
-                                            }`}
-                                    >
-                                        🗺 Hành chính mới
-                                    </button>
-                                </div>
-                                <p className="text-[10px] text-premium-400 mt-1.5 ml-0.5">
-                                    {draftFilters.geoSystem === 'new'
-                                        ? 'Hệ mới: phường/xã bắt buộc chọn'
-                                        : 'Hệ cũ: quận/huyện tùy chọn'}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Search input */}
-                        <div className="px-5 pt-3 pb-2 flex-shrink-0">
-                            <div className="relative">
-                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" />
-                                <input
-                                    type="text"
-                                    placeholder={locationStep === 'province' ? 'Tìm tỉnh/thành phố…' : 'Tìm quận/huyện/phường…'}
-                                    value={locationSearch}
-                                    onChange={e => setLocationSearch(e.target.value)}
-                                    autoFocus
-                                    className="w-full pl-9 pr-3 py-2.5 bg-premium-50 border border-premium-100 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-premium-400"
-                                />
-                            </div>
-                        </div>
-
-                        {/* List */}
-                        <div className="flex-1 overflow-y-auto px-3 py-1">
-                            {locationStep === 'province' ? (
-                                filteredProvinces.length > 0 ? filteredProvinces.map(p => (
-                                    <button
-                                        key={p}
-                                        onClick={() => handleSelectProvince(p)}
-                                        className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-left transition-all cursor-pointer ${draftFilters.province === p
-                                            ? 'bg-premium-50 text-premium-900'
-                                            : 'hover:bg-premium-50 text-premium-600'
-                                            }`}
-                                    >
-                                        <span className="text-sm font-medium">{p}</span>
-                                        {draftFilters.province === p && <Check className="w-4 h-4 text-premium-900" />}
-                                    </button>
-                                )) : (
-                                    <div className="text-center py-10 text-premium-400 text-sm">Không tìm thấy tỉnh/thành phố</div>
-                                )
-                            ) : (
-                                filteredDistricts.length > 0 ? filteredDistricts.map(d => {
-                                    const isSelected = draftFilters.geoSystem === 'old'
-                                        ? draftFilters.district.includes(d)
-                                        : draftFilters.ward.includes(d);
-                                    return (
-                                        <button
-                                            key={d}
-                                            onClick={() => handleToggleDistrict(d)}
-                                            className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-left transition-all cursor-pointer ${isSelected
-                                                ? 'bg-premium-50 text-premium-900'
-                                                : 'hover:bg-premium-50 text-premium-600'
-                                                }`}
-                                        >
-                                            <span className="text-sm font-medium">{d}</span>
-                                            {isSelected && <Check className="w-4 h-4 text-premium-900" />}
-                                        </button>
-                                    );
-                                }) : (
-                                    <div className="text-center py-10 text-premium-400 text-sm">Không tìm thấy kết quả</div>
-                                )
-                            )}
-                        </div>
-
-                        {/* Sub-footer */}
-                        <div className="px-5 py-4 border-t border-premium-100 flex items-center justify-between flex-shrink-0 bg-white">
-                            <div>
-                                {locationStep === 'province' && !draftFilters.province && (
-                                    <p className="text-xs text-red-400 font-medium">⚠ Vui lòng chọn tỉnh/thành để tiếp tục</p>
-                                )}
-                                {locationStep === 'district' && (
-                                    <p className="text-xs text-premium-500">
-                                        Đã chọn {draftFilters.geoSystem === 'old' ? draftFilters.district.length : draftFilters.ward.length}/5
-                                        {draftFilters.geoSystem === 'new' && (
-                                            <span className="text-red-400 ml-1">· bắt buộc ≥ 1</span>
-                                        )}
-                                    </p>
-                                )}
-                            </div>
-
-                            {locationStep === 'district' && (
-                                <button
-                                    onClick={() => setLocationStep('none')}
-                                    disabled={draftFilters.geoSystem === 'new' && draftFilters.ward.length === 0}
-                                    className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
-                                >
-                                    Xác nhận
-                                </button>
-                            )}
-                            {locationStep === 'province' && draftFilters.province && (
-                                <button
-                                    onClick={() => setLocationStep('none')}
-                                    className="px-6 py-2.5 bg-premium-900 text-white rounded-xl font-semibold text-sm hover:bg-premium-800 transition-all cursor-pointer"
-                                >
-                                    Tiếp tục →
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

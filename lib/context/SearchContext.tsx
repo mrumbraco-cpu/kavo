@@ -33,27 +33,52 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
 
-    // Initialize from localStorage on mount
+    // Initialize from localStorage AND URL on mount
     useEffect(() => {
         const saved = localStorage.getItem('search_filters_v1');
+        let initialFilters = DEFAULT_FILTERS;
+
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                // Merge with DEFAULT_FILTERS to ensure all keys exist
-                setFilters({ ...DEFAULT_FILTERS, ...parsed });
+                initialFilters = { ...DEFAULT_FILTERS, ...parsed };
             } catch (e) {
                 console.error('Failed to parse saved filters', e);
             }
         }
+
+        // URL search params take precedence over localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('province')) {
+            const urlFilters: Partial<SearchFilters> = {
+                geoSystem: (urlParams.get('geoSystem') as 'old' | 'new') || initialFilters.geoSystem,
+                province: urlParams.get('province') || '',
+                district: urlParams.get('district')?.split(',').filter(Boolean) || [],
+                ward: urlParams.get('ward')?.split(',').filter(Boolean) || [],
+                query: urlParams.get('query') || '',
+                spaceTypes: urlParams.get('spaceTypes')?.split(',').filter(Boolean) || [],
+                locationTypes: urlParams.get('locationTypes')?.split(',').filter(Boolean) || [],
+                suitableFor: urlParams.get('suitableFor')?.split(',').filter(Boolean) || [],
+                notSuitableFor: urlParams.get('notSuitableFor')?.split(',').filter(Boolean) || [],
+                amenities: urlParams.get('amenities')?.split(',').filter(Boolean) || [],
+                nearbyFeatures: urlParams.get('nearbyFeatures')?.split(',').filter(Boolean) || [],
+                timeOfDay: urlParams.get('timeOfDay')?.split(',').filter(Boolean) || [],
+                priceMin: urlParams.get('priceMin') || '',
+                priceMax: urlParams.get('priceMax') || '',
+            };
+            initialFilters = { ...initialFilters, ...urlFilters };
+        }
+
+        setFilters(initialFilters);
         setIsInitialized(true);
     }, []);
 
     // Save to localStorage whenever filters change
     useEffect(() => {
-        if (filters !== DEFAULT_FILTERS) {
+        if (isInitialized && filters !== DEFAULT_FILTERS) {
             localStorage.setItem('search_filters_v1', JSON.stringify(filters));
         }
-    }, [filters]);
+    }, [filters, isInitialized]);
 
     const executeSearch = useCallback(async (searchFilters: SearchFilters) => {
         setIsLoading(true);
@@ -79,6 +104,14 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 allResults: 'true',
             });
 
+            // Update URL search params
+            const searchPath = `/search?${params.toString()}`;
+            if (pathname === '/search') {
+                window.history.replaceState(null, '', searchPath);
+            } else {
+                router.push(searchPath);
+            }
+
             const res = await fetch(`/api/search?${params.toString()}`);
             if (!res.ok) throw new Error('Tìm kiếm thất bại, vui lòng thử lại.');
 
@@ -87,17 +120,12 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             setTotal(data.total ?? data.listings.length);
             setHasSearched(true);
             setModalOpen(false); // Close modal on success
-
-            // Navigate to /search if not already there
-            if (pathname !== '/search') {
-                router.push('/search');
-            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi.');
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [pathname, router]);
 
     const contextValue = React.useMemo(() => ({
         filters,

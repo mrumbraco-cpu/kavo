@@ -2,7 +2,7 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.cloudflare.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google.com https://*.gstatic.com;
     style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://*.cloudflare.com;
-    img-src 'self' blob: data: https://*.cloudflare.com https://challenges.cloudflare.com https://raw.githubusercontent.com https://*.goong.io https://*.google.com https://*.gstatic.com;
+    img-src 'self' blob: data: https://*.cloudflare.com https://challenges.cloudflare.com https://raw.githubusercontent.com https://*.goong.io https://*.google.com https://*.gstatic.com https://www.pavietnam.vn;
     font-src 'self' data: https://fonts.gstatic.com;
     object-src 'none';
     base-uri 'self';
@@ -52,6 +52,7 @@ const nextConfig = {
         serverActions: {
             allowedOrigins: [
                 'localhost:3000',
+                '192.168.1.5:3000',
                 '*.ngrok-free.app',
                 '*.ngrok.io'
             ],

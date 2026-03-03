@@ -1,5 +1,4 @@
-'use client';
-
+import React, { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getListingUrl } from '@/lib/utils/url';
@@ -13,7 +12,7 @@ interface ListingCardProps {
     priority?: boolean;
 }
 
-export default function ListingCard({ listing, isHighlighted = false, onHover, priority = false }: ListingCardProps) {
+const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, onHover, priority = false }: ListingCardProps) {
     const thumbnail = listing.images?.[0] ?? null;
     const detailedAddress = listing.detailed_address || '';
 
@@ -35,9 +34,10 @@ export default function ListingCard({ listing, isHighlighted = false, onHover, p
                         alt={listing.title}
                         fill
                         priority={priority}
+                        quality={75}
                         className={`object-cover group-hover:scale-110 transition-transform duration-700 ease-out ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
                             }`}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 95vw, (max-width: 1024px) 45vw, 30vw"
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-premium-100/50">
@@ -77,7 +77,7 @@ export default function ListingCard({ listing, isHighlighted = false, onHover, p
 
             {/* Content */}
             <div className="p-3 flex flex-col gap-3 flex-1">
-                <h3 className="font-semibold text-premium-800 text-[13.5px] leading-snug line-clamp-2 group-hover:text-accent-gold transition-colors duration-300">
+                <h3 className="font-semibold text-premium-800 text-[13.5px] leading-snug line-clamp-2 min-h-[2.6em] group-hover:text-accent-gold transition-colors duration-300">
                     {listing.title}
                 </h3>
 
@@ -114,4 +114,6 @@ export default function ListingCard({ listing, isHighlighted = false, onHover, p
             </div>
         </Link>
     );
-}
+});
+
+export default ListingCard;

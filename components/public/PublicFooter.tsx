@@ -15,6 +15,16 @@ export default function PublicFooter() {
                         <p className="text-premium-400 text-sm leading-relaxed mb-8 max-w-sm">
                             Nền tảng kết nối không gian kinh doanh hàng đầu Việt Nam. Tối ưu hóa giá trị mặt bằng và chắp cánh những cơ hội khởi nghiệp mới.
                         </p>
+
+                        {/* Ministry of Industry and Trade Logo */}
+                        <div className="mb-8">
+                            <img
+                                src="https://www.pavietnam.vn/images/bocongthuong/pa_bo_cong_thuong_xanh.png"
+                                alt="Đã thông báo bộ công thương"
+                                className="h-12 w-auto filter brightness-90 contrast-125 opacity-80 hover:opacity-100 transition-all duration-300"
+                            />
+                        </div>
+
                         <div className="flex gap-4">
                             <a href="mailto:contact@spaceshare.vn" className="w-10 h-10 rounded-xl border border-premium-800 flex items-center justify-center text-premium-400 hover:text-white hover:border-accent-gold hover:bg-premium-900 transition-all duration-300">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

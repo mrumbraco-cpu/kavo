@@ -28,6 +28,8 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     const markersRef = useRef<Map<string, goongjs.Marker>>(new Map());
     const isInitializedRef = useRef(false);
     const scriptLoadedRef = useRef(false);
+    const prevHoveredIdRef = useRef<string | null>(null);
+    const prevPageIdsRef = useRef<Set<string>>(new Set());
     const [isLoaded, setIsLoaded] = useState(false);
 
     const getMarkerColor = useCallback((id: string, hovered: string | null): string => {
@@ -108,59 +110,122 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         `;
     };
 
+    const popupRef = useRef<goongjs.Popup | null>(null);
+
     const syncMarkers = useCallback(() => {
         if (!mapRef.current || !window.goongjs) return;
-        const map = mapRef.current;
 
-        // Remove markers that are no longer in allListings
-        const currentIds = new Set(allListings.map(l => l.id));
-        markersRef.current.forEach((marker, id) => {
-            if (!currentIds.has(id)) {
-                marker.remove();
-                markersRef.current.delete(id);
+        const task = () => {
+            const map = mapRef.current;
+            if (!map || !window.goongjs) return;
+
+            const hoveredChanged = hoveredListingId !== prevHoveredIdRef.current;
+
+            let pageIdsChanged = currentPageIds.size !== prevPageIdsRef.current.size;
+            if (!pageIdsChanged) {
+                for (let id of currentPageIds) {
+                    if (!prevPageIdsRef.current.has(id)) {
+                        pageIdsChanged = true;
+                        break;
+                    }
+                }
             }
-        });
 
-        // Add or update markers
-        allListings.forEach(listing => {
-            if (!listing.latitude || !listing.longitude) return;
+            const currentDataIds = new Set(allListings.map(l => l.id));
+            markersRef.current.forEach((marker, id) => {
+                if (!currentDataIds.has(id)) {
+                    marker.remove();
+                    markersRef.current.delete(id);
+                }
+            });
 
-            const color = getMarkerColor(listing.id, hoveredListingId);
-            const isPrimary = currentPageIds.has(listing.id);
-            const scale = isPrimary ? 1.2 : 0.9;
+            // Batch marker creation to avoid long tasks
+            const CHUNK_SIZE = 20;
+            let index = 0;
 
-            if (markersRef.current.has(listing.id)) {
-                // Update existing marker color
-                const marker = markersRef.current.get(listing.id)!;
-                const el = marker.getElement();
-                el.style.background = color;
-                el.style.width = `${24 * scale}px`;
-                el.style.height = `${24 * scale}px`;
-            } else {
-                // Create new marker
-                const el = createMarkerEl(color, scale);
-                const popup = new (window.goongjs.Popup as any)({
-                    closeButton: true,
-                    closeOnClick: false,
-                    offset: 20,
-                    maxWidth: 'none'
-                }).setHTML(buildPopupHTML(listing));
+            const processNextBatch = () => {
+                if (index >= allListings.length) {
+                    prevHoveredIdRef.current = hoveredListingId;
+                    prevPageIdsRef.current = new Set(currentPageIds);
+                    return;
+                }
 
-                const marker = new window.goongjs.Marker({ element: el })
-                    .setLngLat([listing.longitude, listing.latitude])
-                    .addTo(map);
+                const end = Math.min(index + CHUNK_SIZE, allListings.length);
+                const batch = allListings.slice(index, end);
 
-                marker.setPopup(popup);
+                batch.forEach(listing => {
+                    if (!listing.latitude || !listing.longitude) return;
 
-                el.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    marker.togglePopup();
-                    onMarkerClick?.(listing.id);
+                    const isCurrentHovered = listing.id === hoveredListingId;
+                    const wasPrevHovered = listing.id === prevHoveredIdRef.current;
+                    const isCurrentPage = currentPageIds.has(listing.id);
+                    const wasPrevPage = prevPageIdsRef.current.has(listing.id);
+
+                    const needsVisualUpdate =
+                        !markersRef.current.has(listing.id) ||
+                        isCurrentHovered || wasPrevHovered ||
+                        isCurrentPage !== wasPrevPage;
+
+                    if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
+
+                    const color = getMarkerColor(listing.id, hoveredListingId);
+                    const scale = isCurrentPage ? 1.2 : 0.9;
+
+                    if (markersRef.current.has(listing.id)) {
+                        const marker = markersRef.current.get(listing.id)!;
+                        const el = marker.getElement();
+                        if (el.style.background !== color) el.style.background = color;
+                        const sizeStr = `${24 * scale}px`;
+                        if (el.style.width !== sizeStr) {
+                            el.style.width = sizeStr;
+                            el.style.height = sizeStr;
+                        }
+                    } else {
+                        const el = createMarkerEl(color, scale);
+                        const marker = new window.goongjs.Marker({ element: el })
+                            .setLngLat([listing.longitude, listing.latitude])
+                            .addTo(map);
+
+                        el.addEventListener('click', (e) => {
+                            e.stopPropagation();
+
+                            // Single lazy popup logic
+                            if (popupRef.current) popupRef.current.remove();
+
+                            const popup = new (window.goongjs!.Popup as any)({
+                                closeButton: true,
+                                closeOnClick: true,
+                                offset: 20,
+                                maxWidth: 'none'
+                            })
+                                .setLngLat([listing.longitude!, listing.latitude!])
+                                .setHTML(buildPopupHTML(listing))
+                                .addTo(map);
+
+                            popupRef.current = popup;
+                            onMarkerClick?.(listing.id);
+                        });
+
+                        markersRef.current.set(listing.id, marker);
+                    }
                 });
 
-                markersRef.current.set(listing.id, marker);
+                index = end;
+                if (index < allListings.length) {
+                    requestAnimationFrame(processNextBatch);
+                }
+            };
+
+            requestAnimationFrame(processNextBatch);
+        };
+
+        if (typeof window !== 'undefined') {
+            if ('requestIdleCallback' in window) {
+                (window as any).requestIdleCallback(task, { timeout: 2000 });
+            } else {
+                setTimeout(task, 100);
             }
-        });
+        }
     }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick]);
 
     // Fit bounds to markers

@@ -1,23 +1,54 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { createBrowserClient } from '@supabase/ssr';
 import PublicNavbarActions from './PublicNavbarActions';
 
 /**
- * NavAuth: Async Server Component — self-contained auth fetch.
- * Được wrap trong <Suspense> tại layout để HTML streaming bắt đầu ngay.
- * Supabase auth query chạy song song với việc server stream các phần khác của page.
+ * NavAuth: Client Component — self-contained auth fetch.
+ * Changed to Client Component to prevent full-page dynamic rendering.
+ * This ensures bfcache works correctly and pages can be statically cached.
  */
-export default async function NavAuth() {
-    const supabase = await createServerSupabaseClient();
+export default function NavAuth() {
+    const [user, setUser] = useState<any>(undefined);
+    const [profile, setProfile] = useState<any>(null);
 
-    const { data: { user } } = await supabase.auth.getUser();
+    useEffect(() => {
+        const fetchUser = async () => {
+            const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            );
 
-    const profile = user
-        ? (await supabase
-            .from('profiles')
-            .select('role, coin_balance')
-            .eq('id', user.id)
-            .single()).data
-        : null;
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user || null);
+
+                if (user) {
+                    const { data } = await supabase
+                        .from('profiles')
+                        .select('role, coin_balance')
+                        .eq('id', user.id)
+                        .single();
+                    setProfile(data);
+                }
+            } catch (err) {
+                console.error('NavAuth Error:', err);
+                setUser(null);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    // Skeleton loading state
+    if (user === undefined) {
+        return (
+            <div className="flex items-center gap-4" aria-hidden="true">
+                <div className="h-9 w-20 bg-premium-100 rounded-xl animate-pulse" />
+            </div>
+        );
+    }
 
     return <PublicNavbarActions user={user} profile={profile} />;
 }

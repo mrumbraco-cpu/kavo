@@ -5,29 +5,18 @@ import { useSearch } from '@/lib/context/SearchContext';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 
-const SearchModal = dynamic(() => import('./SearchModal'), {
-    ssr: false,
-});
+import HeaderSearch from './HeaderSearch';
 
-const HeaderSearch = dynamic(() => import('./HeaderSearch'), {
-    ssr: false,
-});
+const SearchModal = dynamic(() => import('./SearchModal'));
 
 export default function NavSearchWrapper() {
     const { isModalOpen } = useSearch();
-    const [hasInteracted, setHasInteracted] = useState(false);
     const pathname = usePathname();
 
-    // Hiển thị modal nếu nó đang mở HOẶC nếu người dùng đã từng tương tác (để prefetch)
-    // Tuy nhiên để tối ưu nhất cho Lighthouse, ta chỉ thực sự render khi isModalOpen
     return (
-        <div
-            className="flex items-center"
-            onMouseEnter={() => setHasInteracted(true)}
-            onTouchStart={() => setHasInteracted(true)}
-        >
+        <div className="flex items-center">
             {pathname === '/search' && <HeaderSearch />}
-            {(isModalOpen || hasInteracted) && <SearchModal />}
+            {isModalOpen && <SearchModal />}
         </div>
     );
 }
