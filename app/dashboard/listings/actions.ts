@@ -7,6 +7,7 @@ import { ListingStatus } from '@/types/listing'
 import { encrypt } from '@/lib/utils/encryption'
 import { listingSchema, imageFileSchema } from '@/lib/validations/listing'
 import { z } from 'zod'
+import { logError } from '@/lib/utils/error-logger'
 
 
 export async function createListing(formData: FormData): Promise<{ success: boolean; listingId?: string; error?: string }> {
@@ -126,6 +127,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
         .single()
 
     if (error) {
+        await logError('listing_create_error', error.message, { formData: rawFormData }, user.id)
         throw new Error(error.message)
     }
 
@@ -481,6 +483,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
         .eq('id', listingId)
 
     if (updateError) {
+        await logError('listing_update_error', updateError.message, { listingId, formData: rawFormData }, user.id)
         return { success: false, error: updateError.message }
     }
 

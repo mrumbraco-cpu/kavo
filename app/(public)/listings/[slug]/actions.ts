@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { decrypt } from '@/lib/utils/encryption';
 import { revalidatePath } from 'next/cache';
 import { REPORT_REASONS } from '@/lib/constants/report-reasons';
+import { logError } from '@/lib/utils/error-logger';
 
 export async function unlockContactAction(listingId: string) {
     const supabase = await createServerSupabaseClient();
@@ -43,6 +44,7 @@ export async function unlockContactAction(listingId: string) {
         };
     } catch (err) {
         console.error('Decryption failed:', err);
+        await logError('contact_unlock_decryption_error', err, { listingId, data }, user?.id)
         return {
             success: false,
             error: 'Lỗi giải mã thông tin liên hệ.'
@@ -116,6 +118,7 @@ export async function toggleFavoriteAction(listingId: string) {
         }
     } catch (err: any) {
         console.error('Toggle favorite failed:', err);
+        await logError('listing_toggle_favorite_error', err, { listingId }, user?.id)
         return {
             success: false,
             error: err.message || 'Đã xảy ra lỗi khi cập nhật danh sách yêu thích.'

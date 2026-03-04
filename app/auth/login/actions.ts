@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { verifyCaptcha } from '@/lib/security/captcha'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function loginAction(formData: FormData) {
     // 0. CAPTCHA Check
@@ -30,6 +31,7 @@ export async function loginAction(formData: FormData) {
 
     if (error) {
         await logAuthEvent('login', 'failure')
+        await logError('auth_login_error', error.message, { email }, null)
         return { error: error.message }
     }
 

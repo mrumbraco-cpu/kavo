@@ -190,8 +190,42 @@ Deno.serve(async (req: Request) => {
 
         throw new Error("Invalid action provided");
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('DEBUG: Edge Function Error:', error.message);
+
+        // Log error to database
+        try {
+            const adminClient = createClient(
+                SUPABASE_URL!,
+                SUPABASE_SERVICE_ROLE_KEY!,
+                { auth: { persistSession: false } }
+            );
+
+            // Get body for metadata if possible
+            let bodyData = {};
+            try {
+                // we've already parsed it above, but if it failed early we might not have it
+                // we'll try to re-parse or use the 'body' variable if available
+                bodyData = body || {};
+            } catch (ignore) { }
+
+            await adminClient.from('error_logs').insert({
+                user_id: user?.id || null,
+                action_type: `github_image_${bodyData?.action || 'unknown'}`,
+                error_message: error.message || String(error),
+                error_stack: error.stack,
+                metadata: {
+                    listingId: bodyData?.listingId,
+                    fileName: bodyData?.fileName,
+                    action: bodyData?.action,
+                    isServiceRole: !!isServiceRole
+                },
+                status: 'new'
+            });
+        } catch (logError) {
+            console.error("Failed to log error to database:", logError);
+        }
+
         return new Response(JSON.stringify({ error: error.message }), {
             status: 400,
             headers: { ...corsHeaders, "Content-Type": "application/json" }

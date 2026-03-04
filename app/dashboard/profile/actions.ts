@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { profileSchema, passwordSchema } from '@/lib/validations/profile'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function updateProfile(formData: FormData) {
     const supabase = await createServerSupabaseClient()
@@ -33,6 +34,7 @@ export async function updateProfile(formData: FormData) {
         .eq('id', user.id)
 
     if (error) {
+        await logError('profile_update_error', error.message, { phone, zalo }, user.id)
         return { error: error.message }
     }
 
@@ -72,6 +74,7 @@ export async function updatePassword(formData: FormData) {
 
     if (error) {
         await logAuthEvent('password_reset', 'failure', user.id)
+        await logError('auth_reset_password_error', error.message, {}, user.id)
         return { error: error.message }
     }
 

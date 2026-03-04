@@ -557,12 +557,23 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
                     {mode === 'edit' ? 'Chỉnh sửa tin đăng' : 'Đăng tin không gian mới'}
                 </h2>
-                <p className="text-sm text-gray-500">
+                {mode === 'edit' && initialListing && (
+                    <div className="mt-2 mx-auto max-w-md">
+                        <div className="text-[12px] font-bold text-blue-700 bg-blue-50/80 px-4 py-1.5 rounded-full inline-flex items-center gap-2 border border-blue-100 shadow-sm">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                            <span className="truncate max-w-[250px] sm:max-w-[350px]">
+                                Đang sửa: {initialListing.title}
+                            </span>
+                        </div>
+                    </div>
+                )}
+                <p className="text-sm text-gray-500 pt-2">
                     {mode === 'edit' ? 'Cập nhật thông tin chi tiết' : 'Cung cấp thông tin chi tiết qua 3 bước đơn giản'}
                 </p>
                 {mode === 'edit' && (
-                    <div className="mt-2 p-2 bg-yellow-50 text-yellow-800 rounded-lg text-[11px] inline-block border border-yellow-200">
-                        Lưu ý: bài viết với đầy đủ thông tin sẽ hiển thị nhiều gấp 10 lần so với các bài đăng sơ sài.                    </div>
+                    <div className="mt-3 p-2.5 bg-yellow-50/50 text-yellow-800 rounded-xl text-[11px] inline-block border border-yellow-200/50 font-medium">
+                        Lưu ý: bài viết với đầy đủ thông tin sẽ hiển thị nhiều gấp 10 lần so với các bài đăng sơ sài.
+                    </div>
                 )}
             </div>
 
@@ -1090,7 +1101,12 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     onClick={() => setShowDescription(!showDescription)}
                                     className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Mô tả</span>
+                                    <div className="flex flex-col text-left">
+                                        <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Mô tả</span>
+                                        <span className="text-[10px] text-red-500 font-bold mt-0.5 flex items-center gap-1">
+                                            <Info className="w-2.5 h-2.5" /> Mô tả không được chứa thông tin liên lạc
+                                        </span>
+                                    </div>
                                     {showDescription ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showDescription && (
@@ -1114,7 +1130,12 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     onClick={() => setShowImages(!showImages)}
                                     className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
                                 >
-                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Hình ảnh (Tối đa 6 ảnh)</span>
+                                    <div className="flex flex-col text-left">
+                                        <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Hình ảnh (Tối đa 6 ảnh)</span>
+                                        <span className="text-[10px] text-red-500 font-bold mt-0.5 flex items-center gap-1">
+                                            <Info className="w-2.5 h-2.5" /> Hình ảnh không được chứa thông tin liên lạc
+                                        </span>
+                                    </div>
                                     {showImages ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                 </button>
                                 {showImages && (

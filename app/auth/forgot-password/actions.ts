@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { verifyCaptcha } from '@/lib/security/captcha'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function forgotPasswordAction(formData: FormData) {
     // 0. CAPTCHA Check
@@ -31,6 +32,7 @@ export async function forgotPasswordAction(formData: FormData) {
 
     if (error) {
         await logAuthEvent('password_reset', 'failure')
+        await logError('auth_forgot_password_error', error.message, { email }, null)
         return { error: error.message }
     }
 

@@ -101,6 +101,11 @@ export default function AdminSidebar() {
             label: 'Cập nhật tài khoản',
             href: '/admin/profile',
         },
+        {
+            icon: ShieldCheck,
+            label: 'Log lỗi hệ thống',
+            href: '/admin/error-logs',
+        },
     ]
 
     const isActive = (href?: string, submenu?: { href: string }[]) => {

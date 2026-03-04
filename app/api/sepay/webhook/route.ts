@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/server'
 import { checkOrderStatus } from '@/lib/sepay'
 import { resolveCoinsForAmount } from '@/lib/coins/resolveCoins'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function POST(req: NextRequest) {
+    let body: any = {}
     try {
         console.log('SePay Webhook received')
-
-        let body: any = {}
         const contentType = req.headers.get('content-type') || ''
 
         if (contentType.includes('application/json')) {
@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
 
         if (!orderId) {
             console.error('Missing order identifier in webhook payload')
+            await logError('sepay_webhook_missing_id', 'Missing order identifier in webhook payload', { payload: body })
             return NextResponse.json({ success: false, message: 'Missing order_invoice_number' }, { status: 400 })
         }
 
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
 
         if (!order) {
             console.error(`Order ${orderId} not found in SePay`)
+            await logError('sepay_webhook_order_not_found', `Order ${orderId} not found in SePay`, { orderId, payload: body })
             return NextResponse.json({ success: false, message: 'Order not found in SePay' }, { status: 404 })
         }
 
@@ -49,6 +51,7 @@ export async function POST(req: NextRequest) {
         const userId = order.customer_id
         if (!userId) {
             console.error('Missing customer_id in order details')
+            await logError('sepay_webhook_missing_user', 'Missing customer_id in order details', { orderId, payload: body, order })
             return NextResponse.json({ success: false, message: 'Missing customer_id in order' }, { status: 400 })
         }
 
@@ -80,6 +83,7 @@ export async function POST(req: NextRequest) {
 
         if (rpcError) {
             console.error('RPC Error in Webhook:', rpcError)
+            await logError('sepay_webhook_rpc_error', rpcError.message, { orderId, userId, amountVnd, coinsToCredit, rpcError })
             return NextResponse.json({ success: false, message: 'RPC Error' }, { status: 500 })
         }
 
@@ -91,6 +95,7 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ success: true, message: 'Already processed' })
             }
             console.error('RPC Logical Error:', result.message)
+            await logError('sepay_webhook_logic_error', result.message, { orderId, userId, amountVnd, coinsToCredit, result })
             return NextResponse.json({ success: false, message: result.message }, { status: 400 })
         }
 
@@ -99,6 +104,7 @@ export async function POST(req: NextRequest) {
 
     } catch (error) {
         console.error('Webhook error:', error)
+        await logError('sepay_webhook_internal_error', error, { payload: body })
         return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
     }
 }

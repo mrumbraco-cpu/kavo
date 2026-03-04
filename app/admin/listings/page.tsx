@@ -5,7 +5,7 @@ import { Profile } from '@/types/profile';
 import AdminListingButtons from './AdminListingButtons';
 import ListingFilters from './ListingFilters';
 import Link from 'next/link';
-import { FileText, Clock, CheckCircle, XCircle, EyeOff, Lock, User, Mail, Calendar, Phone, Globe, AlertCircle } from 'lucide-react';
+import { FileText, Clock, CheckCircle, XCircle, EyeOff, Lock, User, Mail, Calendar, Phone, Globe, AlertCircle, FileEdit } from 'lucide-react';
 
 const PAGE_SIZE = 20;
 
@@ -21,6 +21,9 @@ interface AdminListingsPageProps {
         is_hidden?: string;
         is_locked?: string;
         creator_type?: string;
+        geo_system?: string;
+        province?: string;
+        sub_local?: string;
     }>;
 }
 
@@ -38,6 +41,9 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
     const isHiddenFilter = params.is_hidden || 'all';
     const isLockedFilter = params.is_locked || 'all';
     const creatorTypeFilter = params.creator_type || 'all';
+    const geoSystem = params.geo_system || 'all';
+    const province = params.province;
+    const subLocal = params.sub_local;
 
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
@@ -84,6 +90,21 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
     if (dateFrom) query = query.gte('created_at', `${dateFrom}T00:00:00`);
     if (dateTo) query = query.lte('created_at', `${dateTo}T23:59:59`);
 
+    // Geography filters
+    if (geoSystem === 'old') {
+        if (province) query = query.eq('province_old', province);
+        if (subLocal) query = query.eq('district_old', subLocal);
+    } else if (geoSystem === 'new') {
+        if (province) query = query.eq('province_new', province);
+        if (subLocal) query = query.eq('ward_new', subLocal);
+    } else if (province) {
+        // Fallback or cross-system search
+        query = query.or(`province_old.eq."${province}",province_new.eq."${province}"`);
+        if (subLocal) {
+            query = query.or(`district_old.eq."${subLocal}",ward_new.eq."${subLocal}"`);
+        }
+    }
+
     // Owner info filters (require filtering the joined profile)
     // Note: PostgREST filtering on joined tables can be tricky if we want HARD filtering of the main record.
     // In this case, we use owner.email.ilike but it might return listings where owner matches.
@@ -105,7 +126,9 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
 
     const stats = {
         total: statsData?.length || 0,
+        draft: statsData?.filter(l => l.status === 'draft').length || 0,
         pending: statsData?.filter(l => l.status === 'pending').length || 0,
+        approvedTotal: statsData?.filter(l => l.status === 'approved').length || 0,
         active: statsData?.filter(l => l.status === 'approved' && !l.is_hidden).length || 0,
         expired: statsData?.filter(l => l.status === 'expired').length || 0,
         hidden: statsData?.filter(l => l.is_hidden).length || 0,
@@ -134,8 +157,8 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                 )}
             </div>
 
-            {/* STATISTICS SUMMARY */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8 px-4 sm:px-0">
+            {/* STATISTICS SUMMARY - 4 CORE STATUSES SUM UP TO TOTAL */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-8 px-4 sm:px-0">
                 <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
@@ -144,6 +167,16 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Tổng tin</span>
                     </div>
                     <div className="text-2xl font-black text-slate-900">{stats.total}</div>
+                </div>
+
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-slate-400">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                            <FileEdit className="w-5 h-5 text-slate-400" />
+                        </div>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Bản nháp</span>
+                    </div>
+                    <div className="text-2xl font-black text-slate-900">{stats.draft}</div>
                 </div>
 
                 <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-amber-400">
@@ -161,9 +194,15 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                         <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
                             <Globe className="w-5 h-5 text-green-600" />
                         </div>
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Đang hiển thị</span>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Đã duyệt</span>
                     </div>
-                    <div className="text-2xl font-black text-slate-900">{stats.active}</div>
+                    <div className="text-2xl font-black text-slate-900 leading-tight">
+                        {stats.approvedTotal}
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tight mt-1 flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3 text-green-500" />
+                            Hiển thị: {stats.active}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-rose-500">
@@ -176,7 +215,7 @@ export default async function AdminListingsPage({ searchParams }: AdminListingsP
                     <div className="text-2xl font-black text-slate-900">{stats.expired}</div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-slate-200">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center">
                             <EyeOff className="w-5 h-5 text-gray-500" />

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { bootstrapProfile } from '@/lib/auth/bootstrapProfile'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
@@ -63,6 +64,7 @@ export async function GET(request: Request) {
 
         // Log failed login attempt for other errors
         await logAuthEvent('login', 'failure')
+        await logError('auth_callback_error', error.message, { code, nextPath }, null)
 
         return NextResponse.redirect(
             `${origin}/auth/login?error=${encodeURIComponent(error.message)}`
@@ -72,6 +74,7 @@ export async function GET(request: Request) {
     // Check if there are error query parameters sent by Supabase
     const errorDescription = requestUrl.searchParams.get('error_description')
     if (errorDescription) {
+        await logError('auth_callback_provider_error', errorDescription, { searchParams: Object.fromEntries(requestUrl.searchParams.entries()) }, null)
         return NextResponse.redirect(
             `${origin}/auth/login?error=${encodeURIComponent(errorDescription)}`
         )

@@ -6,6 +6,7 @@ import { headers } from 'next/headers'
 import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { resolveCoinsForAmount, getTopupDisplayData } from '@/lib/coins/resolveCoins'
+import { logError } from '@/lib/utils/error-logger'
 
 export async function createPaymentRequest(amount: number, nextPath?: string) {
     try {
@@ -48,6 +49,14 @@ export async function createPaymentRequest(amount: number, nextPath?: string) {
         return { success: true, endpoint, payload }
     } catch (error) {
         console.error('Create payment error:', error)
+        // Optionally get user id if they are authenticated
+        let userId = null;
+        try {
+            const user = await requireAuth();
+            userId = user.id;
+        } catch (ignore) { }
+
+        await logError('topup_create_request_error', error, { amount, nextPath }, userId)
         return { success: false, error: 'Không thể tạo yêu cầu thanh toán' }
     }
 }
@@ -74,6 +83,7 @@ export async function verifyTransaction(orderId: string) {
         const order = orders.find((o: any) => o.order_invoice_number === orderId || o.order_id === orderId)
 
         if (!order) {
+            await logError('topup_verify_order_not_found', `Order ${orderId} not found in SePay`, { orderId }, user.id)
             return { success: false, error: 'Không tìm thấy thông tin đơn hàng từ SePay.' }
         }
 
@@ -86,6 +96,7 @@ export async function verifyTransaction(orderId: string) {
 
         // Verify ownership
         if (order.customer_id && order.customer_id !== user.id) {
+            await logError('topup_verify_ownership_mismatch', 'Order does not belong to this user', { orderId, order, userId: user.id }, user.id)
             return { success: false, error: 'Order does not belong to this user.' }
         }
 
@@ -114,6 +125,7 @@ export async function verifyTransaction(orderId: string) {
 
         if (rpcError) {
             console.error('RPC Error:', rpcError)
+            await logError('topup_verify_rpc_error', rpcError.message, { orderId, order, rpcError }, user.id)
             return { success: false, error: 'Lỗi hệ thống: Vui lòng liên hệ Admin (Code: RPC_FAIL).' }
         }
 
@@ -123,6 +135,7 @@ export async function verifyTransaction(orderId: string) {
             if (result.message === 'Transaction already processed') {
                 return { success: true, message: 'Giao dịch đã được xử lý.' }
             }
+            await logError('topup_verify_logic_error', result.message, { orderId, order, result }, user.id)
             return { success: false, error: result.message }
         }
 
@@ -132,6 +145,14 @@ export async function verifyTransaction(orderId: string) {
 
     } catch (error) {
         console.error('Verify transaction error:', error)
+        // Try to get user id for logging
+        let userId = null;
+        try {
+            const user = await requireAuth();
+            userId = user.id;
+        } catch (ignore) { }
+
+        await logError('topup_verify_internal_error', error, { orderId }, userId)
         return { success: false, error: 'Lỗi khi xác thực giao dịch.' }
     }
 }
