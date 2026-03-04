@@ -66,7 +66,7 @@ export default function ContactUnlockBlock({
     // ── Not authenticated ───────────────────────────────────────────────
     if (!isAuthenticated) {
         return (
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
                 {/* Header */}
                 <div className="flex items-center gap-3 pb-5 border-b border-gray-100">
                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
@@ -112,7 +112,7 @@ export default function ContactUnlockBlock({
     // ── Already unlocked ────────────────────────────────────────────────
     if (state === 'unlocked') {
         return (
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
                 {/* Header */}
                 <div className="flex items-center gap-2 mb-5">
                     <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
@@ -178,7 +178,7 @@ export default function ContactUnlockBlock({
 
     // ── Locked ──────────────────────────────────────────────────────────
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
             <h3 className="font-semibold text-gray-900 mb-1 text-sm">Thông tin liên hệ</h3>
             <p className="text-sm text-gray-500 mb-5 leading-relaxed">
                 Mở khóa để liên hệ trực tiếp với chủ không gian.
