@@ -245,6 +245,16 @@ export default function ProfileContent({ user, profile }: ProfileContentProps) {
 
                             {isChangingPassword && (
                                 <form onSubmit={handleUpdatePassword} className="space-y-4 bg-gray-50/50 p-6 rounded-3xl border border-gray-100">
+                                    {/* Hidden username field for accessibility + password manager compatibility */}
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        autoComplete="username"
+                                        defaultValue={user.email}
+                                        aria-hidden="true"
+                                        className="hidden"
+                                        readOnly
+                                    />
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <label className="text-sm font-bold text-gray-700 ml-1">Mật khẩu mới</label>

@@ -21,6 +21,8 @@ export default function PublicFooter() {
                             <img
                                 src="https://www.pavietnam.vn/images/bocongthuong/pa_bo_cong_thuong_xanh.png"
                                 alt="Đã thông báo bộ công thương"
+                                width={128}
+                                height={48}
                                 className="h-12 w-auto filter brightness-90 contrast-125 opacity-80 hover:opacity-100 transition-all duration-300"
                             />
                         </div>

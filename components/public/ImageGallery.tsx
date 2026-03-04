@@ -84,10 +84,10 @@ export default function ImageGallery({ images, title }: Props) {
                 )}
             </div>
 
-            {/* Lightbox */}
+            {/* Lightbox - Only render if index is not null to keep initial DOM small */}
             {lightboxIndex !== null && (
                 <div
-                    className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center"
+                    className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4 sm:p-8"
                     onClick={closeLightbox}
                 >
                     {/* Close button */}
@@ -107,7 +107,7 @@ export default function ImageGallery({ images, title }: Props) {
 
                     {/* Image */}
                     <div
-                        className="relative w-full max-w-5xl h-[80vh] mx-8"
+                        className="relative w-full max-w-5xl h-[70vh] sm:h-[80vh]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <Image
@@ -116,6 +116,7 @@ export default function ImageGallery({ images, title }: Props) {
                             fill
                             className="object-contain"
                             sizes="100vw"
+                            priority
                         />
                     </div>
 

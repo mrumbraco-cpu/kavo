@@ -84,6 +84,15 @@ export default function ContactUnlockBlock({
                     Đăng nhập để xem số điện thoại và Zalo của chủ không gian.
                 </p>
 
+                <div className="flex items-start gap-2.5 p-3 bg-amber-50 rounded-xl border border-amber-100/50 mb-5">
+                    <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                        Hãy liên lạc trước khi đến gặp trực tiếp chủ không gian.
+                    </p>
+                </div>
+
                 <a
                     href={`/auth/login?next=${encodeURIComponent(callbackUrl)}`}
                     className="block w-full py-3 bg-gray-900 text-white text-sm font-semibold text-center rounded-xl hover:bg-gray-800 transition-colors"
@@ -150,9 +159,19 @@ export default function ContactUnlockBlock({
                     )}
                 </div>
 
-                <p className="mt-4 text-xs text-gray-400 leading-relaxed">
-                    Thỏa thuận giá cả và lịch sử dụng diễn ra trực tiếp với chủ không gian.
-                </p>
+                <div className="mt-5 pt-4 border-t border-gray-100">
+                    <div className="flex items-start gap-2.5 p-3 bg-amber-50 rounded-xl border border-amber-100/50">
+                        <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                            Hãy liên lạc trước khi đến gặp trực tiếp chủ không gian.
+                        </p>
+                    </div>
+                    <p className="mt-3 text-[11px] text-gray-400 leading-relaxed italic px-1">
+                        * Thỏa thuận giá cả và lịch sử dụng diễn ra trực tiếp với chủ không gian.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -164,6 +183,15 @@ export default function ContactUnlockBlock({
             <p className="text-sm text-gray-500 mb-5 leading-relaxed">
                 Mở khóa để liên hệ trực tiếp với chủ không gian.
             </p>
+
+            <div className="flex items-start gap-2.5 p-3 bg-amber-50 rounded-xl border border-amber-100/50 mb-5">
+                <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p className="text-xs text-amber-800 leading-relaxed font-black">
+                    LƯU Ý: Hãy liên lạc trước khi đến gặp trực tiếp chủ không gian.
+                </p>
+            </div>
 
             {/* Coin balance */}
             <div className="flex items-center justify-between p-3.5 bg-amber-50 rounded-xl mb-4 border border-amber-100">

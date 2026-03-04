@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
     const timeOfDay = searchParams.get('timeOfDay')?.split(',').filter(Boolean) || [];
     const allResults = searchParams.get('allResults') === 'true';
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const pageSize = parseInt(searchParams.get('pageSize') || '12', 10);
+    const defaultPageSize = process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || '12';
+    const pageSize = parseInt(searchParams.get('pageSize') || defaultPageSize, 10);
 
     // Validate geography: province is mandatory
     if (!province) {
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const { listings, total } = await getSearchResults(
+        const { listings, markers, total } = await getSearchResults(
             {
                 geoSystem,
                 province,
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
             allResults
         );
 
-        const response = NextResponse.json({ listings, total });
+        const response = NextResponse.json({ listings, markers, total });
         response.headers.set('Cache-Control', 'private, no-cache, must-revalidate, max-age=0');
         return response;
     } catch (error) {

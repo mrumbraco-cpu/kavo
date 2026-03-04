@@ -37,5 +37,6 @@ export const DEFAULT_FILTERS: SearchFilters = {
 
 export interface SearchResult {
     listings: any[];
+    markers: any[];
     total: number;
 }

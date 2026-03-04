@@ -314,10 +314,23 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         syncMarkers();
     }, [isLoaded, syncMarkers]);
 
-    // Fit bounds ONLY when map is ready or results change
+    // Fit bounds ONLY when map is ready or results change (NOT on page change)
+    const prevListingsCountRef = useRef(0);
+    const prevListingsIdsHashRef = useRef('');
+
     useEffect(() => {
-        if (!isLoaded) return;
-        fitMarkers();
+        if (!isLoaded || allListings.length === 0) return;
+
+        // Generate a simple hash of IDs to see if the result SET changed
+        const currentIdsHash = allListings.map(l => l.id).sort().join(',');
+        const resultDelta = allListings.length !== prevListingsCountRef.current ||
+            currentIdsHash !== prevListingsIdsHashRef.current;
+
+        if (resultDelta) {
+            fitMarkers();
+            prevListingsCountRef.current = allListings.length;
+            prevListingsIdsHashRef.current = currentIdsHash;
+        }
     }, [isLoaded, allListings, fitMarkers]);
 
     // Smart hover re-center: Only move map if the marker is NOT in the current view

@@ -9,11 +9,12 @@ interface SearchContextType {
     filters: SearchFilters;
     setFilters: (filters: SearchFilters) => void;
     globalListings: Listing[];
+    allMarkers: Listing[];
     total: number;
     isLoading: boolean;
     error: string | null;
     hasSearched: boolean;
-    executeSearch: (filters: SearchFilters) => Promise<void>;
+    executeSearch: (filters: SearchFilters, page?: number) => Promise<void>;
     isModalOpen: boolean;
     setModalOpen: (open: boolean) => void;
     isInitialized: boolean;
@@ -26,6 +27,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const [filters, setFilters] = useState<SearchFilters>(DEFAULT_FILTERS);
     const [globalListings, setGlobalListings] = useState<Listing[]>([]);
+    const [allMarkers, setAllMarkers] = useState<Listing[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -80,15 +82,18 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         }
     }, [filters, isInitialized]);
 
-    const executeSearch = useCallback(async (searchFilters: SearchFilters) => {
+    const executeSearch = useCallback(async (searchFilters: SearchFilters, page: number = 1) => {
         setIsLoading(true);
         setError(null);
         setFilters(searchFilters);
 
         try {
+            const pageSize = process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || '12';
             const params = new URLSearchParams({
                 geoSystem: searchFilters.geoSystem,
                 province: searchFilters.province,
+                page: page.toString(),
+                pageSize: pageSize,
                 ...(searchFilters.district.length ? { district: searchFilters.district.join(',') } : {}),
                 ...(searchFilters.ward.length ? { ward: searchFilters.ward.join(',') } : {}),
                 ...(searchFilters.query.trim() ? { query: searchFilters.query.trim() } : {}),
@@ -101,7 +106,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
                 ...(searchFilters.timeOfDay.length ? { timeOfDay: searchFilters.timeOfDay.join(',') } : {}),
                 ...(searchFilters.priceMin ? { priceMin: searchFilters.priceMin } : {}),
                 ...(searchFilters.priceMax ? { priceMax: searchFilters.priceMax } : {}),
-                allResults: 'true',
             });
 
             // Update URL search params
@@ -115,9 +119,10 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             const res = await fetch(`/api/search?${params.toString()}`);
             if (!res.ok) throw new Error('Tìm kiếm thất bại, vui lòng thử lại.');
 
-            const data: SearchResult = await res.json();
+            const data: { listings: Listing[]; markers: Listing[]; total: number } = await res.json();
             setGlobalListings(data.listings);
-            setTotal(data.total ?? data.listings.length);
+            setAllMarkers(data.markers);
+            setTotal(data.total);
             setHasSearched(true);
             setModalOpen(false); // Close modal on success
         } catch (err) {
@@ -131,6 +136,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         filters,
         setFilters,
         globalListings,
+        allMarkers,
         total,
         isLoading,
         error,
@@ -142,6 +148,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     }), [
         filters,
         globalListings,
+        allMarkers,
         total,
         isLoading,
         error,

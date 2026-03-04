@@ -6,15 +6,10 @@ import PublicFooter from '@/components/public/PublicFooter';
 export function FooterWrapper() {
     const pathname = usePathname();
 
-    // On search page, we only hide footer on mobile
-    // to prevent double scrollbars and maintain the app-like feel.
-    // Desktop layout (lg and up) will still show it.
+    // On search page, the footer is rendered internally within the scrollable list on desktop.
+    // We do not render the main app layout footer here to prevent double scrollbars.
     if (pathname === '/search') {
-        return (
-            <div className="hidden lg:block">
-                <PublicFooter />
-            </div>
-        );
+        return null;
     }
 
     return <PublicFooter />;

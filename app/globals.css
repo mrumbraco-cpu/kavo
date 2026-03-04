@@ -89,6 +89,18 @@
     ::selection {
         @apply bg-accent-gold/20 text-premium-900;
     }
+
+    /* Applied to <html> on the search page (desktop) to hide the outer scrollbar
+       visually while keeping scroll interaction intact (mouse wheel still works) */
+    html.hide-outer-scrollbar {
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    html.hide-outer-scrollbar::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Edge */
+    }
 }
 
 @layer utilities {
@@ -120,5 +132,29 @@
         background-color: #94a3b8;
         border-radius: 20px;
         border: 1px solid #f1f5f9;
+    }
+
+    /* Very subtle scrollbar for inner panels (e.g. search results list) */
+    .scrollbar-subtle {
+        scrollbar-width: thin;
+        scrollbar-color: #e2e8f0 transparent;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .scrollbar-subtle::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .scrollbar-subtle::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-subtle::-webkit-scrollbar-thumb {
+        background-color: #e2e8f0;
+        border-radius: 20px;
+    }
+
+    .scrollbar-subtle::-webkit-scrollbar-thumb:hover {
+        background-color: #cbd5e1;
     }
 }

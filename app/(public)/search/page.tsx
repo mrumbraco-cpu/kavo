@@ -39,16 +39,17 @@ export default async function SearchPage({
     };
 
     const page = typeof resolvedParams.page === 'string' ? parseInt(resolvedParams.page, 10) : 1;
-    const pageSize = typeof resolvedParams.pageSize === 'string' ? parseInt(resolvedParams.pageSize, 10) : 12;
+    const defaultPageSize = Number(process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || 12);
+    const pageSize = typeof resolvedParams.pageSize === 'string' ? parseInt(resolvedParams.pageSize, 10) : defaultPageSize;
 
-    let initialData: { listings: any[]; total: number } = { listings: [], total: 0 };
+    let initialData: { listings: any[]; markers: any[]; total: number } = { listings: [], markers: [], total: 0 };
     if (filters.province) {
         try {
-            initialData = await getSearchResults(filters, page, pageSize, false);
+            initialData = await getSearchResults(filters, page, pageSize, true);
         } catch (e) {
             console.error('SSR Pre-fetch failed', e);
         }
     }
 
-    return <SearchClient ssrListings={initialData.listings} ssrTotal={initialData.total} />;
+    return <SearchClient ssrListings={initialData.listings} ssrMarkers={initialData.markers} ssrTotal={initialData.total} />;
 }

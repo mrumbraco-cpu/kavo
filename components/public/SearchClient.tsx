@@ -10,6 +10,7 @@ import { Listing } from '@/types/listing';
 
 import SearchToolbar from './SearchToolbar';
 import SearchResults from './SearchResults';
+import PublicFooter from '@/components/public/PublicFooter';
 
 const GoongMapViewer = dynamic(() => import('./GoongMapViewer'), {
     ssr: false,
@@ -23,17 +24,19 @@ const GoongMapViewer = dynamic(() => import('./GoongMapViewer'), {
     )
 });
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || 12);
 
 interface SearchClientProps {
     ssrListings?: Listing[];
+    ssrMarkers?: Listing[];
     ssrTotal?: number;
 }
 
-export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchClientProps) {
+export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTotal = 0 }: SearchClientProps) {
     const {
-        globalListings: contextListings,
-        total: contextTotal,
+        globalListings: listings,
+        allMarkers,
+        total,
         isLoading,
         error,
         hasSearched: contextHasSearched,
@@ -43,12 +46,13 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
         executeSearch
     } = useSearch();
 
-    // Use SSR data if context is empty and we haven't searched yet
-    const listings = (contextListings.length > 0 || contextHasSearched) ? contextListings : ssrListings;
-    const total = (contextTotal > 0 || contextHasSearched) ? contextTotal : ssrTotal;
+    // SSR fallback Logic
+    const displayListings = (listings.length > 0 || contextHasSearched) ? listings : ssrListings;
+    const displayMarkers = (allMarkers.length > 0 || contextHasSearched) ? allMarkers : ssrMarkers;
+    const displayTotal = (total > 0 || contextHasSearched) ? total : ssrTotal;
     const hasSearched = contextHasSearched || (ssrListings.length > 0);
 
-    // Auto-trigger search if we have persisted filters AND no SSR data
+    // Filter sync
     useEffect(() => {
         if (isInitialized && !hasSearched && !isLoading && filters.province && ssrListings.length === 0) {
             executeSearch(filters);
@@ -81,14 +85,13 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
         }
     }, [layout, mapActivated]);
 
-    // Prevent double scrollbars on mobile
+    // Prevent double scrollbars: hide outer body scroll on all devices for the search page.
+    // The footer will be rendered inside the scrollable results-list.
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth < 1024) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = 'unset';
-            }
+            // Block scroll entirely on body so it acts like an app layout (100vh)
+            document.body.style.overflow = 'hidden';
+            document.documentElement.classList.remove('hide-outer-scrollbar');
         };
 
         handleResize();
@@ -102,15 +105,13 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
 
 
     // Pagination
-    const pageStart = (currentPage - 1) * PAGE_SIZE;
-    const pageEnd = pageStart + PAGE_SIZE;
-    const currentPageListings = useMemo(() => listings.slice(pageStart, pageEnd), [listings, pageStart, pageEnd]);
-    const currentPageIds = useMemo(() => new Set(currentPageListings.map(l => l.id)), [currentPageListings]);
-    const totalPages = Math.ceil(listings.length / PAGE_SIZE);
+    const currentPageIds = useMemo(() => new Set(displayListings.map(l => l.id)), [displayListings]);
+    const totalPages = Math.ceil(displayTotal / PAGE_SIZE);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         setHoveredId(null);
+        executeSearch(filters, page);
         document.getElementById('results-list')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -118,7 +119,7 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
         <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-white">
             <div className="flex-1 flex flex-col overflow-hidden">
                 <SearchToolbar
-                    total={total}
+                    total={displayTotal}
                     hasSearched={hasSearched}
                     isLoading={isLoading}
                     layout={layout}
@@ -129,13 +130,13 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
                 <div className="flex-1 flex overflow-hidden lg:flex-row flex-col">
                     <div
                         id="results-list"
-                        className={`flex-1 overflow-y-auto scroll-smooth bg-premium-50/20 transition-all duration-300
+                        className={`flex-1 overflow-y-auto scroll-smooth bg-premium-50/20 transition-all duration-300 scrollbar-subtle
                             ${layout === 'map' ? 'hidden' :
                                 layout === 'list' ? 'w-full' :
                                     'w-full lg:w-1/2 lg:shrink-0 border-r border-premium-100'}`}
                     >
                         <SearchResults
-                            listings={currentPageListings}
+                            listings={displayListings}
                             visibleCount={visibleCount}
                             isLoading={isLoading}
                             hasSearched={hasSearched}
@@ -150,6 +151,9 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
                             totalPages={totalPages}
                             onPageChange={handlePageChange}
                         />
+                        <div className="hidden lg:block border-t border-premium-100 bg-white">
+                            <PublicFooter />
+                        </div>
                     </div>
 
                     <div className={`relative bg-premium-100 transition-all duration-300 min-w-0 overflow-hidden
@@ -159,7 +163,7 @@ export default function SearchClient({ ssrListings = [], ssrTotal = 0 }: SearchC
                     >
                         {mapActivated && (
                             <GoongMapViewer
-                                allListings={listings}
+                                allListings={displayMarkers}
                                 currentPageIds={currentPageIds}
                                 hoveredListingId={hoveredId}
                                 onMarkerClick={setHoveredId}

@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { SearchFilters, SearchResult } from '@/types/search';
 import { Listing } from '@/types/listing';
 
-export async function getSearchResults(filters: Partial<SearchFilters>, page: number = 1, pageSize: number = 12, allResults: boolean = false) {
+export async function getSearchResults(filters: Partial<SearchFilters>, page: number = 1, pageSize: number = 12, allResults: boolean = false): Promise<SearchResult> {
     const supabase = await createServerSupabaseClient();
 
     const geoSystem = filters.geoSystem || 'old';
@@ -31,7 +31,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
 
     // Validate geography: province is mandatory
     if (!province) {
-        return { listings: [], total: 0 };
+        return { listings: [], markers: [], total: 0 };
     }
 
     let dbQuery = supabase
@@ -134,12 +134,25 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
 
     const total = results.length;
 
-    if (!allResults) {
-        const offset = (page - 1) * pageSize;
-        results = results.slice(offset, offset + pageSize);
-    }
+    // Create markers from ALL filtered results
+    const markers = results.map(listing => ({
+        id: listing.id,
+        latitude: listing.latitude,
+        longitude: listing.longitude,
+        title: listing.title,
+        status: listing.status,
+        space_type: listing.space_type,
+        location_type: listing.location_type,
+        price_min: listing.price_min,
+        price_max: listing.price_max,
+        images: listing.images
+    }));
 
-    const optimizedResults = results.map(listing => ({
+    // Slicing for pagination
+    const offset = (page - 1) * pageSize;
+    const paginatedResults = results.slice(offset, offset + pageSize);
+
+    const listings = paginatedResults.map(listing => ({
         id: listing.id,
         title: listing.title,
         status: listing.status,
@@ -153,7 +166,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         longitude: listing.longitude
     }));
 
-    return { listings: optimizedResults as unknown as Listing[], total };
+    return { listings: listings as unknown as Listing[], markers: markers as unknown as Listing[], total };
 }
 
 function normalizeVietnamese(text: string): string {

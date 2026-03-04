@@ -1,15 +1,16 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { Listing } from '@/types/listing';
 import ImageGallery from '@/components/public/ImageGallery';
-import MiniMap from '@/components/public/MiniMap';
-import ContactUnlockBlock from '@/components/public/ContactUnlockBlock';
 import Link from 'next/link';
+import ContactUnlockBlock from '@/components/public/ContactUnlockBlock';
 import { decrypt } from '@/lib/utils/encryption';
 import FavoriteButton from '@/components/public/FavoriteButton';
 import ShareButton from '@/components/public/ShareButton';
 import ReportButton from '@/components/public/ReportButton';
+import UrgencyBadge from '@/components/public/UrgencyBadge';
+import MiniMap from '@/components/public/MiniMap';
 
 import { parseListingIdFromSlug } from '@/lib/utils/url';
 
@@ -31,9 +32,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!data) return { title: 'Không tìm thấy không gian – SPSHARE' };
 
+    const description = data.description?.slice(0, 160) || `Khám phá và kết nối trực tiếp với không gian "${data.title}" tại SPSHARE. Marketplace kết nối không gian kinh doanh hàng đầu.`;
+    const title = `${data.title} | SPSHARE`;
+    const url = `https://spaceshare.vn/listings/${slug}`;
+
     return {
-        title: `${data.title} – SPSHARE`,
-        description: data.description?.slice(0, 160) ?? '',
+        title,
+        description,
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            title,
+            description,
+            url,
+            type: 'website', // or 'article'
+            siteName: 'SPSHARE',
+        }
     };
 }
 
@@ -55,6 +70,15 @@ export default async function ListingDetailPage({ params }: Props) {
     const typedListing = listing as Listing;
 
     const { data: { user } } = await supabase.auth.getUser();
+
+    // Fetch unlock count using service role to bypass RLS for public display
+    const serviceSupabase = createServiceRoleClient();
+    const { count: unlockCount, error: countError } = await serviceSupabase
+        .from('contact_unlocks')
+        .select('*', { count: 'exact', head: true })
+        .eq('listing_id', id);
+
+    if (countError) console.error('Error fetching unlock count:', countError);
 
     let coinBalance = 0;
     let alreadyUnlocked = false;
@@ -117,6 +141,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
     const UNLOCK_COST = 10;
     const canUnlock = coinBalance >= UNLOCK_COST;
+    const threshold = parseInt(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || '3', 10);
 
     // Parse and format time slots (same logic as ListingForm)
     const formatTimeSlot = (slot: string): string => {
@@ -355,10 +380,15 @@ export default async function ListingDetailPage({ params }: Props) {
                     {/* ────── RIGHT COLUMN (sticky sidebar) ────────────── */}
                     <div className="lg:block">
                         <div className="sticky top-24 flex flex-col gap-4">
+                            <UrgencyBadge
+                                unlockCount={unlockCount ?? 0}
+                                threshold={threshold}
+                            />
+
                             {/* Author Info (Hardcoded) */}
-                            <div className="flex items-center gap-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
-                                <div className="w-12 h-12 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-300 shadow-sm relative shrink-0 overflow-hidden">
-                                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                                <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-300 relative shrink-0 overflow-hidden">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
@@ -415,6 +445,66 @@ export default async function ListingDetailPage({ params }: Props) {
                         </div>
                     </div>
                 </div>
+
+                {/* ── JSON-LD Structured Data ────────────────────────── */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "Accommodation",
+                            "name": typedListing.title,
+                            "description": typedListing.description,
+                            "image": typedListing.images,
+                            "address": {
+                                "@type": "PostalAddress",
+                                "streetAddress": typedListing.detailed_address,
+                                "addressLocality": typedListing.ward_new || typedListing.district_old,
+                                "addressRegion": typedListing.province_new || typedListing.province_old,
+                                "addressCountry": "VN"
+                            },
+                            "geo": typedListing.latitude ? {
+                                "@type": "GeoCoordinates",
+                                "latitude": typedListing.latitude,
+                                "longitude": typedListing.longitude
+                            } : undefined,
+                            "amenityFeature": typedListing.amenities?.map(a => ({
+                                "@type": "LocationFeatureSpecification",
+                                "name": a,
+                                "value": true
+                            }))
+                        }),
+                    }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BreadcrumbList",
+                            "itemListElement": [
+                                {
+                                    "@type": "ListItem",
+                                    "position": 1,
+                                    "name": "Trang chủ",
+                                    "item": "https://spaceshare.vn/"
+                                },
+                                {
+                                    "@type": "ListItem",
+                                    "position": 2,
+                                    "name": "Tìm kiếm",
+                                    "item": "https://spaceshare.vn/search"
+                                },
+                                {
+                                    "@type": "ListItem",
+                                    "position": 3,
+                                    "name": typedListing.title,
+                                    "item": `https://spaceshare.vn/listings/${slug}`
+                                }
+                            ]
+                        }),
+                    }}
+                />
             </div>
         </div>
     );

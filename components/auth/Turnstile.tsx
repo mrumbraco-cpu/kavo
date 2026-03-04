@@ -35,13 +35,14 @@ export default function Turnstile({ onVerify, onExpire, onError, theme = 'auto' 
     const isLocalDev = typeof window !== 'undefined' &&
         (window.location.hostname === 'localhost' ||
             window.location.hostname === '127.0.0.1' ||
+            window.location.hostname === '::1' ||
             window.location.hostname.startsWith('192.168.') ||
             window.location.hostname.startsWith('10.') ||
             window.location.hostname.startsWith('172.'));
 
-    // Use testing site key for local development to bypass domain restrictions
-    // Site Key: 1x00000000000000000000AA (Always Pass)
-    const activeSiteKey = isLocalDev ? '1x00000000000000000000AA' : siteKey;
+    // ALWAYS use testing key on local development hostnames to avoid domain mismatch
+    // Unless we are NOT on local, then use the provided site key
+    const activeSiteKey = isLocalDev ? '1x00000000000000000000AA' : (siteKey || '');
 
     const onVerifyRef = useRef(onVerify)
     const onExpireRef = useRef(onExpire)
