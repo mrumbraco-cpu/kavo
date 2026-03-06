@@ -28,7 +28,7 @@ export default function PublicFooter() {
                         </div>
 
                         <div className="flex gap-4">
-                            <a href="mailto:contact@viahe.vn" className="w-10 h-10 rounded-xl border border-premium-800 flex items-center justify-center text-premium-400 hover:text-white hover:border-accent-gold hover:bg-premium-900 transition-all duration-300">
+                            <a href="mailto:contact@spaceshare.vn" className="w-10 h-10 rounded-xl border border-premium-800 flex items-center justify-center text-premium-400 hover:text-white hover:border-accent-gold hover:bg-premium-900 transition-all duration-300">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
@@ -63,7 +63,7 @@ export default function PublicFooter() {
                 </div>
 
                 <div className="pt-8 border-t border-premium-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-premium-500">
-                    <p>© 2025 Viahe.vn Marketplace. Proudly Vietnamese.</p>
+                    <p>© 2025 SpaceShare Marketplace. Proudly Vietnamese.</p>
                     <div className="flex gap-8">
                         <span className="hover:text-premium-300 cursor-default">English</span>
                         <span className="text-white cursor-default font-bold underline decoration-accent-gold underline-offset-4">Tiếng Việt</span>

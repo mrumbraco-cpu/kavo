@@ -2,34 +2,43 @@
 
 import Link from 'next/link';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 
 interface UserDropdownProps {
     user: { email?: string };
     profile: { role: string; coin_balance: number } | null;
     isOpen?: boolean;
+    onClose?: () => void;
 }
 
-export default function UserDropdown({ user, profile, isOpen }: UserDropdownProps) {
-    const router = useRouter();
-
+export default function UserDropdown({ user, profile, isOpen, onClose }: UserDropdownProps) {
     const handleLogout = async () => {
         try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+            });
+
+            if (!response.ok) {
+                console.error('Logout API failed, falling back to client signout');
+            }
+        } catch (error) {
+            console.error('Logout failed:', error);
+        } finally {
+            // Ensure client state is cleared and full reload happens
             const supabase = createBrowserSupabaseClient();
             await supabase.auth.signOut();
-        } catch (e) {
-            console.error('Logout error:', e);
-        } finally {
-            // Force return to current host/IP
-            window.location.href = '/';
+            window.location.reload();
         }
     };
+
+    if (isOpen === false) return null;
+
     return (
-        <div className={`absolute right-0 top-full mt-1 w-64 bg-white rounded-xl shadow-xl border border-premium-100 py-1 transition-all duration-200 z-50 ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+        <div className={`absolute right-0 top-full mt-1 w-64 bg-white rounded-xl shadow-xl border border-premium-100 py-1 transition-all duration-200 z-50 ${isOpen !== undefined ? 'opacity-100 visible' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}>
             {profile?.role === 'admin' && (
                 <>
                     <Link
                         href="/admin"
+                        onClick={onClose}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
                     >
                         <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,6 +52,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard"
+                onClick={onClose}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-premium-900 hover:bg-premium-50 transition-colors"
             >
                 <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,6 +65,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard/coins"
+                onClick={onClose}
                 className="flex items-center justify-between px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
             >
                 <div className="flex items-center gap-2">
@@ -72,6 +83,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard/listings"
+                onClick={onClose}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
             >
                 <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,6 +94,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard/favorites"
+                onClick={onClose}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
             >
                 <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,6 +105,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard/unlocked-listings"
+                onClick={onClose}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
             >
                 <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,6 +116,7 @@ export default function UserDropdown({ user, profile, isOpen }: UserDropdownProp
 
             <Link
                 href="/dashboard/profile"
+                onClick={onClose}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-premium-600 hover:bg-premium-50 hover:text-premium-900 transition-colors"
             >
                 <svg className="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">

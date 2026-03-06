@@ -1,11 +1,12 @@
 import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/proxy'
+import { updateSession } from '@/lib/supabase/middleware'
 
 export async function proxy(request: NextRequest) {
-    const host = request.headers.get('host') || 'localhost:3000'
-    console.log(`[Proxy] ${request.method} ${request.nextUrl.pathname} | Host: ${host}`)
     return await updateSession(request)
 }
+
+export default proxy
+
 
 export const config = {
     matcher: [

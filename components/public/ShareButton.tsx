@@ -17,7 +17,7 @@ export default function ShareButton({ title }: ShareButtonProps) {
             try {
                 await navigator.share({
                     title: title,
-                    text: `Xem không gian này trên VIAHE.VN: ${title}`,
+                    text: `Xem không gian này trên SPSHARE: ${title}`,
                     url: url,
                 });
             } catch (err) {

@@ -79,8 +79,8 @@ function LoginContent() {
         } else {
             const next = searchParams.get('next')
             const redirectTo = next && next.startsWith('/') && next !== '/' ? next : '/dashboard'
-            // Use window.location.href instead of router.push to force the correct domain/IP
-            window.location.href = redirectTo;
+            router.push(redirectTo)
+            router.refresh()
         }
     }
 

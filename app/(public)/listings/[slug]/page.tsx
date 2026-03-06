@@ -422,7 +422,7 @@ export default async function ListingDetailPage({ params }: Props) {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <p>
-                                        <span className="font-semibold text-gray-500">VIAHE.VN</span> chỉ là kênh kết nối. Mọi thỏa thuận và thanh toán đều diễn ra trực tiếp với chủ không gian.
+                                        <span className="font-semibold text-gray-500">SPSHARE</span> chỉ là kênh kết nối. Mọi thỏa thuận và thanh toán đều diễn ra trực tiếp với chủ không gian.
                                     </p>
                                 </div>
                             </div>
@@ -487,19 +487,19 @@ export default async function ListingDetailPage({ params }: Props) {
                                     "@type": "ListItem",
                                     "position": 1,
                                     "name": "Trang chủ",
-                                    "item": "https://viahe.vn/"
+                                    "item": "https://spaceshare.vn/"
                                 },
                                 {
                                     "@type": "ListItem",
                                     "position": 2,
                                     "name": "Tìm kiếm",
-                                    "item": "https://viahe.vn/search"
+                                    "item": "https://spaceshare.vn/search"
                                 },
                                 {
                                     "@type": "ListItem",
                                     "position": 3,
                                     "name": typedListing.title,
-                                    "item": `https://viahe.vn/listings/${slug}`
+                                    "item": `https://spaceshare.vn/listings/${slug}`
                                 }
                             ]
                         }),

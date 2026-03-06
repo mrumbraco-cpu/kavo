@@ -34,16 +34,11 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/auth/logout', {
-                method: 'POST',
-            })
-
-            if (response.ok) {
-                router.push('/auth/login')
-                router.refresh()
-            }
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (error) {
-            console.error('Logout failed:', error)
+            console.error('Logout failed:', error);
+        } finally {
+            window.location.href = '/';
         }
     }
 
@@ -94,11 +89,11 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
                 <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
                     <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                            <span className="text-white font-black text-xl italic tracking-tighter" aria-hidden="true">VH</span>
+                            <span className="text-white font-black text-xl italic tracking-tighter" aria-hidden="true">SP</span>
                         </div>
                         <div>
                             <span className="text-lg font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent leading-none block">
-                                VIAHE.VN
+                                SPSHARE
                             </span>
                             <p className="text-[10px] text-blue-500 uppercase tracking-wider font-bold mt-1">Dashboard</p>
                         </div>

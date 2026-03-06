@@ -37,18 +37,11 @@ export default function AdminSidebar() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/auth/logout', {
-                method: 'POST',
-            })
-
-            if (response.ok) {
-                router.push('/auth/login')
-                router.refresh()
-                // Also trigger client-side refresh for all segments
-                window.location.href = '/auth/login'
-            }
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (error) {
-            console.error('Logout failed:', error)
+            console.error('Logout failed:', error);
+        } finally {
+            window.location.href = '/';
         }
     }
 

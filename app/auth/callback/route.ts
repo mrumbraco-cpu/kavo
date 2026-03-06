@@ -6,17 +6,20 @@ import { logError } from '@/lib/utils/error-logger'
 
 export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
-    const host = request.headers.get('host') || requestUrl.host
-    const protocol = request.headers.get('x-forwarded-proto') || (requestUrl.protocol.replace(':', '')) || 'http'
-    const currentOrigin = `${protocol}://${host}`
-
-    console.log(`>>> [AUTH CALLBACK] Protocol: ${protocol} | Host: ${host} | Origin: ${currentOrigin}`)
-    console.log(`>>> [AUTH CALLBACK] Full Request URL: ${request.url}`)
 
     const code = requestUrl.searchParams.get('code')
     const nextParam = requestUrl.searchParams.get('next')
     const nextPath = nextParam && nextParam.startsWith('/') && nextParam !== '/' ? nextParam : '/dashboard'
-    const finalRedirectUrl = `${currentOrigin}${nextPath}`
+
+    // In Next.js dev mode, request.url may resolve to localhost even when
+    // the browser accessed the app via a local network IP (e.g. 192.168.x.x).
+    // We read the actual Host header to construct the correct redirect origin
+    // so the user is sent back to the host they came from.
+    const hostHeader = request.headers.get('host') // e.g. "192.168.1.5:3000" or "localhost:3000"
+    const protocol = request.headers.get('x-forwarded-proto') || requestUrl.protocol.replace(':', '')
+    const origin = hostHeader
+        ? `${protocol}://${hostHeader}`
+        : requestUrl.origin
 
     if (code) {
         const supabase = await createServerSupabaseClient()
@@ -35,7 +38,7 @@ export async function GET(request: Request) {
         const rateLimit = await checkAuthRateLimit('login')
         if (!rateLimit.allowed) {
             return NextResponse.redirect(
-                `${currentOrigin}/auth/login?error=${encodeURIComponent(rateLimit.error || 'Too many login attempts')}`
+                `${origin}/auth/login?error=${encodeURIComponent(rateLimit.error || 'Too many login attempts')}`
             )
         }
 
@@ -51,12 +54,11 @@ export async function GET(request: Request) {
             if (profile?.lock_status === 'hard') {
                 await supabase.auth.signOut()
                 return NextResponse.redirect(
-                    `${currentOrigin}/auth/login?error=account_hard_locked`
+                    `${origin}/auth/login?error=account_hard_locked`
                 )
             }
 
-            console.log(`>>> [AUTH CALLBACK] Success! Redirecting to: ${finalRedirectUrl}`)
-            return NextResponse.redirect(finalRedirectUrl)
+            return NextResponse.redirect(`${origin}${nextPath}`)
         }
 
         // --- PKCE Resilience Logic ---
@@ -65,7 +67,7 @@ export async function GET(request: Request) {
         // but we couldn't create a session.
         if (error.message.includes('code verifier') || error.message.includes('PKCE')) {
             return NextResponse.redirect(
-                `${currentOrigin}/auth/login?message=${encodeURIComponent('Email đã được xác thực thành công. Vui lòng đăng nhập để bắt đầu.')}`
+                `${origin}/auth/login?message=${encodeURIComponent('Email đã được xác thực thành công. Vui lòng đăng nhập để bắt đầu.')}`
             )
         }
 
@@ -73,9 +75,9 @@ export async function GET(request: Request) {
         await logAuthEvent('login', 'failure')
         await logError('auth_callback_error', error.message, { code, nextPath }, null)
 
-        const errorUrl = `${currentOrigin}/auth/login?error=${encodeURIComponent(error.message)}`
-        console.log(`>>> [AUTH CALLBACK] Error! Redirecting to: ${errorUrl}`)
-        return NextResponse.redirect(errorUrl)
+        return NextResponse.redirect(
+            `${origin}/auth/login?error=${encodeURIComponent(error.message)}`
+        )
     }
 
     // Check if there are error query parameters sent by Supabase
@@ -83,11 +85,11 @@ export async function GET(request: Request) {
     if (errorDescription) {
         await logError('auth_callback_provider_error', errorDescription, { searchParams: Object.fromEntries(requestUrl.searchParams.entries()) }, null)
         return NextResponse.redirect(
-            `${currentOrigin}/auth/login?error=${encodeURIComponent(errorDescription)}`
+            `${origin}/auth/login?error=${encodeURIComponent(errorDescription)}`
         )
     }
 
     return NextResponse.redirect(
-        `${currentOrigin}/auth/login?error=Link+expired+or+already+used.+Please+try+signing+up+again.`
+        `${origin}/auth/login?error=Link+expired+or+already+used.+Please+try+signing+up+again.`
     )
 }

@@ -3,7 +3,7 @@ import crypto from 'crypto';
 // IMPORTANT: In production, this key must be stored in Environment Variables (Next.js/Vercel)
 // If changing the key, OLD data will be unreadable. 
 // Fallback is kept for local dev/current data compatibility, but MUST BE SET in Vercel.
-const KEY_SOURCE = process.env.ENCRYPTION_KEY || 'viahe-vn-super-secret-key-32-chars';
+const KEY_SOURCE = process.env.ENCRYPTION_KEY || 'spshare-super-secret-key-32-chars';
 
 // Smarter key handling: If hex (64 chars), use as is. Otherwise, slice/pad to 32 bytes.
 const getEncryptionKey = (source: string) => {

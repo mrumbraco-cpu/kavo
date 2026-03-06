@@ -43,17 +43,11 @@ export default function AdminHeader({ userEmail, coinBalance }: AdminHeaderProps
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/auth/logout', {
-                method: 'POST',
-            })
-
-            if (response.ok) {
-                router.push('/auth/login')
-                router.refresh()
-                window.location.href = '/auth/login'
-            }
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (error) {
-            console.error('Logout failed:', error)
+            console.error('Logout failed:', error);
+        } finally {
+            window.location.href = '/';
         }
     }
 

@@ -29,16 +29,11 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/api/auth/logout', {
-                method: 'POST',
-            })
-
-            if (response.ok) {
-                router.push('/auth/login')
-                router.refresh()
-            }
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (error) {
-            console.error('Logout failed:', error)
+            console.error('Logout failed:', error);
+        } finally {
+            window.location.href = '/';
         }
     }
 
@@ -90,10 +85,10 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 transition-transform active:scale-95">
                         <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-                            <span className="text-white font-black text-sm italic tracking-tighter">VH</span>
+                            <span className="text-white font-black text-sm italic tracking-tighter">SP</span>
                         </div>
                         <span className="text-base font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                            VIAHE.VN
+                            SPSHARE
                         </span>
                     </Link>
 
@@ -131,9 +126,9 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                             <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/30">
                                 <div className="flex items-center gap-3">
                                     <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                                        <span className="text-white font-black text-lg italic tracking-tighter">VH</span>
+                                        <span className="text-white font-black text-lg italic tracking-tighter">SP</span>
                                     </div>
-                                    <span className="text-lg font-bold text-gray-900">VIAHE.VN</span>
+                                    <span className="text-lg font-bold text-gray-900">SPSHARE</span>
                                 </div>
                                 <button
                                     type="button"
