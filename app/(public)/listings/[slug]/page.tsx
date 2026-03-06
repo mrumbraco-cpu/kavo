@@ -30,11 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .eq('is_hidden', false)
         .single();
 
-    if (!data) return { title: 'Không tìm thấy không gian – SPSHARE' };
+    if (!data) return { title: 'Không tìm thấy không gian – VIAHE.VN' };
 
-    const description = data.description?.slice(0, 160) || `Khám phá và kết nối trực tiếp với không gian "${data.title}" tại SPSHARE. Marketplace kết nối không gian kinh doanh hàng đầu.`;
-    const title = `${data.title} | SPSHARE`;
-    const url = `https://spaceshare.vn/listings/${slug}`;
+    const description = data.description?.slice(0, 160) || `Khám phá và kết nối trực tiếp với không gian "${data.title}" tại VIAHE.VN. Marketplace kết nối không gian kinh doanh hàng đầu.`;
+    const title = `${data.title} | VIAHE.VN`;
+    const url = `https://viahe.vn/listings/${slug}`;
 
     return {
         title,
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             description,
             url,
             type: 'website', // or 'article'
-            siteName: 'SPSHARE',
+            siteName: 'VIAHE.VN',
         }
     };
 }

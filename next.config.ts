@@ -16,6 +16,10 @@ const cspHeader = `
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    allowedDevOrigins: [
+        '192.168.1.5',
+        '192.168.1.5:3000',
+    ],
     async headers() {
         return [
             {
@@ -39,6 +43,7 @@ const nextConfig = {
         ];
     },
     images: {
+        qualities: [75, 90],
         remotePatterns: [
             {
                 protocol: 'https',

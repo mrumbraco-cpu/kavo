@@ -4,63 +4,98 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
     title: 'Trang Chủ',
-    description: 'SpaceShare - Nền tảng kết nối không gian thương mại hàng đầu Việt Nam. Workshop, vỉa hè, kệ hàng, studio - Tìm và chia sẻ ngay.',
+    description: 'Vỉahè.vn - Chia Sẻ Mặt Bằng Kinh Doanh - Cho Thuê Chỗ Bán Hàng Theo Ngày. Workshop, vỉa hè, kệ hàng, studio - Tìm và chia sẻ ngay.',
 };
 
 export default function Home() {
     return (
         <div className="flex flex-col">
             {/* Hero Section */}
-            <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden pt-28 pb-16">
-                {/* Hero Background Image */}
-                <div className="absolute inset-0 z-0">
-                    <Image
-                        src="/hero-spaceshare.png"
-                        alt="Shared modern commercial space"
-                        fill
-                        priority
-                        className="object-cover brightness-[0.7]"
-                        sizes="100vw"
-                        quality={85}
-                        fetchPriority="high"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-premium-950/20 via-transparent to-premium-950/40" />
-                </div>
+            <section className="min-h-[90vh] flex items-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-white pt-20 pb-0 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 
-                <div className="relative z-10 max-w-5xl mx-auto text-center text-white w-full">
-                    <div className="glass-premium py-10 px-6 md:p-16 rounded-[2.5rem] border-white/30 shadow-2xl animate-premium-fade-up">
-                        <h1 className="text-4xl md:text-7xl font-bold mb-6 leading-tight font-outfit text-slate-900">
-                            Chia sẻ không gian,<br />
-                            <span className="text-blue-600">tối ưu chi phí</span>
-                        </h1>
-                        <p className="text-lg md:text-2xl mb-12 text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                            Kết nối những người có không gian với những người cần mặt bằng nhỏ để kinh doanh. Từ kệ hàng, vỉa hè đến góc nhỏ trong cửa hàng.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                            <Link
-                                href="/search"
-                                className="px-10 py-5 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-600/20 active:scale-95 duration-200"
-                            >
-                                <svg className="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                Tìm không gian ngay
-                            </Link>
-                            <div className="relative group/post">
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-amber-500 text-white text-xs font-black rounded-full shadow-xl whitespace-nowrap z-10 animate-premium-float border-2 border-white uppercase tracking-wider">
-                                    Thưởng 10 xu
-                                </div>
+                        {/* Left: Text content */}
+                        <div className="animate-premium-fade-up py-8 lg:py-16 flex flex-col items-center lg:items-start text-center lg:text-left">
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold mb-8 border border-blue-200">
+                                <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                Nền tảng chia sẻ mặt bằng #1 Việt Nam
+                            </div>
+
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-outfit text-slate-900 mb-6">
+                                Chia sẻ theo buổi,<br />
+                                <span className="text-blue-600">tối ưu chi phí</span>
+                            </h1>
+
+                            <p className="text-lg md:text-xl text-slate-500 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
+                                Hàng ngàn vị trí đang chia sẻ cho những người cần mặt bằng nhỏ để kinh doanh hoặc ký gửi hàng bán. Từ kệ hàng, vỉa hè đến góc nhỏ trong cửa hàng.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full">
                                 <Link
-                                    href="/dashboard/listings/new"
-                                    className="px-10 py-5 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-3 shadow-xl active:scale-95 duration-200"
+                                    href="/search"
+                                    className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-base hover:bg-blue-700 transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-blue-600/25 active:scale-95 duration-200"
                                 >
-                                    <svg className="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                                    <svg className="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
-                                    Đăng tin chia sẻ
+                                    Tìm chỗ bán hàng
                                 </Link>
+                                <div className="relative group/post">
+                                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-500 text-white text-xs font-black rounded-full shadow-lg whitespace-nowrap z-10 animate-premium-float border-2 border-white uppercase tracking-wider">
+                                        Thưởng 10 xu
+                                    </div>
+                                    <Link
+                                        href="/dashboard/listings/new"
+                                        className="px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold text-base hover:bg-slate-50 transition-all flex items-center justify-center gap-2.5 shadow-lg active:scale-95 duration-200"
+                                    >
+                                        <svg className="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Đăng tin chia sẻ
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Stats row */}
+                            <div className="flex items-center justify-center lg:justify-start gap-8 mt-12 pt-8 border-t border-slate-200 w-full">
+                                {[
+                                    { value: "10.000+", label: "Vị trí lý tưởng" },
+                                    { value: "20+", label: "Tỉnh thành" },
+                                    { value: "20.000+", label: "Kết nối thành công" },
+                                ].map((stat, i) => (
+                                    <div key={i} className="text-center">
+                                        <div className="text-xl md:text-2xl font-bold text-slate-900 font-outfit">{stat.value}</div>
+                                        <div className="text-xs text-slate-500 mt-0.5">{stat.label}</div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
+
+                        {/* Right: Hero Image */}
+                        <div className="relative h-[420px] lg:h-[600px] w-full flex-shrink-0">
+                            {/* Decorative blobs */}
+                            <div className="absolute top-8 right-8 w-72 h-72 bg-blue-200/40 rounded-full blur-3xl pointer-events-none" />
+                            <div className="absolute bottom-8 left-8 w-56 h-56 bg-amber-200/30 rounded-full blur-3xl pointer-events-none" />
+
+                            {/* Image container with rounded clipping */}
+                            <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-200/60">
+                                <Image
+                                    src="/hero-street-food.png"
+                                    alt="Khu phố ăn vặt nhộn nhịp buổi sáng — vỉa hè bình dân đến cửa hàng hiện đại"
+                                    fill
+                                    priority
+                                    className="object-cover"
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    quality={90}
+                                    fetchPriority="high"
+                                />
+                                {/* Subtle gradient overlay at bottom */}
+                                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>
@@ -81,9 +116,9 @@ function WhyChooseSection() {
     return (
         <section className="py-32 px-4 bg-white">
             <div className="max-w-7xl mx-auto text-center">
-                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 font-outfit">Tại sao chọn SpaceShare?</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 font-outfit">Tại sao chọn <span className="text-accent-gold">vỉahè.vn</span></h2>
                 <p className="text-slate-500 text-lg mb-20 max-w-2xl mx-auto leading-relaxed font-medium">
-                    Nền tảng đầu tiên tại Việt Nam chuyên về chia sẻ không gian kinh doanh quy mô vừa và cực nhỏ
+                    Một khoảng sân nhỏ, thậm chí là một ngăn tủ lạnh trống cũng giúp bạn có thêm thu nhập bằng việc chia sẻ nó cho người cần chỗ bán hàng
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -96,7 +131,7 @@ function WhyChooseSection() {
                         {
                             icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
                             title: "Linh hoạt thời gian",
-                            desc: "Thuê theo giờ, ngày hoặc tháng. Phù hợp cho workshop ngắn ngày hay kệ trưng bày dài hạn"
+                            desc: "Thuê theo giờ, ngày hoặc tháng. Phù hợp cho buôn bán nhỏ lẻ, sự kiện ngắn ngày hay kệ trưng bày dài hạn"
                         },
                         {
                             icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />,
@@ -142,13 +177,13 @@ function HowItWorksSection() {
                             <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center border border-blue-600/30">
                                 <span className="text-blue-400 font-black">F1</span>
                             </div>
-                            <h3 className="text-2xl md:text-3xl font-bold text-white font-outfit">Sở hữu không gian</h3>
+                            <h3 className="text-2xl md:text-3xl font-bold text-white font-outfit">Sở hữu mặt bằng</h3>
                         </div>
                         <div className="space-y-8 pl-2 border-l-2 border-blue-600/20 ml-6">
                             {[
-                                { step: 1, title: "Đăng tin nhanh gọn", desc: "Mô tả diện tích, tiện ích và mong muốn hợp tác." },
-                                { step: 2, title: "Kiểm duyệt an toàn", desc: "Đội ngũ SpaceShare xác minh tính năng trực của tin đăng." },
-                                { step: 3, title: "Kết nối trực tiếp", desc: "Nhận yêu cầu và tự do thỏa thuận với đối tác tiềm năng." }
+                                { step: 1, title: "Đăng tin nhanh gọn", desc: "Mô tả ưu điểm vị trí, thời gian cho thuê và giá thuê." },
+                                { step: 2, title: "Kiểm duyệt an toàn", desc: "Đội ngũ Admin xác minh thông tin chính xác." },
+                                { step: 3, title: "Kết nối trực tiếp", desc: "F2 quan tâm sẽ liên hệ trực tiếp với bạn. Không trung gian." }
                             ].map((step, i) => (
                                 <div key={i} className="flex gap-6 relative group">
                                     <div className="absolute -left-[2.1rem] top-0.5 w-4 h-4 bg-slate-900 border-2 border-blue-500 rounded-full z-10 transition-all group-hover:scale-125 group-hover:bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
@@ -171,9 +206,9 @@ function HowItWorksSection() {
                         </div>
                         <div className="space-y-8 pl-2 border-l-2 border-green-600/20 ml-6">
                             {[
-                                { step: 1, title: "Tìm kiếm thông minh", desc: "Lọc theo khu vực và ngân sách chính xác ý định." },
-                                { step: 2, title: "Mở khóa liên hệ", desc: "Dùng xu để nhận thông tin liên hệ chính chủ F1." },
-                                { step: 3, title: "Hợp tác thành công", desc: "Trao đổi sâu và ký kết thỏa thuận bền vững." }
+                                { step: 1, title: "Tìm kiếm thông minh", desc: "Lọc theo khu vực, ngân sách và nhu cầu cụ thể." },
+                                { step: 2, title: "Liên hệ chủ mặt bằng", desc: "Mặt bằng phù hợp? Liên hệ ngay." },
+                                { step: 3, title: "Hợp tác đơn giản", desc: "Không đặt cọc, không hợp đồng ràng buộc." }
                             ].map((step, i) => (
                                 <div key={i} className="flex gap-6 relative group">
                                     <div className="absolute -left-[2.1rem] top-0.5 w-4 h-4 bg-slate-900 border-2 border-green-500 rounded-full z-10 transition-all group-hover:scale-125 group-hover:bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]" />
@@ -198,9 +233,9 @@ function CtaBannerSection() {
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 50%)', backgroundSize: '4px 4px' }} />
 
             <div className="max-w-4xl mx-auto text-center text-white relative z-10">
-                <h2 className="text-4xl md:text-6xl font-bold mb-8 font-outfit tracking-tight">Vươn tầm kinh doanh cùng <br className="hidden md:block" /> SpaceShare</h2>
+                <h2 className="text-4xl md:text-6xl font-bold mb-8 font-outfit tracking-tight">Sẵn sàng bắt đầu?</h2>
                 <p className="text-xl md:text-2xl text-blue-100 mb-14 max-w-2xl mx-auto leading-relaxed">
-                    Tham gia cộng đồng chia sẻ không gian lớn nhất Việt Nam ngay hôm nay và tối ưu tiềm năng mặt bằng của bạn.
+                    Tham gia cộng đồng chia sẻ mặt bằng lớn nhất Việt Nam ngay hôm nay và tối ưu thu nhập của bạn.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                     <Link
@@ -211,13 +246,13 @@ function CtaBannerSection() {
                     </Link>
                     <div className="relative group/post flex justify-center">
                         <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-accent-gold text-white text-xs font-black rounded-full shadow-xl whitespace-nowrap z-10 animate-premium-float border-2 border-white uppercase tracking-wider">
-                            Miễn phí đăng tin
+                            Thưởng 10 xu
                         </div>
                         <Link
                             href="/dashboard/listings/new"
                             className="px-10 py-5 bg-blue-900/40 text-white border border-blue-500 rounded-2xl font-bold text-lg hover:bg-blue-900/60 transition-all shadow-xl w-full sm:w-auto text-center active:scale-95 duration-200 backdrop-blur-sm"
                         >
-                            Bắt đầu ngay
+                            Đăng tin chia sẻ
                         </Link>
                     </div>
                 </div>

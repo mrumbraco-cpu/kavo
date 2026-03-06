@@ -17,32 +17,32 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | SPSHARE - Marketplace Kết Nối Không Gian',
-        default: 'SPSHARE - Nền Tảng Chia Sẻ Không Gian Kinh Doanh Hàng Đầu',
+        template: '%s | VIAHE.VN - Marketplace Kết Nối Không Gian',
+        default: 'VIAHE.VN - Chia Sẻ Mặt Bằng Kinh Doanh - Thuê Chỗ Bán Hàng Theo Buổi',
     },
     description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ. Workshop, sự kiện, kệ hàng, vỉa hè - Tối ưu chi phí, tăng giá trị.',
-    metadataBase: new URL('https://spaceshare.vn'),
+    metadataBase: new URL('https://viahe.vn'),
     keywords: ['chia sẻ không gian', 'thuê chỗ ngồi', 'workshop', 'mặt bằng nhỏ', 'kinh doanh', 'spaceshare'],
-    authors: [{ name: 'SPSHARE Team' }],
+    authors: [{ name: 'VIAHE.VN Team' }],
     openGraph: {
         type: 'website',
         locale: 'vi_VN',
-        url: 'https://spaceshare.vn',
-        siteName: 'SPSHARE',
-        title: 'SPSHARE - Marketplace Kết Nối Không Gian',
+        url: 'https://viahe.vn',
+        siteName: 'VIAHE.VN',
+        title: 'VIAHE.VN - Marketplace Kết Nối Không Gian',
         description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ.',
         images: [
             {
                 url: '/og-image.jpg',
                 width: 1200,
                 height: 630,
-                alt: 'SPSHARE Marketplace',
+                alt: 'VIAHE.VN Marketplace',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'SPSHARE - Marketplace Kết Nối Không Gian',
+        title: 'VIAHE.VN - Marketplace Kết Nối Không Gian',
         description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ.',
         images: ['/og-image.jpg'],
     },
