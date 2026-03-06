@@ -4,7 +4,7 @@ import { getSearchResults } from '@/lib/services/search';
 import { SearchFilters } from '@/types/search';
 
 export const metadata: Metadata = {
-    title: 'Tìm kiếm không gian – SPSHARE',
+    title: 'Tìm kiếm không gian – VIAHE.VN',
     description: 'Khám phá và kết nối trực tiếp với các không gian workshop, lớp học, sự kiện và nhiều hơn nữa tại Việt Nam.',
 };
 

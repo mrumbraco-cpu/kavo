@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
 
 const UserDropdown = dynamic(() => import('./UserDropdown'), {
     ssr: false,
@@ -16,12 +17,31 @@ interface Props {
 export default function PublicNavbarActions({ user, profile }: Props) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
     const isListingDetail = pathname.startsWith('/listings/');
     const isSearchPage = pathname === '/search';
     const showPostButton = isSearchPage || isListingDetail;
 
+    // Handle click outside to close menu
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [pathname, searchParams]);
+
     if (!user) {
-        // Only set 'next' if we're not on the home page, so home page login goes to dashboard
+        // ... (existing guest logic)
         const nextParam = pathname !== '/'
             ? `?next=${encodeURIComponent(pathname + (searchParams.toString() ? '?' + searchParams.toString() : ''))}`
             : '';
@@ -76,24 +96,26 @@ export default function PublicNavbarActions({ user, profile }: Props) {
                     </Link>
                 </div>
             )}
-            {/* User dropdown */}
-            <div className="relative group">
+            {/* User dropdown wrapper */}
+            <div className="relative" ref={menuRef}>
                 <button
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-premium-50 transition-colors cursor-pointer"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors cursor-pointer ${isMenuOpen ? 'bg-premium-50' : 'hover:bg-premium-50'}`}
                     aria-label="Menu người dùng"
+                    aria-expanded={isMenuOpen}
                 >
                     <div className="w-7 h-7 rounded-full bg-premium-900 flex items-center justify-center">
                         <span className="text-white text-xs font-bold uppercase">
                             {user.email?.[0] ?? 'U'}
                         </span>
                     </div>
-                    <svg className="w-4 h-4 text-premium-400" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 text-premium-400 transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
 
-                {/* Dropdown - Dynamically loaded */}
-                <UserDropdown user={user} profile={profile} />
+                {/* Dropdown - Controlled by state */}
+                <UserDropdown user={user} profile={profile} isOpen={isMenuOpen} />
             </div>
         </div>
     );

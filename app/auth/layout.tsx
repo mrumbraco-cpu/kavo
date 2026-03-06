@@ -12,9 +12,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                     <div className="p-8 pb-0 flex items-center justify-between">
                         <Link href="/" className="flex items-center gap-2 group transition-opacity hover:opacity-80">
                             <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center shadow-sm">
-                                <span className="text-white font-bold text-lg leading-none">S</span>
+                                <span className="text-white font-bold text-lg leading-none">V</span>
                             </div>
-                            <span className="text-xl font-bold text-gray-900 tracking-tight">SPSHARE</span>
+                            <span className="text-xl font-bold text-gray-900 tracking-tight">VIAHE.VN</span>
                         </Link>
                     </div>
 
@@ -36,7 +36,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                     <div className="max-w-xl relative z-10 px-8">
                         <span className="text-7xl text-[#333333] font-serif absolute -top-10 -left-2 leading-none">&quot;</span>
                         <p className="text-3xl font-medium leading-relaxed mb-8 text-white relative z-10 tracking-tight">
-                            Spshare is the best product experience I&apos;ve had in years. Not just tech - taste. From docs to latency to the URL structure that makes you think &quot;oh, that&apos;s obvious&quot; Feels like every other platform should study how they built it @spshare I love you
+                            Viahe is the best product experience I&apos;ve had in years. Not just tech - taste. From docs to latency to the URL structure that makes you think &quot;oh, that&apos;s obvious&quot; Feels like every other platform should study how they built it @viahe.vn I love you
                         </p>
                         <div className="flex items-center gap-4 mt-12">
                             <div className="w-12 h-12 rounded-full bg-gray-700 overflow-hidden flex items-center justify-center text-lg font-semibold border border-gray-600">

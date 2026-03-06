@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     },
     description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ. Workshop, sự kiện, kệ hàng, vỉa hè - Tối ưu chi phí, tăng giá trị.',
     metadataBase: new URL('https://viahe.vn'),
-    keywords: ['chia sẻ không gian', 'thuê chỗ ngồi', 'workshop', 'mặt bằng nhỏ', 'kinh doanh', 'spaceshare'],
+    keywords: ['chia sẻ không gian', 'thuê chỗ ngồi', 'workshop', 'mặt bằng nhỏ', 'kinh doanh', 'viahe'],
     authors: [{ name: 'VIAHE.VN Team' }],
     openGraph: {
         type: 'website',

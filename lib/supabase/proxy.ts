@@ -15,7 +15,7 @@ export async function updateSession(request: NextRequest) {
                     return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
                     supabaseResponse = NextResponse.next({
                         request,
                     })
@@ -28,12 +28,8 @@ export async function updateSession(request: NextRequest) {
     )
 
     // IMPORTANT: Avoid writing any logic between createServerClient and
-    // supabase.auth.getUser(). A simple mistake can make it very hard to debug
-    // auth issues.
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    // supabase.auth.getUser().
+    const { data: { user } } = await supabase.auth.getUser()
 
     if (
         !user &&
@@ -43,28 +39,14 @@ export async function updateSession(request: NextRequest) {
         request.nextUrl.pathname !== '/search' &&
         !request.nextUrl.pathname.startsWith('/listings')
     ) {
-        // no user, potentially redirect to login page
-        // but for now, we just let it through and let page-level auth handle it
-        // unless we want to global-protect routes here.
-        // Actually, the global rules say: "Direct access to dashboard without login is forbidden"
         if (request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin')) {
-            const url = request.nextUrl.clone()
-            url.pathname = '/auth/login'
-            return NextResponse.redirect(url)
+            const host = request.headers.get('host') || request.nextUrl.host
+            const protocol = request.headers.get('x-forwarded-proto') || (request.nextUrl.protocol.replace(':', '')) || 'http'
+            const redirectUrl = `${protocol}://${host}/auth/login?next=${encodeURIComponent(request.nextUrl.pathname)}`
+            console.log(`[Proxy] Auth required. Redirecting to: ${redirectUrl}`)
+            return NextResponse.redirect(redirectUrl)
         }
     }
-
-    // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-    // creating a new response object with NextResponse.next() make sure to:
-    // 1. Pass the request in it, like so:
-    //    const myNewResponse = NextResponse.next({ request })
-    // 2. Copy the cookies from supabaseResponse, like so:
-    //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-    // 3. Change the myNewResponse object to fit your needs, but avoid changing
-    //    the cookies!
-    // 4. Finally, return myNewResponse.
-    // If this is not done, you may be causing the browser and server to go out
-    // of sync and terminate the user's session prematurelly.
 
     return supabaseResponse
 }

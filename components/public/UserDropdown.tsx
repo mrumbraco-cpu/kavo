@@ -7,18 +7,25 @@ import { useRouter } from 'next/navigation';
 interface UserDropdownProps {
     user: { email?: string };
     profile: { role: string; coin_balance: number } | null;
+    isOpen?: boolean;
 }
 
-export default function UserDropdown({ user, profile }: UserDropdownProps) {
+export default function UserDropdown({ user, profile, isOpen }: UserDropdownProps) {
     const router = useRouter();
 
     const handleLogout = async () => {
-        const supabase = createBrowserSupabaseClient();
-        await supabase.auth.signOut();
-        router.refresh();
+        try {
+            const supabase = createBrowserSupabaseClient();
+            await supabase.auth.signOut();
+        } catch (e) {
+            console.error('Logout error:', e);
+        } finally {
+            // Force return to current host/IP
+            window.location.href = '/';
+        }
     };
     return (
-        <div className="absolute right-0 top-full mt-1 w-64 bg-white rounded-xl shadow-xl border border-premium-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+        <div className={`absolute right-0 top-full mt-1 w-64 bg-white rounded-xl shadow-xl border border-premium-100 py-1 transition-all duration-200 z-50 ${isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
             {profile?.role === 'admin' && (
                 <>
                     <Link

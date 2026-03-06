@@ -1,7 +1,9 @@
 import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { updateSession } from '@/lib/supabase/proxy'
 
 export async function proxy(request: NextRequest) {
+    const host = request.headers.get('host') || 'localhost:3000'
+    console.log(`[Proxy] ${request.method} ${request.nextUrl.pathname} | Host: ${host}`)
     return await updateSession(request)
 }
 

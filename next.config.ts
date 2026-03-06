@@ -16,10 +16,6 @@ const cspHeader = `
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    allowedDevOrigins: [
-        '192.168.1.5',
-        '192.168.1.5:3000',
-    ],
     async headers() {
         return [
             {
@@ -53,11 +49,19 @@ const nextConfig = {
             },
         ],
     },
+    allowedDevOrigins: [
+        '192.168.1.5',
+        '192.168.1.5:3000',
+        'viahe.vn',
+        'www.viahe.vn'
+    ],
     experimental: {
         serverActions: {
             allowedOrigins: [
                 'localhost:3000',
                 '192.168.1.5:3000',
+                'viahe.vn',
+                'www.viahe.vn',
                 '*.ngrok-free.app',
                 '*.ngrok.io'
             ],
