@@ -15,10 +15,12 @@ export async function unlockContactAction(listingId: string) {
         return { success: false, error: 'Vui lòng đăng nhập để thực hiện.' };
     }
 
+    const unlockCost = Number(process.env.CONTACT_UNLOCK_COST || 10);
     // 2. Call the RPC to handle deduction and recording
     // The RPC handles: check balance, deduct coins, create transaction, create unlock record
     const { data, error } = await supabase.rpc('unlock_listing_contact', {
         p_listing_id: listingId,
+        p_cost: unlockCost
     });
 
     if (error || !data?.success) {

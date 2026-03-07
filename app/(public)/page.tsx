@@ -106,6 +106,9 @@ export default function Home() {
             {/* How It Works Section */}
             <HowItWorksSection />
 
+            {/* Testimonials Section */}
+            <TestimonialsSection />
+
             {/* CTA Banner Area */}
             <CtaBannerSection />
         </div>
@@ -255,6 +258,98 @@ function CtaBannerSection() {
                             Đăng tin chia sẻ
                         </Link>
                     </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function TestimonialsSection() {
+    return (
+        <section className="py-32 px-4 bg-slate-50 relative overflow-hidden">
+            <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-20">
+                    <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 font-outfit">
+                        Người thật, <span className="text-blue-600">việc thật</span>
+                    </h2>
+                    <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                        Lắng nghe chia sẻ từ cộng đồng, những người đã kết nối thành công qua vỉahè.vn
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {[
+                        {
+                            type: "F1",
+                            role: "Chủ mặt bằng",
+                            name: "Chú Hùng",
+                            location: "Quận 1, TP.HCM",
+                            content: "Tiệm của tôi nằm ở vị trí đắc địa nhưng buổi sáng vỉa hè lại bỏ trống. Từ khi chia sẻ cho chị Phượng bán bánh mì, không gian trở nên nhộn nhịp hơn hẳn, vừa có thêm tiền chợ hằng tháng lại vừa vui vì tiệm lúc nào cũng đông khách.",
+                            image: "/f1_luxury_owner_hung_1772889742723.png",
+                            color: "blue"
+                        },
+                        {
+                            type: "F2",
+                            role: "Kinh doanh nhỏ",
+                            name: "Chị Phượng",
+                            location: "Chuỗi Bánh Mì Phượng",
+                            content: "Tìm được chỗ bán bánh mì theo buổi sáng thế này thật sự rất thuận tiện. Giá thuê hợp lý, không cần cọc, cũng chẳng cần thủ tục rườm rà, giúp tôi yên tâm khởi nghiệp mà không lo gánh nặng chi phí mặt bằng.",
+                            image: "/f2_banh_mi_vendor_1772870853514.png",
+                            color: "green"
+                        },
+                        {
+                            type: "F2",
+                            role: "Kinh doanh nhỏ",
+                            name: "Em Vy",
+                            location: "Bán Trà Sữa & Đồ Ăn Vặt",
+                            content: "Vừa mới ra trường muốn tập tành buôn bán nhỏ nên vỉahè.vn là lựa chọn số 1. Em chỉ cần thuê 1 góc nhỏ từ 4h chiều đến tối để bán trà sữa, bán ngày nào trả tiền thuê ngày đó, cực kỳ tiết kiệm và hiệu quả.",
+                            image: "/f2_tea_vendor_1772870870947.png",
+                            color: "amber"
+                        }
+                    ].map((item, i) => (
+                        <div key={i} className="group bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 hover:-translate-y-2 transition-all duration-300">
+                            <div className="flex items-start gap-4 mb-8">
+                                <div className="relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg ring-4 ring-slate-50">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <div>
+                                    <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider mb-2 ${item.type === 'F1'
+                                        ? 'bg-blue-100 text-blue-600'
+                                        : item.color === 'green' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'
+                                        }`}>
+                                        {item.type} • {item.role}
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-800 font-outfit">{item.name}</h3>
+                                    <p className="text-slate-400 text-xs font-medium">{item.location}</p>
+                                </div>
+                            </div>
+
+                            <div className="relative">
+                                <svg className="absolute -top-4 -left-2 w-8 h-8 text-slate-100 -z-10" fill="currentColor" viewBox="0 0 32 32">
+                                    <path d="M10 8v8h6l-2.286 9H10l2.286-9H8V8h2zm14 0v8h6l-2.286 9h-3.714l2.286-9h-2.286V8h2z" />
+                                </svg>
+                                <p className="text-slate-600 leading-relaxed italic">
+                                    "{item.content}"
+                                </p>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                                <div className="flex gap-0.5">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <svg key={star} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <span className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">Đã xác minh</span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

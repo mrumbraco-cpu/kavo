@@ -139,7 +139,7 @@ export default async function ListingDetailPage({ params }: Props) {
         }
     }
 
-    const UNLOCK_COST = 10;
+    const UNLOCK_COST = Number(process.env.NEXT_PUBLIC_CONTACT_UNLOCK_COST || 10);
     const canUnlock = coinBalance >= UNLOCK_COST;
     const threshold = parseInt(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || '3', 10);
 
@@ -262,9 +262,11 @@ export default async function ListingDetailPage({ params }: Props) {
                             <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Giá thuê theo buổi</p>
                             {typedListing.price_min > 0 || typedListing.price_max > 0 ? (
                                 <p className="text-3xl font-bold text-gray-900">
-                                    {typedListing.price_min === typedListing.price_max
+                                    {typedListing.price_min > 0 && (typedListing.price_max <= 0 || typedListing.price_min === typedListing.price_max)
                                         ? `${typedListing.price_min.toLocaleString('vi-VN')} ₫`
-                                        : `${typedListing.price_min.toLocaleString('vi-VN')} – ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
+                                        : typedListing.price_min === 0 && typedListing.price_max > 0
+                                            ? `Đến ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
+                                            : `${typedListing.price_min.toLocaleString('vi-VN')} – ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
                                     }
                                 </p>
                             ) : (

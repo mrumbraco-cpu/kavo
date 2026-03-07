@@ -41,6 +41,7 @@ export function formatCompactPrice(n: number): string {
  */
 export function formatPriceRange(min: number, max: number): string {
     if (min === 0 && max === 0) return 'Miễn phí';
-    if (min === max) return `${formatCompactPrice(min)} ₫`;
+    if (min > 0 && (max <= 0 || min === max)) return `${formatCompactPrice(min)} ₫`;
+    if (min === 0 && max > 0) return `Đến ${formatCompactPrice(max)} ₫`;
     return `${formatCompactPrice(min)} – ${formatCompactPrice(max)} ₫`;
 }
