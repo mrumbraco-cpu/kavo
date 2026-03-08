@@ -5,6 +5,8 @@ import { bootstrapProfile } from '@/lib/auth/bootstrapProfile'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { verifyCaptcha } from '@/lib/security/captcha'
 import { logError } from '@/lib/utils/error-logger'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
+
 
 export async function registerAction(formData: FormData) {
     // 1. CAPTCHA Check
@@ -36,7 +38,7 @@ export async function registerAction(formData: FormData) {
     if (error) {
         await logAuthEvent('register', 'failure')
         await logError('auth_register_error', error.message, { email }, null)
-        return { error: error.message }
+        return { error: translateAuthMessage(error.message) }
     }
 
     // Log success
