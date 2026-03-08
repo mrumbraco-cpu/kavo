@@ -3,6 +3,7 @@ import Link from 'next/link';
 interface BrandLogoProps {
     className?: string;
     iconOnly?: boolean;
+    hideTextOnMobile?: boolean;
     dark?: boolean;
     href?: string | null;
     scale?: number;
@@ -11,6 +12,7 @@ interface BrandLogoProps {
 export default function BrandLogo({
     className = '',
     iconOnly = false,
+    hideTextOnMobile = false,
     dark = false,
     href = '/',
     scale = 1
@@ -37,7 +39,7 @@ export default function BrandLogo({
                 </svg>
             </div>
             {!iconOnly && (
-                <span className={`text-xl font-bold tracking-tight transition-colors duration-200 ${dark ? 'text-white' : 'text-premium-900 group-hover:text-premium-700'}`}>
+                <span className={`text-xl font-bold tracking-tight transition-colors duration-200 ${dark ? 'text-white' : 'text-premium-900 group-hover:text-premium-700'} ${hideTextOnMobile ? 'hidden sm:inline-block' : ''}`}>
                     CHOBAN<span className={dark ? 'text-white/80' : 'text-accent-gold'}>.VN</span>
                 </span>
             )}

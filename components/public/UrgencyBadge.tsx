@@ -42,7 +42,7 @@ const UrgencyBadge: React.FC<UrgencyBadgeProps> = ({ unlockCount, threshold }) =
                     Còn 1 slot
                 </p>
                 <p className="text-sm text-gray-500 mt-0.5">
-                    Hãy mở khóa để liên hệ chủ ngay
+                    Hãy nhanh tay liên hệ chủ ngay
                 </p>
             </div>
         </div>

@@ -116,12 +116,13 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     };
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-white">
-            <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-white">
+            <div className="flex-1 flex flex-col overflow-hidden relative">
                 <SearchToolbar
                     total={displayTotal}
                     hasSearched={hasSearched}
                     isLoading={isLoading}
+                    province={filters.province}
                     layout={layout}
                     onLayoutChange={setLayout}
                     onOpenFilters={() => setModalOpen(true)}
@@ -130,7 +131,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                 <div className="flex-1 flex overflow-hidden lg:flex-row flex-col">
                     <div
                         id="results-list"
-                        className={`flex-1 overflow-y-auto scroll-smooth bg-premium-50/20 transition-all duration-300 scrollbar-subtle
+                        className={`flex-1 overflow-y-auto scroll-smooth bg-premium-50/20 transition-all duration-300 scrollbar-subtle mobile-safe-padding lg:pb-0
                             ${layout === 'map' ? 'hidden' :
                                 layout === 'list' ? 'w-full' :
                                     'w-full lg:w-1/2 lg:shrink-0 border-r border-premium-100'}`}

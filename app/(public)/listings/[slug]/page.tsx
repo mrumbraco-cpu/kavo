@@ -228,13 +228,13 @@ export default async function ListingDetailPage({ params }: Props) {
                         {/* Badges + Address */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
                             <div className="flex flex-wrap gap-1.5">
-                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm uppercase tracking-tighter">
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm uppercase tracking-tighter transition-all duration-300">
                                     <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     Verified
                                 </span>
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-100 uppercase tracking-widest shadow-sm shadow-blue-700/5">
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-blue-600/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm uppercase tracking-tighter transition-all duration-300">
                                     <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                     </svg>

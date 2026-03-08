@@ -36,11 +36,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                         </p>
                         <div className="flex items-center gap-4 mt-12">
                             <div className="w-12 h-12 rounded-full bg-gray-700 overflow-hidden flex items-center justify-center text-lg font-semibold border border-gray-600">
-                                U
+                                MH
                             </div>
                             <div>
-                                <p className="font-semibold text-white">Happy User</p>
-                                <span className="text-gray-400 text-sm">@happy_user</span>
+                                <p className="font-semibold text-white">Bánh Mì Má Hải Partners</p>
+                                <span className="text-gray-400 text-sm">@mahai_partners</span>
                             </div>
                         </div>
                     </div>
