@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Lock, AlertCircle, CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
 import { resetPasswordAction } from '@/app/auth/reset-password/actions'
 import Turnstile from './Turnstile'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
 export default function ResetPasswordForm() {
     const [password, setPassword] = useState('')
@@ -38,7 +39,7 @@ export default function ResetPasswordForm() {
         const result = await resetPasswordAction(formData)
 
         if (result.error) {
-            setError(result.error)
+            setError(translateAuthMessage(result.error))
             setLoading(false)
         } else {
             setMessage('Mật khẩu đã được thay đổi thành công! Đang chuyển hướng...')

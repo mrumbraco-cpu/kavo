@@ -32,7 +32,7 @@ export default function BrandLogo({
             </div>
             {!iconOnly && (
                 <span className={`text-xl font-bold tracking-tight transition-colors duration-200 ${dark ? 'text-white' : 'text-premium-900 group-hover:text-premium-700'}`}>
-                    Space<span className={dark ? 'text-white/80' : 'text-accent-gold'}>Share</span>
+                    CHOBAN<span className={dark ? 'text-white/80' : 'text-accent-gold'}>.VN</span>
                 </span>
             )}
         </div>

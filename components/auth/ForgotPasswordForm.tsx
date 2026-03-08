@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Mail, ArrowLeft, AlertCircle, CheckCircle2, Loader2, Send } from 'lucide-react'
 import { forgotPasswordAction } from '@/app/auth/forgot-password/actions'
 import Turnstile from './Turnstile'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
 export default function ForgotPasswordForm() {
     const [email, setEmail] = useState('')
@@ -31,7 +32,7 @@ export default function ForgotPasswordForm() {
         const result = await forgotPasswordAction(formData)
 
         if (result.error) {
-            setError(result.error)
+            setError(translateAuthMessage(result.error))
             setLoading(false)
         } else {
             setSuccess(true)

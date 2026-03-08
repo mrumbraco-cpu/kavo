@@ -17,32 +17,32 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | VIAHE.VN - Marketplace Kết Nối Không Gian',
-        default: 'VIAHE.VN - Chia Sẻ Mặt Bằng Kinh Doanh - Thuê Chỗ Bán Hàng Theo Buổi',
+        template: '%s | CHOBAN.VN - Marketplace Kết Nối Không Gian',
+        default: 'CHOBAN.VN - Chia Sẻ Mặt Bằng Kinh Doanh - Thuê Chỗ Bán Hàng Theo Buổi',
     },
     description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ. Workshop, sự kiện, kệ hàng, vỉa hè - Tối ưu chi phí, tăng giá trị.',
-    metadataBase: new URL('https://viahe.vn'),
-    keywords: ['chia sẻ không gian', 'thuê chỗ ngồi', 'workshop', 'mặt bằng nhỏ', 'kinh doanh', 'spaceshare'],
-    authors: [{ name: 'VIAHE.VN Team' }],
+    metadataBase: new URL('https://choban.vn'),
+    keywords: ['chia sẻ không gian', 'thuê chỗ ngồi', 'workshop', 'mặt bằng nhỏ', 'kinh doanh', 'choban'],
+    authors: [{ name: 'CHOBAN.VN Team' }],
     openGraph: {
         type: 'website',
         locale: 'vi_VN',
-        url: 'https://viahe.vn',
-        siteName: 'VIAHE.VN',
-        title: 'VIAHE.VN - Marketplace Kết Nối Không Gian',
-        description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ.',
+        url: 'https://choban.vn',
+        siteName: 'CHOBAN.VN',
+        title: 'CHOBAN.VN - Marketplace Kết Nối Không Gian',
+        description: 'Kết nối trực tiếp người có không gian dư thừa with người cần mặt bằng kinh doanh nhỏ.',
         images: [
             {
                 url: '/og-image.jpg',
                 width: 1200,
                 height: 630,
-                alt: 'VIAHE.VN Marketplace',
+                alt: 'CHOBAN.VN Marketplace',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'VIAHE.VN - Marketplace Kết Nối Không Gian',
+        title: 'CHOBAN.VN - Marketplace Kết Nối Không Gian',
         description: 'Kết nối trực tiếp người có không gian dư thừa với người cần mặt bằng kinh doanh nhỏ.',
         images: ['/og-image.jpg'],
     },

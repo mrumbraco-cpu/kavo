@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { bootstrapProfile } from '@/lib/auth/bootstrapProfile'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { logError } from '@/lib/utils/error-logger'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
 export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
@@ -38,7 +39,7 @@ export async function GET(request: Request) {
         const rateLimit = await checkAuthRateLimit('login')
         if (!rateLimit.allowed) {
             return NextResponse.redirect(
-                `${origin}/auth/login?error=${encodeURIComponent(rateLimit.error || 'Too many login attempts')}`
+                `${origin}/auth/login?error=${encodeURIComponent(translateAuthMessage(rateLimit.error) || 'Quá nhiều lượt thử đăng nhập')}`
             )
         }
 
@@ -76,7 +77,7 @@ export async function GET(request: Request) {
         await logError('auth_callback_error', error.message, { code, nextPath }, null)
 
         return NextResponse.redirect(
-            `${origin}/auth/login?error=${encodeURIComponent(error.message)}`
+            `${origin}/auth/login?error=${encodeURIComponent(translateAuthMessage(error.message))}`
         )
     }
 
@@ -85,11 +86,11 @@ export async function GET(request: Request) {
     if (errorDescription) {
         await logError('auth_callback_provider_error', errorDescription, { searchParams: Object.fromEntries(requestUrl.searchParams.entries()) }, null)
         return NextResponse.redirect(
-            `${origin}/auth/login?error=${encodeURIComponent(errorDescription)}`
+            `${origin}/auth/login?error=${encodeURIComponent(translateAuthMessage(errorDescription))}`
         )
     }
 
     return NextResponse.redirect(
-        `${origin}/auth/login?error=Link+expired+or+already+used.+Please+try+signing+up+again.`
+        `${origin}/auth/login?error=${encodeURIComponent('Liên kết đã hết hạn hoặc đã được sử dụng. Vui lòng thử đăng ký lại.')}`
     )
 }

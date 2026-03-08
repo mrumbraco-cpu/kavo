@@ -30,11 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .eq('is_hidden', false)
         .single();
 
-    if (!data) return { title: 'Không tìm thấy không gian – VIAHE.VN' };
+    if (!data) return { title: 'Không tìm thấy không gian – CHOBAN.VN' };
 
-    const description = data.description?.slice(0, 160) || `Khám phá và kết nối trực tiếp với không gian "${data.title}" tại VIAHE.VN. Marketplace kết nối không gian kinh doanh hàng đầu.`;
-    const title = `${data.title} | VIAHE.VN`;
-    const url = `https://viahe.vn/listings/${slug}`;
+    const description = data.description?.slice(0, 160) || `Khám phá và kết nối trực tiếp với không gian "${data.title}" tại CHOBAN.VN. Marketplace kết nối không gian kinh doanh hàng đầu.`;
+    const title = `${data.title} | CHOBAN.VN`;
+    const url = `https://choban.vn/listings/${slug}`;
 
     return {
         title,
@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title,
             description,
             url,
-            type: 'website', // or 'article'
-            siteName: 'VIAHE.VN',
+            type: 'website',
+            siteName: 'CHOBAN.VN',
         }
     };
 }
@@ -424,7 +424,7 @@ export default async function ListingDetailPage({ params }: Props) {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <p>
-                                        <span className="font-semibold text-gray-500">SPSHARE</span> chỉ là kênh kết nối. Mọi thỏa thuận và thanh toán đều diễn ra trực tiếp với chủ không gian.
+                                        <span className="font-semibold text-gray-500">CHOBAN.VN</span> chỉ là kênh kết nối. Mọi thỏa thuận và thanh toán đều diễn ra trực tiếp với chủ không gian.
                                     </p>
                                 </div>
                             </div>
@@ -489,19 +489,19 @@ export default async function ListingDetailPage({ params }: Props) {
                                     "@type": "ListItem",
                                     "position": 1,
                                     "name": "Trang chủ",
-                                    "item": "https://spaceshare.vn/"
+                                    "item": "https://choban.vn/"
                                 },
                                 {
                                     "@type": "ListItem",
                                     "position": 2,
                                     "name": "Tìm kiếm",
-                                    "item": "https://spaceshare.vn/search"
+                                    "item": "https://choban.vn/search"
                                 },
                                 {
                                     "@type": "ListItem",
                                     "position": 3,
                                     "name": typedListing.title,
-                                    "item": `https://spaceshare.vn/listings/${slug}`
+                                    "item": `https://choban.vn/listings/${slug}`
                                 }
                             ]
                         }),

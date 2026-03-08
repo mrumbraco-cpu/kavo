@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export const metadata: Metadata = {
     title: 'Trang Chủ',
-    description: 'Vỉahè.vn - Chia Sẻ Mặt Bằng Kinh Doanh - Cho Thuê Chỗ Bán Hàng Theo Ngày. Workshop, vỉa hè, kệ hàng, studio - Tìm và chia sẻ ngay.',
+    description: 'CHOBAN.VN - Chia Sẻ Mặt Bằng Kinh Doanh - Cho Thuê Chỗ Bán Hàng Theo Ngày. Workshop, vỉa hè, kệ hàng, studio - Tìm và chia sẻ ngay.',
 };
 
 export default function Home() {
@@ -119,7 +119,7 @@ function WhyChooseSection() {
     return (
         <section className="py-32 px-4 bg-white">
             <div className="max-w-7xl mx-auto text-center">
-                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 font-outfit">Tại sao chọn <span className="text-accent-gold">vỉahè.vn</span></h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 font-outfit">Tại sao chọn <span className="text-accent-gold">CHOBAN.VN</span></h2>
                 <p className="text-slate-500 text-lg mb-20 max-w-2xl mx-auto leading-relaxed font-medium">
                     Một khoảng sân nhỏ, thậm chí là một ngăn tủ lạnh trống cũng giúp bạn có thêm thu nhập bằng việc chia sẻ nó cho người cần chỗ bán hàng
                 </p>
@@ -273,7 +273,7 @@ function TestimonialsSection() {
                         Người thật, <span className="text-blue-600">việc thật</span>
                     </h2>
                     <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
-                        Lắng nghe chia sẻ từ cộng đồng, những người đã kết nối thành công qua vỉahè.vn
+                        Lắng nghe chia sẻ từ cộng đồng và những người đã kết nối thành công qua CHOBAN.VN
                     </p>
                 </div>
 
@@ -302,7 +302,7 @@ function TestimonialsSection() {
                             role: "Kinh doanh nhỏ",
                             name: "Em Vy",
                             location: "Bán Trà Sữa & Đồ Ăn Vặt",
-                            content: "Vừa mới ra trường muốn tập tành buôn bán nhỏ nên vỉahè.vn là lựa chọn số 1. Em chỉ cần thuê 1 góc nhỏ từ 4h chiều đến tối để bán trà sữa, bán ngày nào trả tiền thuê ngày đó, cực kỳ tiết kiệm và hiệu quả.",
+                            content: "Vừa mới ra trường muốn tập tành buôn bán nhỏ nên CHOBAN.VN là lựa chọn số 1. Em chỉ cần thuê 1 góc nhỏ từ 4h chiều đến tối để bán trà sữa, bán ngày nào trả tiền thuê ngày đó, cực kỳ tiết kiệm và hiệu quả.",
                             image: "/f2_tea_vendor_1772870870947.png",
                             color: "amber"
                         }

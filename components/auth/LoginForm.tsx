@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, Lock, AlertCircle, CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
 import Turnstile from './Turnstile'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -47,10 +48,10 @@ function LoginContent() {
         if (errorParam === 'account_hard_locked') {
             setError('Tài khoản của bạn đã bị khóa cứng do vi phạm chính sách của hệ thống.')
         } else if (errorParam) {
-            setError(errorParam)
+            setError(translateAuthMessage(errorParam))
         }
 
-        if (messageParam) setMessage(messageParam)
+        if (messageParam) setMessage(translateAuthMessage(messageParam))
     }, [searchParams])
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -74,7 +75,7 @@ function LoginContent() {
         const result = await loginAction(formData)
 
         if (result.error) {
-            setError(result.error)
+            setError(translateAuthMessage(result.error))
             setLoading(false)
         } else {
             const next = searchParams.get('next')
@@ -98,7 +99,7 @@ function LoginContent() {
             })
             if (error) throw error
         } catch (error: any) {
-            setError(error.message)
+            setError(translateAuthMessage(error.message))
             setLoading(false)
         }
     }

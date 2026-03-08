@@ -4,8 +4,8 @@ import { getSearchResults } from '@/lib/services/search';
 import { SearchFilters } from '@/types/search';
 
 export const metadata: Metadata = {
-    title: 'Tìm kiếm không gian – SPSHARE',
-    description: 'Khám phá và kết nối trực tiếp với các không gian workshop, lớp học, sự kiện và nhiều hơn nữa tại Việt Nam.',
+    title: 'Tìm kiếm không gian – CHOBAN.VN',
+    description: 'Khám phá và kết nối trực tiếp với các không gian kinh doanh, workshop, kệ hàng, vỉa hè tại Việt Nam.',
 };
 
 export default async function SearchPage({

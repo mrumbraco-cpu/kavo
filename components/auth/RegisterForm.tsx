@@ -7,6 +7,7 @@ import { Mail, Lock, AlertCircle, Loader2, ArrowRight, UserPlus } from 'lucide-r
 import { registerAction } from '@/app/auth/register/actions'
 import { createBrowserSupabaseClient } from '@/lib/supabase/client'
 import Turnstile from './Turnstile'
+import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -60,12 +61,12 @@ function RegisterContent() {
         const result = await registerAction(formData)
 
         if (result.error) {
-            setError(result.error)
+            setError(translateAuthMessage(result.error))
             setLoading(false)
         } else if (result.redirect) {
             router.push(result.redirect)
         } else {
-            router.push(`/auth/login?message=${encodeURIComponent(result.message || '')}&next=${encodeURIComponent(next)}`)
+            router.push(`/auth/login?message=${encodeURIComponent(translateAuthMessage(result.message) || '')}&next=${encodeURIComponent(next)}`)
         }
     }
 
@@ -82,7 +83,7 @@ function RegisterContent() {
             })
             if (oauthError) throw oauthError
         } catch (err: any) {
-            setError(err.message)
+            setError(translateAuthMessage(err.message))
             setLoading(false)
         }
     }
