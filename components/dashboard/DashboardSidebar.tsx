@@ -14,6 +14,7 @@ import {
     Unlock
 } from 'lucide-react'
 import { formatCompactPrice } from '@/lib/utils/format'
+import BrandLogo from '@/components/public/BrandLogo'
 
 interface MenuItem {
     icon: React.ElementType
@@ -86,18 +87,9 @@ export default function DashboardSidebar({ userEmail, coinBalance }: DashboardSi
         <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white border-r border-gray-200 shadow-sm z-30">
             <div className="flex flex-col flex-1 overflow-y-auto">
                 {/* Logo Section */}
-                <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
-                    <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-95">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                            <span className="text-white font-black text-xl italic tracking-tighter" aria-hidden="true">CB</span>
-                        </div>
-                        <div>
-                            <span className="text-lg font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent leading-none block">
-                                CHOBAN.VN
-                            </span>
-                            <p className="text-[10px] text-blue-500 uppercase tracking-wider font-bold mt-1">Dashboard</p>
-                        </div>
-                    </Link>
+                <div className="px-6 py-5 border-b border-gray-100">
+                    <BrandLogo />
+                    <p className="text-[10px] text-blue-500 uppercase tracking-wider font-bold mt-1 ml-11">Dashboard</p>
                 </div>
 
                 {/* User Info & Action Button */}

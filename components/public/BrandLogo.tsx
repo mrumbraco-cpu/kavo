@@ -20,13 +20,19 @@ export default function BrandLogo({
 
     const content = (
         <div className={`flex items-center gap-2.5 group ${className}`} style={{ transform: scale !== 1 ? `scale(${scale})` : undefined, transformOrigin: 'left center' }}>
-            <div className={`w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:scale-105 ${dark ? 'bg-white text-premium-900' : 'bg-premium-900 text-white shadow-md shadow-premium-900/10'}`}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className={`w-10 h-10 flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-105`}>
+                <svg viewBox="0 0 40 40" className="w-full h-full overflow-visible drop-shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Mảnh ghép 1 - Đại diện cho F1 (Chủ nhà) */}
                     <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.5}
-                        d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
+                        d="M 20 4 L 4 14 L 8 14 L 8 30 A 4 4 0 0 0 12 34 L 20 34 L 20 23 A 4 4 0 0 0 20 15 L 20 4 Z"
+                        fill={dark ? "#ffffff" : "#2563eb"}
+                        className="transition-transform duration-500 ease-out group-hover:-translate-x-1 origin-right"
+                    />
+                    {/* Mảnh ghép 2 - Đại diện cho F2 (Người kinh doanh) - Lồng vào mảnh 1 */}
+                    <path
+                        d="M 20 4 L 20 15 A 4 4 0 0 1 20 23 L 20 34 L 28 34 A 4 4 0 0 0 32 30 L 32 14 L 36 14 L 20 4 Z"
+                        fill={"#d4af37"}
+                        className="transition-transform duration-500 ease-out group-hover:translate-x-1 origin-left"
                     />
                 </svg>
             </div>

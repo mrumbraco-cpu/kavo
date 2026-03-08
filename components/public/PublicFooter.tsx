@@ -28,7 +28,7 @@ export default function PublicFooter() {
                         </div>
 
                         <div className="flex gap-4">
-                            <a href="mailto:contact@choban.vn" className="w-10 h-10 rounded-xl border border-premium-800 flex items-center justify-center text-premium-400 hover:text-white hover:border-accent-gold hover:bg-premium-900 transition-all duration-300">
+                            <a href="mailto:support@choban.vn" className="w-10 h-10 rounded-xl border border-premium-800 flex items-center justify-center text-premium-400 hover:text-white hover:border-accent-gold hover:bg-premium-900 transition-all duration-300">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
@@ -45,9 +45,9 @@ export default function PublicFooter() {
                     <div>
                         <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">Khám phá</h4>
                         <ul className="space-y-4 text-sm font-medium">
-                            <li><Link href="/search" className="hover:text-accent-gold transition-colors flex items-center gap-2 group"><span className="w-1.5 h-1.5 rounded-full bg-premium-700 group-hover:bg-accent-gold" /> Tìm kiếm không gian</Link></li>
+                            <li><Link href="/search" className="hover:text-accent-gold transition-colors flex items-center gap-2 group"><span className="w-1.5 h-1.5 rounded-full bg-premium-700 group-hover:bg-accent-gold" /> Tìm kiếm chỗ bán</Link></li>
                             <li><Link href="/dashboard/listings/new" className="hover:text-accent-gold transition-colors flex items-center gap-2 group"><span className="w-1.5 h-1.5 rounded-full bg-premium-700 group-hover:bg-accent-gold" /> Đăng tin chia sẻ</Link></li>
-                            <li><Link href="#" className="hover:text-accent-gold transition-colors flex items-center gap-2 group"><span className="w-1.5 h-1.5 rounded-full bg-premium-700 group-hover:bg-accent-gold" /> Về chúng tôi</Link></li>
+                            <li><Link href="/about" className="hover:text-accent-gold transition-colors flex items-center gap-2 group"><span className="w-1.5 h-1.5 rounded-full bg-premium-700 group-hover:bg-accent-gold" /> Về chúng tôi</Link></li>
                         </ul>
                     </div>
 
@@ -55,15 +55,15 @@ export default function PublicFooter() {
                     <div>
                         <h4 className="text-white font-bold mb-8 uppercase tracking-widest text-xs">Pháp lý</h4>
                         <ul className="space-y-4 text-sm font-medium">
-                            <li><Link href="#" className="hover:text-accent-gold transition-colors">Điều khoản dịch vụ</Link></li>
-                            <li><Link href="#" className="hover:text-accent-gold transition-colors">Chính sách bảo mật</Link></li>
+                            <li><Link href="/terms" className="hover:text-accent-gold transition-colors">Điều khoản dịch vụ</Link></li>
+                            <li><Link href="/privacy" className="hover:text-accent-gold transition-colors">Chính sách bảo mật</Link></li>
                             <li><Link href="#" className="hover:text-accent-gold transition-colors">Cộng đồng</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="pt-8 border-t border-premium-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-premium-500">
-                    <p>© 2025 CHOBAN.VN Marketplace. Proudly Vietnamese.</p>
+                    <p>© 2026 CHOBAN.VN - Nền tảng kết nối chia sẻ mặt bằng kinh doanh hàng đầu.</p>
                     <div className="flex gap-8">
                         <span className="hover:text-premium-300 cursor-default">English</span>
                         <span className="text-white cursor-default font-bold underline decoration-accent-gold underline-offset-4">Tiếng Việt</span>

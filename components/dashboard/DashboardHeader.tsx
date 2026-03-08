@@ -16,6 +16,7 @@ import {
     Unlock
 } from 'lucide-react'
 import { formatCompactPrice } from '@/lib/utils/format'
+import BrandLogo from '@/components/public/BrandLogo'
 
 interface DashboardHeaderProps {
     userEmail: string
@@ -83,14 +84,10 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
             <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
                 <div className="flex items-center justify-between px-4 py-3">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 transition-transform active:scale-95">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-                            <span className="text-white font-black text-sm italic tracking-tighter">CB</span>
-                        </div>
-                        <span className="text-base font-bold bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                            CHOBAN.VN
-                        </span>
-                    </Link>
+                    <div className="flex flex-col">
+                        <BrandLogo scale={0.9} />
+                        <p className="text-[8px] text-blue-500 uppercase tracking-widest font-black ml-10 -mt-1 leading-none">Dashboard</p>
+                    </div>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -124,11 +121,9 @@ export default function DashboardHeader({ userEmail, coinBalance }: DashboardHea
                         <div className="flex-none">
                             {/* Logo & Close */}
                             <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/30">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                                        <span className="text-white font-black text-lg italic tracking-tighter">CB</span>
-                                    </div>
-                                    <span className="text-lg font-bold text-gray-900">CHOBAN.VN</span>
+                                <div className="flex flex-col">
+                                    <BrandLogo />
+                                    <p className="text-[9px] text-blue-500 uppercase tracking-widest font-black ml-11 -mt-1">Dashboard</p>
                                 </div>
                                 <button
                                     type="button"

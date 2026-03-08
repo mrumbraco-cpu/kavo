@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Script from 'next/script'
+import BrandLogo from '@/components/public/BrandLogo'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -10,12 +11,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 <div className="flex-1 flex flex-col w-full lg:w-1/2">
                     {/* Header / Logo */}
                     <div className="p-8 pb-0 flex items-center justify-between">
-                        <Link href="/" className="flex items-center gap-2 group transition-opacity hover:opacity-80">
-                            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center shadow-sm">
-                                <span className="text-white font-bold text-lg leading-none">C</span>
-                            </div>
-                            <span className="text-xl font-bold text-gray-900 tracking-tight">CHOBAN.VN</span>
-                        </Link>
+                        <BrandLogo />
                     </div>
 
                     {/* Main Content (Form) */}
