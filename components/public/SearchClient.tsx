@@ -118,15 +118,20 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     return (
         <div className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-white">
             <div className="flex-1 flex flex-col overflow-hidden relative">
-                <SearchToolbar
-                    total={displayTotal}
-                    hasSearched={hasSearched}
-                    isLoading={isLoading}
-                    province={filters.province}
-                    layout={layout}
-                    onLayoutChange={setLayout}
-                    onOpenFilters={() => setModalOpen(true)}
-                />
+                {/* On mobile: only show toolbar after first search or if province is set.
+                    On desktop: always show. This prevents the toolbar being hidden under
+                    the fixed header on real mobile devices before the viewport is stable. */}
+                <div className={`${(!hasSearched && !filters.province) ? 'hidden lg:block' : 'block'}`}>
+                    <SearchToolbar
+                        total={displayTotal}
+                        hasSearched={hasSearched}
+                        isLoading={isLoading}
+                        province={filters.province}
+                        layout={layout}
+                        onLayoutChange={setLayout}
+                        onOpenFilters={() => setModalOpen(true)}
+                    />
+                </div>
 
                 <div className="flex-1 flex overflow-hidden lg:flex-row flex-col">
                     <div

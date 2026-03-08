@@ -48,6 +48,12 @@ export default function SearchResults({
                 <p className="text-premium-500 max-w-xs">
                     Sử dụng thanh tìm kiếm phía trên để khám phá các không gian workshop, văn phòng, sự kiện…
                 </p>
+                <button
+                    onClick={onOpenFilters}
+                    className="mt-6 px-6 py-2.5 bg-premium-900 text-white rounded-full text-sm font-bold shadow-lg shadow-premium-900/10 cursor-pointer"
+                >
+                    Điều chỉnh bộ lọc
+                </button>
             </div>
         );
     }
