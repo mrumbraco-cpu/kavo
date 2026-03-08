@@ -53,7 +53,7 @@ export default function ForgotPasswordForm() {
                     </p>
                     <Link
                         href="/auth/login"
-                        className="block w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-gray-800 transition-all active:scale-[0.98]"
+                        className="block w-full py-3 bg-gray-900 text-white rounded-xl font-bold text-sm text-center hover:bg-gray-800 transition-all active:scale-[0.98]"
                     >
                         Quay lại đăng nhập
                     </Link>
