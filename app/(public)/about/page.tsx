@@ -98,7 +98,7 @@ export default function AboutPage() {
                     ].map((item, i) => (
                         <div key={i} className="bg-white p-10 rounded-[2rem] shadow-xl shadow-slate-200/40 border border-slate-100 hover:-translate-y-2 transition-all duration-300">
                             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${item.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                                    item.color === 'amber' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'
+                                item.color === 'amber' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'
                                 }`}>
                                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     {item.icon}
@@ -113,15 +113,15 @@ export default function AboutPage() {
 
             {/* CTA Section */}
             <section className="py-24 px-6">
-                <div className="max-w-5xl mx-auto bg-blue-600 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-600/30">
+                <div className="max-w-5xl mx-auto bg-blue-600 rounded-[2rem] md:rounded-[3rem] px-6 py-12 sm:p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-600/30">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
                     <div className="relative z-10">
-                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 font-outfit">Sẵn sàng viết nên câu chuyện của riêng bạn?</h2>
+                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 font-outfit leading-tight lg:px-20">Sẵn sàng viết nên câu chuyện của riêng bạn?</h2>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link href="/search" className="px-10 py-5 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:shadow-xl transition-all active:scale-95 duration-200">
+                            <Link href="/search" className="flex items-center justify-center px-6 py-4 sm:px-10 sm:py-5 bg-white text-blue-600 rounded-2xl font-bold text-base sm:text-lg hover:shadow-xl transition-all active:scale-95 duration-200 whitespace-nowrap">
                                 Bắt đầu tìm chỗ bán
                             </Link>
-                            <Link href="/dashboard/listings/new" className="px-10 py-5 bg-blue-900/40 text-white border border-blue-400/30 rounded-2xl font-bold text-lg hover:bg-blue-900/60 transition-all backdrop-blur-sm active:scale-95 duration-200">
+                            <Link href="/dashboard/listings/new" className="flex items-center justify-center px-6 py-4 sm:px-10 sm:py-5 bg-blue-900/40 text-white border border-blue-400/30 rounded-2xl font-bold text-base sm:text-lg hover:bg-blue-900/60 transition-all backdrop-blur-sm active:scale-95 duration-200 whitespace-nowrap">
                                 Chia sẻ mặt bằng
                             </Link>
                         </div>

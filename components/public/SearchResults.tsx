@@ -46,13 +46,16 @@ export default function SearchResults({
                 </div>
                 <h3 className="text-xl font-bold text-premium-900 mb-2">Bắt đầu tìm kiếm</h3>
                 <p className="text-premium-500 max-w-xs">
-                    Sử dụng thanh tìm kiếm phía trên để khám phá các không gian workshop, văn phòng, sự kiện…
+                    <span className="hidden lg:inline">Sử dụng thanh tìm kiếm phía trên</span>
+                    <span className="inline lg:hidden">Mở bộ lọc bên dưới</span>
+                    {' '}để khám phá các vị trí đang chia sẻ.
                 </p>
                 <button
                     onClick={onOpenFilters}
                     className="mt-6 px-6 py-2.5 bg-premium-900 text-white rounded-full text-sm font-bold shadow-lg shadow-premium-900/10 cursor-pointer"
                 >
-                    Điều chỉnh bộ lọc
+                    <span className="hidden lg:inline">Điều chỉnh bộ lọc</span>
+                    <span className="lg:hidden">Bộ lọc tìm kiếm</span>
                 </button>
             </div>
         );

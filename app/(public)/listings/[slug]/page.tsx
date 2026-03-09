@@ -196,12 +196,12 @@ export default async function ListingDetailPage({ params }: Props) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
 
                 {/* ── Breadcrumb ─────────────────────────────────────── */}
-                <nav className="flex items-center gap-1.5 text-sm text-gray-400 mb-6">
-                    <Link href="/" className="hover:text-gray-700 hover:underline transition-colors">Trang chủ</Link>
-                    <span>›</span>
-                    <Link href="/search" className="hover:text-gray-700 hover:underline transition-colors">Tìm kiếm</Link>
-                    <span>›</span>
-                    <span className="text-gray-700 truncate max-w-xs">{typedListing.title}</span>
+                <nav className="flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 mb-6 overflow-hidden whitespace-nowrap">
+                    <Link href="/" className="hover:text-gray-900 transition-colors flex-shrink-0">Trang chủ</Link>
+                    <span className="text-gray-400 flex-shrink-0">›</span>
+                    <Link href="/search" className="hover:text-gray-900 transition-colors flex-shrink-0">Tìm kiếm</Link>
+                    <span className="text-gray-400 flex-shrink-0">›</span>
+                    <span className="text-gray-900 font-medium truncate">{typedListing.title}</span>
                 </nav>
 
                 {/* ── Main 2-column layout ────────────────────────────── */}
@@ -211,11 +211,11 @@ export default async function ListingDetailPage({ params }: Props) {
                     <div className="min-w-0">
 
                         {/* Title + Favorite */}
-                        <div className="flex items-start justify-between gap-4 mb-3">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
                                 {typedListing.title}
                             </h1>
-                            <div className="flex-shrink-0 pt-1 flex items-center gap-2">
+                            <div className="flex flex-shrink-0 items-center gap-2">
                                 <ShareButton title={typedListing.title} />
                                 <FavoriteButton
                                     listingId={id}
@@ -226,7 +226,7 @@ export default async function ListingDetailPage({ params }: Props) {
                         </div>
 
                         {/* Badges + Address */}
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-5">
                             <div className="flex flex-wrap gap-1.5">
                                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm uppercase tracking-tighter transition-all duration-300">
                                     <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
@@ -242,12 +242,12 @@ export default async function ListingDetailPage({ params }: Props) {
                                 </span>
                             </div>
                             {fullAddress && (
-                                <div className="flex items-center gap-1 text-sm text-gray-500">
-                                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="flex items-start gap-1.5 text-[14px] text-gray-600 bg-gray-50/80 px-3 py-2 rounded-lg border border-gray-100 sm:bg-transparent sm:px-0 sm:py-0 sm:border-transparent sm:items-center">
+                                    <svg className="w-4 h-4 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-red-500 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    <span className="underline underline-offset-2 decoration-gray-300">gần {fullAddress}</span>
+                                    <span className="leading-snug">Gần {fullAddress}</span>
                                 </div>
                             )}
                         </div>
