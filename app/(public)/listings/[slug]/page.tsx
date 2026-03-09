@@ -13,6 +13,8 @@ import UrgencyBadge from '@/components/public/UrgencyBadge';
 import MiniMap from '@/components/public/MiniMap';
 
 import { parseListingIdFromSlug } from '@/lib/utils/url';
+import { getAmenityLabel, getNearbyFeatureLabel } from '@/lib/constants/facilities';
+import { getSpaceTypeLabel, getLocationTypeLabel, getSuitableLabel, getNotSuitableLabel } from '@/lib/constants/listing-options';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -168,7 +170,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
     // Amenity icons mapping
     const amenityIcons: Record<string, React.ReactNode> = {
-        'Wi-Fi': (
+        'Wifi': (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
             </svg>
@@ -178,9 +180,44 @@ export default async function ListingDetailPage({ params }: Props) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2" />
             </svg>
         ),
-        'Bãi đậu xe': (
+        'Chỗ đậu xe': (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+        ),
+        'Nhà vệ sinh': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+        ),
+        'Bồn rửa tay': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+        ),
+        'Bồn rửa chén': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+        ),
+        'Bàn ghế': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 10h16M10 14h4M8 18h8" />
+            </svg>
+        ),
+        'Phòng thay đồ': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+        ),
+        'Tủ lạnh': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+        ),
+        'Ổ cắm điện': (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
         ),
     };
@@ -289,6 +326,37 @@ export default async function ListingDetailPage({ params }: Props) {
                             </p>
                         </div>
 
+                        {/* Space & Location Details */}
+                        <div className="py-8 border-b border-gray-100 grid grid-cols-2 sm:grid-cols-2 gap-8">
+                            <div className="group">
+                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Loại hình không gian</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
+                                        {typedListing.space_type?.map(id => getSpaceTypeLabel(id)).join(', ')}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="group">
+                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Vị trí mặt bằng</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
+                                        {getLocationTypeLabel(typedListing.location_type)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Description */}
                         {typedListing.description && (
                             <div className="py-8 border-b border-gray-100">
@@ -304,12 +372,12 @@ export default async function ListingDetailPage({ params }: Props) {
                             <div className="py-8 border-b border-gray-100">
                                 <h2 className="text-xl font-semibold text-gray-900 mb-6">Tiện ích</h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {typedListing.amenities.map(a => (
-                                        <div key={a} className="flex items-center gap-3 text-[15px] text-gray-700">
-                                            <span className="text-gray-500 flex-shrink-0">
-                                                {amenityIcons[a] ?? defaultAmenityIcon}
-                                            </span>
-                                            {a}
+                                    {typedListing.amenities?.map((id: string) => (
+                                        <div key={id} className="flex flex-col items-center p-3 rounded-2xl bg-premium-50 border border-premium-100 hover:border-premium-200 transition-all group">
+                                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-premium-900 shadow-sm mb-2 group-hover:scale-110 transition-transform">
+                                                {amenityIcons[getAmenityLabel(id)] || amenityIcons[id] || defaultAmenityIcon}
+                                            </div>
+                                            <span className="text-[10px] font-bold text-premium-900 text-center uppercase tracking-wider">{getAmenityLabel(id)}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -330,8 +398,8 @@ export default async function ListingDetailPage({ params }: Props) {
                                                 Phù hợp với
                                             </p>
                                             <div className="flex flex-wrap gap-2">
-                                                {typedListing.suitable_for.map(s => (
-                                                    <span key={s} className="px-3 py-1.5 bg-green-50 text-green-700 text-sm rounded-full border border-green-100 font-medium">{s}</span>
+                                                {typedListing.suitable_for.map(id => (
+                                                    <span key={id} className="px-3 py-1.5 bg-green-50 text-green-700 text-sm rounded-full border border-green-100 font-medium">{getSuitableLabel(id)}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -345,8 +413,8 @@ export default async function ListingDetailPage({ params }: Props) {
                                                 Không phù hợp với
                                             </p>
                                             <div className="flex flex-wrap gap-2">
-                                                {typedListing.not_suitable_for.map(s => (
-                                                    <span key={s} className="px-3 py-1.5 bg-red-50 text-red-600 text-sm rounded-full border border-red-100 font-medium">{s}</span>
+                                                {typedListing.not_suitable_for.map(id => (
+                                                    <span key={id} className="px-3 py-1.5 bg-red-50 text-red-600 text-sm rounded-full border border-red-100 font-medium">{getNotSuitableLabel(id)}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -360,8 +428,8 @@ export default async function ListingDetailPage({ params }: Props) {
                             <div className="py-8 border-b border-gray-100">
                                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Đặc điểm xung quanh</h2>
                                 <div className="flex flex-wrap gap-2">
-                                    {typedListing.nearby_features.map(f => (
-                                        <span key={f} className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-100 font-medium">{f}</span>
+                                    {typedListing.nearby_features.map(id => (
+                                        <span key={id} className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-100 font-medium">{getNearbyFeatureLabel(id)}</span>
                                     ))}
                                 </div>
                             </div>

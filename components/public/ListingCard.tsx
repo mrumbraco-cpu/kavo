@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { getListingUrl } from '@/lib/utils/url';
 import { Listing } from '@/types/listing';
 import { formatPriceRange } from '@/lib/utils/format';
+import { getSpaceTypeLabel, getLocationTypeLabel } from '@/lib/constants/listing-options';
 
 interface ListingCardProps {
     listing: Listing;
@@ -51,9 +52,9 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                 {/* Glassy Overlay for Space Type */}
                 {listing.space_type && listing.space_type.length > 0 && (
                     <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-                        {listing.space_type.slice(0, 2).map((type, i) => (
+                        {listing.space_type.slice(0, 2).map((id, i) => (
                             <span key={i} className="px-2.5 py-1 bg-white/90 text-premium-400 text-[10px] font-medium rounded-lg backdrop-blur-md shadow-sm">
-                                {type}
+                                {getSpaceTypeLabel(id)}
                             </span>
                         ))}
                         {listing.space_type.length > 2 && (
@@ -108,7 +109,7 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                     </div>
                     {listing.location_type && (
                         <div className="px-2 py-1 bg-premium-100/70 text-premium-400 text-[10px] font-medium rounded-md">
-                            {listing.location_type}
+                            {getLocationTypeLabel(listing.location_type)}
                         </div>
                     )}
                 </div>

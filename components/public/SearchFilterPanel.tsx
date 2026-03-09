@@ -7,8 +7,13 @@ import {
     PROVINCES_NEW,
     WARDS_NEW_BY_PROVINCE
 } from '@/lib/constants/geography';
-import { SPACE_TYPES, LOCATION_TYPES, SUITABLE_FOR_OPTIONS, NOT_SUITABLE_FOR_OPTIONS } from '@/lib/constants/listing-options';
-import { AMENITIES } from '@/lib/constants/facilities';
+import {
+    SPACE_TYPES_DATA,
+    LOCATION_TYPES_DATA,
+    SUITABLE_FOR_OPTIONS_DATA,
+    NOT_SUITABLE_FOR_OPTIONS_DATA
+} from '@/lib/constants/listing-options';
+import { AMENITIES_DATA, ConstantItem } from '@/lib/constants/facilities';
 
 export interface SearchFilters {
     // Geography
@@ -55,37 +60,37 @@ function CheckboxGroup({
     onChange,
 }: {
     label: string;
-    options: readonly string[];
+    options: readonly ConstantItem[];
     selected: string[];
     onChange: (val: string[]) => void;
 }) {
-    const toggle = (opt: string) => {
-        onChange(selected.includes(opt) ? selected.filter(x => x !== opt) : [...selected, opt]);
+    const toggle = (id: string) => {
+        onChange(selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id]);
     };
     return (
         <div className="space-y-3">
             <p className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em]">{label}</p>
             <div className="flex flex-wrap gap-2">
-                {options.map(opt => {
-                    const isSelected = selected.includes(opt);
-                    const id = `cb-${label.replace(/\s+/g, '-')}-${opt.replace(/\s+/g, '-')}`;
+                {options.map(item => {
+                    const isSelected = selected.includes(item.id);
+                    const domId = `cb-${label.replace(/\s+/g, '-')}-${item.id}`;
                     return (
-                        <div key={opt} className="relative">
+                        <div key={item.id} className="relative">
                             <input
-                                id={id}
+                                id={domId}
                                 type="checkbox"
                                 className="sr-only"
                                 checked={isSelected}
-                                onChange={() => toggle(opt)}
+                                onChange={() => toggle(item.id)}
                             />
                             <label
-                                htmlFor={id}
+                                htmlFor={domId}
                                 className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all duration-300 cursor-pointer block ${isSelected
                                     ? 'bg-premium-900 text-white border-premium-900 shadow-md shadow-premium-900/10'
                                     : 'bg-white text-premium-500 border-premium-100 hover:border-premium-300 hover:bg-premium-50/50'
                                     }`}
                             >
-                                {opt}
+                                {item.label}
                             </label>
                         </div>
                     );
@@ -234,19 +239,19 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
             </div>
 
             {/* Space types */}
-            <CheckboxGroup label="Loại không gian" options={SPACE_TYPES} selected={filters.spaceTypes} onChange={v => set('spaceTypes', v)} />
+            <CheckboxGroup label="Loại không gian" options={SPACE_TYPES_DATA} selected={filters.spaceTypes} onChange={v => set('spaceTypes', v)} />
 
             {/* Location types */}
-            <CheckboxGroup label="Vị trí" options={LOCATION_TYPES} selected={filters.locationTypes} onChange={v => set('locationTypes', v)} />
+            <CheckboxGroup label="Vị trí" options={LOCATION_TYPES_DATA} selected={filters.locationTypes} onChange={v => set('locationTypes', v)} />
 
             {/* Suitable for */}
-            <CheckboxGroup label="Phù hợp cho" options={SUITABLE_FOR_OPTIONS} selected={filters.suitableFor} onChange={v => set('suitableFor', v)} />
+            <CheckboxGroup label="Phù hợp cho" options={SUITABLE_FOR_OPTIONS_DATA} selected={filters.suitableFor} onChange={v => set('suitableFor', v)} />
 
             {/* Not suitable for */}
-            <CheckboxGroup label="Địa điểm loại trừ" options={NOT_SUITABLE_FOR_OPTIONS} selected={filters.notSuitableFor} onChange={v => set('notSuitableFor', v)} />
+            <CheckboxGroup label="Địa điểm loại trừ" options={NOT_SUITABLE_FOR_OPTIONS_DATA} selected={filters.notSuitableFor} onChange={v => set('notSuitableFor', v)} />
 
             {/* Amenities */}
-            <CheckboxGroup label="Tiện ích" options={AMENITIES} selected={filters.amenities} onChange={v => set('amenities', v)} />
+            <CheckboxGroup label="Tiện ích" options={AMENITIES_DATA} selected={filters.amenities} onChange={v => set('amenities', v)} />
 
             {/* Submit */}
             <div className="pt-4 sticky bottom-0 bg-white/10 backdrop-blur-sm -mx-2 px-2 pb-2">

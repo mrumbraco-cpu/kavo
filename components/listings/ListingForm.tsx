@@ -4,10 +4,10 @@ import { createListing, updateListing } from '@/app/dashboard/listings/actions'
 import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams, usePathname } from 'next/navigation'
 import {
-    SPACE_TYPES,
-    LOCATION_TYPES,
-    SUITABLE_FOR_OPTIONS,
-    NOT_SUITABLE_FOR_OPTIONS
+    SPACE_TYPES_DATA,
+    LOCATION_TYPES_DATA,
+    SUITABLE_FOR_OPTIONS_DATA,
+    NOT_SUITABLE_FOR_OPTIONS_DATA
 } from '@/lib/constants/listing-options'
 import {
     PROVINCES_OLD,
@@ -24,8 +24,8 @@ import {
     DayOfWeek
 } from '@/lib/constants/time-config'
 import {
-    AMENITIES,
-    NEARBY_FEATURES
+    AMENITIES_DATA,
+    NEARBY_FEATURES_DATA
 } from '@/lib/constants/facilities'
 import { Profile } from '@/types/profile'
 import { Listing } from '@/types/listing'
@@ -655,18 +655,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
                                         <div className="max-h-40 overflow-y-auto custom-scrollbar pr-2">
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                {SPACE_TYPES.map(option => (
-                                                    <label key={option} className="flex items-center space-x-3 cursor-pointer group py-0.5">
-                                                        <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${spaceTypes.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
-                                                            {spaceTypes.includes(option) && <Check className="w-2.5 h-2.5 text-white" />}
+                                                {SPACE_TYPES_DATA.map(item => (
+                                                    <label key={item.id} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                        <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${spaceTypes.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
+                                                            {spaceTypes.includes(item.id) && <Check className="w-2.5 h-2.5 text-white" />}
                                                             <input
                                                                 type="checkbox"
-                                                                checked={spaceTypes.includes(option)}
-                                                                onChange={() => toggleSpaceType(option)}
+                                                                checked={spaceTypes.includes(item.id)}
+                                                                onChange={() => toggleSpaceType(item.id)}
                                                                 className="hidden"
                                                             />
                                                         </div>
-                                                        <span className="text-[13px] font-medium text-gray-600">{option}</span>
+                                                        <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -681,7 +681,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         className="block w-full px-3 py-2.5 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none bg-white text-sm font-semibold text-gray-700"
                                     >
                                         <option value="">-- Chọn vị trí --</option>
-                                        {LOCATION_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+                                        {LOCATION_TYPES_DATA.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
                                     </select>
                                 </div>
                             </div>
@@ -719,18 +719,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
                                     <div className="max-h-52 overflow-y-auto custom-scrollbar pr-2">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {AMENITIES.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group py-0.5">
-                                                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${amenities.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {amenities.includes(option) && <Check className="w-2.5 h-2.5 text-white" />}
+                                            {AMENITIES_DATA.map(item => (
+                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${amenities.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                        {amenities.includes(item.id) && <Check className="w-2.5 h-2.5 text-white" />}
                                                         <input
                                                             type="checkbox"
-                                                            checked={amenities.includes(option)}
-                                                            onChange={() => toggleAmenity(option)}
+                                                            checked={amenities.includes(item.id)}
+                                                            onChange={() => toggleAmenity(item.id)}
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1166,18 +1166,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 {showSuitable && (
                                     <div className="pb-4 px-2">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                            {SUITABLE_FOR_OPTIONS.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group">
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${suitableFor.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {suitableFor.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                            {SUITABLE_FOR_OPTIONS_DATA.map(item => (
+                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group">
+                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${suitableFor.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                        {suitableFor.includes(item.id) && <Check className="w-3 h-3 text-white" />}
                                                         <input
                                                             type="checkbox"
-                                                            checked={suitableFor.includes(option)}
-                                                            onChange={() => toggleSuitable(option)}
+                                                            checked={suitableFor.includes(item.id)}
+                                                            onChange={() => toggleSuitable(item.id)}
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1198,18 +1198,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 {showNotSuitable && (
                                     <div className="pb-4 px-2">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                            {NOT_SUITABLE_FOR_OPTIONS.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group">
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${notSuitableFor.includes(option) ? 'bg-red-600 border-red-600' : 'border-gray-300 group-hover:border-red-400'}`}>
-                                                        {notSuitableFor.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                            {NOT_SUITABLE_FOR_OPTIONS_DATA.map(item => (
+                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group">
+                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${notSuitableFor.includes(item.id) ? 'bg-red-600 border-red-600' : 'border-gray-300 group-hover:border-red-400'}`}>
+                                                        {notSuitableFor.includes(item.id) && <Check className="w-3 h-3 text-white" />}
                                                         <input
                                                             type="checkbox"
-                                                            checked={notSuitableFor.includes(option)}
-                                                            onChange={() => toggleNotSuitable(option)}
+                                                            checked={notSuitableFor.includes(item.id)}
+                                                            onChange={() => toggleNotSuitable(item.id)}
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -1232,18 +1232,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 {showNearby && (
                                     <div className="pb-4 px-2">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                            {NEARBY_FEATURES.map(option => (
-                                                <label key={option} className="flex items-center space-x-3 cursor-pointer group">
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${nearbyFeatures.includes(option) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {nearbyFeatures.includes(option) && <Check className="w-3 h-3 text-white" />}
+                                            {NEARBY_FEATURES_DATA.map(item => (
+                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group">
+                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${nearbyFeatures.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                        {nearbyFeatures.includes(item.id) && <Check className="w-3 h-3 text-white" />}
                                                         <input
                                                             type="checkbox"
-                                                            checked={nearbyFeatures.includes(option)}
-                                                            onChange={() => toggleNearbyFeature(option)}
+                                                            checked={nearbyFeatures.includes(item.id)}
+                                                            onChange={() => toggleNearbyFeature(item.id)}
                                                             className="hidden"
                                                         />
                                                     </div>
-                                                    <span className="text-[13px] font-medium text-gray-600">{option}</span>
+                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
                                                 </label>
                                             ))}
                                         </div>
