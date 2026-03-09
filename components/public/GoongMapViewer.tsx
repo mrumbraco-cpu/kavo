@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { Listing } from '@/types/listing';
 import { getListingUrl } from '@/lib/utils/url';
+import { getSpaceTypeLabel } from '@/lib/constants/listing-options';
 
 // Types are now handled via types/goong.d.ts
 
@@ -63,7 +64,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 <div style="position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:4px;z-index:10;">
                     ${listing.space_type.slice(0, 2).map(type => `
                         <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#94a3b8;font-size:10px;font-weight:500;border-radius:8px;backdrop-filter:blur(12px);white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-                            ${type}
+                            ${getSpaceTypeLabel(type)}
                         </span>
                     `).join('')}
                     ${listing.space_type.length > 2 ? `

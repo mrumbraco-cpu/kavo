@@ -4,10 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useMemo } from 'react'
 import { Search, X, Filter, Calendar, User, EyeOff, Lock, MapPin } from 'lucide-react'
 import {
-    PROVINCES_OLD,
-    DISTRICTS_OLD_BY_PROVINCE,
-    PROVINCES_NEW,
-    WARDS_NEW_BY_PROVINCE
+    PROVINCES_OLD_DATA,
+    DISTRICTS_OLD_DATA_BY_PROVINCE,
+    PROVINCES_NEW_DATA,
+    WARDS_NEW_DATA_BY_PROVINCE
 } from '@/lib/constants/geography'
 
 export default function ListingFilters() {
@@ -64,16 +64,16 @@ export default function ListingFilters() {
     }
 
     const availableProvinces = useMemo(() => {
-        if (filters.geo_system === 'old') return PROVINCES_OLD;
-        if (filters.geo_system === 'new') return PROVINCES_NEW;
-        return [...PROVINCES_OLD, ...PROVINCES_NEW];
+        if (filters.geo_system === 'old') return PROVINCES_OLD_DATA;
+        if (filters.geo_system === 'new') return PROVINCES_NEW_DATA;
+        return [...PROVINCES_OLD_DATA, ...PROVINCES_NEW_DATA];
     }, [filters.geo_system]);
 
     const availableSubLocals = useMemo(() => {
         if (!filters.province) return [];
-        if (filters.geo_system === 'old') return DISTRICTS_OLD_BY_PROVINCE[filters.province] || [];
-        if (filters.geo_system === 'new') return WARDS_NEW_BY_PROVINCE[filters.province] || [];
-        return (DISTRICTS_OLD_BY_PROVINCE[filters.province] || WARDS_NEW_BY_PROVINCE[filters.province] || []) as string[];
+        if (filters.geo_system === 'old') return DISTRICTS_OLD_DATA_BY_PROVINCE[filters.province] || [];
+        if (filters.geo_system === 'new') return WARDS_NEW_DATA_BY_PROVINCE[filters.province] || [];
+        return [];
     }, [filters.province, filters.geo_system]);
 
     return (
@@ -237,7 +237,7 @@ export default function ListingFilters() {
                             >
                                 <option value="">Tất cả tỉnh thành</option>
                                 {availableProvinces.map(p => (
-                                    <option key={p} value={p}>{p}</option>
+                                    <option key={p.id} value={p.id}>{p.label}</option>
                                 ))}
                             </select>
                         </div>
@@ -255,7 +255,7 @@ export default function ListingFilters() {
                         >
                             <option value="">Tất cả (Quận/Huyện/Phường/Xã)</option>
                             {availableSubLocals.map(s => (
-                                <option key={s} value={s}>{s}</option>
+                                <option key={s.id} value={s.id}>{s.label}</option>
                             ))}
                         </select>
                     </div>
