@@ -7,7 +7,9 @@ import {
     SPACE_TYPES_DATA,
     LOCATION_TYPES_DATA,
     SUITABLE_FOR_OPTIONS_DATA,
-    NOT_SUITABLE_FOR_OPTIONS_DATA
+    NOT_SUITABLE_FOR_OPTIONS_DATA,
+    getSpaceTypeLabel,
+    getLocationTypeLabel
 } from '@/lib/constants/listing-options'
 import {
     PROVINCES_OLD,
@@ -481,8 +483,8 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         // Append all states to formData
         // Append all states to formData
         const prefixParts = [
-            spaceTypes.join(', '),
-            locationType
+            spaceTypes.map(id => getSpaceTypeLabel(id)).join(', '),
+            getLocationTypeLabel(locationType)
         ].filter(Boolean).join(', ').toLowerCase();
 
         let generatedTitle = prefixParts;

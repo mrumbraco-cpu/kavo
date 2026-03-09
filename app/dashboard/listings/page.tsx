@@ -24,6 +24,7 @@ import {
 import { getListingUrl } from '@/lib/utils/url'
 import { Listing, ListingStatus } from '@/types/listing'
 import { formatPriceRange, formatDate } from '@/lib/utils/format'
+import { getSpaceTypeLabel } from '@/lib/constants/listing-options'
 import VisibilityToggle from './VisibilityToggle'
 import ExpirationToggle from './ExpirationToggle'
 
@@ -257,7 +258,9 @@ export default async function MyListingsPage({
                                             <div className="flex flex-col">
                                                 <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">Loại hình</span>
                                                 <span className="text-[10px] font-bold text-slate-500 truncate max-w-[120px]">
-                                                    {Array.isArray(listing.space_type) ? listing.space_type[0] : listing.space_type}
+                                                    {Array.isArray(listing.space_type)
+                                                        ? getSpaceTypeLabel(listing.space_type[0])
+                                                        : getSpaceTypeLabel(listing.space_type)}
                                                     {Array.isArray(listing.space_type) && listing.space_type.length > 1 && ` +${listing.space_type.length - 1}`}
                                                 </span>
                                             </div>
