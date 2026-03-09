@@ -1,25 +1,28 @@
 export const AMENITIES = [
-    'Wi-Fi',
+    'Wifi',
     'Máy lạnh',
-    'Bãi đậu xe',
-    'Thang máy',
-    'Máy phát điện',
-    'Nhà vệ sinh riêng',
-    'Dịch vụ dọn dẹp',
-    'Bàn ghế cơ bản',
-    'Nước uống',
-    'Lễ tân'
+    'Chỗ đậu xe',
+    'Nhà vệ sinh',
+    'Bồn rửa tay',
+    'Bồn rửa chén',
+    'Bàn ghế',
+    'Phòng thay đồ',
+    'Tủ lạnh',
+    'Ổ cắm điện'
 ] as const;
 
 export const NEARBY_FEATURES = [
-    'Bệnh viện',
     'Trường học',
-    'Công viên',
-    'Siêu thị',
-    'Trạm xe buýt',
-    'Đường lớn',
+    'Khu công nghiệp',
     'Chợ',
+    'Trung tâm thương mại',
+    'Bệnh viện',
+    'Công viên',
+    'Trạm xe buýt',
+    'Phố đi bộ',
     'Ngân hàng',
-    'Cà phê',
-    'Cửa hàng tiện lợi'
+    'Cửa hàng tiện lợi',
+    'Khu hành chính',
+    'Khu du lịch',
+    'Khu văn phòng'
 ] as const;
