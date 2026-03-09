@@ -6,7 +6,10 @@ import {
     PROVINCES_OLD_DATA,
     PROVINCES_NEW_DATA,
     DISTRICTS_OLD_DATA_BY_PROVINCE,
-    WARDS_NEW_DATA_BY_PROVINCE
+    WARDS_NEW_DATA_BY_PROVINCE,
+    getProvinceById,
+    getDistrictById,
+    getWardById
 } from '@/lib/constants/geography';
 
 interface GeographySelectorProps {
@@ -63,6 +66,8 @@ export default function GeographySelector({
         setSearch('');
     }, [filters.province]);
 
+    const activeProvinceLabel = getProvinceById(filters.province, filters.geoSystem)?.label || '';
+
     return (
         <div className="space-y-4">
             {/* System Switcher */}
@@ -92,7 +97,7 @@ export default function GeographySelector({
                 </svg>
                 <input
                     type="text"
-                    placeholder={filters.province ? `Lọc khu vực tại ${filters.province}…` : "Tìm tỉnh / thành phố…"}
+                    placeholder={filters.province ? `Lọc khu vực tại ${activeProvinceLabel}…` : "Tìm tỉnh / thành phố…"}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full pl-9 pr-4 py-2.5 bg-premium-50 border border-premium-100 rounded-xl text-xs focus:ring-1 focus:ring-premium-900/10 focus:border-premium-900/20 transition-all outline-none"
@@ -111,7 +116,7 @@ export default function GeographySelector({
                                     <button
                                         key={p.id}
                                         type="button"
-                                        onClick={() => onProvinceChange(p.label)}
+                                        onClick={() => onProvinceChange(p.id)}
                                         className="px-3 py-2 rounded-xl border border-premium-100 bg-white hover:border-premium-200 hover:bg-premium-50 transition-all cursor-pointer group"
                                     >
                                         <div className="text-[10px] font-bold text-premium-900 truncate group-hover:scale-105 transition-transform">{p.label}</div>
@@ -131,7 +136,7 @@ export default function GeographySelector({
                                 <button
                                     key={p.id}
                                     type="button"
-                                    onClick={() => onProvinceChange(p.label)}
+                                    onClick={() => onProvinceChange(p.id)}
                                     className="px-3 py-2 rounded-xl border border-premium-100 bg-white hover:border-premium-200 hover:bg-premium-50 transition-all cursor-pointer text-left"
                                 >
                                     <div className="text-[10px] text-premium-600 truncate">{p.label}</div>
@@ -150,7 +155,7 @@ export default function GeographySelector({
                     {/* Selected Province Header */}
                     <div className="flex items-center justify-between px-1">
                         <div className="flex items-center gap-2">
-                            <span className="text-[11px] font-bold text-premium-900">{filters.province}</span>
+                            <span className="text-[11px] font-bold text-premium-900">{activeProvinceLabel}</span>
                             <button
                                 onClick={() => onUpdate('province', '')}
                                 className="text-[10px] font-bold text-premium-400 hover:text-premium-900 transition-colors underline underline-offset-2 decoration-premium-200 cursor-pointer"
@@ -167,13 +172,13 @@ export default function GeographySelector({
                     <div className="flex flex-wrap gap-2 max-h-[250px] overflow-y-auto pr-1 custom-scrollbar">
                         {filteredSubItems.map((d) => {
                             const isSelected = filters.geoSystem === 'new'
-                                ? filters.ward.includes(d.label)
-                                : filters.district.includes(d.label);
+                                ? filters.ward.includes(d.id)
+                                : filters.district.includes(d.id);
                             return (
                                 <button
                                     key={d.id}
                                     type="button"
-                                    onClick={() => onToggleDistrict(d.label)}
+                                    onClick={() => onToggleDistrict(d.id)}
                                     className={`px-3 py-1.5 rounded-full border text-[10px] font-bold transition-all cursor-pointer ${isSelected
                                         ? 'bg-premium-900 border-premium-900 text-white shadow-md shadow-premium-900/10'
                                         : 'bg-white border-premium-100 text-premium-600 hover:border-premium-300'

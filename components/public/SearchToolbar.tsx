@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { getProvinceById } from '@/lib/constants/geography';
 
 interface SearchToolbarProps {
     total: number;
@@ -10,6 +11,7 @@ interface SearchToolbarProps {
     layout: 'split' | 'map' | 'list';
     onLayoutChange: (layout: 'split' | 'map' | 'list') => void;
     onOpenFilters: () => void;
+    geoSystem?: 'old' | 'new';
 }
 
 export default function SearchToolbar({
@@ -19,14 +21,16 @@ export default function SearchToolbar({
     province,
     layout,
     onLayoutChange,
-    onOpenFilters
+    onOpenFilters,
+    geoSystem = 'old'
 }: SearchToolbarProps) {
+    const provinceLabel = province ? getProvinceById(province, geoSystem)?.label : '';
     return (
         <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-premium-100 bg-white/80 backdrop-blur-md flex-shrink-0 z-20">
             <div className="flex items-center gap-2 sm:gap-4 overflow-hidden min-w-0 flex-1 mr-4">
                 {hasSearched && (
                     <h1 className="text-base sm:text-lg font-bold text-premium-900 truncate">
-                        {total} <span className="text-premium-400 font-medium text-xs sm:text-sm">vị trí {province ? `ở ${province}` : ''}</span>
+                        {total} <span className="text-premium-400 font-medium text-xs sm:text-sm">vị trí {provinceLabel ? `ở ${provinceLabel}` : ''}</span>
                     </h1>
                 )}
                 {!hasSearched && !isLoading && (

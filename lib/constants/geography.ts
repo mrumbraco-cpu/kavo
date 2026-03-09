@@ -503,7 +503,54 @@ export const PROVINCES_NEW_DATA: readonly GeographyItem[] = [
 ] as const;
 
 export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]> = {
-  "Điện Biên": [
+  "10": [
+    {
+      "id": "085",
+      "label": "Bắc Hà",
+      "fullName": "Huyện Bắc Hà"
+    },
+    {
+      "id": "086",
+      "label": "Bảo Thắng",
+      "fullName": "Huyện Bảo Thắng"
+    },
+    {
+      "id": "087",
+      "label": "Bảo Yên",
+      "fullName": "Huyện Bảo Yên"
+    },
+    {
+      "id": "082",
+      "label": "Bát Xát",
+      "fullName": "Huyện Bát Xát"
+    },
+    {
+      "id": "080",
+      "label": "Lào Cai",
+      "fullName": "Thành phố Lào Cai"
+    },
+    {
+      "id": "083",
+      "label": "Mường Khương",
+      "fullName": "Huyện Mường Khương"
+    },
+    {
+      "id": "088",
+      "label": "Sa Pa",
+      "fullName": "Thị xã Sa Pa"
+    },
+    {
+      "id": "084",
+      "label": "Si Ma Cai",
+      "fullName": "Huyện Si Ma Cai"
+    },
+    {
+      "id": "089",
+      "label": "Văn Bàn",
+      "fullName": "Huyện Văn Bàn"
+    }
+  ],
+  "11": [
     {
       "id": "100",
       "label": "Điện Biên",
@@ -555,7 +602,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Tuần Giáo"
     }
   ],
-  "Lai Châu": [
+  "12": [
     {
       "id": "105",
       "label": "Lai Châu",
@@ -597,7 +644,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Than Uyên"
     }
   ],
-  "Sơn La": [
+  "14": [
     {
       "id": "121",
       "label": "Bắc Yên",
@@ -659,7 +706,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Châu"
     }
   ],
-  "Yên Bái": [
+  "15": [
     {
       "id": "135",
       "label": "Lục Yên",
@@ -706,7 +753,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Bình"
     }
   ],
-  "Hoà Bình": [
+  "17": [
     {
       "id": "154",
       "label": "Cao Phong",
@@ -758,7 +805,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Thủy"
     }
   ],
-  "Thái Nguyên": [
+  "19": [
     {
       "id": "171",
       "label": "Đại Từ",
@@ -805,7 +852,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Võ Nhai"
     }
   ],
-  "Lạng Sơn": [
+  "20": [
     {
       "id": "185",
       "label": "Bắc Sơn",
@@ -862,7 +909,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Văn Quan"
     }
   ],
-  "Quảng Ninh": [
+  "22": [
     {
       "id": "202",
       "label": "Ba Chẽ",
@@ -929,7 +976,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Vân Đồn"
     }
   ],
-  "Bắc Giang": [
+  "24": [
     {
       "id": "213",
       "label": "Bắc Giang",
@@ -981,7 +1028,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Thế"
     }
   ],
-  "Phú Thọ": [
+  "25": [
     {
       "id": "235",
       "label": "Cẩm Khê",
@@ -1048,7 +1095,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Lập"
     }
   ],
-  "Vĩnh Phúc": [
+  "26": [
     {
       "id": "249",
       "label": "Bình Xuyên",
@@ -1095,7 +1142,2679 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Lạc"
     }
   ],
-  "Hà Nội": [
+  "27": [
+    {
+      "id": "256",
+      "label": "Bắc Ninh",
+      "fullName": "Thành phố Bắc Ninh"
+    },
+    {
+      "id": "263",
+      "label": "Gia Bình",
+      "fullName": "Huyện Gia Bình"
+    },
+    {
+      "id": "264",
+      "label": "Lương Tài",
+      "fullName": "Huyện Lương Tài"
+    },
+    {
+      "id": "259",
+      "label": "Quế Võ",
+      "fullName": "Thị xã Quế Võ"
+    },
+    {
+      "id": "262",
+      "label": "Thuận Thành",
+      "fullName": "Thị xã Thuận Thành"
+    },
+    {
+      "id": "260",
+      "label": "Tiên Du",
+      "fullName": "Huyện Tiên Du"
+    },
+    {
+      "id": "261",
+      "label": "Từ Sơn",
+      "fullName": "Thành phố Từ Sơn"
+    },
+    {
+      "id": "258",
+      "label": "Yên Phong",
+      "fullName": "Huyện Yên Phong"
+    }
+  ],
+  "30": [
+    {
+      "id": "296",
+      "label": "Bình Giang",
+      "fullName": "Huyện Bình Giang"
+    },
+    {
+      "id": "295",
+      "label": "Cẩm Giàng",
+      "fullName": "Huyện Cẩm Giàng"
+    },
+    {
+      "id": "290",
+      "label": "Chí Linh",
+      "fullName": "Thành phố Chí Linh"
+    },
+    {
+      "id": "297",
+      "label": "Gia Lộc",
+      "fullName": "Huyện Gia Lộc"
+    },
+    {
+      "id": "288",
+      "label": "Hải Dương",
+      "fullName": "Thành phố Hải Dương"
+    },
+    {
+      "id": "293",
+      "label": "Kim Thành",
+      "fullName": "Huyện Kim Thành"
+    },
+    {
+      "id": "292",
+      "label": "Kinh Môn",
+      "fullName": "Thị xã Kinh Môn"
+    },
+    {
+      "id": "291",
+      "label": "Nam Sách",
+      "fullName": "Huyện Nam Sách"
+    },
+    {
+      "id": "299",
+      "label": "Ninh Giang",
+      "fullName": "Huyện Ninh Giang"
+    },
+    {
+      "id": "294",
+      "label": "Thanh Hà",
+      "fullName": "Huyện Thanh Hà"
+    },
+    {
+      "id": "300",
+      "label": "Thanh Miện",
+      "fullName": "Huyện Thanh Miện"
+    },
+    {
+      "id": "298",
+      "label": "Tứ Kỳ",
+      "fullName": "Huyện Tứ Kỳ"
+    }
+  ],
+  "31": [
+    {
+      "id": "312",
+      "label": "An Dương",
+      "fullName": "Huyện An Dương"
+    },
+    {
+      "id": "313",
+      "label": "An Lão",
+      "fullName": "Huyện An Lão"
+    },
+    {
+      "id": "318",
+      "label": "Bạch Long Vĩ",
+      "fullName": "Huyện Bạch Long Vĩ"
+    },
+    {
+      "id": "317",
+      "label": "Cát Hải",
+      "fullName": "Huyện Cát Hải"
+    },
+    {
+      "id": "308",
+      "label": "Đồ Sơn",
+      "fullName": "Quận Đồ Sơn"
+    },
+    {
+      "id": "309",
+      "label": "Dương Kinh",
+      "fullName": "Quận Dương Kinh"
+    },
+    {
+      "id": "306",
+      "label": "Hải An",
+      "fullName": "Quận Hải An"
+    },
+    {
+      "id": "303",
+      "label": "Hồng Bàng",
+      "fullName": "Quận Hồng Bàng"
+    },
+    {
+      "id": "307",
+      "label": "Kiến An",
+      "fullName": "Quận Kiến An"
+    },
+    {
+      "id": "314",
+      "label": "Kiến Thuỵ",
+      "fullName": "Huyện Kiến Thuỵ"
+    },
+    {
+      "id": "305",
+      "label": "Lê Chân",
+      "fullName": "Quận Lê Chân"
+    },
+    {
+      "id": "304",
+      "label": "Ngô Quyền",
+      "fullName": "Quận Ngô Quyền"
+    },
+    {
+      "id": "311",
+      "label": "Thuỷ Nguyên",
+      "fullName": "Huyện Thuỷ Nguyên"
+    },
+    {
+      "id": "315",
+      "label": "Tiên Lãng",
+      "fullName": "Huyện Tiên Lãng"
+    },
+    {
+      "id": "316",
+      "label": "Vĩnh Bảo",
+      "fullName": "Huyện Vĩnh Bảo"
+    }
+  ],
+  "33": [
+    {
+      "id": "329",
+      "label": "Ân Thi",
+      "fullName": "Huyện Ân Thi"
+    },
+    {
+      "id": "323",
+      "label": "Hưng Yên",
+      "fullName": "Thành phố Hưng Yên"
+    },
+    {
+      "id": "330",
+      "label": "Khoái Châu",
+      "fullName": "Huyện Khoái Châu"
+    },
+    {
+      "id": "331",
+      "label": "Kim Động",
+      "fullName": "Huyện Kim Động"
+    },
+    {
+      "id": "328",
+      "label": "Mỹ Hào",
+      "fullName": "Thị xã Mỹ Hào"
+    },
+    {
+      "id": "333",
+      "label": "Phù Cừ",
+      "fullName": "Huyện Phù Cừ"
+    },
+    {
+      "id": "332",
+      "label": "Tiên Lữ",
+      "fullName": "Huyện Tiên Lữ"
+    },
+    {
+      "id": "326",
+      "label": "Văn Giang",
+      "fullName": "Huyện Văn Giang"
+    },
+    {
+      "id": "325",
+      "label": "Văn Lâm",
+      "fullName": "Huyện Văn Lâm"
+    },
+    {
+      "id": "327",
+      "label": "Yên Mỹ",
+      "fullName": "Huyện Yên Mỹ"
+    }
+  ],
+  "34": [
+    {
+      "id": "340",
+      "label": "Đông Hưng",
+      "fullName": "Huyện Đông Hưng"
+    },
+    {
+      "id": "339",
+      "label": "Hưng Hà",
+      "fullName": "Huyện Hưng Hà"
+    },
+    {
+      "id": "343",
+      "label": "Kiến Xương",
+      "fullName": "Huyện Kiến Xương"
+    },
+    {
+      "id": "338",
+      "label": "Quỳnh Phụ",
+      "fullName": "Huyện Quỳnh Phụ"
+    },
+    {
+      "id": "336",
+      "label": "Thái Bình",
+      "fullName": "Thành phố Thái Bình"
+    },
+    {
+      "id": "341",
+      "label": "Thái Thụy",
+      "fullName": "Huyện Thái Thụy"
+    },
+    {
+      "id": "342",
+      "label": "Tiền Hải",
+      "fullName": "Huyện Tiền Hải"
+    },
+    {
+      "id": "344",
+      "label": "Vũ Thư",
+      "fullName": "Huyện Vũ Thư"
+    }
+  ],
+  "35": [
+    {
+      "id": "352",
+      "label": "Bình Lục",
+      "fullName": "Huyện Bình Lục"
+    },
+    {
+      "id": "349",
+      "label": "Duy Tiên",
+      "fullName": "Thị xã Duy Tiên"
+    },
+    {
+      "id": "350",
+      "label": "Kim Bảng",
+      "fullName": "Huyện Kim Bảng"
+    },
+    {
+      "id": "353",
+      "label": "Lý Nhân",
+      "fullName": "Huyện Lý Nhân"
+    },
+    {
+      "id": "347",
+      "label": "Phủ Lý",
+      "fullName": "Thành phố Phủ Lý"
+    },
+    {
+      "id": "351",
+      "label": "Thanh Liêm",
+      "fullName": "Huyện Thanh Liêm"
+    }
+  ],
+  "36": [
+    {
+      "id": "365",
+      "label": "Giao Thủy",
+      "fullName": "Huyện Giao Thủy"
+    },
+    {
+      "id": "366",
+      "label": "Hải Hậu",
+      "fullName": "Huyện Hải Hậu"
+    },
+    {
+      "id": "358",
+      "label": "Mỹ Lộc",
+      "fullName": "Huyện Mỹ Lộc"
+    },
+    {
+      "id": "356",
+      "label": "Nam Định",
+      "fullName": "Thành phố Nam Định"
+    },
+    {
+      "id": "362",
+      "label": "Nam Trực",
+      "fullName": "Huyện Nam Trực"
+    },
+    {
+      "id": "361",
+      "label": "Nghĩa Hưng",
+      "fullName": "Huyện Nghĩa Hưng"
+    },
+    {
+      "id": "363",
+      "label": "Trực Ninh",
+      "fullName": "Huyện Trực Ninh"
+    },
+    {
+      "id": "359",
+      "label": "Vụ Bản",
+      "fullName": "Huyện Vụ Bản"
+    },
+    {
+      "id": "364",
+      "label": "Xuân Trường",
+      "fullName": "Huyện Xuân Trường"
+    },
+    {
+      "id": "360",
+      "label": "Ý Yên",
+      "fullName": "Huyện Ý Yên"
+    }
+  ],
+  "37": [
+    {
+      "id": "373",
+      "label": "Gia Viễn",
+      "fullName": "Huyện Gia Viễn"
+    },
+    {
+      "id": "374",
+      "label": "Hoa Lư",
+      "fullName": "Huyện Hoa Lư"
+    },
+    {
+      "id": "376",
+      "label": "Kim Sơn",
+      "fullName": "Huyện Kim Sơn"
+    },
+    {
+      "id": "372",
+      "label": "Nho Quan",
+      "fullName": "Huyện Nho Quan"
+    },
+    {
+      "id": "369",
+      "label": "Ninh Bình",
+      "fullName": "Thành phố Ninh Bình"
+    },
+    {
+      "id": "370",
+      "label": "Tam Điệp",
+      "fullName": "Thành phố Tam Điệp"
+    },
+    {
+      "id": "375",
+      "label": "Yên Khánh",
+      "fullName": "Huyện Yên Khánh"
+    },
+    {
+      "id": "377",
+      "label": "Yên Mô",
+      "fullName": "Huyện Yên Mô"
+    }
+  ],
+  "38": [
+    {
+      "id": "386",
+      "label": "Bá Thước",
+      "fullName": "Huyện Bá Thước"
+    },
+    {
+      "id": "381",
+      "label": "Bỉm Sơn",
+      "fullName": "Thị xã Bỉm Sơn"
+    },
+    {
+      "id": "390",
+      "label": "Cẩm Thủy",
+      "fullName": "Huyện Cẩm Thủy"
+    },
+    {
+      "id": "405",
+      "label": "Đông Sơn",
+      "fullName": "Huyện Đông Sơn"
+    },
+    {
+      "id": "392",
+      "label": "Hà Trung",
+      "fullName": "Huyện Hà Trung"
+    },
+    {
+      "id": "400",
+      "label": "Hậu Lộc",
+      "fullName": "Huyện Hậu Lộc"
+    },
+    {
+      "id": "399",
+      "label": "Hoằng Hóa",
+      "fullName": "Huyện Hoằng Hóa"
+    },
+    {
+      "id": "388",
+      "label": "Lang Chánh",
+      "fullName": "Huyện Lang Chánh"
+    },
+    {
+      "id": "384",
+      "label": "Mường Lát",
+      "fullName": "Huyện Mường Lát"
+    },
+    {
+      "id": "401",
+      "label": "Nga Sơn",
+      "fullName": "Huyện Nga Sơn"
+    },
+    {
+      "id": "407",
+      "label": "Nghi Sơn",
+      "fullName": "Thị xã Nghi Sơn"
+    },
+    {
+      "id": "389",
+      "label": "Ngọc Lặc",
+      "fullName": "Huyện Ngọc Lặc"
+    },
+    {
+      "id": "403",
+      "label": "Như Thanh",
+      "fullName": "Huyện Như Thanh"
+    },
+    {
+      "id": "402",
+      "label": "Như Xuân",
+      "fullName": "Huyện Như Xuân"
+    },
+    {
+      "id": "404",
+      "label": "Nông Cống",
+      "fullName": "Huyện Nông Cống"
+    },
+    {
+      "id": "385",
+      "label": "Quan Hóa",
+      "fullName": "Huyện Quan Hóa"
+    },
+    {
+      "id": "387",
+      "label": "Quan Sơn",
+      "fullName": "Huyện Quan Sơn"
+    },
+    {
+      "id": "406",
+      "label": "Quảng Xương",
+      "fullName": "Huyện Quảng Xương"
+    },
+    {
+      "id": "382",
+      "label": "Sầm Sơn",
+      "fullName": "Thành phố Sầm Sơn"
+    },
+    {
+      "id": "391",
+      "label": "Thạch Thành",
+      "fullName": "Huyện Thạch Thành"
+    },
+    {
+      "id": "380",
+      "label": "Thanh Hóa",
+      "fullName": "Thành phố Thanh Hóa"
+    },
+    {
+      "id": "398",
+      "label": "Thiệu Hóa",
+      "fullName": "Huyện Thiệu Hóa"
+    },
+    {
+      "id": "395",
+      "label": "Thọ Xuân",
+      "fullName": "Huyện Thọ Xuân"
+    },
+    {
+      "id": "396",
+      "label": "Thường Xuân",
+      "fullName": "Huyện Thường Xuân"
+    },
+    {
+      "id": "397",
+      "label": "Triệu Sơn",
+      "fullName": "Huyện Triệu Sơn"
+    },
+    {
+      "id": "393",
+      "label": "Vĩnh Lộc",
+      "fullName": "Huyện Vĩnh Lộc"
+    },
+    {
+      "id": "394",
+      "label": "Yên Định",
+      "fullName": "Huyện Yên Định"
+    }
+  ],
+  "40": [
+    {
+      "id": "424",
+      "label": "Anh Sơn",
+      "fullName": "Huyện Anh Sơn"
+    },
+    {
+      "id": "422",
+      "label": "Con Cuông",
+      "fullName": "Huyện Con Cuông"
+    },
+    {
+      "id": "413",
+      "label": "Cửa Lò",
+      "fullName": "Thị xã Cửa Lò"
+    },
+    {
+      "id": "425",
+      "label": "Diễn Châu",
+      "fullName": "Huyện Diễn Châu"
+    },
+    {
+      "id": "427",
+      "label": "Đô Lương",
+      "fullName": "Huyện Đô Lương"
+    },
+    {
+      "id": "432",
+      "label": "Hoàng Mai",
+      "fullName": "Thị xã Hoàng Mai"
+    },
+    {
+      "id": "431",
+      "label": "Hưng Nguyên",
+      "fullName": "Huyện Hưng Nguyên"
+    },
+    {
+      "id": "417",
+      "label": "Kỳ Sơn",
+      "fullName": "Huyện Kỳ Sơn"
+    },
+    {
+      "id": "430",
+      "label": "Nam Đàn",
+      "fullName": "Huyện Nam Đàn"
+    },
+    {
+      "id": "429",
+      "label": "Nghi Lộc",
+      "fullName": "Huyện Nghi Lộc"
+    },
+    {
+      "id": "419",
+      "label": "Nghĩa Đàn",
+      "fullName": "Huyện Nghĩa Đàn"
+    },
+    {
+      "id": "415",
+      "label": "Quế Phong",
+      "fullName": "Huyện Quế Phong"
+    },
+    {
+      "id": "416",
+      "label": "Quỳ Châu",
+      "fullName": "Huyện Quỳ Châu"
+    },
+    {
+      "id": "420",
+      "label": "Quỳ Hợp",
+      "fullName": "Huyện Quỳ Hợp"
+    },
+    {
+      "id": "421",
+      "label": "Quỳnh Lưu",
+      "fullName": "Huyện Quỳnh Lưu"
+    },
+    {
+      "id": "423",
+      "label": "Tân Kỳ",
+      "fullName": "Huyện Tân Kỳ"
+    },
+    {
+      "id": "414",
+      "label": "Thái Hoà",
+      "fullName": "Thị xã Thái Hoà"
+    },
+    {
+      "id": "428",
+      "label": "Thanh Chương",
+      "fullName": "Huyện Thanh Chương"
+    },
+    {
+      "id": "418",
+      "label": "Tương Dương",
+      "fullName": "Huyện Tương Dương"
+    },
+    {
+      "id": "412",
+      "label": "Vinh",
+      "fullName": "Thành phố Vinh"
+    },
+    {
+      "id": "426",
+      "label": "Yên Thành",
+      "fullName": "Huyện Yên Thành"
+    }
+  ],
+  "42": [
+    {
+      "id": "446",
+      "label": "Cẩm Xuyên",
+      "fullName": "Huyện Cẩm Xuyên"
+    },
+    {
+      "id": "443",
+      "label": "Can Lộc",
+      "fullName": "Huyện Can Lộc"
+    },
+    {
+      "id": "440",
+      "label": "Đức Thọ",
+      "fullName": "Huyện Đức Thọ"
+    },
+    {
+      "id": "436",
+      "label": "Hà Tĩnh",
+      "fullName": "Thành phố Hà Tĩnh"
+    },
+    {
+      "id": "437",
+      "label": "Hồng Lĩnh",
+      "fullName": "Thị xã Hồng Lĩnh"
+    },
+    {
+      "id": "444",
+      "label": "Hương Khê",
+      "fullName": "Huyện Hương Khê"
+    },
+    {
+      "id": "439",
+      "label": "Hương Sơn",
+      "fullName": "Huyện Hương Sơn"
+    },
+    {
+      "id": "447",
+      "label": "Kỳ Anh",
+      "fullName": "Huyện Kỳ Anh"
+    },
+    {
+      "id": "449",
+      "label": "Kỳ Anh",
+      "fullName": "Thị xã Kỳ Anh"
+    },
+    {
+      "id": "448",
+      "label": "Lộc Hà",
+      "fullName": "Huyện Lộc Hà"
+    },
+    {
+      "id": "442",
+      "label": "Nghi Xuân",
+      "fullName": "Huyện Nghi Xuân"
+    },
+    {
+      "id": "445",
+      "label": "Thạch Hà",
+      "fullName": "Huyện Thạch Hà"
+    },
+    {
+      "id": "441",
+      "label": "Vũ Quang",
+      "fullName": "Huyện Vũ Quang"
+    }
+  ],
+  "44": [
+    {
+      "id": "458",
+      "label": "Ba Đồn",
+      "fullName": "Thị xã Ba Đồn"
+    },
+    {
+      "id": "455",
+      "label": "Bố Trạch",
+      "fullName": "Huyện Bố Trạch"
+    },
+    {
+      "id": "450",
+      "label": "Đồng Hới",
+      "fullName": "Thành Phố Đồng Hới"
+    },
+    {
+      "id": "457",
+      "label": "Lệ Thủy",
+      "fullName": "Huyện Lệ Thủy"
+    },
+    {
+      "id": "452",
+      "label": "Minh Hóa",
+      "fullName": "Huyện Minh Hóa"
+    },
+    {
+      "id": "456",
+      "label": "Quảng Ninh",
+      "fullName": "Huyện Quảng Ninh"
+    },
+    {
+      "id": "454",
+      "label": "Quảng Trạch",
+      "fullName": "Huyện Quảng Trạch"
+    },
+    {
+      "id": "453",
+      "label": "Tuyên Hóa",
+      "fullName": "Huyện Tuyên Hóa"
+    }
+  ],
+  "45": [
+    {
+      "id": "468",
+      "label": "Cam Lộ",
+      "fullName": "Huyện Cam Lộ"
+    },
+    {
+      "id": "471",
+      "label": "Cồn Cỏ",
+      "fullName": "Huyện Cồn Cỏ"
+    },
+    {
+      "id": "467",
+      "label": "Đa Krông",
+      "fullName": "Huyện Đa Krông"
+    },
+    {
+      "id": "461",
+      "label": "Đông Hà",
+      "fullName": "Thành phố Đông Hà"
+    },
+    {
+      "id": "466",
+      "label": "Gio Linh",
+      "fullName": "Huyện Gio Linh"
+    },
+    {
+      "id": "470",
+      "label": "Hải Lăng",
+      "fullName": "Huyện Hải Lăng"
+    },
+    {
+      "id": "465",
+      "label": "Hướng Hóa",
+      "fullName": "Huyện Hướng Hóa"
+    },
+    {
+      "id": "462",
+      "label": "Quảng Trị",
+      "fullName": "Thị xã Quảng Trị"
+    },
+    {
+      "id": "469",
+      "label": "Triệu Phong",
+      "fullName": "Huyện Triệu Phong"
+    },
+    {
+      "id": "464",
+      "label": "Vĩnh Linh",
+      "fullName": "Huyện Vĩnh Linh"
+    }
+  ],
+  "46": [
+    {
+      "id": "481",
+      "label": "A Lưới",
+      "fullName": "Huyện A Lưới"
+    },
+    {
+      "id": "474",
+      "label": "Huế",
+      "fullName": "Thành phố Huế"
+    },
+    {
+      "id": "479",
+      "label": "Hương Thủy",
+      "fullName": "Thị xã Hương Thủy"
+    },
+    {
+      "id": "480",
+      "label": "Hương Trà",
+      "fullName": "Thị xã Hương Trà"
+    },
+    {
+      "id": "483",
+      "label": "Nam Đông",
+      "fullName": "Huyện Nam Đông"
+    },
+    {
+      "id": "476",
+      "label": "Phong Điền",
+      "fullName": "Huyện Phong Điền"
+    },
+    {
+      "id": "482",
+      "label": "Phú Lộc",
+      "fullName": "Huyện Phú Lộc"
+    },
+    {
+      "id": "478",
+      "label": "Phú Vang",
+      "fullName": "Huyện Phú Vang"
+    },
+    {
+      "id": "477",
+      "label": "Quảng Điền",
+      "fullName": "Huyện Quảng Điền"
+    }
+  ],
+  "48": [
+    {
+      "id": "495",
+      "label": "Cẩm Lệ",
+      "fullName": "Quận Cẩm Lệ"
+    },
+    {
+      "id": "492",
+      "label": "Hải Châu",
+      "fullName": "Quận Hải Châu"
+    },
+    {
+      "id": "497",
+      "label": "Hòa Vang",
+      "fullName": "Huyện Hòa Vang"
+    },
+    {
+      "id": "498",
+      "label": "Hoàng Sa",
+      "fullName": "Huyện Hoàng Sa"
+    },
+    {
+      "id": "490",
+      "label": "Liên Chiểu",
+      "fullName": "Quận Liên Chiểu"
+    },
+    {
+      "id": "494",
+      "label": "Ngũ Hành Sơn",
+      "fullName": "Quận Ngũ Hành Sơn"
+    },
+    {
+      "id": "493",
+      "label": "Sơn Trà",
+      "fullName": "Quận Sơn Trà"
+    },
+    {
+      "id": "491",
+      "label": "Thanh Khê",
+      "fullName": "Quận Thanh Khê"
+    }
+  ],
+  "49": [
+    {
+      "id": "515",
+      "label": "Bắc Trà My",
+      "fullName": "Huyện Bắc Trà My"
+    },
+    {
+      "id": "506",
+      "label": "Đại Lộc",
+      "fullName": "Huyện Đại Lộc"
+    },
+    {
+      "id": "507",
+      "label": "Điện Bàn",
+      "fullName": "Thị xã Điện Bàn"
+    },
+    {
+      "id": "505",
+      "label": "Đông Giang",
+      "fullName": "Huyện Đông Giang"
+    },
+    {
+      "id": "508",
+      "label": "Duy Xuyên",
+      "fullName": "Huyện Duy Xuyên"
+    },
+    {
+      "id": "512",
+      "label": "Hiệp Đức",
+      "fullName": "Huyện Hiệp Đức"
+    },
+    {
+      "id": "503",
+      "label": "Hội An",
+      "fullName": "Thành phố Hội An"
+    },
+    {
+      "id": "510",
+      "label": "Nam Giang",
+      "fullName": "Huyện Nam Giang"
+    },
+    {
+      "id": "516",
+      "label": "Nam Trà My",
+      "fullName": "Huyện Nam Trà My"
+    },
+    {
+      "id": "519",
+      "label": "Nông Sơn",
+      "fullName": "Huyện Nông Sơn"
+    },
+    {
+      "id": "517",
+      "label": "Núi Thành",
+      "fullName": "Huyện Núi Thành"
+    },
+    {
+      "id": "518",
+      "label": "Phú Ninh",
+      "fullName": "Huyện Phú Ninh"
+    },
+    {
+      "id": "511",
+      "label": "Phước Sơn",
+      "fullName": "Huyện Phước Sơn"
+    },
+    {
+      "id": "509",
+      "label": "Quế Sơn",
+      "fullName": "Huyện Quế Sơn"
+    },
+    {
+      "id": "502",
+      "label": "Tam Kỳ",
+      "fullName": "Thành phố Tam Kỳ"
+    },
+    {
+      "id": "504",
+      "label": "Tây Giang",
+      "fullName": "Huyện Tây Giang"
+    },
+    {
+      "id": "513",
+      "label": "Thăng Bình",
+      "fullName": "Huyện Thăng Bình"
+    },
+    {
+      "id": "514",
+      "label": "Tiên Phước",
+      "fullName": "Huyện Tiên Phước"
+    }
+  ],
+  "51": [
+    {
+      "id": "535",
+      "label": "Ba Tơ",
+      "fullName": "Huyện Ba Tơ"
+    },
+    {
+      "id": "524",
+      "label": "Bình Sơn",
+      "fullName": "Huyện Bình Sơn"
+    },
+    {
+      "id": "534",
+      "label": "Đức Phổ",
+      "fullName": "Thị xã Đức Phổ"
+    },
+    {
+      "id": "536",
+      "label": "Lý Sơn",
+      "fullName": "Huyện Lý Sơn"
+    },
+    {
+      "id": "531",
+      "label": "Minh Long",
+      "fullName": "Huyện Minh Long"
+    },
+    {
+      "id": "533",
+      "label": "Mộ Đức",
+      "fullName": "Huyện Mộ Đức"
+    },
+    {
+      "id": "532",
+      "label": "Nghĩa Hành",
+      "fullName": "Huyện Nghĩa Hành"
+    },
+    {
+      "id": "522",
+      "label": "Quảng Ngãi",
+      "fullName": "Thành phố Quảng Ngãi"
+    },
+    {
+      "id": "529",
+      "label": "Sơn Hà",
+      "fullName": "Huyện Sơn Hà"
+    },
+    {
+      "id": "530",
+      "label": "Sơn Tây",
+      "fullName": "Huyện Sơn Tây"
+    },
+    {
+      "id": "527",
+      "label": "Sơn Tịnh",
+      "fullName": "Huyện Sơn Tịnh"
+    },
+    {
+      "id": "525",
+      "label": "Trà Bồng",
+      "fullName": "Huyện Trà Bồng"
+    },
+    {
+      "id": "528",
+      "label": "Tư Nghĩa",
+      "fullName": "Huyện Tư Nghĩa"
+    }
+  ],
+  "52": [
+    {
+      "id": "542",
+      "label": "An Lão",
+      "fullName": "Huyện An Lão"
+    },
+    {
+      "id": "549",
+      "label": "An Nhơn",
+      "fullName": "Thị xã An Nhơn"
+    },
+    {
+      "id": "544",
+      "label": "Hoài Ân",
+      "fullName": "Huyện Hoài Ân"
+    },
+    {
+      "id": "543",
+      "label": "Hoài Nhơn",
+      "fullName": "Thị xã Hoài Nhơn"
+    },
+    {
+      "id": "548",
+      "label": "Phù Cát",
+      "fullName": "Huyện Phù Cát"
+    },
+    {
+      "id": "545",
+      "label": "Phù Mỹ",
+      "fullName": "Huyện Phù Mỹ"
+    },
+    {
+      "id": "540",
+      "label": "Quy Nhơn",
+      "fullName": "Thành phố Quy Nhơn"
+    },
+    {
+      "id": "547",
+      "label": "Tây Sơn",
+      "fullName": "Huyện Tây Sơn"
+    },
+    {
+      "id": "550",
+      "label": "Tuy Phước",
+      "fullName": "Huyện Tuy Phước"
+    },
+    {
+      "id": "551",
+      "label": "Vân Canh",
+      "fullName": "Huyện Vân Canh"
+    },
+    {
+      "id": "546",
+      "label": "Vĩnh Thạnh",
+      "fullName": "Huyện Vĩnh Thạnh"
+    }
+  ],
+  "54": [
+    {
+      "id": "564",
+      "label": "Đông Hòa",
+      "fullName": "Thị xã Đông Hòa"
+    },
+    {
+      "id": "558",
+      "label": "Đồng Xuân",
+      "fullName": "Huyện Đồng Xuân"
+    },
+    {
+      "id": "563",
+      "label": "Phú Hoà",
+      "fullName": "Huyện Phú Hoà"
+    },
+    {
+      "id": "560",
+      "label": "Sơn Hòa",
+      "fullName": "Huyện Sơn Hòa"
+    },
+    {
+      "id": "557",
+      "label": "Sông Cầu",
+      "fullName": "Thị xã Sông Cầu"
+    },
+    {
+      "id": "561",
+      "label": "Sông Hinh",
+      "fullName": "Huyện Sông Hinh"
+    },
+    {
+      "id": "562",
+      "label": "Tây Hoà",
+      "fullName": "Huyện Tây Hoà"
+    },
+    {
+      "id": "559",
+      "label": "Tuy An",
+      "fullName": "Huyện Tuy An"
+    },
+    {
+      "id": "555",
+      "label": "Tuy Hoà",
+      "fullName": "Thành phố Tuy Hoà"
+    }
+  ],
+  "56": [
+    {
+      "id": "570",
+      "label": "Cam Lâm",
+      "fullName": "Huyện Cam Lâm"
+    },
+    {
+      "id": "569",
+      "label": "Cam Ranh",
+      "fullName": "Thành phố Cam Ranh"
+    },
+    {
+      "id": "574",
+      "label": "Diên Khánh",
+      "fullName": "Huyện Diên Khánh"
+    },
+    {
+      "id": "575",
+      "label": "Khánh Sơn",
+      "fullName": "Huyện Khánh Sơn"
+    },
+    {
+      "id": "573",
+      "label": "Khánh Vĩnh",
+      "fullName": "Huyện Khánh Vĩnh"
+    },
+    {
+      "id": "568",
+      "label": "Nha Trang",
+      "fullName": "Thành phố Nha Trang"
+    },
+    {
+      "id": "572",
+      "label": "Ninh Hòa",
+      "fullName": "Thị xã Ninh Hòa"
+    },
+    {
+      "id": "576",
+      "label": "Trường Sa",
+      "fullName": "Huyện Trường Sa"
+    },
+    {
+      "id": "571",
+      "label": "Vạn Ninh",
+      "fullName": "Huyện Vạn Ninh"
+    }
+  ],
+  "58": [
+    {
+      "id": "584",
+      "label": "Bác Ái",
+      "fullName": "Huyện Bác Ái"
+    },
+    {
+      "id": "586",
+      "label": "Ninh Hải",
+      "fullName": "Huyện Ninh Hải"
+    },
+    {
+      "id": "587",
+      "label": "Ninh Phước",
+      "fullName": "Huyện Ninh Phước"
+    },
+    {
+      "id": "585",
+      "label": "Ninh Sơn",
+      "fullName": "Huyện Ninh Sơn"
+    },
+    {
+      "id": "582",
+      "label": "Phan Rang-Tháp Chàm",
+      "fullName": "Thành phố Phan Rang-Tháp Chàm"
+    },
+    {
+      "id": "588",
+      "label": "Thuận Bắc",
+      "fullName": "Huyện Thuận Bắc"
+    },
+    {
+      "id": "589",
+      "label": "Thuận Nam",
+      "fullName": "Huyện Thuận Nam"
+    }
+  ],
+  "60": [
+    {
+      "id": "596",
+      "label": "Bắc Bình",
+      "fullName": "Huyện Bắc Bình"
+    },
+    {
+      "id": "600",
+      "label": "Đức Linh",
+      "fullName": "Huyện Đức Linh"
+    },
+    {
+      "id": "601",
+      "label": "Hàm Tân",
+      "fullName": "Huyện Hàm Tân"
+    },
+    {
+      "id": "597",
+      "label": "Hàm Thuận Bắc",
+      "fullName": "Huyện Hàm Thuận Bắc"
+    },
+    {
+      "id": "598",
+      "label": "Hàm Thuận Nam",
+      "fullName": "Huyện Hàm Thuận Nam"
+    },
+    {
+      "id": "594",
+      "label": "La Gi",
+      "fullName": "Thị xã La Gi"
+    },
+    {
+      "id": "593",
+      "label": "Phan Thiết",
+      "fullName": "Thành phố Phan Thiết"
+    },
+    {
+      "id": "602",
+      "label": "Phú Quí",
+      "fullName": "Huyện Phú Quí"
+    },
+    {
+      "id": "599",
+      "label": "Tánh Linh",
+      "fullName": "Huyện Tánh Linh"
+    },
+    {
+      "id": "595",
+      "label": "Tuy Phong",
+      "fullName": "Huyện Tuy Phong"
+    }
+  ],
+  "62": [
+    {
+      "id": "610",
+      "label": "Đắk Glei",
+      "fullName": "Huyện Đắk Glei"
+    },
+    {
+      "id": "615",
+      "label": "Đắk Hà",
+      "fullName": "Huyện Đắk Hà"
+    },
+    {
+      "id": "612",
+      "label": "Đắk Tô",
+      "fullName": "Huyện Đắk Tô"
+    },
+    {
+      "id": "618",
+      "label": "Ia H' Drai",
+      "fullName": "Huyện Ia H' Drai"
+    },
+    {
+      "id": "613",
+      "label": "Kon Plông",
+      "fullName": "Huyện Kon Plông"
+    },
+    {
+      "id": "614",
+      "label": "Kon Rẫy",
+      "fullName": "Huyện Kon Rẫy"
+    },
+    {
+      "id": "608",
+      "label": "Kon Tum",
+      "fullName": "Thành phố Kon Tum"
+    },
+    {
+      "id": "611",
+      "label": "Ngọc Hồi",
+      "fullName": "Huyện Ngọc Hồi"
+    },
+    {
+      "id": "616",
+      "label": "Sa Thầy",
+      "fullName": "Huyện Sa Thầy"
+    },
+    {
+      "id": "617",
+      "label": "Tu Mơ Rông",
+      "fullName": "Huyện Tu Mơ Rông"
+    }
+  ],
+  "64": [
+    {
+      "id": "623",
+      "label": "An Khê",
+      "fullName": "Thị xã An Khê"
+    },
+    {
+      "id": "624",
+      "label": "Ayun Pa",
+      "fullName": "Thị xã Ayun Pa"
+    },
+    {
+      "id": "627",
+      "label": "Chư Păh",
+      "fullName": "Huyện Chư Păh"
+    },
+    {
+      "id": "632",
+      "label": "Chư Prông",
+      "fullName": "Huyện Chư Prông"
+    },
+    {
+      "id": "639",
+      "label": "Chư Pưh",
+      "fullName": "Huyện Chư Pưh"
+    },
+    {
+      "id": "633",
+      "label": "Chư Sê",
+      "fullName": "Huyện Chư Sê"
+    },
+    {
+      "id": "626",
+      "label": "Đăk Đoa",
+      "fullName": "Huyện Đăk Đoa"
+    },
+    {
+      "id": "634",
+      "label": "Đăk Pơ",
+      "fullName": "Huyện Đăk Pơ"
+    },
+    {
+      "id": "631",
+      "label": "Đức Cơ",
+      "fullName": "Huyện Đức Cơ"
+    },
+    {
+      "id": "628",
+      "label": "Ia Grai",
+      "fullName": "Huyện Ia Grai"
+    },
+    {
+      "id": "635",
+      "label": "Ia Pa",
+      "fullName": "Huyện Ia Pa"
+    },
+    {
+      "id": "625",
+      "label": "KBang",
+      "fullName": "Huyện KBang"
+    },
+    {
+      "id": "630",
+      "label": "Kông Chro",
+      "fullName": "Huyện Kông Chro"
+    },
+    {
+      "id": "637",
+      "label": "Krông Pa",
+      "fullName": "Huyện Krông Pa"
+    },
+    {
+      "id": "629",
+      "label": "Mang Yang",
+      "fullName": "Huyện Mang Yang"
+    },
+    {
+      "id": "638",
+      "label": "Phú Thiện",
+      "fullName": "Huyện Phú Thiện"
+    },
+    {
+      "id": "622",
+      "label": "Pleiku",
+      "fullName": "Thành phố Pleiku"
+    }
+  ],
+  "66": [
+    {
+      "id": "647",
+      "label": "Buôn Đôn",
+      "fullName": "Huyện Buôn Đôn"
+    },
+    {
+      "id": "644",
+      "label": "Buôn Hồ",
+      "fullName": "Thị xã Buôn Hồ"
+    },
+    {
+      "id": "643",
+      "label": "Buôn Ma Thuột",
+      "fullName": "Thành phố Buôn Ma Thuột"
+    },
+    {
+      "id": "657",
+      "label": "Cư Kuin",
+      "fullName": "Huyện Cư Kuin"
+    },
+    {
+      "id": "648",
+      "label": "Cư M'gar",
+      "fullName": "Huyện Cư M'gar"
+    },
+    {
+      "id": "645",
+      "label": "Ea H'leo",
+      "fullName": "Huyện Ea H'leo"
+    },
+    {
+      "id": "651",
+      "label": "Ea Kar",
+      "fullName": "Huyện Ea Kar"
+    },
+    {
+      "id": "646",
+      "label": "Ea Súp",
+      "fullName": "Huyện Ea Súp"
+    },
+    {
+      "id": "655",
+      "label": "Krông A Na",
+      "fullName": "Huyện Krông A Na"
+    },
+    {
+      "id": "653",
+      "label": "Krông Bông",
+      "fullName": "Huyện Krông Bông"
+    },
+    {
+      "id": "649",
+      "label": "Krông Búk",
+      "fullName": "Huyện Krông Búk"
+    },
+    {
+      "id": "650",
+      "label": "Krông Năng",
+      "fullName": "Huyện Krông Năng"
+    },
+    {
+      "id": "654",
+      "label": "Krông Pắc",
+      "fullName": "Huyện Krông Pắc"
+    },
+    {
+      "id": "656",
+      "label": "Lắk",
+      "fullName": "Huyện Lắk"
+    },
+    {
+      "id": "652",
+      "label": "M'Đrắk",
+      "fullName": "Huyện M'Đrắk"
+    }
+  ],
+  "67": [
+    {
+      "id": "662",
+      "label": "Cư Jút",
+      "fullName": "Huyện Cư Jút"
+    },
+    {
+      "id": "661",
+      "label": "Đăk Glong",
+      "fullName": "Huyện Đăk Glong"
+    },
+    {
+      "id": "663",
+      "label": "Đắk Mil",
+      "fullName": "Huyện Đắk Mil"
+    },
+    {
+      "id": "666",
+      "label": "Đắk R'Lấp",
+      "fullName": "Huyện Đắk R'Lấp"
+    },
+    {
+      "id": "665",
+      "label": "Đắk Song",
+      "fullName": "Huyện Đắk Song"
+    },
+    {
+      "id": "660",
+      "label": "Gia Nghĩa",
+      "fullName": "Thành phố Gia Nghĩa"
+    },
+    {
+      "id": "664",
+      "label": "Krông Nô",
+      "fullName": "Huyện Krông Nô"
+    },
+    {
+      "id": "667",
+      "label": "Tuy Đức",
+      "fullName": "Huyện Tuy Đức"
+    }
+  ],
+  "68": [
+    {
+      "id": "680",
+      "label": "Bảo Lâm",
+      "fullName": "Huyện Bảo Lâm"
+    },
+    {
+      "id": "673",
+      "label": "Bảo Lộc",
+      "fullName": "Thành phố Bảo Lộc"
+    },
+    {
+      "id": "683",
+      "label": "Cát Tiên",
+      "fullName": "Huyện Cát Tiên"
+    },
+    {
+      "id": "681",
+      "label": "Đạ Huoai",
+      "fullName": "Huyện Đạ Huoai"
+    },
+    {
+      "id": "672",
+      "label": "Đà Lạt",
+      "fullName": "Thành phố Đà Lạt"
+    },
+    {
+      "id": "682",
+      "label": "Đạ Tẻh",
+      "fullName": "Huyện Đạ Tẻh"
+    },
+    {
+      "id": "674",
+      "label": "Đam Rông",
+      "fullName": "Huyện Đam Rông"
+    },
+    {
+      "id": "679",
+      "label": "Di Linh",
+      "fullName": "Huyện Di Linh"
+    },
+    {
+      "id": "677",
+      "label": "Đơn Dương",
+      "fullName": "Huyện Đơn Dương"
+    },
+    {
+      "id": "678",
+      "label": "Đức Trọng",
+      "fullName": "Huyện Đức Trọng"
+    },
+    {
+      "id": "675",
+      "label": "Lạc Dương",
+      "fullName": "Huyện Lạc Dương"
+    },
+    {
+      "id": "676",
+      "label": "Lâm Hà",
+      "fullName": "Huyện Lâm Hà"
+    }
+  ],
+  "70": [
+    {
+      "id": "690",
+      "label": "Bình Long",
+      "fullName": "Thị xã Bình Long"
+    },
+    {
+      "id": "696",
+      "label": "Bù Đăng",
+      "fullName": "Huyện Bù Đăng"
+    },
+    {
+      "id": "693",
+      "label": "Bù Đốp",
+      "fullName": "Huyện Bù Đốp"
+    },
+    {
+      "id": "691",
+      "label": "Bù Gia Mập",
+      "fullName": "Huyện Bù Gia Mập"
+    },
+    {
+      "id": "697",
+      "label": "Chơn Thành",
+      "fullName": "Thị xã Chơn Thành"
+    },
+    {
+      "id": "695",
+      "label": "Đồng Phú",
+      "fullName": "Huyện Đồng Phú"
+    },
+    {
+      "id": "689",
+      "label": "Đồng Xoài",
+      "fullName": "Thành phố Đồng Xoài"
+    },
+    {
+      "id": "694",
+      "label": "Hớn Quản",
+      "fullName": "Huyện Hớn Quản"
+    },
+    {
+      "id": "692",
+      "label": "Lộc Ninh",
+      "fullName": "Huyện Lộc Ninh"
+    },
+    {
+      "id": "698",
+      "label": "Phú Riềng",
+      "fullName": "Huyện Phú Riềng"
+    },
+    {
+      "id": "688",
+      "label": "Phước Long",
+      "fullName": "Thị xã Phước Long"
+    }
+  ],
+  "72": [
+    {
+      "id": "711",
+      "label": "Bến Cầu",
+      "fullName": "Huyện Bến Cầu"
+    },
+    {
+      "id": "708",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "707",
+      "label": "Dương Minh Châu",
+      "fullName": "Huyện Dương Minh Châu"
+    },
+    {
+      "id": "710",
+      "label": "Gò Dầu",
+      "fullName": "Huyện Gò Dầu"
+    },
+    {
+      "id": "709",
+      "label": "Hòa Thành",
+      "fullName": "Thị xã Hòa Thành"
+    },
+    {
+      "id": "705",
+      "label": "Tân Biên",
+      "fullName": "Huyện Tân Biên"
+    },
+    {
+      "id": "706",
+      "label": "Tân Châu",
+      "fullName": "Huyện Tân Châu"
+    },
+    {
+      "id": "703",
+      "label": "Tây Ninh",
+      "fullName": "Thành phố Tây Ninh"
+    },
+    {
+      "id": "712",
+      "label": "Trảng Bàng",
+      "fullName": "Thị xã Trảng Bàng"
+    }
+  ],
+  "74": [
+    {
+      "id": "726",
+      "label": "Bắc Tân Uyên",
+      "fullName": "Huyện Bắc Tân Uyên"
+    },
+    {
+      "id": "719",
+      "label": "Bàu Bàng",
+      "fullName": "Huyện Bàu Bàng"
+    },
+    {
+      "id": "721",
+      "label": "Bến Cát",
+      "fullName": "Thị xã Bến Cát"
+    },
+    {
+      "id": "720",
+      "label": "Dầu Tiếng",
+      "fullName": "Huyện Dầu Tiếng"
+    },
+    {
+      "id": "724",
+      "label": "Dĩ An",
+      "fullName": "Thành phố Dĩ An"
+    },
+    {
+      "id": "722",
+      "label": "Phú Giáo",
+      "fullName": "Huyện Phú Giáo"
+    },
+    {
+      "id": "723",
+      "label": "Tân Uyên",
+      "fullName": "Thành phố Tân Uyên"
+    },
+    {
+      "id": "718",
+      "label": "Thủ Dầu Một",
+      "fullName": "Thành phố Thủ Dầu Một"
+    },
+    {
+      "id": "725",
+      "label": "Thuận An",
+      "fullName": "Thành phố Thuận An"
+    }
+  ],
+  "75": [
+    {
+      "id": "731",
+      "label": "Biên Hòa",
+      "fullName": "Thành phố Biên Hòa"
+    },
+    {
+      "id": "739",
+      "label": "Cẩm Mỹ",
+      "fullName": "Huyện Cẩm Mỹ"
+    },
+    {
+      "id": "736",
+      "label": "Định Quán",
+      "fullName": "Huyện Định Quán"
+    },
+    {
+      "id": "732",
+      "label": "Long Khánh",
+      "fullName": "Thành phố Long Khánh"
+    },
+    {
+      "id": "740",
+      "label": "Long Thành",
+      "fullName": "Huyện Long Thành"
+    },
+    {
+      "id": "742",
+      "label": "Nhơn Trạch",
+      "fullName": "Huyện Nhơn Trạch"
+    },
+    {
+      "id": "734",
+      "label": "Tân Phú",
+      "fullName": "Huyện Tân Phú"
+    },
+    {
+      "id": "738",
+      "label": "Thống Nhất",
+      "fullName": "Huyện Thống Nhất"
+    },
+    {
+      "id": "737",
+      "label": "Trảng Bom",
+      "fullName": "Huyện Trảng Bom"
+    },
+    {
+      "id": "735",
+      "label": "Vĩnh Cửu",
+      "fullName": "Huyện Vĩnh Cửu"
+    },
+    {
+      "id": "741",
+      "label": "Xuân Lộc",
+      "fullName": "Huyện Xuân Lộc"
+    }
+  ],
+  "77": [
+    {
+      "id": "748",
+      "label": "Bà Rịa",
+      "fullName": "Thành phố Bà Rịa"
+    },
+    {
+      "id": "750",
+      "label": "Châu Đức",
+      "fullName": "Huyện Châu Đức"
+    },
+    {
+      "id": "755",
+      "label": "Côn Đảo",
+      "fullName": "Huyện Côn Đảo"
+    },
+    {
+      "id": "753",
+      "label": "Đất Đỏ",
+      "fullName": "Huyện Đất Đỏ"
+    },
+    {
+      "id": "752",
+      "label": "Long Điền",
+      "fullName": "Huyện Long Điền"
+    },
+    {
+      "id": "754",
+      "label": "Phú Mỹ",
+      "fullName": "Thị xã Phú Mỹ"
+    },
+    {
+      "id": "747",
+      "label": "Vũng Tàu",
+      "fullName": "Thành phố Vũng Tàu"
+    },
+    {
+      "id": "751",
+      "label": "Xuyên Mộc",
+      "fullName": "Huyện Xuyên Mộc"
+    }
+  ],
+  "79": [
+    {
+      "id": "760",
+      "label": "1",
+      "fullName": "Quận 1"
+    },
+    {
+      "id": "771",
+      "label": "10",
+      "fullName": "Quận 10"
+    },
+    {
+      "id": "772",
+      "label": "11",
+      "fullName": "Quận 11"
+    },
+    {
+      "id": "761",
+      "label": "12",
+      "fullName": "Quận 12"
+    },
+    {
+      "id": "770",
+      "label": "3",
+      "fullName": "Quận 3"
+    },
+    {
+      "id": "773",
+      "label": "4",
+      "fullName": "Quận 4"
+    },
+    {
+      "id": "774",
+      "label": "5",
+      "fullName": "Quận 5"
+    },
+    {
+      "id": "775",
+      "label": "6",
+      "fullName": "Quận 6"
+    },
+    {
+      "id": "778",
+      "label": "7",
+      "fullName": "Quận 7"
+    },
+    {
+      "id": "776",
+      "label": "8",
+      "fullName": "Quận 8"
+    },
+    {
+      "id": "785",
+      "label": "Bình Chánh",
+      "fullName": "Huyện Bình Chánh"
+    },
+    {
+      "id": "777",
+      "label": "Bình Tân",
+      "fullName": "Quận Bình Tân"
+    },
+    {
+      "id": "765",
+      "label": "Bình Thạnh",
+      "fullName": "Quận Bình Thạnh"
+    },
+    {
+      "id": "787",
+      "label": "Cần Giờ",
+      "fullName": "Huyện Cần Giờ"
+    },
+    {
+      "id": "783",
+      "label": "Củ Chi",
+      "fullName": "Huyện Củ Chi"
+    },
+    {
+      "id": "764",
+      "label": "Gò Vấp",
+      "fullName": "Quận Gò Vấp"
+    },
+    {
+      "id": "784",
+      "label": "Hóc Môn",
+      "fullName": "Huyện Hóc Môn"
+    },
+    {
+      "id": "786",
+      "label": "Nhà Bè",
+      "fullName": "Huyện Nhà Bè"
+    },
+    {
+      "id": "768",
+      "label": "Phú Nhuận",
+      "fullName": "Quận Phú Nhuận"
+    },
+    {
+      "id": "766",
+      "label": "Tân Bình",
+      "fullName": "Quận Tân Bình"
+    },
+    {
+      "id": "767",
+      "label": "Tân Phú",
+      "fullName": "Quận Tân Phú"
+    },
+    {
+      "id": "769",
+      "label": "Thủ Đức",
+      "fullName": "Thành phố Thủ Đức"
+    }
+  ],
+  "80": [
+    {
+      "id": "803",
+      "label": "Bến Lức",
+      "fullName": "Huyện Bến Lức"
+    },
+    {
+      "id": "806",
+      "label": "Cần Đước",
+      "fullName": "Huyện Cần Đước"
+    },
+    {
+      "id": "807",
+      "label": "Cần Giuộc",
+      "fullName": "Huyện Cần Giuộc"
+    },
+    {
+      "id": "808",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "802",
+      "label": "Đức Hòa",
+      "fullName": "Huyện Đức Hòa"
+    },
+    {
+      "id": "801",
+      "label": "Đức Huệ",
+      "fullName": "Huyện Đức Huệ"
+    },
+    {
+      "id": "795",
+      "label": "Kiến Tường",
+      "fullName": "Thị xã Kiến Tường"
+    },
+    {
+      "id": "798",
+      "label": "Mộc Hóa",
+      "fullName": "Huyện Mộc Hóa"
+    },
+    {
+      "id": "794",
+      "label": "Tân An",
+      "fullName": "Thành phố Tân An"
+    },
+    {
+      "id": "796",
+      "label": "Tân Hưng",
+      "fullName": "Huyện Tân Hưng"
+    },
+    {
+      "id": "799",
+      "label": "Tân Thạnh",
+      "fullName": "Huyện Tân Thạnh"
+    },
+    {
+      "id": "805",
+      "label": "Tân Trụ",
+      "fullName": "Huyện Tân Trụ"
+    },
+    {
+      "id": "800",
+      "label": "Thạnh Hóa",
+      "fullName": "Huyện Thạnh Hóa"
+    },
+    {
+      "id": "804",
+      "label": "Thủ Thừa",
+      "fullName": "Huyện Thủ Thừa"
+    },
+    {
+      "id": "797",
+      "label": "Vĩnh Hưng",
+      "fullName": "Huyện Vĩnh Hưng"
+    }
+  ],
+  "82": [
+    {
+      "id": "819",
+      "label": "Cái Bè",
+      "fullName": "Huyện Cái Bè"
+    },
+    {
+      "id": "817",
+      "label": "Cai Lậy",
+      "fullName": "Thị xã Cai Lậy"
+    },
+    {
+      "id": "820",
+      "label": "Cai Lậy",
+      "fullName": "Huyện Cai Lậy"
+    },
+    {
+      "id": "821",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "822",
+      "label": "Chợ Gạo",
+      "fullName": "Huyện Chợ Gạo"
+    },
+    {
+      "id": "816",
+      "label": "Gò Công",
+      "fullName": "Thị xã Gò Công"
+    },
+    {
+      "id": "824",
+      "label": "Gò Công Đông",
+      "fullName": "Huyện Gò Công Đông"
+    },
+    {
+      "id": "823",
+      "label": "Gò Công Tây",
+      "fullName": "Huyện Gò Công Tây"
+    },
+    {
+      "id": "815",
+      "label": "Mỹ Tho",
+      "fullName": "Thành phố Mỹ Tho"
+    },
+    {
+      "id": "825",
+      "label": "Tân Phú Đông",
+      "fullName": "Huyện Tân Phú Đông"
+    },
+    {
+      "id": "818",
+      "label": "Tân Phước",
+      "fullName": "Huyện Tân Phước"
+    }
+  ],
+  "83": [
+    {
+      "id": "836",
+      "label": "Ba Tri",
+      "fullName": "Huyện Ba Tri"
+    },
+    {
+      "id": "829",
+      "label": "Bến Tre",
+      "fullName": "Thành phố Bến Tre"
+    },
+    {
+      "id": "835",
+      "label": "Bình Đại",
+      "fullName": "Huyện Bình Đại"
+    },
+    {
+      "id": "831",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "832",
+      "label": "Chợ Lách",
+      "fullName": "Huyện Chợ Lách"
+    },
+    {
+      "id": "834",
+      "label": "Giồng Trôm",
+      "fullName": "Huyện Giồng Trôm"
+    },
+    {
+      "id": "838",
+      "label": "Mỏ Cày Bắc",
+      "fullName": "Huyện Mỏ Cày Bắc"
+    },
+    {
+      "id": "833",
+      "label": "Mỏ Cày Nam",
+      "fullName": "Huyện Mỏ Cày Nam"
+    },
+    {
+      "id": "837",
+      "label": "Thạnh Phú",
+      "fullName": "Huyện Thạnh Phú"
+    }
+  ],
+  "84": [
+    {
+      "id": "844",
+      "label": "Càng Long",
+      "fullName": "Huyện Càng Long"
+    },
+    {
+      "id": "845",
+      "label": "Cầu Kè",
+      "fullName": "Huyện Cầu Kè"
+    },
+    {
+      "id": "848",
+      "label": "Cầu Ngang",
+      "fullName": "Huyện Cầu Ngang"
+    },
+    {
+      "id": "847",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "850",
+      "label": "Duyên Hải",
+      "fullName": "Huyện Duyên Hải"
+    },
+    {
+      "id": "851",
+      "label": "Duyên Hải",
+      "fullName": "Thị xã Duyên Hải"
+    },
+    {
+      "id": "846",
+      "label": "Tiểu Cần",
+      "fullName": "Huyện Tiểu Cần"
+    },
+    {
+      "id": "849",
+      "label": "Trà Cú",
+      "fullName": "Huyện Trà Cú"
+    },
+    {
+      "id": "842",
+      "label": "Trà Vinh",
+      "fullName": "Thành phố Trà Vinh"
+    }
+  ],
+  "86": [
+    {
+      "id": "861",
+      "label": "Bình Minh",
+      "fullName": "Thị xã Bình Minh"
+    },
+    {
+      "id": "863",
+      "label": "Bình Tân",
+      "fullName": "Huyện Bình Tân"
+    },
+    {
+      "id": "857",
+      "label": "Long Hồ",
+      "fullName": "Huyện Long Hồ"
+    },
+    {
+      "id": "858",
+      "label": "Mang Thít",
+      "fullName": "Huyện Mang Thít"
+    },
+    {
+      "id": "860",
+      "label": "Tam Bình",
+      "fullName": "Huyện Tam Bình"
+    },
+    {
+      "id": "862",
+      "label": "Trà Ôn",
+      "fullName": "Huyện Trà Ôn"
+    },
+    {
+      "id": "855",
+      "label": "Vĩnh Long",
+      "fullName": "Thành phố Vĩnh Long"
+    },
+    {
+      "id": "859",
+      "label": "Vũng Liêm",
+      "fullName": "Huyện  Vũng Liêm"
+    }
+  ],
+  "87": [
+    {
+      "id": "866",
+      "label": "Cao Lãnh",
+      "fullName": "Thành phố Cao Lãnh"
+    },
+    {
+      "id": "873",
+      "label": "Cao Lãnh",
+      "fullName": "Huyện Cao Lãnh"
+    },
+    {
+      "id": "877",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "868",
+      "label": "Hồng Ngự",
+      "fullName": "Thành phố Hồng Ngự"
+    },
+    {
+      "id": "870",
+      "label": "Hồng Ngự",
+      "fullName": "Huyện Hồng Ngự"
+    },
+    {
+      "id": "876",
+      "label": "Lai Vung",
+      "fullName": "Huyện Lai Vung"
+    },
+    {
+      "id": "875",
+      "label": "Lấp Vò",
+      "fullName": "Huyện Lấp Vò"
+    },
+    {
+      "id": "867",
+      "label": "Sa Đéc",
+      "fullName": "Thành phố Sa Đéc"
+    },
+    {
+      "id": "871",
+      "label": "Tam Nông",
+      "fullName": "Huyện Tam Nông"
+    },
+    {
+      "id": "869",
+      "label": "Tân Hồng",
+      "fullName": "Huyện Tân Hồng"
+    },
+    {
+      "id": "874",
+      "label": "Thanh Bình",
+      "fullName": "Huyện Thanh Bình"
+    },
+    {
+      "id": "872",
+      "label": "Tháp Mười",
+      "fullName": "Huyện Tháp Mười"
+    }
+  ],
+  "89": [
+    {
+      "id": "886",
+      "label": "An Phú",
+      "fullName": "Huyện An Phú"
+    },
+    {
+      "id": "884",
+      "label": "Châu Đốc",
+      "fullName": "Thành phố Châu Đốc"
+    },
+    {
+      "id": "889",
+      "label": "Châu Phú",
+      "fullName": "Huyện Châu Phú"
+    },
+    {
+      "id": "892",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "893",
+      "label": "Chợ Mới",
+      "fullName": "Huyện Chợ Mới"
+    },
+    {
+      "id": "883",
+      "label": "Long Xuyên",
+      "fullName": "Thành phố Long Xuyên"
+    },
+    {
+      "id": "888",
+      "label": "Phú Tân",
+      "fullName": "Huyện Phú Tân"
+    },
+    {
+      "id": "887",
+      "label": "Tân Châu",
+      "fullName": "Thị xã Tân Châu"
+    },
+    {
+      "id": "894",
+      "label": "Thoại Sơn",
+      "fullName": "Huyện Thoại Sơn"
+    },
+    {
+      "id": "890",
+      "label": "Tịnh Biên",
+      "fullName": "Thị xã Tịnh Biên"
+    },
+    {
+      "id": "891",
+      "label": "Tri Tôn",
+      "fullName": "Huyện Tri Tôn"
+    }
+  ],
+  "91": [
+    {
+      "id": "908",
+      "label": "An Biên",
+      "fullName": "Huyện An Biên"
+    },
+    {
+      "id": "909",
+      "label": "An Minh",
+      "fullName": "Huyện An Minh"
+    },
+    {
+      "id": "905",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "914",
+      "label": "Giang Thành",
+      "fullName": "Huyện Giang Thành"
+    },
+    {
+      "id": "906",
+      "label": "Giồng Riềng",
+      "fullName": "Huyện Giồng Riềng"
+    },
+    {
+      "id": "907",
+      "label": "Gò Quao",
+      "fullName": "Huyện Gò Quao"
+    },
+    {
+      "id": "900",
+      "label": "Hà Tiên",
+      "fullName": "Thành phố Hà Tiên"
+    },
+    {
+      "id": "903",
+      "label": "Hòn Đất",
+      "fullName": "Huyện Hòn Đất"
+    },
+    {
+      "id": "912",
+      "label": "Kiên Hải",
+      "fullName": "Huyện Kiên Hải"
+    },
+    {
+      "id": "902",
+      "label": "Kiên Lương",
+      "fullName": "Huyện Kiên Lương"
+    },
+    {
+      "id": "911",
+      "label": "Phú Quốc",
+      "fullName": "Thành phố Phú Quốc"
+    },
+    {
+      "id": "899",
+      "label": "Rạch Giá",
+      "fullName": "Thành phố Rạch Giá"
+    },
+    {
+      "id": "904",
+      "label": "Tân Hiệp",
+      "fullName": "Huyện Tân Hiệp"
+    },
+    {
+      "id": "913",
+      "label": "U Minh Thượng",
+      "fullName": "Huyện U Minh Thượng"
+    },
+    {
+      "id": "910",
+      "label": "Vĩnh Thuận",
+      "fullName": "Huyện Vĩnh Thuận"
+    }
+  ],
+  "92": [
+    {
+      "id": "918",
+      "label": "Bình Thuỷ",
+      "fullName": "Quận Bình Thuỷ"
+    },
+    {
+      "id": "919",
+      "label": "Cái Răng",
+      "fullName": "Quận Cái Răng"
+    },
+    {
+      "id": "925",
+      "label": "Cờ Đỏ",
+      "fullName": "Huyện Cờ Đỏ"
+    },
+    {
+      "id": "916",
+      "label": "Ninh Kiều",
+      "fullName": "Quận Ninh Kiều"
+    },
+    {
+      "id": "917",
+      "label": "Ô Môn",
+      "fullName": "Quận Ô Môn"
+    },
+    {
+      "id": "926",
+      "label": "Phong Điền",
+      "fullName": "Huyện Phong Điền"
+    },
+    {
+      "id": "927",
+      "label": "Thới Lai",
+      "fullName": "Huyện Thới Lai"
+    },
+    {
+      "id": "923",
+      "label": "Thốt Nốt",
+      "fullName": "Quận Thốt Nốt"
+    },
+    {
+      "id": "924",
+      "label": "Vĩnh Thạnh",
+      "fullName": "Huyện Vĩnh Thạnh"
+    }
+  ],
+  "93": [
+    {
+      "id": "933",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "932",
+      "label": "Châu Thành A",
+      "fullName": "Huyện Châu Thành A"
+    },
+    {
+      "id": "936",
+      "label": "Long Mỹ",
+      "fullName": "Huyện Long Mỹ"
+    },
+    {
+      "id": "937",
+      "label": "Long Mỹ",
+      "fullName": "Thị xã Long Mỹ"
+    },
+    {
+      "id": "931",
+      "label": "Ngã Bảy",
+      "fullName": "Thành phố Ngã Bảy"
+    },
+    {
+      "id": "934",
+      "label": "Phụng Hiệp",
+      "fullName": "Huyện Phụng Hiệp"
+    },
+    {
+      "id": "930",
+      "label": "Vị Thanh",
+      "fullName": "Thành phố Vị Thanh"
+    },
+    {
+      "id": "935",
+      "label": "Vị Thuỷ",
+      "fullName": "Huyện Vị Thuỷ"
+    }
+  ],
+  "94": [
+    {
+      "id": "942",
+      "label": "Châu Thành",
+      "fullName": "Huyện Châu Thành"
+    },
+    {
+      "id": "945",
+      "label": "Cù Lao Dung",
+      "fullName": "Huyện Cù Lao Dung"
+    },
+    {
+      "id": "943",
+      "label": "Kế Sách",
+      "fullName": "Huyện Kế Sách"
+    },
+    {
+      "id": "946",
+      "label": "Long Phú",
+      "fullName": "Huyện Long Phú"
+    },
+    {
+      "id": "944",
+      "label": "Mỹ Tú",
+      "fullName": "Huyện Mỹ Tú"
+    },
+    {
+      "id": "947",
+      "label": "Mỹ Xuyên",
+      "fullName": "Huyện Mỹ Xuyên"
+    },
+    {
+      "id": "948",
+      "label": "Ngã Năm",
+      "fullName": "Thị xã Ngã Năm"
+    },
+    {
+      "id": "941",
+      "label": "Sóc Trăng",
+      "fullName": "Thành phố Sóc Trăng"
+    },
+    {
+      "id": "949",
+      "label": "Thạnh Trị",
+      "fullName": "Huyện Thạnh Trị"
+    },
+    {
+      "id": "951",
+      "label": "Trần Đề",
+      "fullName": "Huyện Trần Đề"
+    },
+    {
+      "id": "950",
+      "label": "Vĩnh Châu",
+      "fullName": "Thị xã Vĩnh Châu"
+    }
+  ],
+  "95": [
+    {
+      "id": "954",
+      "label": "Bạc Liêu",
+      "fullName": "Thành phố Bạc Liêu"
+    },
+    {
+      "id": "960",
+      "label": "Đông Hải",
+      "fullName": "Huyện Đông Hải"
+    },
+    {
+      "id": "959",
+      "label": "Giá Rai",
+      "fullName": "Thị xã Giá Rai"
+    },
+    {
+      "id": "961",
+      "label": "Hoà Bình",
+      "fullName": "Huyện Hoà Bình"
+    },
+    {
+      "id": "956",
+      "label": "Hồng Dân",
+      "fullName": "Huyện Hồng Dân"
+    },
+    {
+      "id": "957",
+      "label": "Phước Long",
+      "fullName": "Huyện Phước Long"
+    },
+    {
+      "id": "958",
+      "label": "Vĩnh Lợi",
+      "fullName": "Huyện Vĩnh Lợi"
+    }
+  ],
+  "96": [
+    {
+      "id": "964",
+      "label": "Cà Mau",
+      "fullName": "Thành phố Cà Mau"
+    },
+    {
+      "id": "969",
+      "label": "Cái Nước",
+      "fullName": "Huyện Cái Nước"
+    },
+    {
+      "id": "970",
+      "label": "Đầm Dơi",
+      "fullName": "Huyện Đầm Dơi"
+    },
+    {
+      "id": "971",
+      "label": "Năm Căn",
+      "fullName": "Huyện Năm Căn"
+    },
+    {
+      "id": "973",
+      "label": "Ngọc Hiển",
+      "fullName": "Huyện Ngọc Hiển"
+    },
+    {
+      "id": "972",
+      "label": "Phú Tân",
+      "fullName": "Huyện Phú Tân"
+    },
+    {
+      "id": "967",
+      "label": "Thới Bình",
+      "fullName": "Huyện Thới Bình"
+    },
+    {
+      "id": "968",
+      "label": "Trần Văn Thời",
+      "fullName": "Huyện Trần Văn Thời"
+    },
+    {
+      "id": "966",
+      "label": "U Minh",
+      "fullName": "Huyện U Minh"
+    }
+  ],
+  "01": [
     {
       "id": "001",
       "label": "Ba Đình",
@@ -1247,2679 +3966,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Ứng Hòa"
     }
   ],
-  "Bắc Ninh": [
-    {
-      "id": "256",
-      "label": "Bắc Ninh",
-      "fullName": "Thành phố Bắc Ninh"
-    },
-    {
-      "id": "263",
-      "label": "Gia Bình",
-      "fullName": "Huyện Gia Bình"
-    },
-    {
-      "id": "264",
-      "label": "Lương Tài",
-      "fullName": "Huyện Lương Tài"
-    },
-    {
-      "id": "259",
-      "label": "Quế Võ",
-      "fullName": "Thị xã Quế Võ"
-    },
-    {
-      "id": "262",
-      "label": "Thuận Thành",
-      "fullName": "Thị xã Thuận Thành"
-    },
-    {
-      "id": "260",
-      "label": "Tiên Du",
-      "fullName": "Huyện Tiên Du"
-    },
-    {
-      "id": "261",
-      "label": "Từ Sơn",
-      "fullName": "Thành phố Từ Sơn"
-    },
-    {
-      "id": "258",
-      "label": "Yên Phong",
-      "fullName": "Huyện Yên Phong"
-    }
-  ],
-  "Hải Dương": [
-    {
-      "id": "296",
-      "label": "Bình Giang",
-      "fullName": "Huyện Bình Giang"
-    },
-    {
-      "id": "295",
-      "label": "Cẩm Giàng",
-      "fullName": "Huyện Cẩm Giàng"
-    },
-    {
-      "id": "290",
-      "label": "Chí Linh",
-      "fullName": "Thành phố Chí Linh"
-    },
-    {
-      "id": "297",
-      "label": "Gia Lộc",
-      "fullName": "Huyện Gia Lộc"
-    },
-    {
-      "id": "288",
-      "label": "Hải Dương",
-      "fullName": "Thành phố Hải Dương"
-    },
-    {
-      "id": "293",
-      "label": "Kim Thành",
-      "fullName": "Huyện Kim Thành"
-    },
-    {
-      "id": "292",
-      "label": "Kinh Môn",
-      "fullName": "Thị xã Kinh Môn"
-    },
-    {
-      "id": "291",
-      "label": "Nam Sách",
-      "fullName": "Huyện Nam Sách"
-    },
-    {
-      "id": "299",
-      "label": "Ninh Giang",
-      "fullName": "Huyện Ninh Giang"
-    },
-    {
-      "id": "294",
-      "label": "Thanh Hà",
-      "fullName": "Huyện Thanh Hà"
-    },
-    {
-      "id": "300",
-      "label": "Thanh Miện",
-      "fullName": "Huyện Thanh Miện"
-    },
-    {
-      "id": "298",
-      "label": "Tứ Kỳ",
-      "fullName": "Huyện Tứ Kỳ"
-    }
-  ],
-  "Hải Phòng": [
-    {
-      "id": "312",
-      "label": "An Dương",
-      "fullName": "Huyện An Dương"
-    },
-    {
-      "id": "313",
-      "label": "An Lão",
-      "fullName": "Huyện An Lão"
-    },
-    {
-      "id": "318",
-      "label": "Bạch Long Vĩ",
-      "fullName": "Huyện Bạch Long Vĩ"
-    },
-    {
-      "id": "317",
-      "label": "Cát Hải",
-      "fullName": "Huyện Cát Hải"
-    },
-    {
-      "id": "308",
-      "label": "Đồ Sơn",
-      "fullName": "Quận Đồ Sơn"
-    },
-    {
-      "id": "309",
-      "label": "Dương Kinh",
-      "fullName": "Quận Dương Kinh"
-    },
-    {
-      "id": "306",
-      "label": "Hải An",
-      "fullName": "Quận Hải An"
-    },
-    {
-      "id": "303",
-      "label": "Hồng Bàng",
-      "fullName": "Quận Hồng Bàng"
-    },
-    {
-      "id": "307",
-      "label": "Kiến An",
-      "fullName": "Quận Kiến An"
-    },
-    {
-      "id": "314",
-      "label": "Kiến Thuỵ",
-      "fullName": "Huyện Kiến Thuỵ"
-    },
-    {
-      "id": "305",
-      "label": "Lê Chân",
-      "fullName": "Quận Lê Chân"
-    },
-    {
-      "id": "304",
-      "label": "Ngô Quyền",
-      "fullName": "Quận Ngô Quyền"
-    },
-    {
-      "id": "311",
-      "label": "Thuỷ Nguyên",
-      "fullName": "Huyện Thuỷ Nguyên"
-    },
-    {
-      "id": "315",
-      "label": "Tiên Lãng",
-      "fullName": "Huyện Tiên Lãng"
-    },
-    {
-      "id": "316",
-      "label": "Vĩnh Bảo",
-      "fullName": "Huyện Vĩnh Bảo"
-    }
-  ],
-  "Hưng Yên": [
-    {
-      "id": "329",
-      "label": "Ân Thi",
-      "fullName": "Huyện Ân Thi"
-    },
-    {
-      "id": "323",
-      "label": "Hưng Yên",
-      "fullName": "Thành phố Hưng Yên"
-    },
-    {
-      "id": "330",
-      "label": "Khoái Châu",
-      "fullName": "Huyện Khoái Châu"
-    },
-    {
-      "id": "331",
-      "label": "Kim Động",
-      "fullName": "Huyện Kim Động"
-    },
-    {
-      "id": "328",
-      "label": "Mỹ Hào",
-      "fullName": "Thị xã Mỹ Hào"
-    },
-    {
-      "id": "333",
-      "label": "Phù Cừ",
-      "fullName": "Huyện Phù Cừ"
-    },
-    {
-      "id": "332",
-      "label": "Tiên Lữ",
-      "fullName": "Huyện Tiên Lữ"
-    },
-    {
-      "id": "326",
-      "label": "Văn Giang",
-      "fullName": "Huyện Văn Giang"
-    },
-    {
-      "id": "325",
-      "label": "Văn Lâm",
-      "fullName": "Huyện Văn Lâm"
-    },
-    {
-      "id": "327",
-      "label": "Yên Mỹ",
-      "fullName": "Huyện Yên Mỹ"
-    }
-  ],
-  "Thái Bình": [
-    {
-      "id": "340",
-      "label": "Đông Hưng",
-      "fullName": "Huyện Đông Hưng"
-    },
-    {
-      "id": "339",
-      "label": "Hưng Hà",
-      "fullName": "Huyện Hưng Hà"
-    },
-    {
-      "id": "343",
-      "label": "Kiến Xương",
-      "fullName": "Huyện Kiến Xương"
-    },
-    {
-      "id": "338",
-      "label": "Quỳnh Phụ",
-      "fullName": "Huyện Quỳnh Phụ"
-    },
-    {
-      "id": "336",
-      "label": "Thái Bình",
-      "fullName": "Thành phố Thái Bình"
-    },
-    {
-      "id": "341",
-      "label": "Thái Thụy",
-      "fullName": "Huyện Thái Thụy"
-    },
-    {
-      "id": "342",
-      "label": "Tiền Hải",
-      "fullName": "Huyện Tiền Hải"
-    },
-    {
-      "id": "344",
-      "label": "Vũ Thư",
-      "fullName": "Huyện Vũ Thư"
-    }
-  ],
-  "Hà Nam": [
-    {
-      "id": "352",
-      "label": "Bình Lục",
-      "fullName": "Huyện Bình Lục"
-    },
-    {
-      "id": "349",
-      "label": "Duy Tiên",
-      "fullName": "Thị xã Duy Tiên"
-    },
-    {
-      "id": "350",
-      "label": "Kim Bảng",
-      "fullName": "Huyện Kim Bảng"
-    },
-    {
-      "id": "353",
-      "label": "Lý Nhân",
-      "fullName": "Huyện Lý Nhân"
-    },
-    {
-      "id": "347",
-      "label": "Phủ Lý",
-      "fullName": "Thành phố Phủ Lý"
-    },
-    {
-      "id": "351",
-      "label": "Thanh Liêm",
-      "fullName": "Huyện Thanh Liêm"
-    }
-  ],
-  "Nam Định": [
-    {
-      "id": "365",
-      "label": "Giao Thủy",
-      "fullName": "Huyện Giao Thủy"
-    },
-    {
-      "id": "366",
-      "label": "Hải Hậu",
-      "fullName": "Huyện Hải Hậu"
-    },
-    {
-      "id": "358",
-      "label": "Mỹ Lộc",
-      "fullName": "Huyện Mỹ Lộc"
-    },
-    {
-      "id": "356",
-      "label": "Nam Định",
-      "fullName": "Thành phố Nam Định"
-    },
-    {
-      "id": "362",
-      "label": "Nam Trực",
-      "fullName": "Huyện Nam Trực"
-    },
-    {
-      "id": "361",
-      "label": "Nghĩa Hưng",
-      "fullName": "Huyện Nghĩa Hưng"
-    },
-    {
-      "id": "363",
-      "label": "Trực Ninh",
-      "fullName": "Huyện Trực Ninh"
-    },
-    {
-      "id": "359",
-      "label": "Vụ Bản",
-      "fullName": "Huyện Vụ Bản"
-    },
-    {
-      "id": "364",
-      "label": "Xuân Trường",
-      "fullName": "Huyện Xuân Trường"
-    },
-    {
-      "id": "360",
-      "label": "Ý Yên",
-      "fullName": "Huyện Ý Yên"
-    }
-  ],
-  "Ninh Bình": [
-    {
-      "id": "373",
-      "label": "Gia Viễn",
-      "fullName": "Huyện Gia Viễn"
-    },
-    {
-      "id": "374",
-      "label": "Hoa Lư",
-      "fullName": "Huyện Hoa Lư"
-    },
-    {
-      "id": "376",
-      "label": "Kim Sơn",
-      "fullName": "Huyện Kim Sơn"
-    },
-    {
-      "id": "372",
-      "label": "Nho Quan",
-      "fullName": "Huyện Nho Quan"
-    },
-    {
-      "id": "369",
-      "label": "Ninh Bình",
-      "fullName": "Thành phố Ninh Bình"
-    },
-    {
-      "id": "370",
-      "label": "Tam Điệp",
-      "fullName": "Thành phố Tam Điệp"
-    },
-    {
-      "id": "375",
-      "label": "Yên Khánh",
-      "fullName": "Huyện Yên Khánh"
-    },
-    {
-      "id": "377",
-      "label": "Yên Mô",
-      "fullName": "Huyện Yên Mô"
-    }
-  ],
-  "Thanh Hóa": [
-    {
-      "id": "386",
-      "label": "Bá Thước",
-      "fullName": "Huyện Bá Thước"
-    },
-    {
-      "id": "381",
-      "label": "Bỉm Sơn",
-      "fullName": "Thị xã Bỉm Sơn"
-    },
-    {
-      "id": "390",
-      "label": "Cẩm Thủy",
-      "fullName": "Huyện Cẩm Thủy"
-    },
-    {
-      "id": "405",
-      "label": "Đông Sơn",
-      "fullName": "Huyện Đông Sơn"
-    },
-    {
-      "id": "392",
-      "label": "Hà Trung",
-      "fullName": "Huyện Hà Trung"
-    },
-    {
-      "id": "400",
-      "label": "Hậu Lộc",
-      "fullName": "Huyện Hậu Lộc"
-    },
-    {
-      "id": "399",
-      "label": "Hoằng Hóa",
-      "fullName": "Huyện Hoằng Hóa"
-    },
-    {
-      "id": "388",
-      "label": "Lang Chánh",
-      "fullName": "Huyện Lang Chánh"
-    },
-    {
-      "id": "384",
-      "label": "Mường Lát",
-      "fullName": "Huyện Mường Lát"
-    },
-    {
-      "id": "401",
-      "label": "Nga Sơn",
-      "fullName": "Huyện Nga Sơn"
-    },
-    {
-      "id": "407",
-      "label": "Nghi Sơn",
-      "fullName": "Thị xã Nghi Sơn"
-    },
-    {
-      "id": "389",
-      "label": "Ngọc Lặc",
-      "fullName": "Huyện Ngọc Lặc"
-    },
-    {
-      "id": "403",
-      "label": "Như Thanh",
-      "fullName": "Huyện Như Thanh"
-    },
-    {
-      "id": "402",
-      "label": "Như Xuân",
-      "fullName": "Huyện Như Xuân"
-    },
-    {
-      "id": "404",
-      "label": "Nông Cống",
-      "fullName": "Huyện Nông Cống"
-    },
-    {
-      "id": "385",
-      "label": "Quan Hóa",
-      "fullName": "Huyện Quan Hóa"
-    },
-    {
-      "id": "387",
-      "label": "Quan Sơn",
-      "fullName": "Huyện Quan Sơn"
-    },
-    {
-      "id": "406",
-      "label": "Quảng Xương",
-      "fullName": "Huyện Quảng Xương"
-    },
-    {
-      "id": "382",
-      "label": "Sầm Sơn",
-      "fullName": "Thành phố Sầm Sơn"
-    },
-    {
-      "id": "391",
-      "label": "Thạch Thành",
-      "fullName": "Huyện Thạch Thành"
-    },
-    {
-      "id": "380",
-      "label": "Thanh Hóa",
-      "fullName": "Thành phố Thanh Hóa"
-    },
-    {
-      "id": "398",
-      "label": "Thiệu Hóa",
-      "fullName": "Huyện Thiệu Hóa"
-    },
-    {
-      "id": "395",
-      "label": "Thọ Xuân",
-      "fullName": "Huyện Thọ Xuân"
-    },
-    {
-      "id": "396",
-      "label": "Thường Xuân",
-      "fullName": "Huyện Thường Xuân"
-    },
-    {
-      "id": "397",
-      "label": "Triệu Sơn",
-      "fullName": "Huyện Triệu Sơn"
-    },
-    {
-      "id": "393",
-      "label": "Vĩnh Lộc",
-      "fullName": "Huyện Vĩnh Lộc"
-    },
-    {
-      "id": "394",
-      "label": "Yên Định",
-      "fullName": "Huyện Yên Định"
-    }
-  ],
-  "Nghệ An": [
-    {
-      "id": "424",
-      "label": "Anh Sơn",
-      "fullName": "Huyện Anh Sơn"
-    },
-    {
-      "id": "422",
-      "label": "Con Cuông",
-      "fullName": "Huyện Con Cuông"
-    },
-    {
-      "id": "413",
-      "label": "Cửa Lò",
-      "fullName": "Thị xã Cửa Lò"
-    },
-    {
-      "id": "425",
-      "label": "Diễn Châu",
-      "fullName": "Huyện Diễn Châu"
-    },
-    {
-      "id": "427",
-      "label": "Đô Lương",
-      "fullName": "Huyện Đô Lương"
-    },
-    {
-      "id": "432",
-      "label": "Hoàng Mai",
-      "fullName": "Thị xã Hoàng Mai"
-    },
-    {
-      "id": "431",
-      "label": "Hưng Nguyên",
-      "fullName": "Huyện Hưng Nguyên"
-    },
-    {
-      "id": "417",
-      "label": "Kỳ Sơn",
-      "fullName": "Huyện Kỳ Sơn"
-    },
-    {
-      "id": "430",
-      "label": "Nam Đàn",
-      "fullName": "Huyện Nam Đàn"
-    },
-    {
-      "id": "429",
-      "label": "Nghi Lộc",
-      "fullName": "Huyện Nghi Lộc"
-    },
-    {
-      "id": "419",
-      "label": "Nghĩa Đàn",
-      "fullName": "Huyện Nghĩa Đàn"
-    },
-    {
-      "id": "415",
-      "label": "Quế Phong",
-      "fullName": "Huyện Quế Phong"
-    },
-    {
-      "id": "416",
-      "label": "Quỳ Châu",
-      "fullName": "Huyện Quỳ Châu"
-    },
-    {
-      "id": "420",
-      "label": "Quỳ Hợp",
-      "fullName": "Huyện Quỳ Hợp"
-    },
-    {
-      "id": "421",
-      "label": "Quỳnh Lưu",
-      "fullName": "Huyện Quỳnh Lưu"
-    },
-    {
-      "id": "423",
-      "label": "Tân Kỳ",
-      "fullName": "Huyện Tân Kỳ"
-    },
-    {
-      "id": "414",
-      "label": "Thái Hoà",
-      "fullName": "Thị xã Thái Hoà"
-    },
-    {
-      "id": "428",
-      "label": "Thanh Chương",
-      "fullName": "Huyện Thanh Chương"
-    },
-    {
-      "id": "418",
-      "label": "Tương Dương",
-      "fullName": "Huyện Tương Dương"
-    },
-    {
-      "id": "412",
-      "label": "Vinh",
-      "fullName": "Thành phố Vinh"
-    },
-    {
-      "id": "426",
-      "label": "Yên Thành",
-      "fullName": "Huyện Yên Thành"
-    }
-  ],
-  "Hà Tĩnh": [
-    {
-      "id": "446",
-      "label": "Cẩm Xuyên",
-      "fullName": "Huyện Cẩm Xuyên"
-    },
-    {
-      "id": "443",
-      "label": "Can Lộc",
-      "fullName": "Huyện Can Lộc"
-    },
-    {
-      "id": "440",
-      "label": "Đức Thọ",
-      "fullName": "Huyện Đức Thọ"
-    },
-    {
-      "id": "436",
-      "label": "Hà Tĩnh",
-      "fullName": "Thành phố Hà Tĩnh"
-    },
-    {
-      "id": "437",
-      "label": "Hồng Lĩnh",
-      "fullName": "Thị xã Hồng Lĩnh"
-    },
-    {
-      "id": "444",
-      "label": "Hương Khê",
-      "fullName": "Huyện Hương Khê"
-    },
-    {
-      "id": "439",
-      "label": "Hương Sơn",
-      "fullName": "Huyện Hương Sơn"
-    },
-    {
-      "id": "447",
-      "label": "Kỳ Anh",
-      "fullName": "Huyện Kỳ Anh"
-    },
-    {
-      "id": "449",
-      "label": "Kỳ Anh",
-      "fullName": "Thị xã Kỳ Anh"
-    },
-    {
-      "id": "448",
-      "label": "Lộc Hà",
-      "fullName": "Huyện Lộc Hà"
-    },
-    {
-      "id": "442",
-      "label": "Nghi Xuân",
-      "fullName": "Huyện Nghi Xuân"
-    },
-    {
-      "id": "445",
-      "label": "Thạch Hà",
-      "fullName": "Huyện Thạch Hà"
-    },
-    {
-      "id": "441",
-      "label": "Vũ Quang",
-      "fullName": "Huyện Vũ Quang"
-    }
-  ],
-  "Quảng Bình": [
-    {
-      "id": "458",
-      "label": "Ba Đồn",
-      "fullName": "Thị xã Ba Đồn"
-    },
-    {
-      "id": "455",
-      "label": "Bố Trạch",
-      "fullName": "Huyện Bố Trạch"
-    },
-    {
-      "id": "450",
-      "label": "Đồng Hới",
-      "fullName": "Thành Phố Đồng Hới"
-    },
-    {
-      "id": "457",
-      "label": "Lệ Thủy",
-      "fullName": "Huyện Lệ Thủy"
-    },
-    {
-      "id": "452",
-      "label": "Minh Hóa",
-      "fullName": "Huyện Minh Hóa"
-    },
-    {
-      "id": "456",
-      "label": "Quảng Ninh",
-      "fullName": "Huyện Quảng Ninh"
-    },
-    {
-      "id": "454",
-      "label": "Quảng Trạch",
-      "fullName": "Huyện Quảng Trạch"
-    },
-    {
-      "id": "453",
-      "label": "Tuyên Hóa",
-      "fullName": "Huyện Tuyên Hóa"
-    }
-  ],
-  "Quảng Trị": [
-    {
-      "id": "468",
-      "label": "Cam Lộ",
-      "fullName": "Huyện Cam Lộ"
-    },
-    {
-      "id": "471",
-      "label": "Cồn Cỏ",
-      "fullName": "Huyện Cồn Cỏ"
-    },
-    {
-      "id": "467",
-      "label": "Đa Krông",
-      "fullName": "Huyện Đa Krông"
-    },
-    {
-      "id": "461",
-      "label": "Đông Hà",
-      "fullName": "Thành phố Đông Hà"
-    },
-    {
-      "id": "466",
-      "label": "Gio Linh",
-      "fullName": "Huyện Gio Linh"
-    },
-    {
-      "id": "470",
-      "label": "Hải Lăng",
-      "fullName": "Huyện Hải Lăng"
-    },
-    {
-      "id": "465",
-      "label": "Hướng Hóa",
-      "fullName": "Huyện Hướng Hóa"
-    },
-    {
-      "id": "462",
-      "label": "Quảng Trị",
-      "fullName": "Thị xã Quảng Trị"
-    },
-    {
-      "id": "469",
-      "label": "Triệu Phong",
-      "fullName": "Huyện Triệu Phong"
-    },
-    {
-      "id": "464",
-      "label": "Vĩnh Linh",
-      "fullName": "Huyện Vĩnh Linh"
-    }
-  ],
-  "Thừa Thiên Huế": [
-    {
-      "id": "481",
-      "label": "A Lưới",
-      "fullName": "Huyện A Lưới"
-    },
-    {
-      "id": "474",
-      "label": "Huế",
-      "fullName": "Thành phố Huế"
-    },
-    {
-      "id": "479",
-      "label": "Hương Thủy",
-      "fullName": "Thị xã Hương Thủy"
-    },
-    {
-      "id": "480",
-      "label": "Hương Trà",
-      "fullName": "Thị xã Hương Trà"
-    },
-    {
-      "id": "483",
-      "label": "Nam Đông",
-      "fullName": "Huyện Nam Đông"
-    },
-    {
-      "id": "476",
-      "label": "Phong Điền",
-      "fullName": "Huyện Phong Điền"
-    },
-    {
-      "id": "482",
-      "label": "Phú Lộc",
-      "fullName": "Huyện Phú Lộc"
-    },
-    {
-      "id": "478",
-      "label": "Phú Vang",
-      "fullName": "Huyện Phú Vang"
-    },
-    {
-      "id": "477",
-      "label": "Quảng Điền",
-      "fullName": "Huyện Quảng Điền"
-    }
-  ],
-  "Đà Nẵng": [
-    {
-      "id": "495",
-      "label": "Cẩm Lệ",
-      "fullName": "Quận Cẩm Lệ"
-    },
-    {
-      "id": "492",
-      "label": "Hải Châu",
-      "fullName": "Quận Hải Châu"
-    },
-    {
-      "id": "497",
-      "label": "Hòa Vang",
-      "fullName": "Huyện Hòa Vang"
-    },
-    {
-      "id": "498",
-      "label": "Hoàng Sa",
-      "fullName": "Huyện Hoàng Sa"
-    },
-    {
-      "id": "490",
-      "label": "Liên Chiểu",
-      "fullName": "Quận Liên Chiểu"
-    },
-    {
-      "id": "494",
-      "label": "Ngũ Hành Sơn",
-      "fullName": "Quận Ngũ Hành Sơn"
-    },
-    {
-      "id": "493",
-      "label": "Sơn Trà",
-      "fullName": "Quận Sơn Trà"
-    },
-    {
-      "id": "491",
-      "label": "Thanh Khê",
-      "fullName": "Quận Thanh Khê"
-    }
-  ],
-  "Quảng Nam": [
-    {
-      "id": "515",
-      "label": "Bắc Trà My",
-      "fullName": "Huyện Bắc Trà My"
-    },
-    {
-      "id": "506",
-      "label": "Đại Lộc",
-      "fullName": "Huyện Đại Lộc"
-    },
-    {
-      "id": "507",
-      "label": "Điện Bàn",
-      "fullName": "Thị xã Điện Bàn"
-    },
-    {
-      "id": "505",
-      "label": "Đông Giang",
-      "fullName": "Huyện Đông Giang"
-    },
-    {
-      "id": "508",
-      "label": "Duy Xuyên",
-      "fullName": "Huyện Duy Xuyên"
-    },
-    {
-      "id": "512",
-      "label": "Hiệp Đức",
-      "fullName": "Huyện Hiệp Đức"
-    },
-    {
-      "id": "503",
-      "label": "Hội An",
-      "fullName": "Thành phố Hội An"
-    },
-    {
-      "id": "510",
-      "label": "Nam Giang",
-      "fullName": "Huyện Nam Giang"
-    },
-    {
-      "id": "516",
-      "label": "Nam Trà My",
-      "fullName": "Huyện Nam Trà My"
-    },
-    {
-      "id": "519",
-      "label": "Nông Sơn",
-      "fullName": "Huyện Nông Sơn"
-    },
-    {
-      "id": "517",
-      "label": "Núi Thành",
-      "fullName": "Huyện Núi Thành"
-    },
-    {
-      "id": "518",
-      "label": "Phú Ninh",
-      "fullName": "Huyện Phú Ninh"
-    },
-    {
-      "id": "511",
-      "label": "Phước Sơn",
-      "fullName": "Huyện Phước Sơn"
-    },
-    {
-      "id": "509",
-      "label": "Quế Sơn",
-      "fullName": "Huyện Quế Sơn"
-    },
-    {
-      "id": "502",
-      "label": "Tam Kỳ",
-      "fullName": "Thành phố Tam Kỳ"
-    },
-    {
-      "id": "504",
-      "label": "Tây Giang",
-      "fullName": "Huyện Tây Giang"
-    },
-    {
-      "id": "513",
-      "label": "Thăng Bình",
-      "fullName": "Huyện Thăng Bình"
-    },
-    {
-      "id": "514",
-      "label": "Tiên Phước",
-      "fullName": "Huyện Tiên Phước"
-    }
-  ],
-  "Quảng Ngãi": [
-    {
-      "id": "535",
-      "label": "Ba Tơ",
-      "fullName": "Huyện Ba Tơ"
-    },
-    {
-      "id": "524",
-      "label": "Bình Sơn",
-      "fullName": "Huyện Bình Sơn"
-    },
-    {
-      "id": "534",
-      "label": "Đức Phổ",
-      "fullName": "Thị xã Đức Phổ"
-    },
-    {
-      "id": "536",
-      "label": "Lý Sơn",
-      "fullName": "Huyện Lý Sơn"
-    },
-    {
-      "id": "531",
-      "label": "Minh Long",
-      "fullName": "Huyện Minh Long"
-    },
-    {
-      "id": "533",
-      "label": "Mộ Đức",
-      "fullName": "Huyện Mộ Đức"
-    },
-    {
-      "id": "532",
-      "label": "Nghĩa Hành",
-      "fullName": "Huyện Nghĩa Hành"
-    },
-    {
-      "id": "522",
-      "label": "Quảng Ngãi",
-      "fullName": "Thành phố Quảng Ngãi"
-    },
-    {
-      "id": "529",
-      "label": "Sơn Hà",
-      "fullName": "Huyện Sơn Hà"
-    },
-    {
-      "id": "530",
-      "label": "Sơn Tây",
-      "fullName": "Huyện Sơn Tây"
-    },
-    {
-      "id": "527",
-      "label": "Sơn Tịnh",
-      "fullName": "Huyện Sơn Tịnh"
-    },
-    {
-      "id": "525",
-      "label": "Trà Bồng",
-      "fullName": "Huyện Trà Bồng"
-    },
-    {
-      "id": "528",
-      "label": "Tư Nghĩa",
-      "fullName": "Huyện Tư Nghĩa"
-    }
-  ],
-  "Bình Định": [
-    {
-      "id": "542",
-      "label": "An Lão",
-      "fullName": "Huyện An Lão"
-    },
-    {
-      "id": "549",
-      "label": "An Nhơn",
-      "fullName": "Thị xã An Nhơn"
-    },
-    {
-      "id": "544",
-      "label": "Hoài Ân",
-      "fullName": "Huyện Hoài Ân"
-    },
-    {
-      "id": "543",
-      "label": "Hoài Nhơn",
-      "fullName": "Thị xã Hoài Nhơn"
-    },
-    {
-      "id": "548",
-      "label": "Phù Cát",
-      "fullName": "Huyện Phù Cát"
-    },
-    {
-      "id": "545",
-      "label": "Phù Mỹ",
-      "fullName": "Huyện Phù Mỹ"
-    },
-    {
-      "id": "540",
-      "label": "Quy Nhơn",
-      "fullName": "Thành phố Quy Nhơn"
-    },
-    {
-      "id": "547",
-      "label": "Tây Sơn",
-      "fullName": "Huyện Tây Sơn"
-    },
-    {
-      "id": "550",
-      "label": "Tuy Phước",
-      "fullName": "Huyện Tuy Phước"
-    },
-    {
-      "id": "551",
-      "label": "Vân Canh",
-      "fullName": "Huyện Vân Canh"
-    },
-    {
-      "id": "546",
-      "label": "Vĩnh Thạnh",
-      "fullName": "Huyện Vĩnh Thạnh"
-    }
-  ],
-  "Phú Yên": [
-    {
-      "id": "564",
-      "label": "Đông Hòa",
-      "fullName": "Thị xã Đông Hòa"
-    },
-    {
-      "id": "558",
-      "label": "Đồng Xuân",
-      "fullName": "Huyện Đồng Xuân"
-    },
-    {
-      "id": "563",
-      "label": "Phú Hoà",
-      "fullName": "Huyện Phú Hoà"
-    },
-    {
-      "id": "560",
-      "label": "Sơn Hòa",
-      "fullName": "Huyện Sơn Hòa"
-    },
-    {
-      "id": "557",
-      "label": "Sông Cầu",
-      "fullName": "Thị xã Sông Cầu"
-    },
-    {
-      "id": "561",
-      "label": "Sông Hinh",
-      "fullName": "Huyện Sông Hinh"
-    },
-    {
-      "id": "562",
-      "label": "Tây Hoà",
-      "fullName": "Huyện Tây Hoà"
-    },
-    {
-      "id": "559",
-      "label": "Tuy An",
-      "fullName": "Huyện Tuy An"
-    },
-    {
-      "id": "555",
-      "label": "Tuy Hoà",
-      "fullName": "Thành phố Tuy Hoà"
-    }
-  ],
-  "Khánh Hòa": [
-    {
-      "id": "570",
-      "label": "Cam Lâm",
-      "fullName": "Huyện Cam Lâm"
-    },
-    {
-      "id": "569",
-      "label": "Cam Ranh",
-      "fullName": "Thành phố Cam Ranh"
-    },
-    {
-      "id": "574",
-      "label": "Diên Khánh",
-      "fullName": "Huyện Diên Khánh"
-    },
-    {
-      "id": "575",
-      "label": "Khánh Sơn",
-      "fullName": "Huyện Khánh Sơn"
-    },
-    {
-      "id": "573",
-      "label": "Khánh Vĩnh",
-      "fullName": "Huyện Khánh Vĩnh"
-    },
-    {
-      "id": "568",
-      "label": "Nha Trang",
-      "fullName": "Thành phố Nha Trang"
-    },
-    {
-      "id": "572",
-      "label": "Ninh Hòa",
-      "fullName": "Thị xã Ninh Hòa"
-    },
-    {
-      "id": "576",
-      "label": "Trường Sa",
-      "fullName": "Huyện Trường Sa"
-    },
-    {
-      "id": "571",
-      "label": "Vạn Ninh",
-      "fullName": "Huyện Vạn Ninh"
-    }
-  ],
-  "Ninh Thuận": [
-    {
-      "id": "584",
-      "label": "Bác Ái",
-      "fullName": "Huyện Bác Ái"
-    },
-    {
-      "id": "586",
-      "label": "Ninh Hải",
-      "fullName": "Huyện Ninh Hải"
-    },
-    {
-      "id": "587",
-      "label": "Ninh Phước",
-      "fullName": "Huyện Ninh Phước"
-    },
-    {
-      "id": "585",
-      "label": "Ninh Sơn",
-      "fullName": "Huyện Ninh Sơn"
-    },
-    {
-      "id": "582",
-      "label": "Phan Rang-Tháp Chàm",
-      "fullName": "Thành phố Phan Rang-Tháp Chàm"
-    },
-    {
-      "id": "588",
-      "label": "Thuận Bắc",
-      "fullName": "Huyện Thuận Bắc"
-    },
-    {
-      "id": "589",
-      "label": "Thuận Nam",
-      "fullName": "Huyện Thuận Nam"
-    }
-  ],
-  "Bình Thuận": [
-    {
-      "id": "596",
-      "label": "Bắc Bình",
-      "fullName": "Huyện Bắc Bình"
-    },
-    {
-      "id": "600",
-      "label": "Đức Linh",
-      "fullName": "Huyện Đức Linh"
-    },
-    {
-      "id": "601",
-      "label": "Hàm Tân",
-      "fullName": "Huyện Hàm Tân"
-    },
-    {
-      "id": "597",
-      "label": "Hàm Thuận Bắc",
-      "fullName": "Huyện Hàm Thuận Bắc"
-    },
-    {
-      "id": "598",
-      "label": "Hàm Thuận Nam",
-      "fullName": "Huyện Hàm Thuận Nam"
-    },
-    {
-      "id": "594",
-      "label": "La Gi",
-      "fullName": "Thị xã La Gi"
-    },
-    {
-      "id": "593",
-      "label": "Phan Thiết",
-      "fullName": "Thành phố Phan Thiết"
-    },
-    {
-      "id": "602",
-      "label": "Phú Quí",
-      "fullName": "Huyện Phú Quí"
-    },
-    {
-      "id": "599",
-      "label": "Tánh Linh",
-      "fullName": "Huyện Tánh Linh"
-    },
-    {
-      "id": "595",
-      "label": "Tuy Phong",
-      "fullName": "Huyện Tuy Phong"
-    }
-  ],
-  "Kon Tum": [
-    {
-      "id": "610",
-      "label": "Đắk Glei",
-      "fullName": "Huyện Đắk Glei"
-    },
-    {
-      "id": "615",
-      "label": "Đắk Hà",
-      "fullName": "Huyện Đắk Hà"
-    },
-    {
-      "id": "612",
-      "label": "Đắk Tô",
-      "fullName": "Huyện Đắk Tô"
-    },
-    {
-      "id": "618",
-      "label": "Ia H' Drai",
-      "fullName": "Huyện Ia H' Drai"
-    },
-    {
-      "id": "613",
-      "label": "Kon Plông",
-      "fullName": "Huyện Kon Plông"
-    },
-    {
-      "id": "614",
-      "label": "Kon Rẫy",
-      "fullName": "Huyện Kon Rẫy"
-    },
-    {
-      "id": "608",
-      "label": "Kon Tum",
-      "fullName": "Thành phố Kon Tum"
-    },
-    {
-      "id": "611",
-      "label": "Ngọc Hồi",
-      "fullName": "Huyện Ngọc Hồi"
-    },
-    {
-      "id": "616",
-      "label": "Sa Thầy",
-      "fullName": "Huyện Sa Thầy"
-    },
-    {
-      "id": "617",
-      "label": "Tu Mơ Rông",
-      "fullName": "Huyện Tu Mơ Rông"
-    }
-  ],
-  "Gia Lai": [
-    {
-      "id": "623",
-      "label": "An Khê",
-      "fullName": "Thị xã An Khê"
-    },
-    {
-      "id": "624",
-      "label": "Ayun Pa",
-      "fullName": "Thị xã Ayun Pa"
-    },
-    {
-      "id": "627",
-      "label": "Chư Păh",
-      "fullName": "Huyện Chư Păh"
-    },
-    {
-      "id": "632",
-      "label": "Chư Prông",
-      "fullName": "Huyện Chư Prông"
-    },
-    {
-      "id": "639",
-      "label": "Chư Pưh",
-      "fullName": "Huyện Chư Pưh"
-    },
-    {
-      "id": "633",
-      "label": "Chư Sê",
-      "fullName": "Huyện Chư Sê"
-    },
-    {
-      "id": "626",
-      "label": "Đăk Đoa",
-      "fullName": "Huyện Đăk Đoa"
-    },
-    {
-      "id": "634",
-      "label": "Đăk Pơ",
-      "fullName": "Huyện Đăk Pơ"
-    },
-    {
-      "id": "631",
-      "label": "Đức Cơ",
-      "fullName": "Huyện Đức Cơ"
-    },
-    {
-      "id": "628",
-      "label": "Ia Grai",
-      "fullName": "Huyện Ia Grai"
-    },
-    {
-      "id": "635",
-      "label": "Ia Pa",
-      "fullName": "Huyện Ia Pa"
-    },
-    {
-      "id": "625",
-      "label": "KBang",
-      "fullName": "Huyện KBang"
-    },
-    {
-      "id": "630",
-      "label": "Kông Chro",
-      "fullName": "Huyện Kông Chro"
-    },
-    {
-      "id": "637",
-      "label": "Krông Pa",
-      "fullName": "Huyện Krông Pa"
-    },
-    {
-      "id": "629",
-      "label": "Mang Yang",
-      "fullName": "Huyện Mang Yang"
-    },
-    {
-      "id": "638",
-      "label": "Phú Thiện",
-      "fullName": "Huyện Phú Thiện"
-    },
-    {
-      "id": "622",
-      "label": "Pleiku",
-      "fullName": "Thành phố Pleiku"
-    }
-  ],
-  "Đắk Lắk": [
-    {
-      "id": "647",
-      "label": "Buôn Đôn",
-      "fullName": "Huyện Buôn Đôn"
-    },
-    {
-      "id": "644",
-      "label": "Buôn Hồ",
-      "fullName": "Thị xã Buôn Hồ"
-    },
-    {
-      "id": "643",
-      "label": "Buôn Ma Thuột",
-      "fullName": "Thành phố Buôn Ma Thuột"
-    },
-    {
-      "id": "657",
-      "label": "Cư Kuin",
-      "fullName": "Huyện Cư Kuin"
-    },
-    {
-      "id": "648",
-      "label": "Cư M'gar",
-      "fullName": "Huyện Cư M'gar"
-    },
-    {
-      "id": "645",
-      "label": "Ea H'leo",
-      "fullName": "Huyện Ea H'leo"
-    },
-    {
-      "id": "651",
-      "label": "Ea Kar",
-      "fullName": "Huyện Ea Kar"
-    },
-    {
-      "id": "646",
-      "label": "Ea Súp",
-      "fullName": "Huyện Ea Súp"
-    },
-    {
-      "id": "655",
-      "label": "Krông A Na",
-      "fullName": "Huyện Krông A Na"
-    },
-    {
-      "id": "653",
-      "label": "Krông Bông",
-      "fullName": "Huyện Krông Bông"
-    },
-    {
-      "id": "649",
-      "label": "Krông Búk",
-      "fullName": "Huyện Krông Búk"
-    },
-    {
-      "id": "650",
-      "label": "Krông Năng",
-      "fullName": "Huyện Krông Năng"
-    },
-    {
-      "id": "654",
-      "label": "Krông Pắc",
-      "fullName": "Huyện Krông Pắc"
-    },
-    {
-      "id": "656",
-      "label": "Lắk",
-      "fullName": "Huyện Lắk"
-    },
-    {
-      "id": "652",
-      "label": "M'Đrắk",
-      "fullName": "Huyện M'Đrắk"
-    }
-  ],
-  "Đắk Nông": [
-    {
-      "id": "662",
-      "label": "Cư Jút",
-      "fullName": "Huyện Cư Jút"
-    },
-    {
-      "id": "661",
-      "label": "Đăk Glong",
-      "fullName": "Huyện Đăk Glong"
-    },
-    {
-      "id": "663",
-      "label": "Đắk Mil",
-      "fullName": "Huyện Đắk Mil"
-    },
-    {
-      "id": "666",
-      "label": "Đắk R'Lấp",
-      "fullName": "Huyện Đắk R'Lấp"
-    },
-    {
-      "id": "665",
-      "label": "Đắk Song",
-      "fullName": "Huyện Đắk Song"
-    },
-    {
-      "id": "660",
-      "label": "Gia Nghĩa",
-      "fullName": "Thành phố Gia Nghĩa"
-    },
-    {
-      "id": "664",
-      "label": "Krông Nô",
-      "fullName": "Huyện Krông Nô"
-    },
-    {
-      "id": "667",
-      "label": "Tuy Đức",
-      "fullName": "Huyện Tuy Đức"
-    }
-  ],
-  "Lâm Đồng": [
-    {
-      "id": "680",
-      "label": "Bảo Lâm",
-      "fullName": "Huyện Bảo Lâm"
-    },
-    {
-      "id": "673",
-      "label": "Bảo Lộc",
-      "fullName": "Thành phố Bảo Lộc"
-    },
-    {
-      "id": "683",
-      "label": "Cát Tiên",
-      "fullName": "Huyện Cát Tiên"
-    },
-    {
-      "id": "681",
-      "label": "Đạ Huoai",
-      "fullName": "Huyện Đạ Huoai"
-    },
-    {
-      "id": "672",
-      "label": "Đà Lạt",
-      "fullName": "Thành phố Đà Lạt"
-    },
-    {
-      "id": "682",
-      "label": "Đạ Tẻh",
-      "fullName": "Huyện Đạ Tẻh"
-    },
-    {
-      "id": "674",
-      "label": "Đam Rông",
-      "fullName": "Huyện Đam Rông"
-    },
-    {
-      "id": "679",
-      "label": "Di Linh",
-      "fullName": "Huyện Di Linh"
-    },
-    {
-      "id": "677",
-      "label": "Đơn Dương",
-      "fullName": "Huyện Đơn Dương"
-    },
-    {
-      "id": "678",
-      "label": "Đức Trọng",
-      "fullName": "Huyện Đức Trọng"
-    },
-    {
-      "id": "675",
-      "label": "Lạc Dương",
-      "fullName": "Huyện Lạc Dương"
-    },
-    {
-      "id": "676",
-      "label": "Lâm Hà",
-      "fullName": "Huyện Lâm Hà"
-    }
-  ],
-  "Bình Phước": [
-    {
-      "id": "690",
-      "label": "Bình Long",
-      "fullName": "Thị xã Bình Long"
-    },
-    {
-      "id": "696",
-      "label": "Bù Đăng",
-      "fullName": "Huyện Bù Đăng"
-    },
-    {
-      "id": "693",
-      "label": "Bù Đốp",
-      "fullName": "Huyện Bù Đốp"
-    },
-    {
-      "id": "691",
-      "label": "Bù Gia Mập",
-      "fullName": "Huyện Bù Gia Mập"
-    },
-    {
-      "id": "697",
-      "label": "Chơn Thành",
-      "fullName": "Thị xã Chơn Thành"
-    },
-    {
-      "id": "695",
-      "label": "Đồng Phú",
-      "fullName": "Huyện Đồng Phú"
-    },
-    {
-      "id": "689",
-      "label": "Đồng Xoài",
-      "fullName": "Thành phố Đồng Xoài"
-    },
-    {
-      "id": "694",
-      "label": "Hớn Quản",
-      "fullName": "Huyện Hớn Quản"
-    },
-    {
-      "id": "692",
-      "label": "Lộc Ninh",
-      "fullName": "Huyện Lộc Ninh"
-    },
-    {
-      "id": "698",
-      "label": "Phú Riềng",
-      "fullName": "Huyện Phú Riềng"
-    },
-    {
-      "id": "688",
-      "label": "Phước Long",
-      "fullName": "Thị xã Phước Long"
-    }
-  ],
-  "Tây Ninh": [
-    {
-      "id": "711",
-      "label": "Bến Cầu",
-      "fullName": "Huyện Bến Cầu"
-    },
-    {
-      "id": "708",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "707",
-      "label": "Dương Minh Châu",
-      "fullName": "Huyện Dương Minh Châu"
-    },
-    {
-      "id": "710",
-      "label": "Gò Dầu",
-      "fullName": "Huyện Gò Dầu"
-    },
-    {
-      "id": "709",
-      "label": "Hòa Thành",
-      "fullName": "Thị xã Hòa Thành"
-    },
-    {
-      "id": "705",
-      "label": "Tân Biên",
-      "fullName": "Huyện Tân Biên"
-    },
-    {
-      "id": "706",
-      "label": "Tân Châu",
-      "fullName": "Huyện Tân Châu"
-    },
-    {
-      "id": "703",
-      "label": "Tây Ninh",
-      "fullName": "Thành phố Tây Ninh"
-    },
-    {
-      "id": "712",
-      "label": "Trảng Bàng",
-      "fullName": "Thị xã Trảng Bàng"
-    }
-  ],
-  "Bình Dương": [
-    {
-      "id": "726",
-      "label": "Bắc Tân Uyên",
-      "fullName": "Huyện Bắc Tân Uyên"
-    },
-    {
-      "id": "719",
-      "label": "Bàu Bàng",
-      "fullName": "Huyện Bàu Bàng"
-    },
-    {
-      "id": "721",
-      "label": "Bến Cát",
-      "fullName": "Thị xã Bến Cát"
-    },
-    {
-      "id": "720",
-      "label": "Dầu Tiếng",
-      "fullName": "Huyện Dầu Tiếng"
-    },
-    {
-      "id": "724",
-      "label": "Dĩ An",
-      "fullName": "Thành phố Dĩ An"
-    },
-    {
-      "id": "722",
-      "label": "Phú Giáo",
-      "fullName": "Huyện Phú Giáo"
-    },
-    {
-      "id": "723",
-      "label": "Tân Uyên",
-      "fullName": "Thành phố Tân Uyên"
-    },
-    {
-      "id": "718",
-      "label": "Thủ Dầu Một",
-      "fullName": "Thành phố Thủ Dầu Một"
-    },
-    {
-      "id": "725",
-      "label": "Thuận An",
-      "fullName": "Thành phố Thuận An"
-    }
-  ],
-  "Đồng Nai": [
-    {
-      "id": "731",
-      "label": "Biên Hòa",
-      "fullName": "Thành phố Biên Hòa"
-    },
-    {
-      "id": "739",
-      "label": "Cẩm Mỹ",
-      "fullName": "Huyện Cẩm Mỹ"
-    },
-    {
-      "id": "736",
-      "label": "Định Quán",
-      "fullName": "Huyện Định Quán"
-    },
-    {
-      "id": "732",
-      "label": "Long Khánh",
-      "fullName": "Thành phố Long Khánh"
-    },
-    {
-      "id": "740",
-      "label": "Long Thành",
-      "fullName": "Huyện Long Thành"
-    },
-    {
-      "id": "742",
-      "label": "Nhơn Trạch",
-      "fullName": "Huyện Nhơn Trạch"
-    },
-    {
-      "id": "734",
-      "label": "Tân Phú",
-      "fullName": "Huyện Tân Phú"
-    },
-    {
-      "id": "738",
-      "label": "Thống Nhất",
-      "fullName": "Huyện Thống Nhất"
-    },
-    {
-      "id": "737",
-      "label": "Trảng Bom",
-      "fullName": "Huyện Trảng Bom"
-    },
-    {
-      "id": "735",
-      "label": "Vĩnh Cửu",
-      "fullName": "Huyện Vĩnh Cửu"
-    },
-    {
-      "id": "741",
-      "label": "Xuân Lộc",
-      "fullName": "Huyện Xuân Lộc"
-    }
-  ],
-  "Bà Rịa - Vũng Tàu": [
-    {
-      "id": "748",
-      "label": "Bà Rịa",
-      "fullName": "Thành phố Bà Rịa"
-    },
-    {
-      "id": "750",
-      "label": "Châu Đức",
-      "fullName": "Huyện Châu Đức"
-    },
-    {
-      "id": "755",
-      "label": "Côn Đảo",
-      "fullName": "Huyện Côn Đảo"
-    },
-    {
-      "id": "753",
-      "label": "Đất Đỏ",
-      "fullName": "Huyện Đất Đỏ"
-    },
-    {
-      "id": "752",
-      "label": "Long Điền",
-      "fullName": "Huyện Long Điền"
-    },
-    {
-      "id": "754",
-      "label": "Phú Mỹ",
-      "fullName": "Thị xã Phú Mỹ"
-    },
-    {
-      "id": "747",
-      "label": "Vũng Tàu",
-      "fullName": "Thành phố Vũng Tàu"
-    },
-    {
-      "id": "751",
-      "label": "Xuyên Mộc",
-      "fullName": "Huyện Xuyên Mộc"
-    }
-  ],
-  "Hồ Chí Minh": [
-    {
-      "id": "760",
-      "label": "1",
-      "fullName": "Quận 1"
-    },
-    {
-      "id": "771",
-      "label": "10",
-      "fullName": "Quận 10"
-    },
-    {
-      "id": "772",
-      "label": "11",
-      "fullName": "Quận 11"
-    },
-    {
-      "id": "761",
-      "label": "12",
-      "fullName": "Quận 12"
-    },
-    {
-      "id": "770",
-      "label": "3",
-      "fullName": "Quận 3"
-    },
-    {
-      "id": "773",
-      "label": "4",
-      "fullName": "Quận 4"
-    },
-    {
-      "id": "774",
-      "label": "5",
-      "fullName": "Quận 5"
-    },
-    {
-      "id": "775",
-      "label": "6",
-      "fullName": "Quận 6"
-    },
-    {
-      "id": "778",
-      "label": "7",
-      "fullName": "Quận 7"
-    },
-    {
-      "id": "776",
-      "label": "8",
-      "fullName": "Quận 8"
-    },
-    {
-      "id": "785",
-      "label": "Bình Chánh",
-      "fullName": "Huyện Bình Chánh"
-    },
-    {
-      "id": "777",
-      "label": "Bình Tân",
-      "fullName": "Quận Bình Tân"
-    },
-    {
-      "id": "765",
-      "label": "Bình Thạnh",
-      "fullName": "Quận Bình Thạnh"
-    },
-    {
-      "id": "787",
-      "label": "Cần Giờ",
-      "fullName": "Huyện Cần Giờ"
-    },
-    {
-      "id": "783",
-      "label": "Củ Chi",
-      "fullName": "Huyện Củ Chi"
-    },
-    {
-      "id": "764",
-      "label": "Gò Vấp",
-      "fullName": "Quận Gò Vấp"
-    },
-    {
-      "id": "784",
-      "label": "Hóc Môn",
-      "fullName": "Huyện Hóc Môn"
-    },
-    {
-      "id": "786",
-      "label": "Nhà Bè",
-      "fullName": "Huyện Nhà Bè"
-    },
-    {
-      "id": "768",
-      "label": "Phú Nhuận",
-      "fullName": "Quận Phú Nhuận"
-    },
-    {
-      "id": "766",
-      "label": "Tân Bình",
-      "fullName": "Quận Tân Bình"
-    },
-    {
-      "id": "767",
-      "label": "Tân Phú",
-      "fullName": "Quận Tân Phú"
-    },
-    {
-      "id": "769",
-      "label": "Thủ Đức",
-      "fullName": "Thành phố Thủ Đức"
-    }
-  ],
-  "Long An": [
-    {
-      "id": "803",
-      "label": "Bến Lức",
-      "fullName": "Huyện Bến Lức"
-    },
-    {
-      "id": "806",
-      "label": "Cần Đước",
-      "fullName": "Huyện Cần Đước"
-    },
-    {
-      "id": "807",
-      "label": "Cần Giuộc",
-      "fullName": "Huyện Cần Giuộc"
-    },
-    {
-      "id": "808",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "802",
-      "label": "Đức Hòa",
-      "fullName": "Huyện Đức Hòa"
-    },
-    {
-      "id": "801",
-      "label": "Đức Huệ",
-      "fullName": "Huyện Đức Huệ"
-    },
-    {
-      "id": "795",
-      "label": "Kiến Tường",
-      "fullName": "Thị xã Kiến Tường"
-    },
-    {
-      "id": "798",
-      "label": "Mộc Hóa",
-      "fullName": "Huyện Mộc Hóa"
-    },
-    {
-      "id": "794",
-      "label": "Tân An",
-      "fullName": "Thành phố Tân An"
-    },
-    {
-      "id": "796",
-      "label": "Tân Hưng",
-      "fullName": "Huyện Tân Hưng"
-    },
-    {
-      "id": "799",
-      "label": "Tân Thạnh",
-      "fullName": "Huyện Tân Thạnh"
-    },
-    {
-      "id": "805",
-      "label": "Tân Trụ",
-      "fullName": "Huyện Tân Trụ"
-    },
-    {
-      "id": "800",
-      "label": "Thạnh Hóa",
-      "fullName": "Huyện Thạnh Hóa"
-    },
-    {
-      "id": "804",
-      "label": "Thủ Thừa",
-      "fullName": "Huyện Thủ Thừa"
-    },
-    {
-      "id": "797",
-      "label": "Vĩnh Hưng",
-      "fullName": "Huyện Vĩnh Hưng"
-    }
-  ],
-  "Tiền Giang": [
-    {
-      "id": "819",
-      "label": "Cái Bè",
-      "fullName": "Huyện Cái Bè"
-    },
-    {
-      "id": "817",
-      "label": "Cai Lậy",
-      "fullName": "Thị xã Cai Lậy"
-    },
-    {
-      "id": "820",
-      "label": "Cai Lậy",
-      "fullName": "Huyện Cai Lậy"
-    },
-    {
-      "id": "821",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "822",
-      "label": "Chợ Gạo",
-      "fullName": "Huyện Chợ Gạo"
-    },
-    {
-      "id": "816",
-      "label": "Gò Công",
-      "fullName": "Thị xã Gò Công"
-    },
-    {
-      "id": "824",
-      "label": "Gò Công Đông",
-      "fullName": "Huyện Gò Công Đông"
-    },
-    {
-      "id": "823",
-      "label": "Gò Công Tây",
-      "fullName": "Huyện Gò Công Tây"
-    },
-    {
-      "id": "815",
-      "label": "Mỹ Tho",
-      "fullName": "Thành phố Mỹ Tho"
-    },
-    {
-      "id": "825",
-      "label": "Tân Phú Đông",
-      "fullName": "Huyện Tân Phú Đông"
-    },
-    {
-      "id": "818",
-      "label": "Tân Phước",
-      "fullName": "Huyện Tân Phước"
-    }
-  ],
-  "Bến Tre": [
-    {
-      "id": "836",
-      "label": "Ba Tri",
-      "fullName": "Huyện Ba Tri"
-    },
-    {
-      "id": "829",
-      "label": "Bến Tre",
-      "fullName": "Thành phố Bến Tre"
-    },
-    {
-      "id": "835",
-      "label": "Bình Đại",
-      "fullName": "Huyện Bình Đại"
-    },
-    {
-      "id": "831",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "832",
-      "label": "Chợ Lách",
-      "fullName": "Huyện Chợ Lách"
-    },
-    {
-      "id": "834",
-      "label": "Giồng Trôm",
-      "fullName": "Huyện Giồng Trôm"
-    },
-    {
-      "id": "838",
-      "label": "Mỏ Cày Bắc",
-      "fullName": "Huyện Mỏ Cày Bắc"
-    },
-    {
-      "id": "833",
-      "label": "Mỏ Cày Nam",
-      "fullName": "Huyện Mỏ Cày Nam"
-    },
-    {
-      "id": "837",
-      "label": "Thạnh Phú",
-      "fullName": "Huyện Thạnh Phú"
-    }
-  ],
-  "Trà Vinh": [
-    {
-      "id": "844",
-      "label": "Càng Long",
-      "fullName": "Huyện Càng Long"
-    },
-    {
-      "id": "845",
-      "label": "Cầu Kè",
-      "fullName": "Huyện Cầu Kè"
-    },
-    {
-      "id": "848",
-      "label": "Cầu Ngang",
-      "fullName": "Huyện Cầu Ngang"
-    },
-    {
-      "id": "847",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "850",
-      "label": "Duyên Hải",
-      "fullName": "Huyện Duyên Hải"
-    },
-    {
-      "id": "851",
-      "label": "Duyên Hải",
-      "fullName": "Thị xã Duyên Hải"
-    },
-    {
-      "id": "846",
-      "label": "Tiểu Cần",
-      "fullName": "Huyện Tiểu Cần"
-    },
-    {
-      "id": "849",
-      "label": "Trà Cú",
-      "fullName": "Huyện Trà Cú"
-    },
-    {
-      "id": "842",
-      "label": "Trà Vinh",
-      "fullName": "Thành phố Trà Vinh"
-    }
-  ],
-  "Vĩnh Long": [
-    {
-      "id": "861",
-      "label": "Bình Minh",
-      "fullName": "Thị xã Bình Minh"
-    },
-    {
-      "id": "863",
-      "label": "Bình Tân",
-      "fullName": "Huyện Bình Tân"
-    },
-    {
-      "id": "857",
-      "label": "Long Hồ",
-      "fullName": "Huyện Long Hồ"
-    },
-    {
-      "id": "858",
-      "label": "Mang Thít",
-      "fullName": "Huyện Mang Thít"
-    },
-    {
-      "id": "860",
-      "label": "Tam Bình",
-      "fullName": "Huyện Tam Bình"
-    },
-    {
-      "id": "862",
-      "label": "Trà Ôn",
-      "fullName": "Huyện Trà Ôn"
-    },
-    {
-      "id": "855",
-      "label": "Vĩnh Long",
-      "fullName": "Thành phố Vĩnh Long"
-    },
-    {
-      "id": "859",
-      "label": "Vũng Liêm",
-      "fullName": "Huyện  Vũng Liêm"
-    }
-  ],
-  "Đồng Tháp": [
-    {
-      "id": "866",
-      "label": "Cao Lãnh",
-      "fullName": "Thành phố Cao Lãnh"
-    },
-    {
-      "id": "873",
-      "label": "Cao Lãnh",
-      "fullName": "Huyện Cao Lãnh"
-    },
-    {
-      "id": "877",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "868",
-      "label": "Hồng Ngự",
-      "fullName": "Thành phố Hồng Ngự"
-    },
-    {
-      "id": "870",
-      "label": "Hồng Ngự",
-      "fullName": "Huyện Hồng Ngự"
-    },
-    {
-      "id": "876",
-      "label": "Lai Vung",
-      "fullName": "Huyện Lai Vung"
-    },
-    {
-      "id": "875",
-      "label": "Lấp Vò",
-      "fullName": "Huyện Lấp Vò"
-    },
-    {
-      "id": "867",
-      "label": "Sa Đéc",
-      "fullName": "Thành phố Sa Đéc"
-    },
-    {
-      "id": "871",
-      "label": "Tam Nông",
-      "fullName": "Huyện Tam Nông"
-    },
-    {
-      "id": "869",
-      "label": "Tân Hồng",
-      "fullName": "Huyện Tân Hồng"
-    },
-    {
-      "id": "874",
-      "label": "Thanh Bình",
-      "fullName": "Huyện Thanh Bình"
-    },
-    {
-      "id": "872",
-      "label": "Tháp Mười",
-      "fullName": "Huyện Tháp Mười"
-    }
-  ],
-  "An Giang": [
-    {
-      "id": "886",
-      "label": "An Phú",
-      "fullName": "Huyện An Phú"
-    },
-    {
-      "id": "884",
-      "label": "Châu Đốc",
-      "fullName": "Thành phố Châu Đốc"
-    },
-    {
-      "id": "889",
-      "label": "Châu Phú",
-      "fullName": "Huyện Châu Phú"
-    },
-    {
-      "id": "892",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "893",
-      "label": "Chợ Mới",
-      "fullName": "Huyện Chợ Mới"
-    },
-    {
-      "id": "883",
-      "label": "Long Xuyên",
-      "fullName": "Thành phố Long Xuyên"
-    },
-    {
-      "id": "888",
-      "label": "Phú Tân",
-      "fullName": "Huyện Phú Tân"
-    },
-    {
-      "id": "887",
-      "label": "Tân Châu",
-      "fullName": "Thị xã Tân Châu"
-    },
-    {
-      "id": "894",
-      "label": "Thoại Sơn",
-      "fullName": "Huyện Thoại Sơn"
-    },
-    {
-      "id": "890",
-      "label": "Tịnh Biên",
-      "fullName": "Thị xã Tịnh Biên"
-    },
-    {
-      "id": "891",
-      "label": "Tri Tôn",
-      "fullName": "Huyện Tri Tôn"
-    }
-  ],
-  "Kiên Giang": [
-    {
-      "id": "908",
-      "label": "An Biên",
-      "fullName": "Huyện An Biên"
-    },
-    {
-      "id": "909",
-      "label": "An Minh",
-      "fullName": "Huyện An Minh"
-    },
-    {
-      "id": "905",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "914",
-      "label": "Giang Thành",
-      "fullName": "Huyện Giang Thành"
-    },
-    {
-      "id": "906",
-      "label": "Giồng Riềng",
-      "fullName": "Huyện Giồng Riềng"
-    },
-    {
-      "id": "907",
-      "label": "Gò Quao",
-      "fullName": "Huyện Gò Quao"
-    },
-    {
-      "id": "900",
-      "label": "Hà Tiên",
-      "fullName": "Thành phố Hà Tiên"
-    },
-    {
-      "id": "903",
-      "label": "Hòn Đất",
-      "fullName": "Huyện Hòn Đất"
-    },
-    {
-      "id": "912",
-      "label": "Kiên Hải",
-      "fullName": "Huyện Kiên Hải"
-    },
-    {
-      "id": "902",
-      "label": "Kiên Lương",
-      "fullName": "Huyện Kiên Lương"
-    },
-    {
-      "id": "911",
-      "label": "Phú Quốc",
-      "fullName": "Thành phố Phú Quốc"
-    },
-    {
-      "id": "899",
-      "label": "Rạch Giá",
-      "fullName": "Thành phố Rạch Giá"
-    },
-    {
-      "id": "904",
-      "label": "Tân Hiệp",
-      "fullName": "Huyện Tân Hiệp"
-    },
-    {
-      "id": "913",
-      "label": "U Minh Thượng",
-      "fullName": "Huyện U Minh Thượng"
-    },
-    {
-      "id": "910",
-      "label": "Vĩnh Thuận",
-      "fullName": "Huyện Vĩnh Thuận"
-    }
-  ],
-  "Cần Thơ": [
-    {
-      "id": "918",
-      "label": "Bình Thuỷ",
-      "fullName": "Quận Bình Thuỷ"
-    },
-    {
-      "id": "919",
-      "label": "Cái Răng",
-      "fullName": "Quận Cái Răng"
-    },
-    {
-      "id": "925",
-      "label": "Cờ Đỏ",
-      "fullName": "Huyện Cờ Đỏ"
-    },
-    {
-      "id": "916",
-      "label": "Ninh Kiều",
-      "fullName": "Quận Ninh Kiều"
-    },
-    {
-      "id": "917",
-      "label": "Ô Môn",
-      "fullName": "Quận Ô Môn"
-    },
-    {
-      "id": "926",
-      "label": "Phong Điền",
-      "fullName": "Huyện Phong Điền"
-    },
-    {
-      "id": "927",
-      "label": "Thới Lai",
-      "fullName": "Huyện Thới Lai"
-    },
-    {
-      "id": "923",
-      "label": "Thốt Nốt",
-      "fullName": "Quận Thốt Nốt"
-    },
-    {
-      "id": "924",
-      "label": "Vĩnh Thạnh",
-      "fullName": "Huyện Vĩnh Thạnh"
-    }
-  ],
-  "Hậu Giang": [
-    {
-      "id": "933",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "932",
-      "label": "Châu Thành A",
-      "fullName": "Huyện Châu Thành A"
-    },
-    {
-      "id": "936",
-      "label": "Long Mỹ",
-      "fullName": "Huyện Long Mỹ"
-    },
-    {
-      "id": "937",
-      "label": "Long Mỹ",
-      "fullName": "Thị xã Long Mỹ"
-    },
-    {
-      "id": "931",
-      "label": "Ngã Bảy",
-      "fullName": "Thành phố Ngã Bảy"
-    },
-    {
-      "id": "934",
-      "label": "Phụng Hiệp",
-      "fullName": "Huyện Phụng Hiệp"
-    },
-    {
-      "id": "930",
-      "label": "Vị Thanh",
-      "fullName": "Thành phố Vị Thanh"
-    },
-    {
-      "id": "935",
-      "label": "Vị Thuỷ",
-      "fullName": "Huyện Vị Thuỷ"
-    }
-  ],
-  "Sóc Trăng": [
-    {
-      "id": "942",
-      "label": "Châu Thành",
-      "fullName": "Huyện Châu Thành"
-    },
-    {
-      "id": "945",
-      "label": "Cù Lao Dung",
-      "fullName": "Huyện Cù Lao Dung"
-    },
-    {
-      "id": "943",
-      "label": "Kế Sách",
-      "fullName": "Huyện Kế Sách"
-    },
-    {
-      "id": "946",
-      "label": "Long Phú",
-      "fullName": "Huyện Long Phú"
-    },
-    {
-      "id": "944",
-      "label": "Mỹ Tú",
-      "fullName": "Huyện Mỹ Tú"
-    },
-    {
-      "id": "947",
-      "label": "Mỹ Xuyên",
-      "fullName": "Huyện Mỹ Xuyên"
-    },
-    {
-      "id": "948",
-      "label": "Ngã Năm",
-      "fullName": "Thị xã Ngã Năm"
-    },
-    {
-      "id": "941",
-      "label": "Sóc Trăng",
-      "fullName": "Thành phố Sóc Trăng"
-    },
-    {
-      "id": "949",
-      "label": "Thạnh Trị",
-      "fullName": "Huyện Thạnh Trị"
-    },
-    {
-      "id": "951",
-      "label": "Trần Đề",
-      "fullName": "Huyện Trần Đề"
-    },
-    {
-      "id": "950",
-      "label": "Vĩnh Châu",
-      "fullName": "Thị xã Vĩnh Châu"
-    }
-  ],
-  "Bạc Liêu": [
-    {
-      "id": "954",
-      "label": "Bạc Liêu",
-      "fullName": "Thành phố Bạc Liêu"
-    },
-    {
-      "id": "960",
-      "label": "Đông Hải",
-      "fullName": "Huyện Đông Hải"
-    },
-    {
-      "id": "959",
-      "label": "Giá Rai",
-      "fullName": "Thị xã Giá Rai"
-    },
-    {
-      "id": "961",
-      "label": "Hoà Bình",
-      "fullName": "Huyện Hoà Bình"
-    },
-    {
-      "id": "956",
-      "label": "Hồng Dân",
-      "fullName": "Huyện Hồng Dân"
-    },
-    {
-      "id": "957",
-      "label": "Phước Long",
-      "fullName": "Huyện Phước Long"
-    },
-    {
-      "id": "958",
-      "label": "Vĩnh Lợi",
-      "fullName": "Huyện Vĩnh Lợi"
-    }
-  ],
-  "Cà Mau": [
-    {
-      "id": "964",
-      "label": "Cà Mau",
-      "fullName": "Thành phố Cà Mau"
-    },
-    {
-      "id": "969",
-      "label": "Cái Nước",
-      "fullName": "Huyện Cái Nước"
-    },
-    {
-      "id": "970",
-      "label": "Đầm Dơi",
-      "fullName": "Huyện Đầm Dơi"
-    },
-    {
-      "id": "971",
-      "label": "Năm Căn",
-      "fullName": "Huyện Năm Căn"
-    },
-    {
-      "id": "973",
-      "label": "Ngọc Hiển",
-      "fullName": "Huyện Ngọc Hiển"
-    },
-    {
-      "id": "972",
-      "label": "Phú Tân",
-      "fullName": "Huyện Phú Tân"
-    },
-    {
-      "id": "967",
-      "label": "Thới Bình",
-      "fullName": "Huyện Thới Bình"
-    },
-    {
-      "id": "968",
-      "label": "Trần Văn Thời",
-      "fullName": "Huyện Trần Văn Thời"
-    },
-    {
-      "id": "966",
-      "label": "U Minh",
-      "fullName": "Huyện U Minh"
-    }
-  ],
-  "Hà Giang": [
+  "02": [
     {
       "id": "031",
       "label": "Bắc Mê",
@@ -3976,7 +4023,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Yên Minh"
     }
   ],
-  "Cao Bằng": [
+  "04": [
     {
       "id": "043",
       "label": "Bảo Lạc",
@@ -4028,7 +4075,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Trùng Khánh"
     }
   ],
-  "Bắc Kạn": [
+  "06": [
     {
       "id": "061",
       "label": "Ba Bể",
@@ -4070,7 +4117,7 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "fullName": "Huyện Pác Nặm"
     }
   ],
-  "Tuyên Quang": [
+  "08": [
     {
       "id": "073",
       "label": "Chiêm Hóa",
@@ -4106,1594 +4153,11 @@ export const DISTRICTS_OLD_DATA_BY_PROVINCE: Record<string, readonly GeographyIt
       "label": "Yên Sơn",
       "fullName": "Huyện Yên Sơn"
     }
-  ],
-  "Lào Cai": [
-    {
-      "id": "085",
-      "label": "Bắc Hà",
-      "fullName": "Huyện Bắc Hà"
-    },
-    {
-      "id": "086",
-      "label": "Bảo Thắng",
-      "fullName": "Huyện Bảo Thắng"
-    },
-    {
-      "id": "087",
-      "label": "Bảo Yên",
-      "fullName": "Huyện Bảo Yên"
-    },
-    {
-      "id": "082",
-      "label": "Bát Xát",
-      "fullName": "Huyện Bát Xát"
-    },
-    {
-      "id": "080",
-      "label": "Lào Cai",
-      "fullName": "Thành phố Lào Cai"
-    },
-    {
-      "id": "083",
-      "label": "Mường Khương",
-      "fullName": "Huyện Mường Khương"
-    },
-    {
-      "id": "088",
-      "label": "Sa Pa",
-      "fullName": "Thị xã Sa Pa"
-    },
-    {
-      "id": "084",
-      "label": "Si Ma Cai",
-      "fullName": "Huyện Si Ma Cai"
-    },
-    {
-      "id": "089",
-      "label": "Văn Bàn",
-      "fullName": "Huyện Văn Bàn"
-    }
   ]
 } as const;
 
 export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]> = {
-  "Hà Nội": [
-    {
-      "id": "00004",
-      "label": "Phường Ba Đình",
-      "fullName": "Phường Ba Đình"
-    },
-    {
-      "id": "00292",
-      "label": "Phường Bạch Mai",
-      "fullName": "Phường Bạch Mai"
-    },
-    {
-      "id": "00118",
-      "label": "Phường Bồ Đề",
-      "fullName": "Phường Bồ Đề"
-    },
-    {
-      "id": "00166",
-      "label": "Phường Cầu Giấy",
-      "fullName": "Phường Cầu Giấy"
-    },
-    {
-      "id": "10015",
-      "label": "Phường Chương Mỹ",
-      "fullName": "Phường Chương Mỹ"
-    },
-    {
-      "id": "00082",
-      "label": "Phường Cửa Nam",
-      "fullName": "Phường Cửa Nam"
-    },
-    {
-      "id": "00637",
-      "label": "Phường Đại Mỗ",
-      "fullName": "Phường Đại Mỗ"
-    },
-    {
-      "id": "00316",
-      "label": "Phường Định Công",
-      "fullName": "Phường Định Công"
-    },
-    {
-      "id": "00235",
-      "label": "Phường Đống Đa",
-      "fullName": "Phường Đống Đa"
-    },
-    {
-      "id": "00602",
-      "label": "Phường Đông Ngạc",
-      "fullName": "Phường Đông Ngạc"
-    },
-    {
-      "id": "09886",
-      "label": "Phường Dương Nội",
-      "fullName": "Phường Dương Nội"
-    },
-    {
-      "id": "00025",
-      "label": "Phường Giảng Võ",
-      "fullName": "Phường Giảng Võ"
-    },
-    {
-      "id": "09556",
-      "label": "Phường Hà Đông",
-      "fullName": "Phường Hà Đông"
-    },
-    {
-      "id": "00256",
-      "label": "Phường Hai Bà Trưng",
-      "fullName": "Phường Hai Bà Trưng"
-    },
-    {
-      "id": "00070",
-      "label": "Phường Hoàn Kiếm",
-      "fullName": "Phường Hoàn Kiếm"
-    },
-    {
-      "id": "00337",
-      "label": "Phường Hoàng Liệt",
-      "fullName": "Phường Hoàng Liệt"
-    },
-    {
-      "id": "00331",
-      "label": "Phường Hoàng Mai",
-      "fullName": "Phường Hoàng Mai"
-    },
-    {
-      "id": "00097",
-      "label": "Phường Hồng Hà",
-      "fullName": "Phường Hồng Hà"
-    },
-    {
-      "id": "00364",
-      "label": "Phường Khương Đình",
-      "fullName": "Phường Khương Đình"
-    },
-    {
-      "id": "09552",
-      "label": "Phường Kiến Hưng",
-      "fullName": "Phường Kiến Hưng"
-    },
-    {
-      "id": "00229",
-      "label": "Phường Kim Liên",
-      "fullName": "Phường Kim Liên"
-    },
-    {
-      "id": "00199",
-      "label": "Phường Láng",
-      "fullName": "Phường Láng"
-    },
-    {
-      "id": "00328",
-      "label": "Phường Lĩnh Nam",
-      "fullName": "Phường Lĩnh Nam"
-    },
-    {
-      "id": "00145",
-      "label": "Phường Long Biên",
-      "fullName": "Phường Long Biên"
-    },
-    {
-      "id": "00160",
-      "label": "Phường Nghĩa Đô",
-      "fullName": "Phường Nghĩa Đô"
-    },
-    {
-      "id": "00008",
-      "label": "Phường Ngọc Hà",
-      "fullName": "Phường Ngọc Hà"
-    },
-    {
-      "id": "00190",
-      "label": "Phường Ô Chợ Dừa",
-      "fullName": "Phường Ô Chợ Dừa"
-    },
-    {
-      "id": "00619",
-      "label": "Phường Phú Diễn",
-      "fullName": "Phường Phú Diễn"
-    },
-    {
-      "id": "09568",
-      "label": "Phường Phú Lương",
-      "fullName": "Phường Phú Lương"
-    },
-    {
-      "id": "00091",
-      "label": "Phường Phú Thượng",
-      "fullName": "Phường Phú Thượng"
-    },
-    {
-      "id": "00136",
-      "label": "Phường Phúc Lợi",
-      "fullName": "Phường Phúc Lợi"
-    },
-    {
-      "id": "00352",
-      "label": "Phường Phương Liệt",
-      "fullName": "Phường Phương Liệt"
-    },
-    {
-      "id": "09574",
-      "label": "Phường Sơn Tây",
-      "fullName": "Phường Sơn Tây"
-    },
-    {
-      "id": "00103",
-      "label": "Phường Tây Hồ",
-      "fullName": "Phường Tây Hồ"
-    },
-    {
-      "id": "00634",
-      "label": "Phường Tây Mỗ",
-      "fullName": "Phường Tây Mỗ"
-    },
-    {
-      "id": "00613",
-      "label": "Phường Tây Tựu",
-      "fullName": "Phường Tây Tựu"
-    },
-    {
-      "id": "00643",
-      "label": "Phường Thanh Liệt",
-      "fullName": "Phường Thanh Liệt"
-    },
-    {
-      "id": "00367",
-      "label": "Phường Thanh Xuân",
-      "fullName": "Phường Thanh Xuân"
-    },
-    {
-      "id": "00598",
-      "label": "Phường Thượng Cát",
-      "fullName": "Phường Thượng Cát"
-    },
-    {
-      "id": "00592",
-      "label": "Phường Từ Liêm",
-      "fullName": "Phường Từ Liêm"
-    },
-    {
-      "id": "09604",
-      "label": "Phường Tùng Thiện",
-      "fullName": "Phường Tùng Thiện"
-    },
-    {
-      "id": "00322",
-      "label": "Phường Tương Mai",
-      "fullName": "Phường Tương Mai"
-    },
-    {
-      "id": "00226",
-      "label": "Phường Văn Miếu - Quốc Tử Giám",
-      "fullName": "Phường Văn Miếu - Quốc Tử Giám"
-    },
-    {
-      "id": "00127",
-      "label": "Phường Việt Hưng",
-      "fullName": "Phường Việt Hưng"
-    },
-    {
-      "id": "00301",
-      "label": "Phường Vĩnh Hưng",
-      "fullName": "Phường Vĩnh Hưng"
-    },
-    {
-      "id": "00283",
-      "label": "Phường Vĩnh Tuy",
-      "fullName": "Phường Vĩnh Tuy"
-    },
-    {
-      "id": "00611",
-      "label": "Phường Xuân Đỉnh",
-      "fullName": "Phường Xuân Đỉnh"
-    },
-    {
-      "id": "00622",
-      "label": "Phường Xuân Phương",
-      "fullName": "Phường Xuân Phương"
-    },
-    {
-      "id": "00175",
-      "label": "Phường Yên Hòa",
-      "fullName": "Phường Yên Hòa"
-    },
-    {
-      "id": "09562",
-      "label": "Phường Yên Nghĩa",
-      "fullName": "Phường Yên Nghĩa"
-    },
-    {
-      "id": "00340",
-      "label": "Phường Yên Sở",
-      "fullName": "Phường Yên Sở"
-    },
-    {
-      "id": "09877",
-      "label": "Xã An Khánh",
-      "fullName": "Xã An Khánh"
-    },
-    {
-      "id": "09700",
-      "label": "Xã Ba Vì",
-      "fullName": "Xã Ba Vì"
-    },
-    {
-      "id": "09676",
-      "label": "Xã Bất Bạt",
-      "fullName": "Xã Bất Bạt"
-    },
-    {
-      "id": "00577",
-      "label": "Xã Bát Tràng",
-      "fullName": "Xã Bát Tràng"
-    },
-    {
-      "id": "10126",
-      "label": "Xã Bình Minh",
-      "fullName": "Xã Bình Minh"
-    },
-    {
-      "id": "10237",
-      "label": "Xã Chương Dương",
-      "fullName": "Xã Chương Dương"
-    },
-    {
-      "id": "10330",
-      "label": "Xã Chuyên Mỹ",
-      "fullName": "Xã Chuyên Mỹ"
-    },
-    {
-      "id": "09634",
-      "label": "Xã Cổ Đô",
-      "fullName": "Xã Cổ Đô"
-    },
-    {
-      "id": "00430",
-      "label": "Xã Đa Phúc",
-      "fullName": "Xã Đa Phúc"
-    },
-    {
-      "id": "00664",
-      "label": "Xã Đại Thanh",
-      "fullName": "Xã Đại Thanh"
-    },
-    {
-      "id": "10342",
-      "label": "Xã Đại Xuyên",
-      "fullName": "Xã Đại Xuyên"
-    },
-    {
-      "id": "10180",
-      "label": "Xã Dân Hòa",
-      "fullName": "Xã Dân Hòa"
-    },
-    {
-      "id": "09784",
-      "label": "Xã Đan Phượng",
-      "fullName": "Xã Đan Phượng"
-    },
-    {
-      "id": "09616",
-      "label": "Xã Đoài Phương",
-      "fullName": "Xã Đoài Phương"
-    },
-    {
-      "id": "00454",
-      "label": "Xã Đông Anh",
-      "fullName": "Xã Đông Anh"
-    },
-    {
-      "id": "09856",
-      "label": "Xã Dương Hòa",
-      "fullName": "Xã Dương Hòa"
-    },
-    {
-      "id": "00565",
-      "label": "Xã Gia Lâm",
-      "fullName": "Xã Gia Lâm"
-    },
-    {
-      "id": "09982",
-      "label": "Xã Hạ Bằng",
-      "fullName": "Xã Hạ Bằng"
-    },
-    {
-      "id": "09772",
-      "label": "Xã Hát Môn",
-      "fullName": "Xã Hát Môn"
-    },
-    {
-      "id": "09988",
-      "label": "Xã Hòa Lạc",
-      "fullName": "Xã Hòa Lạc"
-    },
-    {
-      "id": "10096",
-      "label": "Xã Hòa Phú",
-      "fullName": "Xã Hòa Phú"
-    },
-    {
-      "id": "10417",
-      "label": "Xã Hòa Xá",
-      "fullName": "Xã Hòa Xá"
-    },
-    {
-      "id": "09832",
-      "label": "Xã Hoài Đức",
-      "fullName": "Xã Hoài Đức"
-    },
-    {
-      "id": "10465",
-      "label": "Xã Hồng Sơn",
-      "fullName": "Xã Hồng Sơn"
-    },
-    {
-      "id": "10210",
-      "label": "Xã Hồng Vân",
-      "fullName": "Xã Hồng Vân"
-    },
-    {
-      "id": "09931",
-      "label": "Xã Hưng Đạo",
-      "fullName": "Xã Hưng Đạo"
-    },
-    {
-      "id": "10489",
-      "label": "Xã Hương Sơn",
-      "fullName": "Xã Hương Sơn"
-    },
-    {
-      "id": "09910",
-      "label": "Xã Kiều Phú",
-      "fullName": "Xã Kiều Phú"
-    },
-    {
-      "id": "00382",
-      "label": "Xã Kim Anh",
-      "fullName": "Xã Kim Anh"
-    },
-    {
-      "id": "09787",
-      "label": "Xã Liên Minh",
-      "fullName": "Xã Liên Minh"
-    },
-    {
-      "id": "09022",
-      "label": "Xã Mê Linh",
-      "fullName": "Xã Mê Linh"
-    },
-    {
-      "id": "09661",
-      "label": "Xã Minh Châu",
-      "fullName": "Xã Minh Châu"
-    },
-    {
-      "id": "10441",
-      "label": "Xã Mỹ Đức",
-      "fullName": "Xã Mỹ Đức"
-    },
-    {
-      "id": "00685",
-      "label": "Xã Nam Phù",
-      "fullName": "Xã Nam Phù"
-    },
-    {
-      "id": "00679",
-      "label": "Xã Ngọc Hồi",
-      "fullName": "Xã Ngọc Hồi"
-    },
-    {
-      "id": "00433",
-      "label": "Xã Nội Bài",
-      "fullName": "Xã Nội Bài"
-    },
-    {
-      "id": "09817",
-      "label": "Xã Ô Diên",
-      "fullName": "Xã Ô Diên"
-    },
-    {
-      "id": "09952",
-      "label": "Xã Phú Cát",
-      "fullName": "Xã Phú Cát"
-    },
-    {
-      "id": "00541",
-      "label": "Xã Phù Đổng",
-      "fullName": "Xã Phù Đổng"
-    },
-    {
-      "id": "10030",
-      "label": "Xã Phú Nghĩa",
-      "fullName": "Xã Phú Nghĩa"
-    },
-    {
-      "id": "10273",
-      "label": "Xã Phú Xuyên",
-      "fullName": "Xã Phú Xuyên"
-    },
-    {
-      "id": "09739",
-      "label": "Xã Phúc Lộc",
-      "fullName": "Xã Phúc Lộc"
-    },
-    {
-      "id": "10459",
-      "label": "Xã Phúc Sơn",
-      "fullName": "Xã Phúc Sơn"
-    },
-    {
-      "id": "00466",
-      "label": "Xã Phúc Thịnh",
-      "fullName": "Xã Phúc Thịnh"
-    },
-    {
-      "id": "09715",
-      "label": "Xã Phúc Thọ",
-      "fullName": "Xã Phúc Thọ"
-    },
-    {
-      "id": "10279",
-      "label": "Xã Phượng Dực",
-      "fullName": "Xã Phượng Dực"
-    },
-    {
-      "id": "10072",
-      "label": "Xã Quảng Bị",
-      "fullName": "Xã Quảng Bị"
-    },
-    {
-      "id": "08974",
-      "label": "Xã Quang Minh",
-      "fullName": "Xã Quang Minh"
-    },
-    {
-      "id": "09619",
-      "label": "Xã Quảng Oai",
-      "fullName": "Xã Quảng Oai"
-    },
-    {
-      "id": "09895",
-      "label": "Xã Quốc Oai",
-      "fullName": "Xã Quốc Oai"
-    },
-    {
-      "id": "00376",
-      "label": "Xã Sóc Sơn",
-      "fullName": "Xã Sóc Sơn"
-    },
-    {
-      "id": "09871",
-      "label": "Xã Sơn Đồng",
-      "fullName": "Xã Sơn Đồng"
-    },
-    {
-      "id": "09694",
-      "label": "Xã Suối Hai",
-      "fullName": "Xã Suối Hai"
-    },
-    {
-      "id": "10144",
-      "label": "Xã Tam Hưng",
-      "fullName": "Xã Tam Hưng"
-    },
-    {
-      "id": "10003",
-      "label": "Xã Tây Phương",
-      "fullName": "Xã Tây Phương"
-    },
-    {
-      "id": "09955",
-      "label": "Xã Thạch Thất",
-      "fullName": "Xã Thạch Thất"
-    },
-    {
-      "id": "10114",
-      "label": "Xã Thanh Oai",
-      "fullName": "Xã Thanh Oai"
-    },
-    {
-      "id": "00640",
-      "label": "Xã Thanh Trì",
-      "fullName": "Xã Thanh Trì"
-    },
-    {
-      "id": "00493",
-      "label": "Xã Thiên Lộc",
-      "fullName": "Xã Thiên Lộc"
-    },
-    {
-      "id": "00475",
-      "label": "Xã Thư Lâm",
-      "fullName": "Xã Thư Lâm"
-    },
-    {
-      "id": "00562",
-      "label": "Xã Thuận An",
-      "fullName": "Xã Thuận An"
-    },
-    {
-      "id": "10231",
-      "label": "Xã Thượng Phúc",
-      "fullName": "Xã Thượng Phúc"
-    },
-    {
-      "id": "10183",
-      "label": "Xã Thường Tín",
-      "fullName": "Xã Thường Tín"
-    },
-    {
-      "id": "08995",
-      "label": "Xã Tiến Thắng",
-      "fullName": "Xã Tiến Thắng"
-    },
-    {
-      "id": "10081",
-      "label": "Xã Trần Phú",
-      "fullName": "Xã Trần Phú"
-    },
-    {
-      "id": "00385",
-      "label": "Xã Trung Giã",
-      "fullName": "Xã Trung Giã"
-    },
-    {
-      "id": "10402",
-      "label": "Xã Ứng Hòa",
-      "fullName": "Xã Ứng Hòa"
-    },
-    {
-      "id": "10369",
-      "label": "Xã Ứng Thiên",
-      "fullName": "Xã Ứng Thiên"
-    },
-    {
-      "id": "10354",
-      "label": "Xã Vân Đình",
-      "fullName": "Xã Vân Đình"
-    },
-    {
-      "id": "09664",
-      "label": "Xã Vật Lại",
-      "fullName": "Xã Vật Lại"
-    },
-    {
-      "id": "00508",
-      "label": "Xã Vĩnh Thanh",
-      "fullName": "Xã Vĩnh Thanh"
-    },
-    {
-      "id": "10045",
-      "label": "Xã Xuân Mai",
-      "fullName": "Xã Xuân Mai"
-    },
-    {
-      "id": "09706",
-      "label": "Xã Yên Bài",
-      "fullName": "Xã Yên Bài"
-    },
-    {
-      "id": "08980",
-      "label": "Xã Yên Lãng",
-      "fullName": "Xã Yên Lãng"
-    },
-    {
-      "id": "04930",
-      "label": "Xã Yên Xuân",
-      "fullName": "Xã Yên Xuân"
-    }
-  ],
-  "Cao Bằng": [
-    {
-      "id": "01279",
-      "label": "Phường Nùng Trí Cao",
-      "fullName": "Phường Nùng Trí Cao"
-    },
-    {
-      "id": "01288",
-      "label": "Phường Tân Giang",
-      "fullName": "Phường Tân Giang"
-    },
-    {
-      "id": "01273",
-      "label": "Phường Thục Phán",
-      "fullName": "Phường Thục Phán"
-    },
-    {
-      "id": "01708",
-      "label": "Xã Bạch Đằng",
-      "fullName": "Xã Bạch Đằng"
-    },
-    {
-      "id": "01321",
-      "label": "Xã Bảo Lạc",
-      "fullName": "Xã Bảo Lạc"
-    },
-    {
-      "id": "01290",
-      "label": "Xã Bảo Lâm",
-      "fullName": "Xã Bảo Lâm"
-    },
-    {
-      "id": "01636",
-      "label": "Xã Bế Văn Đàn",
-      "fullName": "Xã Bế Văn Đàn"
-    },
-    {
-      "id": "01738",
-      "label": "Xã Ca Thành",
-      "fullName": "Xã Ca Thành"
-    },
-    {
-      "id": "01366",
-      "label": "Xã Cần Yên",
-      "fullName": "Xã Cần Yên"
-    },
-    {
-      "id": "01789",
-      "label": "Xã Canh Tân",
-      "fullName": "Xã Canh Tân"
-    },
-    {
-      "id": "01327",
-      "label": "Xã Cô Ba",
-      "fullName": "Xã Cô Ba"
-    },
-    {
-      "id": "01324",
-      "label": "Xã Cốc Pàng",
-      "fullName": "Xã Cốc Pàng"
-    },
-    {
-      "id": "01501",
-      "label": "Xã Đàm Thủy",
-      "fullName": "Xã Đàm Thủy"
-    },
-    {
-      "id": "01489",
-      "label": "Xã Đình Phong",
-      "fullName": "Xã Đình Phong"
-    },
-    {
-      "id": "01525",
-      "label": "Xã Đoài Dương",
-      "fullName": "Xã Đoài Dương"
-    },
-    {
-      "id": "01594",
-      "label": "Xã Độc Lập",
-      "fullName": "Xã Độc Lập"
-    },
-    {
-      "id": "01786",
-      "label": "Xã Đông Khê",
-      "fullName": "Xã Đông Khê"
-    },
-    {
-      "id": "01822",
-      "label": "Xã Đức Long",
-      "fullName": "Xã Đức Long"
-    },
-    {
-      "id": "01558",
-      "label": "Xã Hạ Lang",
-      "fullName": "Xã Hạ Lang"
-    },
-    {
-      "id": "01438",
-      "label": "Xã Hà Quảng",
-      "fullName": "Xã Hà Quảng"
-    },
-    {
-      "id": "01618",
-      "label": "Xã Hạnh Phúc",
-      "fullName": "Xã Hạnh Phúc"
-    },
-    {
-      "id": "01654",
-      "label": "Xã Hòa An",
-      "fullName": "Xã Hòa An"
-    },
-    {
-      "id": "01351",
-      "label": "Xã Hưng Đạo",
-      "fullName": "Xã Hưng Đạo"
-    },
-    {
-      "id": "01354",
-      "label": "Xã Huy Giáp",
-      "fullName": "Xã Huy Giáp"
-    },
-    {
-      "id": "01336",
-      "label": "Xã Khánh Xuân",
-      "fullName": "Xã Khánh Xuân"
-    },
-    {
-      "id": "01792",
-      "label": "Xã Kim Đồng",
-      "fullName": "Xã Kim Đồng"
-    },
-    {
-      "id": "01393",
-      "label": "Xã Lũng Nặm",
-      "fullName": "Xã Lũng Nặm"
-    },
-    {
-      "id": "01294",
-      "label": "Xã Lý Bôn",
-      "fullName": "Xã Lý Bôn"
-    },
-    {
-      "id": "01537",
-      "label": "Xã Lý Quốc",
-      "fullName": "Xã Lý Quốc"
-    },
-    {
-      "id": "01795",
-      "label": "Xã Minh Khai",
-      "fullName": "Xã Minh Khai"
-    },
-    {
-      "id": "01747",
-      "label": "Xã Minh Tâm",
-      "fullName": "Xã Minh Tâm"
-    },
-    {
-      "id": "01297",
-      "label": "Xã Nam Quang",
-      "fullName": "Xã Nam Quang"
-    },
-    {
-      "id": "01660",
-      "label": "Xã Nam Tuấn",
-      "fullName": "Xã Nam Tuấn"
-    },
-    {
-      "id": "01726",
-      "label": "Xã Nguyên Bình",
-      "fullName": "Xã Nguyên Bình"
-    },
-    {
-      "id": "01699",
-      "label": "Xã Nguyễn Huệ",
-      "fullName": "Xã Nguyễn Huệ"
-    },
-    {
-      "id": "01768",
-      "label": "Xã Phan Thanh",
-      "fullName": "Xã Phan Thanh"
-    },
-    {
-      "id": "01648",
-      "label": "Xã Phục Hòa",
-      "fullName": "Xã Phục Hòa"
-    },
-    {
-      "id": "01456",
-      "label": "Xã Quang Hán",
-      "fullName": "Xã Quang Hán"
-    },
-    {
-      "id": "01304",
-      "label": "Xã Quảng Lâm",
-      "fullName": "Xã Quảng Lâm"
-    },
-    {
-      "id": "01552",
-      "label": "Xã Quang Long",
-      "fullName": "Xã Quang Long"
-    },
-    {
-      "id": "01465",
-      "label": "Xã Quang Trung",
-      "fullName": "Xã Quang Trung"
-    },
-    {
-      "id": "01576",
-      "label": "Xã Quảng Uyên",
-      "fullName": "Xã Quảng Uyên"
-    },
-    {
-      "id": "01360",
-      "label": "Xã Sơn Lộ",
-      "fullName": "Xã Sơn Lộ"
-    },
-    {
-      "id": "01774",
-      "label": "Xã Tam Kim",
-      "fullName": "Xã Tam Kim"
-    },
-    {
-      "id": "01807",
-      "label": "Xã Thạch An",
-      "fullName": "Xã Thạch An"
-    },
-    {
-      "id": "01777",
-      "label": "Xã Thành Công",
-      "fullName": "Xã Thành Công"
-    },
-    {
-      "id": "01387",
-      "label": "Xã Thanh Long",
-      "fullName": "Xã Thanh Long"
-    },
-    {
-      "id": "01363",
-      "label": "Xã Thông Nông",
-      "fullName": "Xã Thông Nông"
-    },
-    {
-      "id": "01729",
-      "label": "Xã Tĩnh Túc",
-      "fullName": "Xã Tĩnh Túc"
-    },
-    {
-      "id": "01414",
-      "label": "Xã Tổng Cọt",
-      "fullName": "Xã Tổng Cọt"
-    },
-    {
-      "id": "01447",
-      "label": "Xã Trà Lĩnh",
-      "fullName": "Xã Trà Lĩnh"
-    },
-    {
-      "id": "01477",
-      "label": "Xã Trùng Khánh",
-      "fullName": "Xã Trùng Khánh"
-    },
-    {
-      "id": "01392",
-      "label": "Xã Trường Hà",
-      "fullName": "Xã Trường Hà"
-    },
-    {
-      "id": "01561",
-      "label": "Xã Vinh Quý",
-      "fullName": "Xã Vinh Quý"
-    },
-    {
-      "id": "01339",
-      "label": "Xã Xuân Trường",
-      "fullName": "Xã Xuân Trường"
-    },
-    {
-      "id": "01318",
-      "label": "Xã Yên Thổ",
-      "fullName": "Xã Yên Thổ"
-    }
-  ],
-  "Tuyên Quang": [
-    {
-      "id": "02512",
-      "label": "Phường An Tường",
-      "fullName": "Phường An Tường"
-    },
-    {
-      "id": "02524",
-      "label": "Phường Bình Thuận",
-      "fullName": "Phường Bình Thuận"
-    },
-    {
-      "id": "00694",
-      "label": "Phường Hà Giang 1",
-      "fullName": "Phường Hà Giang 1"
-    },
-    {
-      "id": "00691",
-      "label": "Phường Hà Giang 2",
-      "fullName": "Phường Hà Giang 2"
-    },
-    {
-      "id": "02215",
-      "label": "Phường Minh Xuân",
-      "fullName": "Phường Minh Xuân"
-    },
-    {
-      "id": "02509",
-      "label": "Phường Mỹ Lâm",
-      "fullName": "Phường Mỹ Lâm"
-    },
-    {
-      "id": "02212",
-      "label": "Phường Nông Tiến",
-      "fullName": "Phường Nông Tiến"
-    },
-    {
-      "id": "00991",
-      "label": "Xã Bắc Mê",
-      "fullName": "Xã Bắc Mê"
-    },
-    {
-      "id": "01153",
-      "label": "Xã Bắc Quang",
-      "fullName": "Xã Bắc Quang"
-    },
-    {
-      "id": "00832",
-      "label": "Xã Bạch Đích",
-      "fullName": "Xã Bạch Đích"
-    },
-    {
-      "id": "00976",
-      "label": "Xã Bạch Ngọc",
-      "fullName": "Xã Bạch Ngọc"
-    },
-    {
-      "id": "02380",
-      "label": "Xã Bạch Xa",
-      "fullName": "Xã Bạch Xa"
-    },
-    {
-      "id": "01024",
-      "label": "Xã Bản Máy",
-      "fullName": "Xã Bản Máy"
-    },
-    {
-      "id": "01180",
-      "label": "Xã Bằng Hành",
-      "fullName": "Xã Bằng Hành"
-    },
-    {
-      "id": "01246",
-      "label": "Xã Bằng Lang",
-      "fullName": "Xã Bằng Lang"
-    },
-    {
-      "id": "02296",
-      "label": "Xã Bình An",
-      "fullName": "Xã Bình An"
-    },
-    {
-      "id": "02548",
-      "label": "Xã Bình Ca",
-      "fullName": "Xã Bình Ca"
-    },
-    {
-      "id": "02404",
-      "label": "Xã Bình Xa",
-      "fullName": "Xã Bình Xa"
-    },
-    {
-      "id": "00883",
-      "label": "Xã Cán Tỷ",
-      "fullName": "Xã Cán Tỷ"
-    },
-    {
-      "id": "00952",
-      "label": "Xã Cao Bồ",
-      "fullName": "Xã Cao Bồ"
-    },
-    {
-      "id": "02287",
-      "label": "Xã Chiêm Hóa",
-      "fullName": "Xã Chiêm Hóa"
-    },
-    {
-      "id": "02245",
-      "label": "Xã Côn Lôn",
-      "fullName": "Xã Côn Lôn"
-    },
-    {
-      "id": "01165",
-      "label": "Xã Đồng Tâm",
-      "fullName": "Xã Đồng Tâm"
-    },
-    {
-      "id": "02572",
-      "label": "Xã Đông Thọ",
-      "fullName": "Xã Đông Thọ"
-    },
-    {
-      "id": "00721",
-      "label": "Xã Đồng Văn",
-      "fullName": "Xã Đồng Văn"
-    },
-    {
-      "id": "01216",
-      "label": "Xã Đồng Yên",
-      "fullName": "Xã Đồng Yên"
-    },
-    {
-      "id": "00871",
-      "label": "Xã Du Già",
-      "fullName": "Xã Du Già"
-    },
-    {
-      "id": "01012",
-      "label": "Xã Đường Hồng",
-      "fullName": "Xã Đường Hồng"
-    },
-    {
-      "id": "00865",
-      "label": "Xã Đường Thượng",
-      "fullName": "Xã Đường Thượng"
-    },
-    {
-      "id": "00985",
-      "label": "Xã Giáp Trung",
-      "fullName": "Xã Giáp Trung"
-    },
-    {
-      "id": "02374",
-      "label": "Xã Hàm Yên",
-      "fullName": "Xã Hàm Yên"
-    },
-    {
-      "id": "01084",
-      "label": "Xã Hồ Thầu",
-      "fullName": "Xã Hồ Thầu"
-    },
-    {
-      "id": "02353",
-      "label": "Xã Hòa An",
-      "fullName": "Xã Hòa An"
-    },
-    {
-      "id": "01021",
-      "label": "Xã Hoàng Su Phì",
-      "fullName": "Xã Hoàng Su Phì"
-    },
-    {
-      "id": "02608",
-      "label": "Xã Hồng Sơn",
-      "fullName": "Xã Hồng Sơn"
-    },
-    {
-      "id": "02260",
-      "label": "Xã Hồng Thái",
-      "fullName": "Xã Hồng Thái"
-    },
-    {
-      "id": "01201",
-      "label": "Xã Hùng An",
-      "fullName": "Xã Hùng An"
-    },
-    {
-      "id": "02425",
-      "label": "Xã Hùng Đức",
-      "fullName": "Xã Hùng Đức"
-    },
-    {
-      "id": "02455",
-      "label": "Xã Hùng Lợi",
-      "fullName": "Xã Hùng Lợi"
-    },
-    {
-      "id": "00802",
-      "label": "Xã Khâu Vai",
-      "fullName": "Xã Khâu Vai"
-    },
-    {
-      "id": "01147",
-      "label": "Xã Khuôn Lùng",
-      "fullName": "Xã Khuôn Lùng"
-    },
-    {
-      "id": "02332",
-      "label": "Xã Kiên Đài",
-      "fullName": "Xã Kiên Đài"
-    },
-    {
-      "id": "02437",
-      "label": "Xã Kiến Thiết",
-      "fullName": "Xã Kiến Thiết"
-    },
-    {
-      "id": "02350",
-      "label": "Xã Kim Bình",
-      "fullName": "Xã Kim Bình"
-    },
-    {
-      "id": "02266",
-      "label": "Xã Lâm Bình",
-      "fullName": "Xã Lâm Bình"
-    },
-    {
-      "id": "00937",
-      "label": "Xã Lao Chải",
-      "fullName": "Xã Lao Chải"
-    },
-    {
-      "id": "01192",
-      "label": "Xã Liên Hiệp",
-      "fullName": "Xã Liên Hiệp"
-    },
-    {
-      "id": "00970",
-      "label": "Xã Linh Hồ",
-      "fullName": "Xã Linh Hồ"
-    },
-    {
-      "id": "02434",
-      "label": "Xã Lực Hành",
-      "fullName": "Xã Lực Hành"
-    },
-    {
-      "id": "00715",
-      "label": "Xã Lũng Cú",
-      "fullName": "Xã Lũng Cú"
-    },
-    {
-      "id": "00763",
-      "label": "Xã Lũng Phìn",
-      "fullName": "Xã Lũng Phìn"
-    },
-    {
-      "id": "00901",
-      "label": "Xã Lùng Tám",
-      "fullName": "Xã Lùng Tám"
-    },
-    {
-      "id": "00847",
-      "label": "Xã Mậu Duệ",
-      "fullName": "Xã Mậu Duệ"
-    },
-    {
-      "id": "00769",
-      "label": "Xã Mèo Vạc",
-      "fullName": "Xã Mèo Vạc"
-    },
-    {
-      "id": "00994",
-      "label": "Xã Minh Ngọc",
-      "fullName": "Xã Minh Ngọc"
-    },
-    {
-      "id": "02302",
-      "label": "Xã Minh Quang",
-      "fullName": "Xã Minh Quang"
-    },
-    {
-      "id": "00982",
-      "label": "Xã Minh Sơn",
-      "fullName": "Xã Minh Sơn"
-    },
-    {
-      "id": "00919",
-      "label": "Xã Minh Tân",
-      "fullName": "Xã Minh Tân"
-    },
-    {
-      "id": "02554",
-      "label": "Xã Minh Thanh",
-      "fullName": "Xã Minh Thanh"
-    },
-    {
-      "id": "02221",
-      "label": "Xã Nà Hang",
-      "fullName": "Xã Nà Hang"
-    },
-    {
-      "id": "01141",
-      "label": "Xã Nấm Dẩn",
-      "fullName": "Xã Nấm Dẩn"
-    },
-    {
-      "id": "01075",
-      "label": "Xã Nậm Dịch",
-      "fullName": "Xã Nậm Dịch"
-    },
-    {
-      "id": "00889",
-      "label": "Xã Nghĩa Thuận",
-      "fullName": "Xã Nghĩa Thuận"
-    },
-    {
-      "id": "00700",
-      "label": "Xã Ngọc Đường",
-      "fullName": "Xã Ngọc Đường"
-    },
-    {
-      "id": "00859",
-      "label": "Xã Ngọc Long",
-      "fullName": "Xã Ngọc Long"
-    },
-    {
-      "id": "02530",
-      "label": "Xã Nhữ Khê",
-      "fullName": "Xã Nhữ Khê"
-    },
-    {
-      "id": "00817",
-      "label": "Xã Niêm Sơn",
-      "fullName": "Xã Niêm Sơn"
-    },
-    {
-      "id": "01096",
-      "label": "Xã Pà Vầy Sủ",
-      "fullName": "Xã Pà Vầy Sủ"
-    },
-    {
-      "id": "00745",
-      "label": "Xã Phó Bảng",
-      "fullName": "Xã Phó Bảng"
-    },
-    {
-      "id": "00706",
-      "label": "Xã Phú Linh",
-      "fullName": "Xã Phú Linh"
-    },
-    {
-      "id": "02611",
-      "label": "Xã Phú Lương",
-      "fullName": "Xã Phú Lương"
-    },
-    {
-      "id": "02392",
-      "label": "Xã Phù Lưu",
-      "fullName": "Xã Phù Lưu"
-    },
-    {
-      "id": "01057",
-      "label": "Xã Pờ Ly Ngài",
-      "fullName": "Xã Pờ Ly Ngài"
-    },
-    {
-      "id": "00874",
-      "label": "Xã Quản Bạ",
-      "fullName": "Xã Quản Bạ"
-    },
-    {
-      "id": "01237",
-      "label": "Xã Quang Bình",
-      "fullName": "Xã Quang Bình"
-    },
-    {
-      "id": "01144",
-      "label": "Xã Quảng Nguyên",
-      "fullName": "Xã Quảng Nguyên"
-    },
-    {
-      "id": "00733",
-      "label": "Xã Sà Phìn",
-      "fullName": "Xã Sà Phìn"
-    },
-    {
-      "id": "02536",
-      "label": "Xã Sơn Dương",
-      "fullName": "Xã Sơn Dương"
-    },
-    {
-      "id": "02620",
-      "label": "Xã Sơn Thủy",
-      "fullName": "Xã Sơn Thủy"
-    },
-    {
-      "id": "00778",
-      "label": "Xã Sơn Vĩ",
-      "fullName": "Xã Sơn Vĩ"
-    },
-    {
-      "id": "00787",
-      "label": "Xã Sủng Máng",
-      "fullName": "Xã Sủng Máng"
-    },
-    {
-      "id": "02320",
-      "label": "Xã Tân An",
-      "fullName": "Xã Tân An"
-    },
-    {
-      "id": "02470",
-      "label": "Xã Tân Long",
-      "fullName": "Xã Tân Long"
-    },
-    {
-      "id": "02308",
-      "label": "Xã Tân Mỹ",
-      "fullName": "Xã Tân Mỹ"
-    },
-    {
-      "id": "01171",
-      "label": "Xã Tân Quang",
-      "fullName": "Xã Tân Quang"
-    },
-    {
-      "id": "02578",
-      "label": "Xã Tân Thanh",
-      "fullName": "Xã Tân Thanh"
-    },
-    {
-      "id": "01051",
-      "label": "Xã Tân Tiến",
-      "fullName": "Xã Tân Tiến"
-    },
-    {
-      "id": "02545",
-      "label": "Xã Tân Trào",
-      "fullName": "Xã Tân Trào"
-    },
-    {
-      "id": "01243",
-      "label": "Xã Tân Trịnh",
-      "fullName": "Xã Tân Trịnh"
-    },
-    {
-      "id": "00808",
-      "label": "Xã Tát Ngà",
-      "fullName": "Xã Tát Ngà"
-    },
-    {
-      "id": "02494",
-      "label": "Xã Thái Bình",
-      "fullName": "Xã Thái Bình"
-    },
-    {
-      "id": "02419",
-      "label": "Xã Thái Hòa",
-      "fullName": "Xã Thái Hòa"
-    },
-    {
-      "id": "02407",
-      "label": "Xã Thái Sơn",
-      "fullName": "Xã Thái Sơn"
-    },
-    {
-      "id": "00829",
-      "label": "Xã Thắng Mố",
-      "fullName": "Xã Thắng Mố"
-    },
-    {
-      "id": "01033",
-      "label": "Xã Thàng Tín",
-      "fullName": "Xã Thàng Tín"
-    },
-    {
-      "id": "00928",
-      "label": "Xã Thanh Thủy",
-      "fullName": "Xã Thanh Thủy"
-    },
-    {
-      "id": "01090",
-      "label": "Xã Thông Nguyên",
-      "fullName": "Xã Thông Nguyên"
-    },
-    {
-      "id": "00922",
-      "label": "Xã Thuận Hòa",
-      "fullName": "Xã Thuận Hòa"
-    },
-    {
-      "id": "02269",
-      "label": "Xã Thượng Lâm",
-      "fullName": "Xã Thượng Lâm"
-    },
-    {
-      "id": "02239",
-      "label": "Xã Thượng Nông",
-      "fullName": "Xã Thượng Nông"
-    },
-    {
-      "id": "00958",
-      "label": "Xã Thượng Sơn",
-      "fullName": "Xã Thượng Sơn"
-    },
-    {
-      "id": "01225",
-      "label": "Xã Tiên Nguyên",
-      "fullName": "Xã Tiên Nguyên"
-    },
-    {
-      "id": "01261",
-      "label": "Xã Tiên Yên",
-      "fullName": "Xã Tiên Yên"
-    },
-    {
-      "id": "02359",
-      "label": "Xã Tri Phú",
-      "fullName": "Xã Tri Phú"
-    },
-    {
-      "id": "02305",
-      "label": "Xã Trung Hà",
-      "fullName": "Xã Trung Hà"
-    },
-    {
-      "id": "02458",
-      "label": "Xã Trung Sơn",
-      "fullName": "Xã Trung Sơn"
-    },
-    {
-      "id": "01117",
-      "label": "Xã Trung Thịnh",
-      "fullName": "Xã Trung Thịnh"
-    },
-    {
-      "id": "02623",
-      "label": "Xã Trường Sinh",
-      "fullName": "Xã Trường Sinh"
-    },
-    {
-      "id": "00925",
-      "label": "Xã Tùng Bá",
-      "fullName": "Xã Tùng Bá"
-    },
-    {
-      "id": "00892",
-      "label": "Xã Tùng Vài",
-      "fullName": "Xã Tùng Vài"
-    },
-    {
-      "id": "00913",
-      "label": "Xã Vị Xuyên",
-      "fullName": "Xã Vị Xuyên"
-    },
-    {
-      "id": "00967",
-      "label": "Xã Việt Lâm",
-      "fullName": "Xã Việt Lâm"
-    },
-    {
-      "id": "01156",
-      "label": "Xã Vĩnh Tuy",
-      "fullName": "Xã Vĩnh Tuy"
-    },
-    {
-      "id": "01108",
-      "label": "Xã Xín Mần",
-      "fullName": "Xã Xín Mần"
-    },
-    {
-      "id": "01255",
-      "label": "Xã Xuân Giang",
-      "fullName": "Xã Xuân Giang"
-    },
-    {
-      "id": "02449",
-      "label": "Xã Xuân Vân",
-      "fullName": "Xã Xuân Vân"
-    },
-    {
-      "id": "01006",
-      "label": "Xã Yên Cường",
-      "fullName": "Xã Yên Cường"
-    },
-    {
-      "id": "02248",
-      "label": "Xã Yên Hoa",
-      "fullName": "Xã Yên Hoa"
-    },
-    {
-      "id": "02317",
-      "label": "Xã Yên Lập",
-      "fullName": "Xã Yên Lập"
-    },
-    {
-      "id": "00820",
-      "label": "Xã Yên Minh",
-      "fullName": "Xã Yên Minh"
-    },
-    {
-      "id": "02365",
-      "label": "Xã Yên Nguyên",
-      "fullName": "Xã Yên Nguyên"
-    },
-    {
-      "id": "02398",
-      "label": "Xã Yên Phú",
-      "fullName": "Xã Yên Phú"
-    },
-    {
-      "id": "02473",
-      "label": "Xã Yên Sơn",
-      "fullName": "Xã Yên Sơn"
-    },
-    {
-      "id": "01234",
-      "label": "Xã Yên Thành",
-      "fullName": "Xã Yên Thành"
-    }
-  ],
-  "Điện Biên": [
+  "11": [
     {
       "id": "03127",
       "label": "Phường Điện Biên Phủ",
@@ -5920,7 +4384,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xa Dung"
     }
   ],
-  "Lai Châu": [
+  "12": [
     {
       "id": "03388",
       "label": "Phường Đoàn Kết",
@@ -6112,7 +4576,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Tủa Sín Chải"
     }
   ],
-  "Sơn La": [
+  "14": [
     {
       "id": "03664",
       "label": "Phường Chiềng An",
@@ -6489,7 +4953,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Sơn"
     }
   ],
-  "Lào Cai": [
+  "15": [
     {
       "id": "04543",
       "label": "Phường Âu Lâu",
@@ -6986,7 +5450,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Thành"
     }
   ],
-  "Thái Nguyên": [
+  "19": [
     {
       "id": "05533",
       "label": "Phường Bá Xuyên",
@@ -7448,7 +5912,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Trạch"
     }
   ],
-  "Lạng Sơn": [
+  "20": [
     {
       "id": "05977",
       "label": "Phường Đông Kinh",
@@ -7775,7 +6239,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Phúc"
     }
   ],
-  "Quảng Ninh": [
+  "22": [
     {
       "id": "07192",
       "label": "Đặc khu Cô Tô",
@@ -8047,7 +6511,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Thực"
     }
   ],
-  "Bắc Ninh": [
+  "24": [
     {
       "id": "07210",
       "label": "Phường Bắc Giang",
@@ -8544,7 +7008,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Trung"
     }
   ],
-  "Phú Thọ": [
+  "25": [
     {
       "id": "07948",
       "label": "Phường Âu Cơ",
@@ -9286,7 +7750,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Trị"
     }
   ],
-  "Hải Phòng": [
+  "31": [
     {
       "id": "11948",
       "label": "Đặc khu Bạch Long Vĩ",
@@ -9858,7 +8322,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yết Kiêu"
     }
   ],
-  "Hưng Yên": [
+  "33": [
     {
       "id": "12133",
       "label": "Phường Đường Hào",
@@ -10380,7 +8844,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Mỹ"
     }
   ],
-  "Ninh Bình": [
+  "37": [
     {
       "id": "13318",
       "label": "Phường Châu Sơn",
@@ -11027,7 +9491,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Từ"
     }
   ],
-  "Thanh Hóa": [
+  "38": [
     {
       "id": "14812",
       "label": "Phường Bỉm Sơn",
@@ -11859,7 +10323,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Trường"
     }
   ],
-  "Nghệ An": [
+  "40": [
     {
       "id": "16732",
       "label": "Phường Cửa Lò",
@@ -12511,7 +10975,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Xuân"
     }
   ],
-  "Hà Tĩnh": [
+  "42": [
     {
       "id": "18115",
       "label": "Phường Bắc Hồng Lĩnh",
@@ -12858,7 +11322,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yên Hòa"
     }
   ],
-  "Quảng Trị": [
+  "44": [
     {
       "id": "19742",
       "label": "Đặc khu Cồn Cỏ",
@@ -13250,7 +11714,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Thủy"
     }
   ],
-  "Huế": [
+  "46": [
     {
       "id": "19815",
       "label": "Phường An Cựu",
@@ -13452,7 +11916,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vinh Lộc"
     }
   ],
-  "Đà Nẵng": [
+  "48": [
     {
       "id": "20333",
       "label": "Đặc khu Hoàng Sa",
@@ -13924,7 +12388,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xuân Phú"
     }
   ],
-  "Quảng Ngãi": [
+  "51": [
     {
       "id": "21548",
       "label": "Đặc khu Lý Sơn",
@@ -14406,7 +12870,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Ya Ly"
     }
   ],
-  "Gia Lai": [
+  "52": [
     {
       "id": "23614",
       "label": "Phường An Bình",
@@ -15083,7 +13547,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Ya Ma"
     }
   ],
-  "Khánh Hòa": [
+  "56": [
     {
       "id": "22736",
       "label": "Đặc khu Trường Sa",
@@ -15410,7 +13874,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xuân Hải"
     }
   ],
-  "Đắk Lắk": [
+  "66": [
     {
       "id": "22045",
       "label": "Phường Bình Kiến",
@@ -15922,7 +14386,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Yang Mao"
     }
   ],
-  "Lâm Đồng": [
+  "68": [
     {
       "id": "23272",
       "label": "Đặc khu Phú Quý",
@@ -16544,7 +15008,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Hảo"
     }
   ],
-  "Đồng Nai": [
+  "75": [
     {
       "id": "25333",
       "label": "Phường An Lộc",
@@ -17021,7 +15485,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xuân Thành"
     }
   ],
-  "Hồ Chí Minh": [
+  "79": [
     {
       "id": "26732",
       "label": "Đặc khu Côn Đảo",
@@ -17863,7 +16327,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xuyên Mộc"
     }
   ],
-  "Tây Ninh": [
+  "80": [
     {
       "id": "25732",
       "label": "Phường An Tịnh",
@@ -18345,7 +16809,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Thạnh"
     }
   ],
-  "Đồng Tháp": [
+  "82": [
     {
       "id": "29954",
       "label": "Phường An Bình",
@@ -18857,7 +17321,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Kim"
     }
   ],
-  "Vĩnh Long": [
+  "86": [
     {
       "id": "28777",
       "label": "Phường An Hội",
@@ -19479,7 +17943,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Xuân"
     }
   ],
-  "An Giang": [
+  "91": [
     {
       "id": "31108",
       "label": "Đặc khu Kiên Hải",
@@ -19991,7 +18455,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Vĩnh Xương"
     }
   ],
-  "Cần Thơ": [
+  "92": [
     {
       "id": "31150",
       "label": "Phường An Bình",
@@ -20508,7 +18972,7 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "fullName": "Xã Xà Phiên"
     }
   ],
-  "Cà Mau": [
+  "96": [
     {
       "id": "32002",
       "label": "Phường An Xuyên",
@@ -20829,6 +19293,1542 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
       "label": "Xã Vĩnh Thanh",
       "fullName": "Xã Vĩnh Thanh"
     }
+  ],
+  "01": [
+    {
+      "id": "00004",
+      "label": "Phường Ba Đình",
+      "fullName": "Phường Ba Đình"
+    },
+    {
+      "id": "00292",
+      "label": "Phường Bạch Mai",
+      "fullName": "Phường Bạch Mai"
+    },
+    {
+      "id": "00118",
+      "label": "Phường Bồ Đề",
+      "fullName": "Phường Bồ Đề"
+    },
+    {
+      "id": "00166",
+      "label": "Phường Cầu Giấy",
+      "fullName": "Phường Cầu Giấy"
+    },
+    {
+      "id": "10015",
+      "label": "Phường Chương Mỹ",
+      "fullName": "Phường Chương Mỹ"
+    },
+    {
+      "id": "00082",
+      "label": "Phường Cửa Nam",
+      "fullName": "Phường Cửa Nam"
+    },
+    {
+      "id": "00637",
+      "label": "Phường Đại Mỗ",
+      "fullName": "Phường Đại Mỗ"
+    },
+    {
+      "id": "00316",
+      "label": "Phường Định Công",
+      "fullName": "Phường Định Công"
+    },
+    {
+      "id": "00235",
+      "label": "Phường Đống Đa",
+      "fullName": "Phường Đống Đa"
+    },
+    {
+      "id": "00602",
+      "label": "Phường Đông Ngạc",
+      "fullName": "Phường Đông Ngạc"
+    },
+    {
+      "id": "09886",
+      "label": "Phường Dương Nội",
+      "fullName": "Phường Dương Nội"
+    },
+    {
+      "id": "00025",
+      "label": "Phường Giảng Võ",
+      "fullName": "Phường Giảng Võ"
+    },
+    {
+      "id": "09556",
+      "label": "Phường Hà Đông",
+      "fullName": "Phường Hà Đông"
+    },
+    {
+      "id": "00256",
+      "label": "Phường Hai Bà Trưng",
+      "fullName": "Phường Hai Bà Trưng"
+    },
+    {
+      "id": "00070",
+      "label": "Phường Hoàn Kiếm",
+      "fullName": "Phường Hoàn Kiếm"
+    },
+    {
+      "id": "00337",
+      "label": "Phường Hoàng Liệt",
+      "fullName": "Phường Hoàng Liệt"
+    },
+    {
+      "id": "00331",
+      "label": "Phường Hoàng Mai",
+      "fullName": "Phường Hoàng Mai"
+    },
+    {
+      "id": "00097",
+      "label": "Phường Hồng Hà",
+      "fullName": "Phường Hồng Hà"
+    },
+    {
+      "id": "00364",
+      "label": "Phường Khương Đình",
+      "fullName": "Phường Khương Đình"
+    },
+    {
+      "id": "09552",
+      "label": "Phường Kiến Hưng",
+      "fullName": "Phường Kiến Hưng"
+    },
+    {
+      "id": "00229",
+      "label": "Phường Kim Liên",
+      "fullName": "Phường Kim Liên"
+    },
+    {
+      "id": "00199",
+      "label": "Phường Láng",
+      "fullName": "Phường Láng"
+    },
+    {
+      "id": "00328",
+      "label": "Phường Lĩnh Nam",
+      "fullName": "Phường Lĩnh Nam"
+    },
+    {
+      "id": "00145",
+      "label": "Phường Long Biên",
+      "fullName": "Phường Long Biên"
+    },
+    {
+      "id": "00160",
+      "label": "Phường Nghĩa Đô",
+      "fullName": "Phường Nghĩa Đô"
+    },
+    {
+      "id": "00008",
+      "label": "Phường Ngọc Hà",
+      "fullName": "Phường Ngọc Hà"
+    },
+    {
+      "id": "00190",
+      "label": "Phường Ô Chợ Dừa",
+      "fullName": "Phường Ô Chợ Dừa"
+    },
+    {
+      "id": "00619",
+      "label": "Phường Phú Diễn",
+      "fullName": "Phường Phú Diễn"
+    },
+    {
+      "id": "09568",
+      "label": "Phường Phú Lương",
+      "fullName": "Phường Phú Lương"
+    },
+    {
+      "id": "00091",
+      "label": "Phường Phú Thượng",
+      "fullName": "Phường Phú Thượng"
+    },
+    {
+      "id": "00136",
+      "label": "Phường Phúc Lợi",
+      "fullName": "Phường Phúc Lợi"
+    },
+    {
+      "id": "00352",
+      "label": "Phường Phương Liệt",
+      "fullName": "Phường Phương Liệt"
+    },
+    {
+      "id": "09574",
+      "label": "Phường Sơn Tây",
+      "fullName": "Phường Sơn Tây"
+    },
+    {
+      "id": "00103",
+      "label": "Phường Tây Hồ",
+      "fullName": "Phường Tây Hồ"
+    },
+    {
+      "id": "00634",
+      "label": "Phường Tây Mỗ",
+      "fullName": "Phường Tây Mỗ"
+    },
+    {
+      "id": "00613",
+      "label": "Phường Tây Tựu",
+      "fullName": "Phường Tây Tựu"
+    },
+    {
+      "id": "00643",
+      "label": "Phường Thanh Liệt",
+      "fullName": "Phường Thanh Liệt"
+    },
+    {
+      "id": "00367",
+      "label": "Phường Thanh Xuân",
+      "fullName": "Phường Thanh Xuân"
+    },
+    {
+      "id": "00598",
+      "label": "Phường Thượng Cát",
+      "fullName": "Phường Thượng Cát"
+    },
+    {
+      "id": "00592",
+      "label": "Phường Từ Liêm",
+      "fullName": "Phường Từ Liêm"
+    },
+    {
+      "id": "09604",
+      "label": "Phường Tùng Thiện",
+      "fullName": "Phường Tùng Thiện"
+    },
+    {
+      "id": "00322",
+      "label": "Phường Tương Mai",
+      "fullName": "Phường Tương Mai"
+    },
+    {
+      "id": "00226",
+      "label": "Phường Văn Miếu - Quốc Tử Giám",
+      "fullName": "Phường Văn Miếu - Quốc Tử Giám"
+    },
+    {
+      "id": "00127",
+      "label": "Phường Việt Hưng",
+      "fullName": "Phường Việt Hưng"
+    },
+    {
+      "id": "00301",
+      "label": "Phường Vĩnh Hưng",
+      "fullName": "Phường Vĩnh Hưng"
+    },
+    {
+      "id": "00283",
+      "label": "Phường Vĩnh Tuy",
+      "fullName": "Phường Vĩnh Tuy"
+    },
+    {
+      "id": "00611",
+      "label": "Phường Xuân Đỉnh",
+      "fullName": "Phường Xuân Đỉnh"
+    },
+    {
+      "id": "00622",
+      "label": "Phường Xuân Phương",
+      "fullName": "Phường Xuân Phương"
+    },
+    {
+      "id": "00175",
+      "label": "Phường Yên Hòa",
+      "fullName": "Phường Yên Hòa"
+    },
+    {
+      "id": "09562",
+      "label": "Phường Yên Nghĩa",
+      "fullName": "Phường Yên Nghĩa"
+    },
+    {
+      "id": "00340",
+      "label": "Phường Yên Sở",
+      "fullName": "Phường Yên Sở"
+    },
+    {
+      "id": "09877",
+      "label": "Xã An Khánh",
+      "fullName": "Xã An Khánh"
+    },
+    {
+      "id": "09700",
+      "label": "Xã Ba Vì",
+      "fullName": "Xã Ba Vì"
+    },
+    {
+      "id": "09676",
+      "label": "Xã Bất Bạt",
+      "fullName": "Xã Bất Bạt"
+    },
+    {
+      "id": "00577",
+      "label": "Xã Bát Tràng",
+      "fullName": "Xã Bát Tràng"
+    },
+    {
+      "id": "10126",
+      "label": "Xã Bình Minh",
+      "fullName": "Xã Bình Minh"
+    },
+    {
+      "id": "10237",
+      "label": "Xã Chương Dương",
+      "fullName": "Xã Chương Dương"
+    },
+    {
+      "id": "10330",
+      "label": "Xã Chuyên Mỹ",
+      "fullName": "Xã Chuyên Mỹ"
+    },
+    {
+      "id": "09634",
+      "label": "Xã Cổ Đô",
+      "fullName": "Xã Cổ Đô"
+    },
+    {
+      "id": "00430",
+      "label": "Xã Đa Phúc",
+      "fullName": "Xã Đa Phúc"
+    },
+    {
+      "id": "00664",
+      "label": "Xã Đại Thanh",
+      "fullName": "Xã Đại Thanh"
+    },
+    {
+      "id": "10342",
+      "label": "Xã Đại Xuyên",
+      "fullName": "Xã Đại Xuyên"
+    },
+    {
+      "id": "10180",
+      "label": "Xã Dân Hòa",
+      "fullName": "Xã Dân Hòa"
+    },
+    {
+      "id": "09784",
+      "label": "Xã Đan Phượng",
+      "fullName": "Xã Đan Phượng"
+    },
+    {
+      "id": "09616",
+      "label": "Xã Đoài Phương",
+      "fullName": "Xã Đoài Phương"
+    },
+    {
+      "id": "00454",
+      "label": "Xã Đông Anh",
+      "fullName": "Xã Đông Anh"
+    },
+    {
+      "id": "09856",
+      "label": "Xã Dương Hòa",
+      "fullName": "Xã Dương Hòa"
+    },
+    {
+      "id": "00565",
+      "label": "Xã Gia Lâm",
+      "fullName": "Xã Gia Lâm"
+    },
+    {
+      "id": "09982",
+      "label": "Xã Hạ Bằng",
+      "fullName": "Xã Hạ Bằng"
+    },
+    {
+      "id": "09772",
+      "label": "Xã Hát Môn",
+      "fullName": "Xã Hát Môn"
+    },
+    {
+      "id": "09988",
+      "label": "Xã Hòa Lạc",
+      "fullName": "Xã Hòa Lạc"
+    },
+    {
+      "id": "10096",
+      "label": "Xã Hòa Phú",
+      "fullName": "Xã Hòa Phú"
+    },
+    {
+      "id": "10417",
+      "label": "Xã Hòa Xá",
+      "fullName": "Xã Hòa Xá"
+    },
+    {
+      "id": "09832",
+      "label": "Xã Hoài Đức",
+      "fullName": "Xã Hoài Đức"
+    },
+    {
+      "id": "10465",
+      "label": "Xã Hồng Sơn",
+      "fullName": "Xã Hồng Sơn"
+    },
+    {
+      "id": "10210",
+      "label": "Xã Hồng Vân",
+      "fullName": "Xã Hồng Vân"
+    },
+    {
+      "id": "09931",
+      "label": "Xã Hưng Đạo",
+      "fullName": "Xã Hưng Đạo"
+    },
+    {
+      "id": "10489",
+      "label": "Xã Hương Sơn",
+      "fullName": "Xã Hương Sơn"
+    },
+    {
+      "id": "09910",
+      "label": "Xã Kiều Phú",
+      "fullName": "Xã Kiều Phú"
+    },
+    {
+      "id": "00382",
+      "label": "Xã Kim Anh",
+      "fullName": "Xã Kim Anh"
+    },
+    {
+      "id": "09787",
+      "label": "Xã Liên Minh",
+      "fullName": "Xã Liên Minh"
+    },
+    {
+      "id": "09022",
+      "label": "Xã Mê Linh",
+      "fullName": "Xã Mê Linh"
+    },
+    {
+      "id": "09661",
+      "label": "Xã Minh Châu",
+      "fullName": "Xã Minh Châu"
+    },
+    {
+      "id": "10441",
+      "label": "Xã Mỹ Đức",
+      "fullName": "Xã Mỹ Đức"
+    },
+    {
+      "id": "00685",
+      "label": "Xã Nam Phù",
+      "fullName": "Xã Nam Phù"
+    },
+    {
+      "id": "00679",
+      "label": "Xã Ngọc Hồi",
+      "fullName": "Xã Ngọc Hồi"
+    },
+    {
+      "id": "00433",
+      "label": "Xã Nội Bài",
+      "fullName": "Xã Nội Bài"
+    },
+    {
+      "id": "09817",
+      "label": "Xã Ô Diên",
+      "fullName": "Xã Ô Diên"
+    },
+    {
+      "id": "09952",
+      "label": "Xã Phú Cát",
+      "fullName": "Xã Phú Cát"
+    },
+    {
+      "id": "00541",
+      "label": "Xã Phù Đổng",
+      "fullName": "Xã Phù Đổng"
+    },
+    {
+      "id": "10030",
+      "label": "Xã Phú Nghĩa",
+      "fullName": "Xã Phú Nghĩa"
+    },
+    {
+      "id": "10273",
+      "label": "Xã Phú Xuyên",
+      "fullName": "Xã Phú Xuyên"
+    },
+    {
+      "id": "09739",
+      "label": "Xã Phúc Lộc",
+      "fullName": "Xã Phúc Lộc"
+    },
+    {
+      "id": "10459",
+      "label": "Xã Phúc Sơn",
+      "fullName": "Xã Phúc Sơn"
+    },
+    {
+      "id": "00466",
+      "label": "Xã Phúc Thịnh",
+      "fullName": "Xã Phúc Thịnh"
+    },
+    {
+      "id": "09715",
+      "label": "Xã Phúc Thọ",
+      "fullName": "Xã Phúc Thọ"
+    },
+    {
+      "id": "10279",
+      "label": "Xã Phượng Dực",
+      "fullName": "Xã Phượng Dực"
+    },
+    {
+      "id": "10072",
+      "label": "Xã Quảng Bị",
+      "fullName": "Xã Quảng Bị"
+    },
+    {
+      "id": "08974",
+      "label": "Xã Quang Minh",
+      "fullName": "Xã Quang Minh"
+    },
+    {
+      "id": "09619",
+      "label": "Xã Quảng Oai",
+      "fullName": "Xã Quảng Oai"
+    },
+    {
+      "id": "09895",
+      "label": "Xã Quốc Oai",
+      "fullName": "Xã Quốc Oai"
+    },
+    {
+      "id": "00376",
+      "label": "Xã Sóc Sơn",
+      "fullName": "Xã Sóc Sơn"
+    },
+    {
+      "id": "09871",
+      "label": "Xã Sơn Đồng",
+      "fullName": "Xã Sơn Đồng"
+    },
+    {
+      "id": "09694",
+      "label": "Xã Suối Hai",
+      "fullName": "Xã Suối Hai"
+    },
+    {
+      "id": "10144",
+      "label": "Xã Tam Hưng",
+      "fullName": "Xã Tam Hưng"
+    },
+    {
+      "id": "10003",
+      "label": "Xã Tây Phương",
+      "fullName": "Xã Tây Phương"
+    },
+    {
+      "id": "09955",
+      "label": "Xã Thạch Thất",
+      "fullName": "Xã Thạch Thất"
+    },
+    {
+      "id": "10114",
+      "label": "Xã Thanh Oai",
+      "fullName": "Xã Thanh Oai"
+    },
+    {
+      "id": "00640",
+      "label": "Xã Thanh Trì",
+      "fullName": "Xã Thanh Trì"
+    },
+    {
+      "id": "00493",
+      "label": "Xã Thiên Lộc",
+      "fullName": "Xã Thiên Lộc"
+    },
+    {
+      "id": "00475",
+      "label": "Xã Thư Lâm",
+      "fullName": "Xã Thư Lâm"
+    },
+    {
+      "id": "00562",
+      "label": "Xã Thuận An",
+      "fullName": "Xã Thuận An"
+    },
+    {
+      "id": "10231",
+      "label": "Xã Thượng Phúc",
+      "fullName": "Xã Thượng Phúc"
+    },
+    {
+      "id": "10183",
+      "label": "Xã Thường Tín",
+      "fullName": "Xã Thường Tín"
+    },
+    {
+      "id": "08995",
+      "label": "Xã Tiến Thắng",
+      "fullName": "Xã Tiến Thắng"
+    },
+    {
+      "id": "10081",
+      "label": "Xã Trần Phú",
+      "fullName": "Xã Trần Phú"
+    },
+    {
+      "id": "00385",
+      "label": "Xã Trung Giã",
+      "fullName": "Xã Trung Giã"
+    },
+    {
+      "id": "10402",
+      "label": "Xã Ứng Hòa",
+      "fullName": "Xã Ứng Hòa"
+    },
+    {
+      "id": "10369",
+      "label": "Xã Ứng Thiên",
+      "fullName": "Xã Ứng Thiên"
+    },
+    {
+      "id": "10354",
+      "label": "Xã Vân Đình",
+      "fullName": "Xã Vân Đình"
+    },
+    {
+      "id": "09664",
+      "label": "Xã Vật Lại",
+      "fullName": "Xã Vật Lại"
+    },
+    {
+      "id": "00508",
+      "label": "Xã Vĩnh Thanh",
+      "fullName": "Xã Vĩnh Thanh"
+    },
+    {
+      "id": "10045",
+      "label": "Xã Xuân Mai",
+      "fullName": "Xã Xuân Mai"
+    },
+    {
+      "id": "09706",
+      "label": "Xã Yên Bài",
+      "fullName": "Xã Yên Bài"
+    },
+    {
+      "id": "08980",
+      "label": "Xã Yên Lãng",
+      "fullName": "Xã Yên Lãng"
+    },
+    {
+      "id": "04930",
+      "label": "Xã Yên Xuân",
+      "fullName": "Xã Yên Xuân"
+    }
+  ],
+  "04": [
+    {
+      "id": "01279",
+      "label": "Phường Nùng Trí Cao",
+      "fullName": "Phường Nùng Trí Cao"
+    },
+    {
+      "id": "01288",
+      "label": "Phường Tân Giang",
+      "fullName": "Phường Tân Giang"
+    },
+    {
+      "id": "01273",
+      "label": "Phường Thục Phán",
+      "fullName": "Phường Thục Phán"
+    },
+    {
+      "id": "01708",
+      "label": "Xã Bạch Đằng",
+      "fullName": "Xã Bạch Đằng"
+    },
+    {
+      "id": "01321",
+      "label": "Xã Bảo Lạc",
+      "fullName": "Xã Bảo Lạc"
+    },
+    {
+      "id": "01290",
+      "label": "Xã Bảo Lâm",
+      "fullName": "Xã Bảo Lâm"
+    },
+    {
+      "id": "01636",
+      "label": "Xã Bế Văn Đàn",
+      "fullName": "Xã Bế Văn Đàn"
+    },
+    {
+      "id": "01738",
+      "label": "Xã Ca Thành",
+      "fullName": "Xã Ca Thành"
+    },
+    {
+      "id": "01366",
+      "label": "Xã Cần Yên",
+      "fullName": "Xã Cần Yên"
+    },
+    {
+      "id": "01789",
+      "label": "Xã Canh Tân",
+      "fullName": "Xã Canh Tân"
+    },
+    {
+      "id": "01327",
+      "label": "Xã Cô Ba",
+      "fullName": "Xã Cô Ba"
+    },
+    {
+      "id": "01324",
+      "label": "Xã Cốc Pàng",
+      "fullName": "Xã Cốc Pàng"
+    },
+    {
+      "id": "01501",
+      "label": "Xã Đàm Thủy",
+      "fullName": "Xã Đàm Thủy"
+    },
+    {
+      "id": "01489",
+      "label": "Xã Đình Phong",
+      "fullName": "Xã Đình Phong"
+    },
+    {
+      "id": "01525",
+      "label": "Xã Đoài Dương",
+      "fullName": "Xã Đoài Dương"
+    },
+    {
+      "id": "01594",
+      "label": "Xã Độc Lập",
+      "fullName": "Xã Độc Lập"
+    },
+    {
+      "id": "01786",
+      "label": "Xã Đông Khê",
+      "fullName": "Xã Đông Khê"
+    },
+    {
+      "id": "01822",
+      "label": "Xã Đức Long",
+      "fullName": "Xã Đức Long"
+    },
+    {
+      "id": "01558",
+      "label": "Xã Hạ Lang",
+      "fullName": "Xã Hạ Lang"
+    },
+    {
+      "id": "01438",
+      "label": "Xã Hà Quảng",
+      "fullName": "Xã Hà Quảng"
+    },
+    {
+      "id": "01618",
+      "label": "Xã Hạnh Phúc",
+      "fullName": "Xã Hạnh Phúc"
+    },
+    {
+      "id": "01654",
+      "label": "Xã Hòa An",
+      "fullName": "Xã Hòa An"
+    },
+    {
+      "id": "01351",
+      "label": "Xã Hưng Đạo",
+      "fullName": "Xã Hưng Đạo"
+    },
+    {
+      "id": "01354",
+      "label": "Xã Huy Giáp",
+      "fullName": "Xã Huy Giáp"
+    },
+    {
+      "id": "01336",
+      "label": "Xã Khánh Xuân",
+      "fullName": "Xã Khánh Xuân"
+    },
+    {
+      "id": "01792",
+      "label": "Xã Kim Đồng",
+      "fullName": "Xã Kim Đồng"
+    },
+    {
+      "id": "01393",
+      "label": "Xã Lũng Nặm",
+      "fullName": "Xã Lũng Nặm"
+    },
+    {
+      "id": "01294",
+      "label": "Xã Lý Bôn",
+      "fullName": "Xã Lý Bôn"
+    },
+    {
+      "id": "01537",
+      "label": "Xã Lý Quốc",
+      "fullName": "Xã Lý Quốc"
+    },
+    {
+      "id": "01795",
+      "label": "Xã Minh Khai",
+      "fullName": "Xã Minh Khai"
+    },
+    {
+      "id": "01747",
+      "label": "Xã Minh Tâm",
+      "fullName": "Xã Minh Tâm"
+    },
+    {
+      "id": "01297",
+      "label": "Xã Nam Quang",
+      "fullName": "Xã Nam Quang"
+    },
+    {
+      "id": "01660",
+      "label": "Xã Nam Tuấn",
+      "fullName": "Xã Nam Tuấn"
+    },
+    {
+      "id": "01726",
+      "label": "Xã Nguyên Bình",
+      "fullName": "Xã Nguyên Bình"
+    },
+    {
+      "id": "01699",
+      "label": "Xã Nguyễn Huệ",
+      "fullName": "Xã Nguyễn Huệ"
+    },
+    {
+      "id": "01768",
+      "label": "Xã Phan Thanh",
+      "fullName": "Xã Phan Thanh"
+    },
+    {
+      "id": "01648",
+      "label": "Xã Phục Hòa",
+      "fullName": "Xã Phục Hòa"
+    },
+    {
+      "id": "01456",
+      "label": "Xã Quang Hán",
+      "fullName": "Xã Quang Hán"
+    },
+    {
+      "id": "01304",
+      "label": "Xã Quảng Lâm",
+      "fullName": "Xã Quảng Lâm"
+    },
+    {
+      "id": "01552",
+      "label": "Xã Quang Long",
+      "fullName": "Xã Quang Long"
+    },
+    {
+      "id": "01465",
+      "label": "Xã Quang Trung",
+      "fullName": "Xã Quang Trung"
+    },
+    {
+      "id": "01576",
+      "label": "Xã Quảng Uyên",
+      "fullName": "Xã Quảng Uyên"
+    },
+    {
+      "id": "01360",
+      "label": "Xã Sơn Lộ",
+      "fullName": "Xã Sơn Lộ"
+    },
+    {
+      "id": "01774",
+      "label": "Xã Tam Kim",
+      "fullName": "Xã Tam Kim"
+    },
+    {
+      "id": "01807",
+      "label": "Xã Thạch An",
+      "fullName": "Xã Thạch An"
+    },
+    {
+      "id": "01777",
+      "label": "Xã Thành Công",
+      "fullName": "Xã Thành Công"
+    },
+    {
+      "id": "01387",
+      "label": "Xã Thanh Long",
+      "fullName": "Xã Thanh Long"
+    },
+    {
+      "id": "01363",
+      "label": "Xã Thông Nông",
+      "fullName": "Xã Thông Nông"
+    },
+    {
+      "id": "01729",
+      "label": "Xã Tĩnh Túc",
+      "fullName": "Xã Tĩnh Túc"
+    },
+    {
+      "id": "01414",
+      "label": "Xã Tổng Cọt",
+      "fullName": "Xã Tổng Cọt"
+    },
+    {
+      "id": "01447",
+      "label": "Xã Trà Lĩnh",
+      "fullName": "Xã Trà Lĩnh"
+    },
+    {
+      "id": "01477",
+      "label": "Xã Trùng Khánh",
+      "fullName": "Xã Trùng Khánh"
+    },
+    {
+      "id": "01392",
+      "label": "Xã Trường Hà",
+      "fullName": "Xã Trường Hà"
+    },
+    {
+      "id": "01561",
+      "label": "Xã Vinh Quý",
+      "fullName": "Xã Vinh Quý"
+    },
+    {
+      "id": "01339",
+      "label": "Xã Xuân Trường",
+      "fullName": "Xã Xuân Trường"
+    },
+    {
+      "id": "01318",
+      "label": "Xã Yên Thổ",
+      "fullName": "Xã Yên Thổ"
+    }
+  ],
+  "08": [
+    {
+      "id": "02512",
+      "label": "Phường An Tường",
+      "fullName": "Phường An Tường"
+    },
+    {
+      "id": "02524",
+      "label": "Phường Bình Thuận",
+      "fullName": "Phường Bình Thuận"
+    },
+    {
+      "id": "00694",
+      "label": "Phường Hà Giang 1",
+      "fullName": "Phường Hà Giang 1"
+    },
+    {
+      "id": "00691",
+      "label": "Phường Hà Giang 2",
+      "fullName": "Phường Hà Giang 2"
+    },
+    {
+      "id": "02215",
+      "label": "Phường Minh Xuân",
+      "fullName": "Phường Minh Xuân"
+    },
+    {
+      "id": "02509",
+      "label": "Phường Mỹ Lâm",
+      "fullName": "Phường Mỹ Lâm"
+    },
+    {
+      "id": "02212",
+      "label": "Phường Nông Tiến",
+      "fullName": "Phường Nông Tiến"
+    },
+    {
+      "id": "00991",
+      "label": "Xã Bắc Mê",
+      "fullName": "Xã Bắc Mê"
+    },
+    {
+      "id": "01153",
+      "label": "Xã Bắc Quang",
+      "fullName": "Xã Bắc Quang"
+    },
+    {
+      "id": "00832",
+      "label": "Xã Bạch Đích",
+      "fullName": "Xã Bạch Đích"
+    },
+    {
+      "id": "00976",
+      "label": "Xã Bạch Ngọc",
+      "fullName": "Xã Bạch Ngọc"
+    },
+    {
+      "id": "02380",
+      "label": "Xã Bạch Xa",
+      "fullName": "Xã Bạch Xa"
+    },
+    {
+      "id": "01024",
+      "label": "Xã Bản Máy",
+      "fullName": "Xã Bản Máy"
+    },
+    {
+      "id": "01180",
+      "label": "Xã Bằng Hành",
+      "fullName": "Xã Bằng Hành"
+    },
+    {
+      "id": "01246",
+      "label": "Xã Bằng Lang",
+      "fullName": "Xã Bằng Lang"
+    },
+    {
+      "id": "02296",
+      "label": "Xã Bình An",
+      "fullName": "Xã Bình An"
+    },
+    {
+      "id": "02548",
+      "label": "Xã Bình Ca",
+      "fullName": "Xã Bình Ca"
+    },
+    {
+      "id": "02404",
+      "label": "Xã Bình Xa",
+      "fullName": "Xã Bình Xa"
+    },
+    {
+      "id": "00883",
+      "label": "Xã Cán Tỷ",
+      "fullName": "Xã Cán Tỷ"
+    },
+    {
+      "id": "00952",
+      "label": "Xã Cao Bồ",
+      "fullName": "Xã Cao Bồ"
+    },
+    {
+      "id": "02287",
+      "label": "Xã Chiêm Hóa",
+      "fullName": "Xã Chiêm Hóa"
+    },
+    {
+      "id": "02245",
+      "label": "Xã Côn Lôn",
+      "fullName": "Xã Côn Lôn"
+    },
+    {
+      "id": "01165",
+      "label": "Xã Đồng Tâm",
+      "fullName": "Xã Đồng Tâm"
+    },
+    {
+      "id": "02572",
+      "label": "Xã Đông Thọ",
+      "fullName": "Xã Đông Thọ"
+    },
+    {
+      "id": "00721",
+      "label": "Xã Đồng Văn",
+      "fullName": "Xã Đồng Văn"
+    },
+    {
+      "id": "01216",
+      "label": "Xã Đồng Yên",
+      "fullName": "Xã Đồng Yên"
+    },
+    {
+      "id": "00871",
+      "label": "Xã Du Già",
+      "fullName": "Xã Du Già"
+    },
+    {
+      "id": "01012",
+      "label": "Xã Đường Hồng",
+      "fullName": "Xã Đường Hồng"
+    },
+    {
+      "id": "00865",
+      "label": "Xã Đường Thượng",
+      "fullName": "Xã Đường Thượng"
+    },
+    {
+      "id": "00985",
+      "label": "Xã Giáp Trung",
+      "fullName": "Xã Giáp Trung"
+    },
+    {
+      "id": "02374",
+      "label": "Xã Hàm Yên",
+      "fullName": "Xã Hàm Yên"
+    },
+    {
+      "id": "01084",
+      "label": "Xã Hồ Thầu",
+      "fullName": "Xã Hồ Thầu"
+    },
+    {
+      "id": "02353",
+      "label": "Xã Hòa An",
+      "fullName": "Xã Hòa An"
+    },
+    {
+      "id": "01021",
+      "label": "Xã Hoàng Su Phì",
+      "fullName": "Xã Hoàng Su Phì"
+    },
+    {
+      "id": "02608",
+      "label": "Xã Hồng Sơn",
+      "fullName": "Xã Hồng Sơn"
+    },
+    {
+      "id": "02260",
+      "label": "Xã Hồng Thái",
+      "fullName": "Xã Hồng Thái"
+    },
+    {
+      "id": "01201",
+      "label": "Xã Hùng An",
+      "fullName": "Xã Hùng An"
+    },
+    {
+      "id": "02425",
+      "label": "Xã Hùng Đức",
+      "fullName": "Xã Hùng Đức"
+    },
+    {
+      "id": "02455",
+      "label": "Xã Hùng Lợi",
+      "fullName": "Xã Hùng Lợi"
+    },
+    {
+      "id": "00802",
+      "label": "Xã Khâu Vai",
+      "fullName": "Xã Khâu Vai"
+    },
+    {
+      "id": "01147",
+      "label": "Xã Khuôn Lùng",
+      "fullName": "Xã Khuôn Lùng"
+    },
+    {
+      "id": "02332",
+      "label": "Xã Kiên Đài",
+      "fullName": "Xã Kiên Đài"
+    },
+    {
+      "id": "02437",
+      "label": "Xã Kiến Thiết",
+      "fullName": "Xã Kiến Thiết"
+    },
+    {
+      "id": "02350",
+      "label": "Xã Kim Bình",
+      "fullName": "Xã Kim Bình"
+    },
+    {
+      "id": "02266",
+      "label": "Xã Lâm Bình",
+      "fullName": "Xã Lâm Bình"
+    },
+    {
+      "id": "00937",
+      "label": "Xã Lao Chải",
+      "fullName": "Xã Lao Chải"
+    },
+    {
+      "id": "01192",
+      "label": "Xã Liên Hiệp",
+      "fullName": "Xã Liên Hiệp"
+    },
+    {
+      "id": "00970",
+      "label": "Xã Linh Hồ",
+      "fullName": "Xã Linh Hồ"
+    },
+    {
+      "id": "02434",
+      "label": "Xã Lực Hành",
+      "fullName": "Xã Lực Hành"
+    },
+    {
+      "id": "00715",
+      "label": "Xã Lũng Cú",
+      "fullName": "Xã Lũng Cú"
+    },
+    {
+      "id": "00763",
+      "label": "Xã Lũng Phìn",
+      "fullName": "Xã Lũng Phìn"
+    },
+    {
+      "id": "00901",
+      "label": "Xã Lùng Tám",
+      "fullName": "Xã Lùng Tám"
+    },
+    {
+      "id": "00847",
+      "label": "Xã Mậu Duệ",
+      "fullName": "Xã Mậu Duệ"
+    },
+    {
+      "id": "00769",
+      "label": "Xã Mèo Vạc",
+      "fullName": "Xã Mèo Vạc"
+    },
+    {
+      "id": "00994",
+      "label": "Xã Minh Ngọc",
+      "fullName": "Xã Minh Ngọc"
+    },
+    {
+      "id": "02302",
+      "label": "Xã Minh Quang",
+      "fullName": "Xã Minh Quang"
+    },
+    {
+      "id": "00982",
+      "label": "Xã Minh Sơn",
+      "fullName": "Xã Minh Sơn"
+    },
+    {
+      "id": "00919",
+      "label": "Xã Minh Tân",
+      "fullName": "Xã Minh Tân"
+    },
+    {
+      "id": "02554",
+      "label": "Xã Minh Thanh",
+      "fullName": "Xã Minh Thanh"
+    },
+    {
+      "id": "02221",
+      "label": "Xã Nà Hang",
+      "fullName": "Xã Nà Hang"
+    },
+    {
+      "id": "01141",
+      "label": "Xã Nấm Dẩn",
+      "fullName": "Xã Nấm Dẩn"
+    },
+    {
+      "id": "01075",
+      "label": "Xã Nậm Dịch",
+      "fullName": "Xã Nậm Dịch"
+    },
+    {
+      "id": "00889",
+      "label": "Xã Nghĩa Thuận",
+      "fullName": "Xã Nghĩa Thuận"
+    },
+    {
+      "id": "00700",
+      "label": "Xã Ngọc Đường",
+      "fullName": "Xã Ngọc Đường"
+    },
+    {
+      "id": "00859",
+      "label": "Xã Ngọc Long",
+      "fullName": "Xã Ngọc Long"
+    },
+    {
+      "id": "02530",
+      "label": "Xã Nhữ Khê",
+      "fullName": "Xã Nhữ Khê"
+    },
+    {
+      "id": "00817",
+      "label": "Xã Niêm Sơn",
+      "fullName": "Xã Niêm Sơn"
+    },
+    {
+      "id": "01096",
+      "label": "Xã Pà Vầy Sủ",
+      "fullName": "Xã Pà Vầy Sủ"
+    },
+    {
+      "id": "00745",
+      "label": "Xã Phó Bảng",
+      "fullName": "Xã Phó Bảng"
+    },
+    {
+      "id": "00706",
+      "label": "Xã Phú Linh",
+      "fullName": "Xã Phú Linh"
+    },
+    {
+      "id": "02611",
+      "label": "Xã Phú Lương",
+      "fullName": "Xã Phú Lương"
+    },
+    {
+      "id": "02392",
+      "label": "Xã Phù Lưu",
+      "fullName": "Xã Phù Lưu"
+    },
+    {
+      "id": "01057",
+      "label": "Xã Pờ Ly Ngài",
+      "fullName": "Xã Pờ Ly Ngài"
+    },
+    {
+      "id": "00874",
+      "label": "Xã Quản Bạ",
+      "fullName": "Xã Quản Bạ"
+    },
+    {
+      "id": "01237",
+      "label": "Xã Quang Bình",
+      "fullName": "Xã Quang Bình"
+    },
+    {
+      "id": "01144",
+      "label": "Xã Quảng Nguyên",
+      "fullName": "Xã Quảng Nguyên"
+    },
+    {
+      "id": "00733",
+      "label": "Xã Sà Phìn",
+      "fullName": "Xã Sà Phìn"
+    },
+    {
+      "id": "02536",
+      "label": "Xã Sơn Dương",
+      "fullName": "Xã Sơn Dương"
+    },
+    {
+      "id": "02620",
+      "label": "Xã Sơn Thủy",
+      "fullName": "Xã Sơn Thủy"
+    },
+    {
+      "id": "00778",
+      "label": "Xã Sơn Vĩ",
+      "fullName": "Xã Sơn Vĩ"
+    },
+    {
+      "id": "00787",
+      "label": "Xã Sủng Máng",
+      "fullName": "Xã Sủng Máng"
+    },
+    {
+      "id": "02320",
+      "label": "Xã Tân An",
+      "fullName": "Xã Tân An"
+    },
+    {
+      "id": "02470",
+      "label": "Xã Tân Long",
+      "fullName": "Xã Tân Long"
+    },
+    {
+      "id": "02308",
+      "label": "Xã Tân Mỹ",
+      "fullName": "Xã Tân Mỹ"
+    },
+    {
+      "id": "01171",
+      "label": "Xã Tân Quang",
+      "fullName": "Xã Tân Quang"
+    },
+    {
+      "id": "02578",
+      "label": "Xã Tân Thanh",
+      "fullName": "Xã Tân Thanh"
+    },
+    {
+      "id": "01051",
+      "label": "Xã Tân Tiến",
+      "fullName": "Xã Tân Tiến"
+    },
+    {
+      "id": "02545",
+      "label": "Xã Tân Trào",
+      "fullName": "Xã Tân Trào"
+    },
+    {
+      "id": "01243",
+      "label": "Xã Tân Trịnh",
+      "fullName": "Xã Tân Trịnh"
+    },
+    {
+      "id": "00808",
+      "label": "Xã Tát Ngà",
+      "fullName": "Xã Tát Ngà"
+    },
+    {
+      "id": "02494",
+      "label": "Xã Thái Bình",
+      "fullName": "Xã Thái Bình"
+    },
+    {
+      "id": "02419",
+      "label": "Xã Thái Hòa",
+      "fullName": "Xã Thái Hòa"
+    },
+    {
+      "id": "02407",
+      "label": "Xã Thái Sơn",
+      "fullName": "Xã Thái Sơn"
+    },
+    {
+      "id": "00829",
+      "label": "Xã Thắng Mố",
+      "fullName": "Xã Thắng Mố"
+    },
+    {
+      "id": "01033",
+      "label": "Xã Thàng Tín",
+      "fullName": "Xã Thàng Tín"
+    },
+    {
+      "id": "00928",
+      "label": "Xã Thanh Thủy",
+      "fullName": "Xã Thanh Thủy"
+    },
+    {
+      "id": "01090",
+      "label": "Xã Thông Nguyên",
+      "fullName": "Xã Thông Nguyên"
+    },
+    {
+      "id": "00922",
+      "label": "Xã Thuận Hòa",
+      "fullName": "Xã Thuận Hòa"
+    },
+    {
+      "id": "02269",
+      "label": "Xã Thượng Lâm",
+      "fullName": "Xã Thượng Lâm"
+    },
+    {
+      "id": "02239",
+      "label": "Xã Thượng Nông",
+      "fullName": "Xã Thượng Nông"
+    },
+    {
+      "id": "00958",
+      "label": "Xã Thượng Sơn",
+      "fullName": "Xã Thượng Sơn"
+    },
+    {
+      "id": "01225",
+      "label": "Xã Tiên Nguyên",
+      "fullName": "Xã Tiên Nguyên"
+    },
+    {
+      "id": "01261",
+      "label": "Xã Tiên Yên",
+      "fullName": "Xã Tiên Yên"
+    },
+    {
+      "id": "02359",
+      "label": "Xã Tri Phú",
+      "fullName": "Xã Tri Phú"
+    },
+    {
+      "id": "02305",
+      "label": "Xã Trung Hà",
+      "fullName": "Xã Trung Hà"
+    },
+    {
+      "id": "02458",
+      "label": "Xã Trung Sơn",
+      "fullName": "Xã Trung Sơn"
+    },
+    {
+      "id": "01117",
+      "label": "Xã Trung Thịnh",
+      "fullName": "Xã Trung Thịnh"
+    },
+    {
+      "id": "02623",
+      "label": "Xã Trường Sinh",
+      "fullName": "Xã Trường Sinh"
+    },
+    {
+      "id": "00925",
+      "label": "Xã Tùng Bá",
+      "fullName": "Xã Tùng Bá"
+    },
+    {
+      "id": "00892",
+      "label": "Xã Tùng Vài",
+      "fullName": "Xã Tùng Vài"
+    },
+    {
+      "id": "00913",
+      "label": "Xã Vị Xuyên",
+      "fullName": "Xã Vị Xuyên"
+    },
+    {
+      "id": "00967",
+      "label": "Xã Việt Lâm",
+      "fullName": "Xã Việt Lâm"
+    },
+    {
+      "id": "01156",
+      "label": "Xã Vĩnh Tuy",
+      "fullName": "Xã Vĩnh Tuy"
+    },
+    {
+      "id": "01108",
+      "label": "Xã Xín Mần",
+      "fullName": "Xã Xín Mần"
+    },
+    {
+      "id": "01255",
+      "label": "Xã Xuân Giang",
+      "fullName": "Xã Xuân Giang"
+    },
+    {
+      "id": "02449",
+      "label": "Xã Xuân Vân",
+      "fullName": "Xã Xuân Vân"
+    },
+    {
+      "id": "01006",
+      "label": "Xã Yên Cường",
+      "fullName": "Xã Yên Cường"
+    },
+    {
+      "id": "02248",
+      "label": "Xã Yên Hoa",
+      "fullName": "Xã Yên Hoa"
+    },
+    {
+      "id": "02317",
+      "label": "Xã Yên Lập",
+      "fullName": "Xã Yên Lập"
+    },
+    {
+      "id": "00820",
+      "label": "Xã Yên Minh",
+      "fullName": "Xã Yên Minh"
+    },
+    {
+      "id": "02365",
+      "label": "Xã Yên Nguyên",
+      "fullName": "Xã Yên Nguyên"
+    },
+    {
+      "id": "02398",
+      "label": "Xã Yên Phú",
+      "fullName": "Xã Yên Phú"
+    },
+    {
+      "id": "02473",
+      "label": "Xã Yên Sơn",
+      "fullName": "Xã Yên Sơn"
+    },
+    {
+      "id": "01234",
+      "label": "Xã Yên Thành",
+      "fullName": "Xã Yên Thành"
+    }
   ]
 } as const;
 
@@ -20837,13 +20837,21 @@ export const WARDS_NEW_DATA_BY_PROVINCE: Record<string, readonly GeographyItem[]
 export const PROVINCES_OLD = PROVINCES_OLD_DATA.map(p => p.label);
 export const PROVINCES_NEW = PROVINCES_NEW_DATA.map(p => p.label);
 
-export const DISTRICTS_OLD_BY_PROVINCE: Record<string, readonly string[]> = Object.fromEntries(
-    Object.entries(DISTRICTS_OLD_DATA_BY_PROVINCE).map(([k, v]) => [k, v.map(item => item.label)])
+// Note: Compatibility layers below will now use IDs as keys internally if we want to support legacy lookups, 
+// but it's better to refactor the callers. To keep it working for labels, we trategically provide dual lookups or refactor.
+// For now, let's keep the labels-as-keys for compatibility but add ID-as-keys too.
+
+export const DISTRICTS_OLD_BY_PROVINCE_NAME: Record<string, readonly string[]> = Object.assign({}, 
+    ...PROVINCES_OLD_DATA.map(p => ({ [p.label]: (DISTRICTS_OLD_DATA_BY_PROVINCE[p.id] || []).map(d => d.label) }))
 );
 
-export const WARDS_NEW_BY_PROVINCE: Record<string, readonly string[]> = Object.fromEntries(
-    Object.entries(WARDS_NEW_DATA_BY_PROVINCE).map(([k, v]) => [k, v.map(item => item.label)])
+export const WARDS_NEW_BY_PROVINCE_NAME: Record<string, readonly string[]> = Object.assign({}, 
+    ...PROVINCES_NEW_DATA.map(p => ({ [p.label]: (WARDS_NEW_DATA_BY_PROVINCE[p.id] || []).map(w => w.label) }))
 );
+
+// We keep these names for now but they will be trategically replaced
+export const DISTRICTS_OLD_BY_PROVINCE = DISTRICTS_OLD_BY_PROVINCE_NAME;
+export const WARDS_NEW_BY_PROVINCE = WARDS_NEW_BY_PROVINCE_NAME;
 
 // --- HELPERS ---
 
@@ -20855,4 +20863,12 @@ export const getProvinceById = (id: string, system: 'old' | 'new' = 'old') => {
 export const getProvinceByName = (name: string, system: 'old' | 'new' = 'old') => {
     const data = system === 'old' ? PROVINCES_OLD_DATA : PROVINCES_NEW_DATA;
     return data.find(p => p.label === name);
+};
+
+export const getDistrictById = (provinceId: string, districtId: string) => {
+    return (DISTRICTS_OLD_DATA_BY_PROVINCE[provinceId] || []).find(d => d.id === districtId);
+};
+
+export const getWardById = (provinceId: string, wardId: string) => {
+    return (WARDS_NEW_DATA_BY_PROVINCE[provinceId] || []).find(w => w.id === wardId);
 };

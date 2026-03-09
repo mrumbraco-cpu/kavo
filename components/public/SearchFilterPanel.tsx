@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import {
-    PROVINCES_OLD,
-    DISTRICTS_OLD_BY_PROVINCE,
-    PROVINCES_NEW,
-    WARDS_NEW_BY_PROVINCE
+    PROVINCES_OLD_DATA,
+    DISTRICTS_OLD_DATA_BY_PROVINCE,
+    PROVINCES_NEW_DATA,
+    WARDS_NEW_DATA_BY_PROVINCE,
+    getProvinceById,
+    getDistrictById,
+    getWardById
 } from '@/lib/constants/geography';
 import {
     SPACE_TYPES_DATA,
@@ -19,8 +22,8 @@ export interface SearchFilters {
     // Geography
     geoSystem: 'old' | 'new';
     province: string;
-    district: string;
-    ward: string;
+    district: string[];
+    ward: string[];
     // Text
     query: string;
     // Filters
@@ -41,8 +44,8 @@ interface Props {
 const DEFAULT_FILTERS: SearchFilters = {
     geoSystem: 'old',
     province: '',
-    district: '',
-    ward: '',
+    district: [],
+    ward: [],
     query: '',
     spaceTypes: [],
     locationTypes: [],
@@ -110,12 +113,12 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
     const canSearch = filters.province !== '';
 
     const districts = filters.geoSystem === 'old' && filters.province
-        ? DISTRICTS_OLD_BY_PROVINCE[filters.province] ?? []
+        ? DISTRICTS_OLD_DATA_BY_PROVINCE[filters.province] ?? []
         : [];
     const wards = filters.geoSystem === 'new' && filters.province
-        ? WARDS_NEW_BY_PROVINCE[filters.province] ?? []
+        ? WARDS_NEW_DATA_BY_PROVINCE[filters.province] ?? []
         : [];
-    const provinces = filters.geoSystem === 'old' ? PROVINCES_OLD : PROVINCES_NEW;
+    const provinces = filters.geoSystem === 'old' ? PROVINCES_OLD_DATA : PROVINCES_NEW_DATA;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -131,7 +134,14 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
                 <div className="flex p-1 bg-premium-50 rounded-xl border border-premium-100/50">
                     <button
                         type="button"
-                        onClick={() => { set('geoSystem', 'old'); set('province', ''); set('district', ''); set('ward', ''); }}
+                        onClick={() => { set('geoSystem', 'old'); set('province', ''); set('district', []); set('ward', []); }}
+                        className={`flex-1 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all duration-300 rounded-lg cursor-pointer ${filters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
+                    >
+                        Hành chính cũ
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => { set('geoSystem', 'new'); set('province', ''); set('district', []); set('ward', []); }}
                         className={`flex-1 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all duration-300 rounded-lg cursor-pointer ${filters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400 hover:text-premium-600'}`}
                     >
                         Hành chính mới
@@ -146,12 +156,12 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
                 </label>
                 <select
                     value={filters.province}
-                    onChange={e => { set('province', e.target.value); set('district', ''); set('ward', ''); }}
+                    onChange={e => { set('province', e.target.value); set('district', []); set('ward', []); }}
                     autoComplete="address-level1"
                     className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                 >
                     <option value="">-- Chọn tỉnh/thành --</option>
-                    {provinces.map(p => <option key={p} value={p}>{p}</option>)}
+                    {provinces.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
                 </select>
             </div>
 
@@ -160,13 +170,13 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
                 <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <label className="text-[11px] font-bold text-premium-400 uppercase tracking-[0.2em] block">Quận/Huyện (tùy chọn)</label>
                     <select
-                        value={filters.district}
-                        onChange={e => set('district', e.target.value)}
+                        value={filters.district[0] || ''}
+                        onChange={e => set('district', e.target.value ? [e.target.value] : [])}
                         autoComplete="address-level2"
                         className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                     >
                         <option value="">-- Tất cả quận/huyện --</option>
-                        {districts.map(d => <option key={d} value={d}>{d}</option>)}
+                        {districts.map(d => <option key={d.id} value={d.id}>{d.label}</option>)}
                     </select>
                 </div>
             )}
@@ -178,13 +188,13 @@ export default function SearchFilterPanel({ onSearch, isLoading }: Props) {
                         <span className="text-accent-gold">*</span> Phường/Xã
                     </label>
                     <select
-                        value={filters.ward}
-                        onChange={e => set('ward', e.target.value)}
+                        value={filters.ward[0] || ''}
+                        onChange={e => set('ward', e.target.value ? [e.target.value] : [])}
                         autoComplete="address-level3"
                         className="w-full px-4 py-2.5 rounded-xl border border-premium-100 text-sm font-bold text-premium-900 bg-white focus:outline-none focus:ring-2 focus:ring-premium-900/10 focus:border-premium-900 transition-all cursor-pointer"
                     >
                         <option value="">-- Chọn phường/xã --</option>
-                        {wards.map(w => <option key={w} value={w}>{w}</option>)}
+                        {wards.map(w => <option key={w.id} value={w.id}>{w.label}</option>)}
                     </select>
                 </div>
             )}

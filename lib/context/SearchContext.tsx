@@ -4,6 +4,12 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import { useRouter, usePathname } from 'next/navigation';
 import { SearchFilters, DEFAULT_FILTERS, SearchResult } from '@/types/search';
 import { Listing } from '@/types/listing';
+import {
+    PROVINCES_OLD_DATA,
+    PROVINCES_NEW_DATA,
+    DISTRICTS_OLD_DATA_BY_PROVINCE,
+    WARDS_NEW_DATA_BY_PROVINCE
+} from '@/lib/constants/geography';
 
 interface SearchContextType {
     filters: SearchFilters;
@@ -52,11 +58,33 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         // URL search params take precedence over localStorage
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('province')) {
+            const rawProvince = urlParams.get('province') || '';
+            const geoSystem = (urlParams.get('geoSystem') as 'old' | 'new') || initialFilters.geoSystem;
+
+            // Resolve Province ID if it's a label
+            const provinceData = geoSystem === 'old' ? PROVINCES_OLD_DATA : PROVINCES_NEW_DATA;
+            const provinceId = provinceData.find(p => p.id === rawProvince)?.id ||
+                provinceData.find(p => p.label === rawProvince || p.fullName === rawProvince)?.id || rawProvince;
+
+            const rawDistricts = urlParams.get('district')?.split(',').filter(Boolean) || [];
+            const resolvedDistricts = geoSystem === 'old' ? rawDistricts.map(d => {
+                const list = DISTRICTS_OLD_DATA_BY_PROVINCE[provinceId] || [];
+                return list.find(item => item.id === d)?.id ||
+                    list.find(item => item.label === d || item.fullName === d)?.id || d;
+            }) : [];
+
+            const rawWards = urlParams.get('ward')?.split(',').filter(Boolean) || [];
+            const resolvedWards = geoSystem === 'new' ? rawWards.map(w => {
+                const list = WARDS_NEW_DATA_BY_PROVINCE[provinceId] || [];
+                return list.find(item => item.id === w)?.id ||
+                    list.find(item => item.label === w || item.fullName === w)?.id || w;
+            }) : [];
+
             const urlFilters: Partial<SearchFilters> = {
-                geoSystem: (urlParams.get('geoSystem') as 'old' | 'new') || initialFilters.geoSystem,
-                province: urlParams.get('province') || '',
-                district: urlParams.get('district')?.split(',').filter(Boolean) || [],
-                ward: urlParams.get('ward')?.split(',').filter(Boolean) || [],
+                geoSystem,
+                province: provinceId,
+                district: resolvedDistricts,
+                ward: resolvedWards,
                 query: urlParams.get('query') || '',
                 spaceTypes: urlParams.get('spaceTypes')?.split(',').filter(Boolean) || [],
                 locationTypes: urlParams.get('locationTypes')?.split(',').filter(Boolean) || [],

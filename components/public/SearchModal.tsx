@@ -11,6 +11,7 @@ import {
     LOCATION_TYPES_DATA,
     SUITABLE_FOR_OPTIONS_DATA
 } from '@/lib/constants/listing-options';
+import { getProvinceById } from '@/lib/constants/geography';
 
 const TIME_OF_DAY_OPTIONS = [
     {
@@ -437,7 +438,7 @@ export default function SearchModal() {
                         <div className="flex flex-col min-w-0">
                             <span className="text-[9px] font-bold text-premium-400 uppercase tracking-widest leading-none mb-1">Khu vực</span>
                             <span className="text-sm font-bold text-premium-900 truncate max-w-[150px]">
-                                {draftFilters.province || 'Toàn quốc'}
+                                {getProvinceById(draftFilters.province, draftFilters.geoSystem)?.label || 'Toàn quốc'}
                             </span>
                         </div>
                     </div>

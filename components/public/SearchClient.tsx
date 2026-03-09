@@ -127,6 +127,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                         hasSearched={hasSearched}
                         isLoading={isLoading}
                         province={filters.province}
+                        geoSystem={filters.geoSystem}
                         layout={layout}
                         onLayoutChange={setLayout}
                         onOpenFilters={() => setModalOpen(true)}

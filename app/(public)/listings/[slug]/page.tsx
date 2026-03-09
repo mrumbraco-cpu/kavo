@@ -11,8 +11,9 @@ import ShareButton from '@/components/public/ShareButton';
 import ReportButton from '@/components/public/ReportButton';
 import UrgencyBadge from '@/components/public/UrgencyBadge';
 import MiniMap from '@/components/public/MiniMap';
+import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/geography';
 
-import { parseListingIdFromSlug } from '@/lib/utils/url';
+import { parseListingIdFromSlug, getListingUrl } from '@/lib/utils/url';
 import { getAmenityLabel, getNearbyFeatureLabel } from '@/lib/constants/facilities';
 import { getSpaceTypeLabel, getLocationTypeLabel, getSuitableLabel, getNotSuitableLabel } from '@/lib/constants/listing-options';
 
@@ -529,8 +530,8 @@ export default async function ListingDetailPage({ params }: Props) {
                             "address": {
                                 "@type": "PostalAddress",
                                 "streetAddress": typedListing.detailed_address,
-                                "addressLocality": typedListing.ward_new || typedListing.district_old,
-                                "addressRegion": typedListing.province_new || typedListing.province_old,
+                                "addressLocality": (typedListing.ward_new ? getWardById(typedListing.province_new, typedListing.ward_new)?.label : getDistrictById(typedListing.province_old, typedListing.district_old)?.label) || '',
+                                "addressRegion": (getProvinceById(typedListing.province_new, 'new')?.label || getProvinceById(typedListing.province_old, 'old')?.label) || '',
                                 "addressCountry": "VN"
                             },
                             "geo": typedListing.latitude ? {

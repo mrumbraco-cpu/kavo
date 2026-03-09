@@ -2,6 +2,7 @@
 
 import { useSearch } from '@/lib/context/SearchContext';
 import { usePathname } from 'next/navigation';
+import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/geography';
 // No icons needed from lucide-react here anymore
 
 export default function HeaderSearch() {
@@ -25,10 +26,16 @@ export default function HeaderSearch() {
                         <div className="text-xs font-bold text-premium-900 truncate max-w-[130px]">
                             {filters.province ? (
                                 (() => {
-                                    const subLocations = filters.geoSystem === 'new' ? filters.ward : filters.district;
-                                    return subLocations.length > 0
-                                        ? `${subLocations.join(', ')}, ${filters.province}`
-                                        : filters.province;
+                                    const provinceLabel = getProvinceById(filters.province, filters.geoSystem)?.label || filters.province;
+                                    if (filters.geoSystem === 'new') {
+                                        return filters.ward.length > 0
+                                            ? `${filters.ward.map(id => getWardById(filters.province, id)?.label || id).join(', ')}, ${provinceLabel}`
+                                            : provinceLabel;
+                                    } else {
+                                        return filters.district.length > 0
+                                            ? `${filters.district.map(id => getDistrictById(filters.province, id)?.label || id).join(', ')}, ${provinceLabel}`
+                                            : provinceLabel;
+                                    }
                                 })()
                             ) : 'Toàn quốc'}
                         </div>

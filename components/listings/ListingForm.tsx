@@ -12,10 +12,13 @@ import {
     getLocationTypeLabel
 } from '@/lib/constants/listing-options'
 import {
-    PROVINCES_OLD,
-    DISTRICTS_OLD_BY_PROVINCE,
-    PROVINCES_NEW,
-    WARDS_NEW_BY_PROVINCE
+    PROVINCES_OLD_DATA,
+    DISTRICTS_OLD_DATA_BY_PROVINCE,
+    PROVINCES_NEW_DATA,
+    WARDS_NEW_DATA_BY_PROVINCE,
+    getProvinceById,
+    getDistrictById,
+    getWardById
 } from '@/lib/constants/geography'
 import {
     TIME_SLOT_TYPES,
@@ -81,10 +84,47 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const [locationType, setLocationType] = useState(initialListing?.location_type || '')
 
     // Geography Administrative State
-    const [provinceOld, setProvinceOld] = useState(initialListing?.province_old || '')
-    const [districtOld, setDistrictOld] = useState(initialListing?.district_old || '')
-    const [provinceNew, setProvinceNew] = useState(initialListing?.province_new || '')
-    const [wardNew, setWardNew] = useState(initialListing?.ward_new || '')
+    const [provinceOld, setProvinceOld] = useState(() => {
+        const val = initialListing?.province_old || '';
+        if (!val) return '';
+        const byId = PROVINCES_OLD_DATA.find(p => p.id === val);
+        if (byId) return val;
+        return PROVINCES_OLD_DATA.find(p => p.label === val || p.fullName === val)?.id || val;
+    })
+    const [districtOld, setDistrictOld] = useState(() => {
+        const val = initialListing?.district_old || '';
+        if (!val) return '';
+        // Search in all districts (since we don't necessarily know the province ID yet)
+        for (const pId in DISTRICTS_OLD_DATA_BY_PROVINCE) {
+            const found = DISTRICTS_OLD_DATA_BY_PROVINCE[pId].find(d => d.id === val);
+            if (found) return val;
+        }
+        for (const pId in DISTRICTS_OLD_DATA_BY_PROVINCE) {
+            const found = DISTRICTS_OLD_DATA_BY_PROVINCE[pId].find(d => d.label === val || d.fullName === val);
+            if (found) return found.id;
+        }
+        return val;
+    })
+    const [provinceNew, setProvinceNew] = useState(() => {
+        const val = initialListing?.province_new || '';
+        if (!val) return '';
+        const byId = PROVINCES_NEW_DATA.find(p => p.id === val);
+        if (byId) return val;
+        return PROVINCES_NEW_DATA.find(p => p.label === val || p.fullName === val)?.id || val;
+    })
+    const [wardNew, setWardNew] = useState(() => {
+        const val = initialListing?.ward_new || '';
+        if (!val) return '';
+        for (const pId in WARDS_NEW_DATA_BY_PROVINCE) {
+            const found = WARDS_NEW_DATA_BY_PROVINCE[pId].find(w => w.id === val);
+            if (found) return val;
+        }
+        for (const pId in WARDS_NEW_DATA_BY_PROVINCE) {
+            const found = WARDS_NEW_DATA_BY_PROVINCE[pId].find(w => w.label === val || w.fullName === val);
+            if (found) return found.id;
+        }
+        return val;
+    })
 
     // Address & Coordinates State
     const [detailedAddress, setDetailedAddress] = useState(initialListing?.detailed_address || '')
@@ -482,14 +522,18 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
         // Append all states to formData
         // Append all states to formData
+        // Generate Title from labels resolved from IDs
+        const provinceLabel = getProvinceById(provinceOld, 'old')?.label || '';
+        const districtLabel = getDistrictById(provinceOld, districtOld)?.label || '';
+
         const prefixParts = [
             spaceTypes.map(id => getSpaceTypeLabel(id)).join(', '),
             getLocationTypeLabel(locationType)
         ].filter(Boolean).join(', ').toLowerCase();
 
         let generatedTitle = prefixParts;
-        if (districtOld) {
-            generatedTitle += (generatedTitle ? ' tại ' : '') + districtOld;
+        if (districtLabel) {
+            generatedTitle += (generatedTitle ? ' tại ' : '') + districtLabel;
         }
 
         if (generatedTitle.length > 0) {
@@ -837,7 +881,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         <div className="flex items-center gap-2.5">
                                             <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                                             <span className={`text-sm font-semibold ${provinceOld ? 'text-gray-900' : 'text-gray-400'}`}>
-                                                {provinceOld || '-- Chọn Tỉnh/Thành --'}
+                                                {getProvinceById(provinceOld, 'old')?.label || '-- Chọn Tỉnh/Thành --'}
                                             </span>
                                         </div>
                                         <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -854,7 +898,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         <div className="flex items-center gap-2.5">
                                             <Home className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                                             <span className={`text-sm font-semibold ${districtOld ? 'text-gray-900' : 'text-gray-400'}`}>
-                                                {districtOld || '-- Chọn Quận/Huyện --'}
+                                                {getDistrictById(provinceOld, districtOld)?.label || '-- Chọn Quận/Huyện --'}
                                             </span>
                                         </div>
                                         <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -880,7 +924,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         <div className="flex items-center gap-2.5">
                                             <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                                             <span className={`text-sm font-semibold ${provinceNew ? 'text-gray-900' : 'text-gray-400'}`}>
-                                                {provinceNew || '-- Chọn Tỉnh/Thành --'}
+                                                {getProvinceById(provinceNew, 'new')?.label || '-- Chọn Tỉnh/Thành --'}
                                             </span>
                                         </div>
                                         <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -897,7 +941,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         <div className="flex items-center gap-2.5">
                                             <Home className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                                             <span className={`text-sm font-semibold ${wardNew ? 'text-gray-900' : 'text-gray-400'}`}>
-                                                {wardNew || '-- Chọn Phường/Xã --'}
+                                                {getWardById(provinceNew, wardNew)?.label || '-- Chọn Phường/Xã --'}
                                             </span>
                                         </div>
                                         <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -949,55 +993,55 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     {/* List */}
                                     <div className="flex-1 overflow-y-auto p-6 space-y-1">
                                         {(geoModalStep === 'old-province' || geoModalStep === 'new-province') && (
-                                            (geoModalStep === 'old-province' ? PROVINCES_OLD : PROVINCES_NEW)
-                                                .filter(p => normalizeString(p).includes(normalizeString(geoSearch)))
+                                            (geoModalStep === 'old-province' ? PROVINCES_OLD_DATA : PROVINCES_NEW_DATA)
+                                                .filter(p => normalizeString(p.label).includes(normalizeString(geoSearch)) || normalizeString(p.fullName).includes(normalizeString(geoSearch)))
                                                 .map(p => (
                                                     <button
-                                                        key={p}
+                                                        key={p.id}
                                                         onClick={() => {
                                                             if (geoModalStep === 'old-province') {
-                                                                setProvinceOld(p);
+                                                                setProvinceOld(p.id);
                                                                 setDistrictOld('');
                                                                 setGeoModalStep('old-district');
                                                             } else {
-                                                                setProvinceNew(p);
+                                                                setProvinceNew(p.id);
                                                                 setWardNew('');
                                                                 setGeoModalStep('new-ward');
                                                             }
                                                             setGeoSearch('');
                                                         }}
-                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p.id ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
                                                     >
-                                                        <span className="text-sm font-semibold">{p}</span>
-                                                        {(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p && <Check className="w-4 h-4" />}
+                                                        <span className="text-sm font-semibold">{p.label}</span>
+                                                        {(geoModalStep === 'old-province' ? provinceOld : provinceNew) === p.id && <Check className="w-4 h-4" />}
                                                     </button>
                                                 ))
                                         )}
                                         {geoModalStep === 'old-district' && (
-                                            (DISTRICTS_OLD_BY_PROVINCE[provinceOld] || [])
-                                                .filter(d => normalizeString(d).includes(normalizeString(geoSearch)))
+                                            (DISTRICTS_OLD_DATA_BY_PROVINCE[provinceOld] || [])
+                                                .filter(d => normalizeString(d.label).includes(normalizeString(geoSearch)))
                                                 .map(d => (
                                                     <button
-                                                        key={d}
-                                                        onClick={() => { setDistrictOld(d); setGeoModalStep('none'); }}
-                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${districtOld === d ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                        key={d.id}
+                                                        onClick={() => { setDistrictOld(d.id); setGeoModalStep('none'); }}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${districtOld === d.id ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
                                                     >
-                                                        <span className="text-sm font-semibold">{d}</span>
-                                                        {districtOld === d && <Check className="w-4 h-4" />}
+                                                        <span className="text-sm font-semibold">{d.label}</span>
+                                                        {districtOld === d.id && <Check className="w-4 h-4" />}
                                                     </button>
                                                 ))
                                         )}
                                         {geoModalStep === 'new-ward' && (
-                                            (WARDS_NEW_BY_PROVINCE[provinceNew] || [])
-                                                .filter(w => normalizeString(w).includes(normalizeString(geoSearch)))
+                                            (WARDS_NEW_DATA_BY_PROVINCE[provinceNew] || [])
+                                                .filter(w => normalizeString(w.label).includes(normalizeString(geoSearch)))
                                                 .map(w => (
                                                     <button
-                                                        key={w}
-                                                        onClick={() => { setWardNew(w); setGeoModalStep('none'); }}
-                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${wardNew === w ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
+                                                        key={w.id}
+                                                        onClick={() => { setWardNew(w.id); setGeoModalStep('none'); }}
+                                                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${wardNew === w.id ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
                                                     >
-                                                        <span className="text-sm font-semibold">{w}</span>
-                                                        {wardNew === w && <Check className="w-4 h-4" />}
+                                                        <span className="text-sm font-semibold">{w.label}</span>
+                                                        {wardNew === w.id && <Check className="w-4 h-4" />}
                                                     </button>
                                                 ))
                                         )}
