@@ -9,13 +9,17 @@ export default function HeaderSearch() {
     const { filters, setModalOpen } = useSearch();
     const pathname = usePathname();
 
-    if (pathname !== '/search') return null;
+    const isSearchPage = pathname === '/search';
+    const isListingDetail = pathname.startsWith('/listings/');
+
+    if (!isSearchPage && !isListingDetail) return null;
 
     return (
-        <div className="hidden lg:flex items-center">
+        <div className="flex items-center">
+            {/* Desktop Search Button (hidden on mobile) */}
             <button
                 onClick={() => setModalOpen(true)}
-                className="flex items-center pl-1.5 pr-2 py-1.5 bg-white border border-premium-100 rounded-full shadow-sm hover:shadow-md hover:border-premium-200 transition-all cursor-pointer group"
+                className="hidden lg:flex items-center pl-1.5 pr-2 py-1.5 bg-white border border-premium-100 rounded-full shadow-sm hover:shadow-md hover:border-premium-200 transition-all cursor-pointer group"
             >
                 <div className="flex items-center gap-2.5 pr-4 border-r border-premium-50">
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white group-hover:bg-premium-50 transition-colors shadow-sm border border-premium-50">
@@ -57,3 +61,4 @@ export default function HeaderSearch() {
         </div>
     );
 }
+

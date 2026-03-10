@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { Listing } from '@/types/listing';
 import { getListingUrl } from '@/lib/utils/url';
-import { getSpaceTypeLabel } from '@/lib/constants/listing-options';
+import { getRentalModeLabel } from '@/lib/constants/listing-options';
 
 // Types are now handled via types/goong.d.ts
 
@@ -59,17 +59,17 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         const priceDisplay = formatPriceRange(listing.price_min, listing.price_max);
         const isFree = priceDisplay === 'Miễn phí';
 
-        const spaceBadges = (listing.space_type && Array.isArray(listing.space_type) && listing.space_type.length > 0)
+        const rentalBadges = (listing.rental_modes && Array.isArray(listing.rental_modes) && listing.rental_modes.length > 0)
             ? `
                 <div style="position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:4px;z-index:10;">
-                    ${listing.space_type.slice(0, 2).map(type => `
-                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#94a3b8;font-size:10px;font-weight:500;border-radius:8px;backdrop-filter:blur(12px);white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-                            ${getSpaceTypeLabel(type)}
+                    ${listing.rental_modes.slice(0, 2).map(type => `
+                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#475569;font-size:10px;font-weight:500;border-radius:4px;backdrop-filter:blur(12px);white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                            ${getRentalModeLabel(type)}
                         </span>
                     `).join('')}
-                    ${listing.space_type.length > 2 ? `
-                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#94a3b8;font-size:10px;font-weight:500;border-radius:8px;backdrop-filter:blur(12px);box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-                            +${listing.space_type.length - 2}
+                    ${listing.rental_modes.length > 2 ? `
+                        <span style="padding:3px 8px;background:rgba(255,255,255,0.9);color:#475569;font-size:10px;font-weight:500;border-radius:4px;backdrop-filter:blur(12px);box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                            +${listing.rental_modes.length - 2}
                         </span>
                     ` : ''}
                 </div>
@@ -88,7 +88,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             </svg>
                         </div>
                     `}
-                    ${spaceBadges}
+                    ${rentalBadges}
                 </div>
 
                 <!-- Content Section -->

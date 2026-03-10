@@ -99,8 +99,8 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
             {/* Content – bên phải */}
             <div className="flex-1 min-w-0 flex flex-col pt-1 gap-[2px]">
 
-                {/* 1. Title – 1 dòng, font mỏng, to hơn */}
-                <h3 className={`text-[15px] font-medium leading-[20px] truncate transition-colors duration-150 ${isHighlighted ? 'text-blue-700' : 'text-[#202124] group-hover:text-blue-600'
+                {/* 1. Title – 1 dòng, to hơn và nhạt hơn 1 xíu */}
+                <h3 className={`text-[17px] font-medium leading-[24px] truncate transition-colors duration-150 ${isHighlighted ? 'text-blue-700' : 'text-[#5f6368] group-hover:text-blue-600'
                     }`}>
                     {listing.title}
                 </h3>

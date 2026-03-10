@@ -15,7 +15,7 @@ export default function NavSearchWrapper() {
 
     return (
         <div className="flex items-center">
-            {pathname === '/search' && <HeaderSearch />}
+            {(pathname === '/search' || pathname.startsWith('/listings/')) && <HeaderSearch />}
             {isModalOpen && <SearchModal />}
         </div>
     );

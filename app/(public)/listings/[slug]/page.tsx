@@ -11,6 +11,7 @@ import ShareButton from '@/components/public/ShareButton';
 import ReportButton from '@/components/public/ReportButton';
 import UrgencyBadge from '@/components/public/UrgencyBadge';
 import MiniMap from '@/components/public/MiniMap';
+import ListingMobileFilterBar from '@/components/public/ListingMobileFilterBar';
 import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/geography';
 
 import { parseListingIdFromSlug, getListingUrl } from '@/lib/utils/url';
@@ -231,16 +232,8 @@ export default async function ListingDetailPage({ params }: Props) {
 
     return (
         <div className="min-h-screen bg-white">
+            <ListingMobileFilterBar />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
-
-                {/* ── Breadcrumb ─────────────────────────────────────── */}
-                <nav className="flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 mb-6 overflow-hidden whitespace-nowrap">
-                    <Link href="/" className="hover:text-gray-900 transition-colors flex-shrink-0">Trang chủ</Link>
-                    <span className="text-gray-400 flex-shrink-0">›</span>
-                    <Link href="/search" className="hover:text-gray-900 transition-colors flex-shrink-0">Tìm kiếm</Link>
-                    <span className="text-gray-400 flex-shrink-0">›</span>
-                    <span className="text-gray-900 font-medium truncate">{typedListing.title}</span>
-                </nav>
 
                 {/* ── Main 2-column layout ────────────────────────────── */}
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-x-14 gap-y-10">
@@ -250,7 +243,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
                         {/* Title + Favorite */}
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
+                            <h1 className="text-2xl sm:text-3xl font-medium text-[#3c4043] leading-tight">
                                 {typedListing.title}
                             </h1>
                             <div className="flex flex-shrink-0 items-center gap-2">
@@ -279,13 +272,11 @@ export default async function ListingDetailPage({ params }: Props) {
                                     Còn hiệu lực
                                 </span>
                             </div>
-                            {fullAddress && (
+                            {typedListing.rental_modes && typedListing.rental_modes.length > 0 && (
                                 <div className="flex items-start gap-1.5 text-[14px] text-gray-600 bg-gray-50/80 px-3 py-2 rounded-lg border border-gray-100 sm:bg-transparent sm:px-0 sm:py-0 sm:border-transparent sm:items-center">
-                                    <svg className="w-4 h-4 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-red-500 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span className="leading-snug">Gần {fullAddress}</span>
+                                    <span className="leading-snug">
+                                        {typedListing.rental_modes.map(id => getRentalModeLabel(id)).filter(Boolean).join(' · ')}
+                                    </span>
                                 </div>
                             )}
                         </div>
@@ -450,15 +441,25 @@ export default async function ListingDetailPage({ params }: Props) {
                         )}
 
                         {/* Mini Map */}
-                        {typedListing.latitude && typedListing.longitude && (
+                        {(typedListing.latitude && typedListing.longitude) || fullAddress ? (
                             <div className="py-8">
                                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Vị trí trên bản đồ</h2>
-                                <div className="rounded-2xl overflow-hidden border border-gray-100">
-                                    <MiniMap latitude={typedListing.latitude} longitude={typedListing.longitude} />
-                                </div>
-
+                                {typedListing.latitude && typedListing.longitude && (
+                                    <div className="rounded-2xl overflow-hidden border border-gray-100 mb-4">
+                                        <MiniMap latitude={typedListing.latitude} longitude={typedListing.longitude} />
+                                    </div>
+                                )}
+                                {fullAddress && (
+                                    <div className="flex items-start gap-2 text-[15px] text-gray-600">
+                                        <svg className="w-5 h-5 flex-shrink-0 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span className="leading-relaxed">Gần {fullAddress}</span>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        ) : null}
                     </div>
 
                     {/* ────── RIGHT COLUMN (sticky sidebar) ────────────── */}
