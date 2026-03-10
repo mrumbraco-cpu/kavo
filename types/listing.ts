@@ -8,6 +8,7 @@ export interface Listing {
     space_type: string[];
     suitable_for: string[];
     not_suitable_for: string[];
+    rental_modes: string[];
     location_type: string;
     amenities: string[];
     time_slots: string[];

@@ -29,6 +29,7 @@ export const listingSchema = z.object({
     longitude: z.number().finite(),
     suitable_for: z.array(z.string()).optional(),
     not_suitable_for: z.array(z.string()).optional(),
+    rental_modes: z.array(z.string()).min(1, 'Vui lòng chọn ít nhất một hình thức cho thuê'),
     amenities: z.array(z.string()).optional(),
     nearby_features: z.array(z.string()).optional(),
     time_slots: z.array(z.string()).optional(),

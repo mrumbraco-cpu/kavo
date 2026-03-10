@@ -8,7 +8,7 @@ export const SPACE_TYPES_DATA: readonly ConstantItem[] = [
     { id: 'cabinet', label: 'Kệ tủ' },
     { id: 'garden', label: 'Sân vườn' },
     { id: 'sidewalk', label: 'Vỉa hè' },
-    { id: 'fridge_space', label: 'Ngân tủ lạnh' },
+    { id: 'fridge_space', label: 'Ngăn tủ lạnh' },
     { id: 'indoor_corner', label: 'Góc nhỏ trong nhà' },
     { id: 'market_corner', label: 'Góc nhỏ trong chợ' },
     { id: 'kiosk', label: 'Kiot bán hàng' },
@@ -69,14 +69,21 @@ export const NOT_SUITABLE_FOR_OPTIONS_DATA: readonly ConstantItem[] = [
     { id: 'crowded', label: 'Tụ tập đông người' },
 ] as const;
 
-// Duy trì tính tương thích
+export const RENTAL_MODES_DATA: readonly ConstantItem[] = [
+    { id: 'f1_consignment', label: 'Ký gửi (F1 bán hộ hoàn toàn)' },
+    { id: 'direct_rent', label: 'Thuê đứng quầy trực tiếp' },
+    { id: 'popup_event', label: 'Thuê sự kiện / Pop-up ngắn hạn' },
+] as const;
+
 export const SPACE_TYPES = SPACE_TYPES_DATA.map(item => item.label);
 export const LOCATION_TYPES = LOCATION_TYPES_DATA.map(item => item.label);
 export const SUITABLE_FOR_OPTIONS = SUITABLE_FOR_OPTIONS_DATA.map(item => item.label);
 export const NOT_SUITABLE_FOR_OPTIONS = NOT_SUITABLE_FOR_OPTIONS_DATA.map(item => item.label);
+export const RENTAL_MODES = RENTAL_MODES_DATA.map(item => item.label);
 
 // Helpers
 export const getSpaceTypeLabel = (id: string) => SPACE_TYPES_DATA.find(i => i.id === id)?.label || id;
 export const getLocationTypeLabel = (id: string) => LOCATION_TYPES_DATA.find(i => i.id === id)?.label || id;
 export const getSuitableLabel = (id: string) => SUITABLE_FOR_OPTIONS_DATA.find(i => i.id === id)?.label || id;
 export const getNotSuitableLabel = (id: string) => NOT_SUITABLE_FOR_OPTIONS_DATA.find(i => i.id === id)?.label || id;
+export const getRentalModeLabel = (id: string) => RENTAL_MODES_DATA.find(i => i.id === id)?.label || id;

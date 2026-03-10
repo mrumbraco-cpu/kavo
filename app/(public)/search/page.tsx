@@ -30,7 +30,6 @@ export default async function SearchPage({
         spaceTypes: parseArray(resolvedParams.spaceTypes),
         locationTypes: parseArray(resolvedParams.locationTypes),
         suitableFor: parseArray(resolvedParams.suitableFor),
-        notSuitableFor: parseArray(resolvedParams.notSuitableFor),
         amenities: parseArray(resolvedParams.amenities),
         nearbyFeatures: parseArray(resolvedParams.nearbyFeatures),
         timeOfDay: parseArray(resolvedParams.timeOfDay),

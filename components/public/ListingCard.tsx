@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { getListingUrl } from '@/lib/utils/url';
 import { Listing } from '@/types/listing';
 import { formatPriceRange } from '@/lib/utils/format';
-import { getSpaceTypeLabel, getLocationTypeLabel } from '@/lib/constants/listing-options';
+import { getSpaceTypeLabel, getLocationTypeLabel, getRentalModeLabel } from '@/lib/constants/listing-options';
 
 interface ListingCardProps {
     listing: Listing;
@@ -107,6 +107,11 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                             <span className="text-sm font-bold text-[#10b981]">Miễn phí</span>
                         )}
                     </div>
+                    {listing.rental_modes && listing.rental_modes.length > 0 && (
+                        <div className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-medium rounded-md">
+                            {getRentalModeLabel(listing.rental_modes[0])}
+                        </div>
+                    )}
                     {listing.location_type && (
                         <div className="px-2 py-1 bg-premium-100/70 text-premium-400 text-[10px] font-medium rounded-md">
                             {getLocationTypeLabel(listing.location_type)}

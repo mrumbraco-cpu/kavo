@@ -8,8 +8,10 @@ import {
     LOCATION_TYPES_DATA,
     SUITABLE_FOR_OPTIONS_DATA,
     NOT_SUITABLE_FOR_OPTIONS_DATA,
+    RENTAL_MODES_DATA,
     getSpaceTypeLabel,
-    getLocationTypeLabel
+    getLocationTypeLabel,
+    getRentalModeLabel
 } from '@/lib/constants/listing-options'
 import {
     PROVINCES_OLD_DATA,
@@ -81,6 +83,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const [phone, setPhone] = useState(initialPhone || initialProfile?.phone || '')
     const [zalo, setZalo] = useState(initialZalo || initialProfile?.zalo || '')
     const [spaceTypes, setSpaceTypes] = useState<string[]>(initialListing?.space_type || [])
+    const [rentalModes, setRentalModes] = useState<string[]>(initialListing?.rental_modes || [])
     const [locationType, setLocationType] = useState(initialListing?.location_type || '')
 
     // Geography Administrative State
@@ -178,6 +181,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                     if (data.phone) setPhone(data.phone)
                     if (data.zalo) setZalo(data.zalo)
                     if (data.spaceTypes) setSpaceTypes(data.spaceTypes)
+                    if (data.rentalModes) setRentalModes(data.rentalModes)
                     if (data.locationType) setLocationType(data.locationType)
                     if (data.provinceOld) setProvinceOld(data.provinceOld)
                     if (data.districtOld) setDistrictOld(data.districtOld)
@@ -228,6 +232,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 phone,
                 zalo,
                 spaceTypes,
+                rentalModes,
                 locationType,
                 provinceOld,
                 districtOld,
@@ -254,6 +259,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         lat, lng,
         description, priceMin, priceMax,
         spaceTypes,
+        rentalModes,
         suitableFor, notSuitableFor, amenities, nearbyFeatures, timeSlots
     ])
 
@@ -296,6 +302,10 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         }
 
         setSpaceTypes(prev => [...prev, option]);
+    };
+
+    const toggleRentalMode = (option: string) => {
+        setRentalModes(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
     };
 
     const addTimeSlot = () => {
@@ -404,7 +414,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     const validateStep = (step: number) => {
         if (step === 1) {
-            if (!phone || spaceTypes.length === 0 || !locationType) {
+            if (!phone || spaceTypes.length === 0 || rentalModes.length === 0 || !locationType) {
                 alert('Vui lòng điền đầy đủ thông tin bắt buộc ở Bước 1')
                 return false
             }
@@ -550,6 +560,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         formData.append('phone', phone)
         formData.append('zalo', zalo)
         formData.append('space_type', spaceTypes.join(','))
+        formData.append('rental_modes', rentalModes.join(','))
         formData.append('location_type', locationType)
         formData.append('province_old', provinceOld)
         formData.append('district_old', districtOld)
@@ -716,6 +727,27 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                     </label>
                                                 ))}
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Hình thức cho thuê <span className="text-red-500">*</span></label>
+                                    <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            {RENTAL_MODES_DATA.map(item => (
+                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${rentalModes.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 bg-white group-hover:border-blue-400'}`}>
+                                                        {rentalModes.includes(item.id) && <Check className="w-2.5 h-2.5 text-white" />}
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={rentalModes.includes(item.id)}
+                                                            onChange={() => toggleRentalMode(item.id)}
+                                                            className="hidden"
+                                                        />
+                                                    </div>
+                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
+                                                </label>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>

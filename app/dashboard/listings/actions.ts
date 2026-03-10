@@ -30,6 +30,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
         longitude: parseFloat(formData.get('longitude') as string),
         suitable_for: (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         not_suitable_for: (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        rental_modes: (formData.get('rental_modes') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         amenities: (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         nearby_features: (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         time_slots: (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || [],
@@ -47,7 +48,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
         title, description, space_type, location_type,
         price_min, price_max, province_old, district_old,
         province_new, ward_new, detailed_address,
-        latitude, longitude, suitable_for, not_suitable_for,
+        latitude, longitude, suitable_for, not_suitable_for, rental_modes,
         amenities, nearby_features, time_slots, phone, zalo
     } = validation.data
 
@@ -117,6 +118,7 @@ export async function createListing(formData: FormData): Promise<{ success: bool
             longitude,
             suitable_for,
             not_suitable_for,
+            rental_modes,
             amenities,
             nearby_features,
             time_slots,
@@ -276,6 +278,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
         longitude: parseFloat(formData.get('longitude') as string),
         suitable_for: (formData.get('suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         not_suitable_for: (formData.get('not_suitable_for') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+        rental_modes: (formData.get('rental_modes') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         amenities: (formData.get('amenities') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         nearby_features: (formData.get('nearby_features') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
         time_slots: (formData.get('time_slots') as string)?.split(';').map(s => s.trim()).filter(Boolean) || [],
@@ -293,7 +296,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
         title, description, space_type, location_type,
         price_min, price_max, province_old, district_old,
         province_new, ward_new, detailed_address,
-        latitude, longitude, suitable_for, not_suitable_for,
+        latitude, longitude, suitable_for, not_suitable_for, rental_modes,
         amenities, nearby_features, time_slots, phone, zalo
     } = validation.data
 
@@ -473,6 +476,7 @@ export async function updateListing(listingId: string, formData: FormData): Prom
             longitude,
             suitable_for,
             not_suitable_for,
+            rental_modes,
             amenities,
             nearby_features,
             time_slots,

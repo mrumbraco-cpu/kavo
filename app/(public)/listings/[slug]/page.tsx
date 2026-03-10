@@ -15,7 +15,7 @@ import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/g
 
 import { parseListingIdFromSlug, getListingUrl } from '@/lib/utils/url';
 import { getAmenityLabel, getNearbyFeatureLabel } from '@/lib/constants/facilities';
-import { getSpaceTypeLabel, getLocationTypeLabel, getSuitableLabel, getNotSuitableLabel } from '@/lib/constants/listing-options';
+import { getSpaceTypeLabel, getLocationTypeLabel, getSuitableLabel, getNotSuitableLabel, getRentalModeLabel } from '@/lib/constants/listing-options';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -328,7 +328,7 @@ export default async function ListingDetailPage({ params }: Props) {
                         </div>
 
                         {/* Space & Location Details */}
-                        <div className="py-8 border-b border-gray-100 grid grid-cols-2 sm:grid-cols-2 gap-8">
+                        <div className="py-8 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-8">
                             <div className="group">
                                 <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Loại hình không gian</p>
                                 <div className="flex items-center gap-3">
@@ -353,6 +353,19 @@ export default async function ListingDetailPage({ params }: Props) {
                                     </div>
                                     <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
                                         {getLocationTypeLabel(typedListing.location_type)}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="group">
+                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Hình thức cho thuê</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
+                                        {typedListing.rental_modes?.map(id => getRentalModeLabel(id)).join(', ') || 'Chưa cập nhật'}
                                     </span>
                                 </div>
                             </div>

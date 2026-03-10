@@ -10,9 +10,9 @@ export interface SearchFilters {
     spaceTypes: string[];
     locationTypes: string[];
     suitableFor: string[];
-    notSuitableFor: string[];
     amenities: string[];
     nearbyFeatures: string[];
+    rentalModes: string[];
     timeOfDay: string[];
     priceMin: string;
     priceMax: string;
@@ -27,9 +27,9 @@ export const DEFAULT_FILTERS: SearchFilters = {
     spaceTypes: [],
     locationTypes: [],
     suitableFor: [],
-    notSuitableFor: [],
     amenities: [],
     nearbyFeatures: [],
+    rentalModes: [],
     timeOfDay: [],
     priceMin: '',
     priceMax: '',

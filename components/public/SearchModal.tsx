@@ -9,7 +9,8 @@ import PriceRangeSelector from './PriceRangeSelector';
 import {
     SPACE_TYPES_DATA,
     LOCATION_TYPES_DATA,
-    SUITABLE_FOR_OPTIONS_DATA
+    SUITABLE_FOR_OPTIONS_DATA,
+    RENTAL_MODES_DATA
 } from '@/lib/constants/listing-options';
 import { getProvinceById } from '@/lib/constants/geography';
 
@@ -209,7 +210,7 @@ export default function SearchModal() {
             amenities: [],
             nearbyFeatures: [],
             suitableFor: [],
-            notSuitableFor: [],
+            rentalModes: [],
             priceMin: '',
             priceMax: '',
         });
@@ -317,6 +318,19 @@ export default function SearchModal() {
                                     label={item.label}
                                     selected={draftFilters.spaceTypes.includes(item.id)}
                                     onClick={() => toggleArray('spaceTypes', item.id)}
+                                />
+                            ))}
+                        </div>
+                    </Section>
+
+                    <Section title="Hình thức cho thuê">
+                        <div className="flex flex-wrap gap-2">
+                            {RENTAL_MODES_DATA.map(item => (
+                                <Chip
+                                    key={item.id}
+                                    label={item.label}
+                                    selected={draftFilters.rentalModes.includes(item.id)}
+                                    onClick={() => toggleArray('rentalModes', item.id)}
                                 />
                             ))}
                         </div>

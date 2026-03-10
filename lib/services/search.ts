@@ -13,9 +13,9 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
     const spaceTypes = filters.spaceTypes || [];
     const locationTypes = filters.locationTypes || [];
     const suitableFor = filters.suitableFor || [];
-    const notSuitableFor = filters.notSuitableFor || [];
     const amenities = filters.amenities || [];
     const nearbyFeatures = filters.nearbyFeatures || [];
+    const rentalModes = filters.rentalModes || [];
     const priceMin = filters.priceMin || '';
     const priceMax = filters.priceMax || '';
     const timeOfDay = filters.timeOfDay || [];
@@ -36,7 +36,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
 
     let dbQuery = supabase
         .from('listings')
-        .select('id, title, description, status, is_hidden, space_type, location_type, province_old, district_old, province_new, ward_new, detailed_address, price_min, price_max, suitable_for, not_suitable_for, amenities, nearby_features, time_slots, images, latitude, longitude')
+        .select('id, title, description, status, is_hidden, space_type, location_type, province_old, district_old, province_new, ward_new, detailed_address, price_min, price_max, suitable_for, not_suitable_for, rental_modes, amenities, nearby_features, time_slots, images, latitude, longitude')
         .in('status', ['approved', 'expired'])
         .eq('is_hidden', false);
 
@@ -53,13 +53,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         }
     }
 
-    if (notSuitableFor.length > 0) {
-        dbQuery = dbQuery.not('not_suitable_for', 'ov', `{${notSuitableFor.map(v => `"${v}"`).join(',')}}`);
-    }
 
-    if (suitableFor.length > 0) {
-        dbQuery = dbQuery.not('not_suitable_for', 'cs', `{${suitableFor.map(v => `"${v}"`).join(',')}}`);
-    }
 
     if (spaceTypes.length > 0) {
         dbQuery = dbQuery.overlaps('space_type', spaceTypes);
@@ -75,6 +69,10 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
 
     if (nearbyFeatures.length > 0) {
         dbQuery = dbQuery.overlaps('nearby_features', nearbyFeatures);
+    }
+
+    if (rentalModes.length > 0) {
+        dbQuery = dbQuery.overlaps('rental_modes', rentalModes);
     }
 
     if (priceMin && priceMax) {

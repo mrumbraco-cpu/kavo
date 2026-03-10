@@ -14,6 +14,12 @@ export const AMENITIES_DATA: readonly ConstantItem[] = [
     { id: 'changing_room', label: 'Phòng thay đồ' },
     { id: 'fridge', label: 'Tủ lạnh' },
     { id: 'power_outlet', label: 'Ổ cắm điện' },
+    { id: 'sell_help', label: 'Có bán hộ' },
+    { id: 'watch_help', label: 'Trông coi hàng' },
+    { id: 'delivery_help', label: 'Giao nhận cho shipper' },
+    { id: 'pack_help', label: 'Đóng gói hộ' },
+    { id: 'pos_machine', label: 'Máy POS chung' },
+    { id: 'cooking_tools', label: 'Dụng cụ pha chế nấu nướng chung' },
 ] as const;
 
 export const NEARBY_FEATURES_DATA: readonly ConstantItem[] = [

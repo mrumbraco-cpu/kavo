@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
     const spaceTypes = searchParams.get('spaceTypes')?.split(',').filter(Boolean) || [];
     const locationTypes = searchParams.get('locationTypes')?.split(',').filter(Boolean) || [];
     const suitableFor = searchParams.get('suitableFor')?.split(',').filter(Boolean) || [];
-    const notSuitableFor = searchParams.get('notSuitableFor')?.split(',').filter(Boolean) || [];
     const amenities = searchParams.get('amenities')?.split(',').filter(Boolean) || [];
     const nearbyFeatures = searchParams.get('nearbyFeatures')?.split(',').filter(Boolean) || [];
+    const rentalModes = searchParams.get('rentalModes')?.split(',').filter(Boolean) || [];
     const priceMin = searchParams.get('priceMin') || '';
     const priceMax = searchParams.get('priceMax') || '';
     const timeOfDay = searchParams.get('timeOfDay')?.split(',').filter(Boolean) || [];
@@ -42,9 +42,9 @@ export async function GET(request: NextRequest) {
                 spaceTypes,
                 locationTypes,
                 suitableFor,
-                notSuitableFor,
                 amenities,
                 nearbyFeatures,
+                rentalModes,
                 priceMin,
                 priceMax,
                 timeOfDay
