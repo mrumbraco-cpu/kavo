@@ -138,8 +138,8 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
 
     // Optional Fields State
     const [description, setDescription] = useState(initialListing?.description || '')
-    const [priceMin, setPriceMin] = useState(initialListing?.price_min?.toString() || '')
-    const [priceMax, setPriceMax] = useState(initialListing?.price_max?.toString() || '')
+    const [priceMin, setPriceMin] = useState(initialListing?.price_min ? initialListing.price_min.toString() : '')
+    const [priceMax, setPriceMax] = useState(initialListing?.price_max ? initialListing.price_max.toString() : '')
     const [suitableFor, setSuitableFor] = useState<string[]>(initialListing?.suitable_for || [])
     const [notSuitableFor, setNotSuitableFor] = useState<string[]>(initialListing?.not_suitable_for || [])
     const [amenities, setAmenities] = useState<string[]>(initialListing?.amenities || [])
@@ -165,6 +165,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
     const [showSuitable, setShowSuitable] = useState(!!initialListing?.suitable_for?.length)
     const [showNotSuitable, setShowNotSuitable] = useState(!!initialListing?.not_suitable_for?.length)
     const [showNearby, setShowNearby] = useState(!!initialListing?.nearby_features?.length)
+    const [showAmenities, setShowAmenities] = useState(!!initialListing?.amenities?.length)
 
     // Geography Modal State
     const [geoModalStep, setGeoModalStep] = useState<'none' | 'old-province' | 'old-district' | 'new-province' | 'new-ward'>('none')
@@ -426,10 +427,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 alert('Zalo phải là số điện thoại 10 số hoặc đường dẫn liên kết')
                 return false
             }
-            if (amenities.length === 0) {
-                alert('Vui lòng chọn ít nhất một tiện ích')
-                return false
-            }
             if (timeSlots.length === 0) {
                 alert('Vui lòng thêm ít nhất một khung giờ cho thuê')
                 return false
@@ -450,7 +447,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                 alert('Giá cao nhất không thể nhỏ hơn 0')
                 return false
             }
-            if (!isNaN(minV) && !isNaN(maxV) && maxV < minV) {
+            if (priceMin && priceMax && !isNaN(parseFloat(priceMin)) && !isNaN(parseFloat(priceMax)) && parseFloat(priceMax) < parseFloat(priceMin)) {
                 alert('Giá cao nhất phải lớn hơn hoặc bằng giá thấp nhất')
                 return false
             }
@@ -791,30 +788,6 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                 </div>
                             </div>
 
-                            {/* Moved from Step 3: Amenities */}
-                            <div className="space-y-4">
-                                <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Tiện ích <span className="text-red-500">*</span></label>
-                                <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
-                                    <div className="max-h-52 overflow-y-auto custom-scrollbar pr-2">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {AMENITIES_DATA.map(item => (
-                                                <label key={item.id} className="flex items-center space-x-3 cursor-pointer group py-0.5">
-                                                    <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${amenities.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
-                                                        {amenities.includes(item.id) && <Check className="w-2.5 h-2.5 text-white" />}
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={amenities.includes(item.id)}
-                                                            onChange={() => toggleAmenity(item.id)}
-                                                            className="hidden"
-                                                        />
-                                                    </div>
-                                                    <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Moved from Step 3: Rental Time Slots */}
                             <div className="space-y-4">
@@ -900,7 +873,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                         <div className="space-y-4">
                             <h4 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                                 <div className="w-2 h-4 bg-blue-400 rounded-full"></div>
-                                Hệ thống hành chính cũ
+                                Trước sáp nhập
                             </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -943,7 +916,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                         <div className="space-y-4">
                             <h4 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                                 <div className="w-2 h-4 bg-green-400 rounded-full"></div>
-                                Hệ thống hành chính mới
+                                Sau sáp nhập
                             </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -1226,9 +1199,41 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     </div>
                                 )}
                             </div>
-
-
-
+                            {/* Amenities - Collapsible */}
+                            <div className="py-1">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAmenities(!showAmenities)}
+                                    className="w-full flex items-center justify-between py-2.5 px-2 hover:bg-gray-50/50 transition-colors group"
+                                >
+                                    <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Tiện ích</span>
+                                    {showAmenities ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                                </button>
+                                {showAmenities && (
+                                    <div className="pb-4 px-2">
+                                        <div className="p-4 bg-gray-50/50 rounded-xl border border-gray-100">
+                                            <div className="max-h-52 overflow-y-auto custom-scrollbar pr-2">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    {AMENITIES_DATA.map(item => (
+                                                        <label key={item.id} className="flex items-center space-x-3 cursor-pointer group py-0.5">
+                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${amenities.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                                                                {amenities.includes(item.id) && <Check className="w-2.5 h-2.5 text-white" />}
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={amenities.includes(item.id)}
+                                                                    onChange={() => toggleAmenity(item.id)}
+                                                                    className="hidden"
+                                                                />
+                                                            </div>
+                                                            <span className="text-[13px] font-medium text-gray-600">{item.label}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
 
                             {/* Suitable For */}

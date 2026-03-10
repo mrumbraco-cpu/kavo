@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get('query') || '';
     const spaceTypes = searchParams.get('spaceTypes')?.split(',').filter(Boolean) || [];
     const locationTypes = searchParams.get('locationTypes')?.split(',').filter(Boolean) || [];
-    const suitableFor = searchParams.get('suitableFor')?.split(',').filter(Boolean) || [];
     const amenities = searchParams.get('amenities')?.split(',').filter(Boolean) || [];
     const nearbyFeatures = searchParams.get('nearbyFeatures')?.split(',').filter(Boolean) || [];
     const rentalModes = searchParams.get('rentalModes')?.split(',').filter(Boolean) || [];
@@ -41,7 +40,6 @@ export async function GET(request: NextRequest) {
                 query,
                 spaceTypes,
                 locationTypes,
-                suitableFor,
                 amenities,
                 nearbyFeatures,
                 rentalModes,

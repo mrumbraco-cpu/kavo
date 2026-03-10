@@ -78,7 +78,7 @@ export default function GeographySelector({
                     className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${filters.geoSystem === 'old' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400'
                         }`}
                 >
-                    Hệ thống cũ
+                    Trước sáp nhập
                 </button>
                 <button
                     onClick={() => onSwitchSystem('new')}
@@ -86,7 +86,7 @@ export default function GeographySelector({
                     className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${filters.geoSystem === 'new' ? 'bg-white text-premium-900 shadow-sm' : 'text-premium-400'
                         }`}
                 >
-                    Hệ thống mới
+                    Sau sáp nhập
                 </button>
             </div>
 

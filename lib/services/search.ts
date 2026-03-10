@@ -12,7 +12,6 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
     const query = filters.query || '';
     const spaceTypes = filters.spaceTypes || [];
     const locationTypes = filters.locationTypes || [];
-    const suitableFor = filters.suitableFor || [];
     const amenities = filters.amenities || [];
     const nearbyFeatures = filters.nearbyFeatures || [];
     const rentalModes = filters.rentalModes || [];
@@ -117,16 +116,6 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
             return requiredSessions.some(session =>
                 slots.some(slot => slot.includes(`|${session}`))
             );
-        });
-    }
-
-    if (suitableFor.length > 0) {
-        results = results.sort((a, b) => {
-            const aMatch = suitableFor.some(s => (a.suitable_for as string[] ?? []).includes(s));
-            const bMatch = suitableFor.some(s => (b.suitable_for as string[] ?? []).includes(s));
-            if (aMatch && !bMatch) return -1;
-            if (!aMatch && bMatch) return 1;
-            return 0;
         });
     }
 

@@ -9,7 +9,6 @@ export interface SearchFilters {
     // Filters
     spaceTypes: string[];
     locationTypes: string[];
-    suitableFor: string[];
     amenities: string[];
     nearbyFeatures: string[];
     rentalModes: string[];
@@ -26,7 +25,6 @@ export const DEFAULT_FILTERS: SearchFilters = {
     query: '',
     spaceTypes: [],
     locationTypes: [],
-    suitableFor: [],
     amenities: [],
     nearbyFeatures: [],
     rentalModes: [],

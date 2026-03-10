@@ -70,9 +70,10 @@ export const NOT_SUITABLE_FOR_OPTIONS_DATA: readonly ConstantItem[] = [
 ] as const;
 
 export const RENTAL_MODES_DATA: readonly ConstantItem[] = [
-    { id: 'f1_consignment', label: 'Ký gửi (F1 bán hộ hoàn toàn)' },
-    { id: 'direct_rent', label: 'Thuê đứng quầy trực tiếp' },
-    { id: 'popup_event', label: 'Thuê sự kiện / Pop-up ngắn hạn' },
+    { id: 'f1_consignment', label: 'Ký gửi' },
+    { id: 'direct_rent', label: 'Tự quản' },
+    { id: 'popup_event', label: 'Làm sự kiện' },
+    { id: 'ads_display', label: 'Đặt quảng cáo' },
 ] as const;
 
 export const SPACE_TYPES = SPACE_TYPES_DATA.map(item => item.label);

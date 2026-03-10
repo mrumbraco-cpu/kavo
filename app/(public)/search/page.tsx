@@ -29,7 +29,6 @@ export default async function SearchPage({
         query: typeof resolvedParams.query === 'string' ? resolvedParams.query : '',
         spaceTypes: parseArray(resolvedParams.spaceTypes),
         locationTypes: parseArray(resolvedParams.locationTypes),
-        suitableFor: parseArray(resolvedParams.suitableFor),
         amenities: parseArray(resolvedParams.amenities),
         nearbyFeatures: parseArray(resolvedParams.nearbyFeatures),
         timeOfDay: parseArray(resolvedParams.timeOfDay),

@@ -9,7 +9,6 @@ import PriceRangeSelector from './PriceRangeSelector';
 import {
     SPACE_TYPES_DATA,
     LOCATION_TYPES_DATA,
-    SUITABLE_FOR_OPTIONS_DATA,
     RENTAL_MODES_DATA
 } from '@/lib/constants/listing-options';
 import { getProvinceById } from '@/lib/constants/geography';
@@ -209,7 +208,6 @@ export default function SearchModal() {
             timeOfDay: [],
             amenities: [],
             nearbyFeatures: [],
-            suitableFor: [],
             rentalModes: [],
             priceMin: '',
             priceMax: '',
@@ -295,33 +293,22 @@ export default function SearchModal() {
                         />
                     </Section>
 
-                    <Section title="Từ khóa">
-                        <div className="relative">
-                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input
-                                type="text"
-                                placeholder="Tiêu đề, địa chỉ, tên đường…"
-                                value={draftFilters.query}
-                                onChange={e => set('query', e.target.value)}
-                                className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm"
-                            />
-                        </div>
-                    </Section>
-
-                    <Section title="Loại hình không gian">
-                        <div className="flex flex-wrap gap-2">
-                            {SPACE_TYPES_DATA.map(item => (
-                                <Chip
-                                    key={item.id}
-                                    label={item.label}
-                                    selected={draftFilters.spaceTypes.includes(item.id)}
-                                    onClick={() => toggleArray('spaceTypes', item.id)}
+                    {process.env.NEXT_PUBLIC_SHOW_SEARCH_KEYWORD === 'true' && (
+                        <Section title="Từ khóa">
+                            <div className="relative">
+                                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-premium-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <input
+                                    type="text"
+                                    placeholder="Tiêu đề, địa chỉ, tên đường…"
+                                    value={draftFilters.query}
+                                    onChange={e => set('query', e.target.value)}
+                                    className="w-full pl-9 pr-3 py-2.5 bg-white border border-premium-200 rounded-xl text-sm"
                                 />
-                            ))}
-                        </div>
-                    </Section>
+                            </div>
+                        </Section>
+                    )}
 
                     <Section title="Hình thức cho thuê">
                         <div className="flex flex-wrap gap-2">
@@ -390,6 +377,19 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
+                    <Section title="Loại hình không gian">
+                        <div className="flex flex-wrap gap-2">
+                            {SPACE_TYPES_DATA.map(item => (
+                                <Chip
+                                    key={item.id}
+                                    label={item.label}
+                                    selected={draftFilters.spaceTypes.includes(item.id)}
+                                    onClick={() => toggleArray('spaceTypes', item.id)}
+                                />
+                            ))}
+                        </div>
+                    </Section>
+
                     <Section title="Khoảng giá">
                         <PriceRangeSelector
                             minPrice={draftFilters.priceMin}
@@ -401,20 +401,7 @@ export default function SearchModal() {
                         />
                     </Section>
 
-                    <Section title="Phù hợp cho" collapsible defaultExpanded={false}>
-                        <div className="flex flex-wrap gap-2">
-                            {SUITABLE_FOR_OPTIONS_DATA.map(item => (
-                                <Chip
-                                    key={item.id}
-                                    label={item.label}
-                                    selected={draftFilters.suitableFor.includes(item.id)}
-                                    onClick={() => toggleArray('suitableFor', item.id)}
-                                />
-                            ))}
-                        </div>
-                    </Section>
-
-                    <Section title="Tiện ích" collapsible defaultExpanded={false}>
+                    <Section title="Tiện ích vật chất & hỗ trợ từ con người">
                         <div className="flex flex-wrap gap-2">
                             {AMENITIES_DATA.map(item => (
                                 <Chip
@@ -427,7 +414,7 @@ export default function SearchModal() {
                         </div>
                     </Section>
 
-                    <Section title="Gần khu vực" collapsible defaultExpanded={false}>
+                    <Section title="Gần khu vực">
                         <div className="flex flex-wrap gap-2">
                             {NEARBY_FEATURES_DATA.map(item => (
                                 <Chip
