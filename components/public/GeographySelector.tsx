@@ -184,7 +184,7 @@ export default function GeographySelector({
                                         : 'bg-white border-premium-100 text-premium-600 hover:border-premium-300'
                                         }`}
                                 >
-                                    {d.label}
+                                    {filters.geoSystem === 'new' ? d.label : d.fullName}
                                 </button>
                             );
                         })}

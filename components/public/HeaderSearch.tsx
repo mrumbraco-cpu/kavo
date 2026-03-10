@@ -37,7 +37,7 @@ export default function HeaderSearch() {
                                             : provinceLabel;
                                     } else {
                                         return filters.district.length > 0
-                                            ? `${filters.district.map(id => getDistrictById(filters.province, id)?.label || id).join(', ')}, ${provinceLabel}`
+                                            ? `${filters.district.map(id => getDistrictById(filters.province, id)?.fullName || id).join(', ')}, ${provinceLabel}`
                                             : provinceLabel;
                                     }
                                 })()

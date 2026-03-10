@@ -28,4 +28,5 @@ export interface Listing {
     is_locked: boolean;
     created_at: string;
     updated_at: string;
+    unlock_count: number;
 }

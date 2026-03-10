@@ -531,7 +531,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
         // Append all states to formData
         // Generate Title from labels resolved from IDs
         const provinceLabel = getProvinceById(provinceOld, 'old')?.label || '';
-        const districtLabel = getDistrictById(provinceOld, districtOld)?.label || '';
+        const districtLabel = getDistrictById(provinceOld, districtOld)?.fullName || '';
 
         const prefixParts = [
             spaceTypes.map(id => getSpaceTypeLabel(id)).join(', '),
@@ -903,7 +903,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                         <div className="flex items-center gap-2.5">
                                             <Home className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                                             <span className={`text-sm font-semibold ${districtOld ? 'text-gray-900' : 'text-gray-400'}`}>
-                                                {getDistrictById(provinceOld, districtOld)?.label || '-- Chọn Quận/Huyện --'}
+                                                {getDistrictById(provinceOld, districtOld)?.fullName || '-- Chọn Quận/Huyện --'}
                                             </span>
                                         </div>
                                         <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -936,7 +936,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                     </button>
                                 </div>
                                 <div>
-                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Phường/Xã/Quận <span className="text-red-500">*</span></label>
+                                    <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Phường/Xã <span className="text-red-500">*</span></label>
                                     <button
                                         type="button"
                                         disabled={!provinceNew}
@@ -1031,7 +1031,7 @@ export function ListingForm({ initialProfile, initialListing, initialPhone, init
                                                         onClick={() => { setDistrictOld(d.id); setGeoModalStep('none'); }}
                                                         className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all ${districtOld === d.id ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
                                                     >
-                                                        <span className="text-sm font-semibold">{d.label}</span>
+                                                        <span className="text-sm font-semibold">{d.fullName}</span>
                                                         {districtOld === d.id && <Check className="w-4 h-4" />}
                                                     </button>
                                                 ))

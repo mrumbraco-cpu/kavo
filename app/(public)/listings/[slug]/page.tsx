@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { createServerSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { Listing } from '@/types/listing';
 import ImageGallery from '@/components/public/ImageGallery';
 import Link from 'next/link';
@@ -64,26 +64,20 @@ export default async function ListingDetailPage({ params }: Props) {
     const { slug } = await params;
     const id = parseListingIdFromSlug(slug);
     const supabase = await createServerSupabaseClient();
-    const serviceSupabase = createServiceRoleClient();
 
-    // Fetch listing, user, and unlock count in parallel
-    const [listingResult, userResult, unlockCountResult] = await Promise.all([
+    // Fetch listing and user in parallel
+    const [listingResult, userResult] = await Promise.all([
         getListing(id),
-        supabase.auth.getUser(),
-        serviceSupabase
-            .from('contact_unlocks')
-            .select('*', { count: 'exact', head: true })
-            .eq('listing_id', id)
+        supabase.auth.getUser()
     ]);
 
     const { data: listing, error } = listingResult;
     const { data: { user } } = userResult;
-    const { count: unlockCount, error: countError } = unlockCountResult;
 
     if (error || !listing) notFound();
-    if (countError) console.error('Error fetching unlock count:', countError);
 
     const typedListing = listing as Listing;
+    const unlockCount = typedListing.unlock_count ?? 0;
 
     let coinBalance = 0;
     let alreadyUnlocked = false;
@@ -329,9 +323,6 @@ export default async function ListingDetailPage({ params }: Props) {
                                     ))}
                                 </div>
                             )}
-                            <p className="text-xs text-gray-400 mt-3 leading-relaxed">
-                                * Mọi thương lượng giá cả diễn ra trực tiếp với chủ không gian. Nền tảng không xử lý thanh toán.
-                            </p>
                         </div>
 
                         {/* Space & Location Details */}
@@ -392,7 +383,7 @@ export default async function ListingDetailPage({ params }: Props) {
                         {typedListing.amenities?.length > 0 && (
                             <div className="py-8 border-b border-gray-100">
                                 <h2 className="text-xl font-semibold text-gray-900 mb-6">Tiện ích</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
                                     {typedListing.amenities?.map((id: string) => (
                                         <div key={id} className="flex flex-col items-center p-3 rounded-2xl bg-premium-50 border border-premium-100 hover:border-premium-200 transition-all group">
                                             <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-premium-900 shadow-sm mb-2 group-hover:scale-110 transition-transform">
