@@ -11,8 +11,8 @@ import ShareButton from '@/components/public/ShareButton';
 import ReportButton from '@/components/public/ReportButton';
 import UrgencyBadge from '@/components/public/UrgencyBadge';
 import MiniMap from '@/components/public/MiniMap';
-import ListingMobileFilterBar from '@/components/public/ListingMobileFilterBar';
 import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/geography';
+import { cache } from 'react';
 
 import { parseListingIdFromSlug, getListingUrl } from '@/lib/utils/url';
 import { getAmenityLabel, getNearbyFeatureLabel } from '@/lib/constants/facilities';
@@ -22,17 +22,21 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { slug } = await params;
-    const id = parseListingIdFromSlug(slug);
+const getListing = cache(async (id: string) => {
     const supabase = await createServerSupabaseClient();
-    const { data } = await supabase
+    return await supabase
         .from('listings')
-        .select('title, description')
+        .select('*')
         .eq('id', id)
         .eq('status', 'approved')
         .eq('is_hidden', false)
         .single();
+});
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params;
+    const id = parseListingIdFromSlug(slug);
+    const { data } = await getListing(id);
 
     if (!data) return { title: 'Không tìm thấy không gian – CHOBAN.VN' };
 
@@ -60,29 +64,26 @@ export default async function ListingDetailPage({ params }: Props) {
     const { slug } = await params;
     const id = parseListingIdFromSlug(slug);
     const supabase = await createServerSupabaseClient();
+    const serviceSupabase = createServiceRoleClient();
 
-    const { data: listing, error } = await supabase
-        .from('listings')
-        .select('*')
-        .eq('id', id)
-        .eq('status', 'approved')
-        .eq('is_hidden', false)
-        .single();
+    // Fetch listing, user, and unlock count in parallel
+    const [listingResult, userResult, unlockCountResult] = await Promise.all([
+        getListing(id),
+        supabase.auth.getUser(),
+        serviceSupabase
+            .from('contact_unlocks')
+            .select('*', { count: 'exact', head: true })
+            .eq('listing_id', id)
+    ]);
+
+    const { data: listing, error } = listingResult;
+    const { data: { user } } = userResult;
+    const { count: unlockCount, error: countError } = unlockCountResult;
 
     if (error || !listing) notFound();
+    if (countError) console.error('Error fetching unlock count:', countError);
 
     const typedListing = listing as Listing;
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    // Fetch unlock count using service role to bypass RLS for public display
-    const serviceSupabase = createServiceRoleClient();
-    const { count: unlockCount, error: countError } = await serviceSupabase
-        .from('contact_unlocks')
-        .select('*', { count: 'exact', head: true })
-        .eq('listing_id', id);
-
-    if (countError) console.error('Error fetching unlock count:', countError);
 
     let coinBalance = 0;
     let alreadyUnlocked = false;
@@ -91,37 +92,38 @@ export default async function ListingDetailPage({ params }: Props) {
     let isFavorite = false;
 
     if (user) {
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('coin_balance')
-            .eq('id', user.id)
-            .single();
-        coinBalance = profile?.coin_balance ?? 0;
+        // Fetch user-specific data in parallel
+        const [profileResult, unlockCheckResult, favoriteResult] = await Promise.all([
+            supabase
+                .from('profiles')
+                .select('coin_balance')
+                .eq('id', user.id)
+                .single(),
+            supabase
+                .from('contact_unlocks')
+                .select('user_id')
+                .eq('user_id', user.id)
+                .eq('listing_id', id)
+                .maybeSingle(),
+            supabase
+                .from('favorites')
+                .select('user_id')
+                .eq('user_id', user.id)
+                .eq('listing_id', id)
+                .maybeSingle()
+        ]);
 
-        const { data: unlock, error: unlockError } = await supabase
-            .from('contact_unlocks')
-            .select('user_id')
-            .eq('user_id', user.id)
-            .eq('listing_id', id)
-            .maybeSingle();
-
-        if (unlockError) console.error('Error checking unlock status:', unlockError);
-
-        const { data: favorite, error: favoriteError } = await supabase
-            .from('favorites')
-            .select('user_id')
-            .eq('user_id', user.id)
-            .eq('listing_id', id)
-            .maybeSingle();
-
-        if (favoriteError) console.error('Error checking favorite status:', favoriteError);
-
-        isFavorite = !!favorite;
+        coinBalance = profileResult.data?.coin_balance ?? 0;
+        isFavorite = !!favoriteResult.data;
 
         const isOwner = user.id === typedListing.owner_id;
+        const hasUnlocked = !!unlockCheckResult.data;
 
-        if (unlock || isOwner) {
+        if (hasUnlocked || isOwner) {
             alreadyUnlocked = true;
+            // RPC must be done separately after we know we need it,
+            // though we could have fetched the raw listing_contacts if we were owner or unlocked.
+            // But let's stick to the RPC for security/decoupling.
             const { data: contactData, error: rpcError } = await supabase.rpc('unlock_listing_contact', {
                 p_listing_id: id,
             });
@@ -232,7 +234,6 @@ export default async function ListingDetailPage({ params }: Props) {
 
     return (
         <div className="min-h-screen bg-white">
-            <ListingMobileFilterBar />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
 
                 {/* ── Main 2-column layout ────────────────────────────── */}
@@ -241,11 +242,19 @@ export default async function ListingDetailPage({ params }: Props) {
                     {/* ────── LEFT COLUMN ─────────────────────────────── */}
                     <div className="min-w-0">
 
-                        {/* Title + Favorite */}
-                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
-                            <h1 className="text-2xl sm:text-3xl font-medium text-[#3c4043] leading-tight">
-                                {typedListing.title}
-                            </h1>
+                        {/* Top Actions */}
+                        <div className="flex items-center justify-between pb-5 border-b border-gray-100 mb-5">
+                            <Link
+                                href="/search"
+                                className="flex items-center gap-1.5 px-4 py-2 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md hover:bg-white transition-all duration-300 active:scale-95 rounded-full border border-gray-100 group"
+                                title="Quay lại tìm kiếm"
+                            >
+                                <svg className="w-4 h-4 text-gray-500 group-hover:text-amber-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                <span className="text-[13px] font-bold text-gray-600 group-hover:text-amber-600">Quay lại</span>
+                            </Link>
+
                             <div className="flex flex-shrink-0 items-center gap-2">
                                 <ShareButton title={typedListing.title} />
                                 <FavoriteButton
@@ -254,6 +263,13 @@ export default async function ListingDetailPage({ params }: Props) {
                                     isAuthenticated={!!user}
                                 />
                             </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="mb-4">
+                            <h1 className="text-2xl sm:text-3xl font-medium text-[#3c4043] leading-tight pr-0 sm:pr-4">
+                                {typedListing.title}
+                            </h1>
                         </div>
 
                         {/* Badges + Address */}
@@ -517,16 +533,6 @@ export default async function ListingDetailPage({ params }: Props) {
                                 <ReportButton listingId={id} isAuthenticated={!!user} />
                             </div>
 
-                            {/* Back to search */}
-                            <Link
-                                href="/search"
-                                className="flex items-center justify-center gap-1.5 py-2.5 text-sm text-gray-500 hover:text-gray-900 transition-colors"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                                Quay lại tìm kiếm
-                            </Link>
                         </div>
                     </div>
                 </div>

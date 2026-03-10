@@ -132,7 +132,8 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         location_type: listing.location_type,
         price_min: listing.price_min,
         price_max: listing.price_max,
-        images: listing.images
+        images: listing.images,
+        rental_modes: listing.rental_modes
     }));
 
     // Slicing for pagination
