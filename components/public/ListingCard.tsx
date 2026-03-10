@@ -5,7 +5,33 @@ import Image from 'next/image';
 import { getListingUrl } from '@/lib/utils/url';
 import { Listing } from '@/types/listing';
 import { formatPriceRange } from '@/lib/utils/format';
-import { getSpaceTypeLabel, getLocationTypeLabel, getRentalModeLabel } from '@/lib/constants/listing-options';
+import { getNearbyFeatureLabel } from '@/lib/constants/facilities';
+import { getRentalModeLabel } from '@/lib/constants/listing-options';
+
+// Keyword xuất hiện ở phần tử CUỐI cùng sau split '|'
+// Ví dụ: "daily|Sáng" → "Sáng" | "single|2026-03-10|Sáng" → "Sáng"
+const TIME_KEYWORD_LABEL: Record<string, string> = {
+    'Sáng': 'Buổi sáng',
+    'Trưa': 'Buổi trưa',
+    'Chiều': 'Buổi chiều',
+    'Tối': 'Buổi tối',
+    'Cả ngày': 'Cả ngày',
+};
+
+/** Trích xuất nhãn thời gian ngắn gọn, không trùng, từ mảng time_slots */
+function parseTimeSlotLabels(timeSlots: string[]): string[] {
+    const seen = new Set<string>();
+    const result: string[] = [];
+    for (const slot of timeSlots) {
+        const parts = slot.split('|');
+        const keyword = parts[parts.length - 1]?.trim();
+        if (keyword && TIME_KEYWORD_LABEL[keyword] && !seen.has(keyword)) {
+            seen.add(keyword);
+            result.push(TIME_KEYWORD_LABEL[keyword]);
+        }
+    }
+    return result;
+}
 
 interface ListingCardProps {
     listing: Listing;
@@ -16,20 +42,31 @@ interface ListingCardProps {
 
 const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, onHover, priority = false }: ListingCardProps) {
     const thumbnail = listing.images?.[0] ?? null;
-    const detailedAddress = listing.detailed_address || '';
+
+    // Yêu cầu: thay đổi thành Hình thức cho thuê
+    const rentalModesText = (listing.rental_modes ?? [])
+        .map(id => getRentalModeLabel(id))
+        .filter(Boolean)
+        .join(', ');
+
+    // Dòng 3 – yêu cầu 3: nhãn thời gian thuê ngắn gọn
+    const timeLabels = parseTimeSlotLabels(listing.time_slots ?? []);
+
+    // Dòng 4 – yêu cầu 4: nearby_features tags
+    const nearbyTags = (listing.nearby_features ?? [])
+        .map(id => getNearbyFeatureLabel(id))
+        .filter(Boolean);
 
     return (
         <Link
             href={getListingUrl(listing)}
-            className={`group flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-2xl hover:shadow-premium-900/10 hover:-translate-y-1 active:scale-[0.98] cursor-pointer ${isHighlighted
-                ? 'border-accent-gold shadow-md shadow-accent-gold/10 ring-1 ring-accent-gold/30 bg-premium-50/30'
-                : 'border-premium-100 bg-white hover:border-premium-200'
+            className={`group flex flex-row gap-3 px-4 py-3.5 transition-all duration-150 cursor-pointer border-b border-gray-100 last:border-b-0 ${isHighlighted ? 'bg-blue-50/60' : 'bg-white hover:bg-gray-50'
                 }`}
             onMouseEnter={() => onHover?.(listing.id)}
             onMouseLeave={() => onHover?.(null)}
         >
-            {/* Image */}
-            <div className="relative w-full aspect-video bg-premium-50 overflow-hidden">
+            {/* Thumbnail – vuông bên trái */}
+            <div className="relative flex-shrink-0 w-[88px] h-[88px] rounded-xl overflow-hidden bg-gray-100">
                 {thumbnail ? (
                     <Image
                         src={thumbnail}
@@ -37,87 +74,58 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                         fill
                         priority={priority}
                         quality={75}
-                        className={`object-cover group-hover:scale-110 transition-transform duration-700 ease-out ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
+                        className={`object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
                             }`}
-                        sizes="(max-width: 640px) 95vw, (max-width: 1024px) 45vw, 30vw"
+                        sizes="88px"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-premium-100/50">
-                        <svg className="w-12 h-12 text-premium-200" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <svg className="w-8 h-8 text-gray-300" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                     </div>
                 )}
 
-                {/* Glassy Overlay for Space Type */}
-                {listing.space_type && listing.space_type.length > 0 && (
-                    <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-                        {listing.space_type.slice(0, 2).map((id, i) => (
-                            <span key={i} className="px-2.5 py-1 bg-white/90 text-premium-400 text-[10px] font-medium rounded-lg backdrop-blur-md shadow-sm">
-                                {getSpaceTypeLabel(id)}
-                            </span>
-                        ))}
-                        {listing.space_type.length > 2 && (
-                            <span className="px-2 py-1 bg-white/90 text-premium-400 text-[10px] font-medium rounded-lg backdrop-blur-md shadow-sm">
-                                +{listing.space_type.length - 2}
-                            </span>
-                        )}
-                        {listing.status === 'approved' && (
-                            <span className="px-2 py-1 bg-emerald-500/90 text-white text-[9px] font-black rounded-lg backdrop-blur-md shadow-sm flex items-center gap-1 uppercase tracking-tighter">
-                                <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                                Verified
-                            </span>
-                        )}
+                {/* Verified badge */}
+                {listing.status === 'approved' && (
+                    <div className="absolute bottom-1.5 left-1.5 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center shadow-sm">
+                        <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
                     </div>
                 )}
-
-                {/* Gradient overlay for text protection */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
 
-            {/* Content */}
-            <div className="p-3 flex flex-col gap-3 flex-1">
-                <h3 className="font-semibold text-premium-800 text-[13.5px] leading-snug line-clamp-2 min-h-[2.6em] group-hover:text-accent-gold transition-colors duration-300">
+            {/* Content – bên phải */}
+            <div className="flex-1 min-w-0 flex flex-col pt-1 gap-[2px]">
+
+                {/* 1. Title – 1 dòng, font mỏng, to hơn */}
+                <h3 className={`text-[15px] font-medium leading-[20px] truncate transition-colors duration-150 ${isHighlighted ? 'text-blue-700' : 'text-[#202124] group-hover:text-blue-600'
+                    }`}>
                     {listing.title}
                 </h3>
 
-                {detailedAddress && (
-                    <div className="flex items-center gap-1.5 text-premium-400">
-                        <div className="p-1 rounded-md bg-premium-50 group-hover:bg-premium-100 transition-colors">
-                            <svg className="w-3 h-3 flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <span className="text-[10px] font-medium truncate">
-                            Gần {detailedAddress}
-                        </span>
+                {/* 2. Giá + thời gian thuê (text màu xám) */}
+                <div className="text-[13px] text-[#70757a] truncate leading-[18px] mt-0.5">
+                    {listing.price_min > 0 || listing.price_max > 0 ? formatPriceRange(listing.price_min, listing.price_max) : 'Miễn phí'}
+                    {timeLabels.length > 0 && (
+                        <span> · {timeLabels.join(', ')}</span>
+                    )}
+                </div>
+
+                {/* 3. Hình thức cho thuê */}
+                {rentalModesText && (
+                    <div className="text-[13px] text-[#70757a] truncate leading-[18px]">
+                        {rentalModesText}
                     </div>
                 )}
 
-                <div className="mt-auto pt-3 border-t border-premium-50 flex items-center justify-between">
-                    <div className="flex flex-col">
-                        {listing.price_min > 0 || listing.price_max > 0 ? (
-                            <span className="text-sm font-bold text-premium-700">
-                                {formatPriceRange(listing.price_min, listing.price_max)}
-                            </span>
-                        ) : (
-                            <span className="text-sm font-bold text-[#10b981]">Miễn phí</span>
-                        )}
+                {/* 4. Tags nearby_features – dạng text phân tách bởi dấu chấm tròn thay vì dùng các khối màu nặng nề */}
+                {nearbyTags.length > 0 && (
+                    <div className="text-[13px] text-[#70757a] truncate leading-[18px]">
+                        Gần {nearbyTags.join(' · ')}
                     </div>
-                    {listing.rental_modes && listing.rental_modes.length > 0 && (
-                        <div className="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-medium rounded-md">
-                            {getRentalModeLabel(listing.rental_modes[0])}
-                        </div>
-                    )}
-                    {listing.location_type && (
-                        <div className="px-2 py-1 bg-premium-100/70 text-premium-400 text-[10px] font-medium rounded-md">
-                            {getLocationTypeLabel(listing.location_type)}
-                        </div>
-                    )}
-                </div>
+                )}
             </div>
         </Link>
     );

@@ -150,7 +150,10 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         price_max: listing.price_max,
         images: listing.images,
         latitude: listing.latitude,
-        longitude: listing.longitude
+        longitude: listing.longitude,
+        time_slots: listing.time_slots,
+        nearby_features: listing.nearby_features,
+        rental_modes: listing.rental_modes,
     }));
 
     return { listings: listings as unknown as Listing[], markers: markers as unknown as Listing[], total };
