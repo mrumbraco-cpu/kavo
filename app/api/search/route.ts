@@ -26,9 +26,6 @@ export async function GET(request: NextRequest) {
     if (!province) {
         return NextResponse.json({ error: 'Province is required' }, { status: 400 });
     }
-    if (geoSystem === 'new' && wards.length === 0) {
-        return NextResponse.json({ error: 'Ward is required for New system' }, { status: 400 });
-    }
 
     try {
         const { listings, markers, total } = await getSearchResults(

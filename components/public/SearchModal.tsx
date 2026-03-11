@@ -220,13 +220,11 @@ export default function SearchModal() {
         if (current.includes(d)) {
             set(key, current.filter(x => x !== d) as any);
         } else {
-            if (current.length >= 5) return;
             set(key, [...current, d] as any);
         }
     };
 
-    const canApply = draftFilters.province !== '' &&
-        (draftFilters.geoSystem === 'old' || draftFilters.ward.length > 0);
+    const canApply = draftFilters.province !== '';
 
     return (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4">

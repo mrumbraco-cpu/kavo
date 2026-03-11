@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearch } from '@/lib/context/SearchContext';
 import dynamic from 'next/dynamic';
 import ListingCard from './ListingCard';
@@ -61,9 +61,30 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
     const [currentPage, setCurrentPage] = useState(1);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
-    const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split'); // Default to split for desktop stability
+    const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split');
     const [mapActivated, setMapActivated] = useState(false);
+    const [isMapExpanded, setIsMapExpanded] = useState(false);
+    const [canExpand, setCanExpand] = useState(true);
+    const [sidebarWidth, setSidebarWidth] = useState(0);
+    const sidebarRef = useRef<HTMLDivElement>(null);
 
+    // Track sidebar width for map padding
+    useEffect(() => {
+        if (!sidebarRef.current || layout !== 'split') {
+            setSidebarWidth(0);
+            return;
+        }
+
+        const observer = new ResizeObserver(entries => {
+            if (entries[0]) {
+                setSidebarWidth(entries[0].contentRect.width);
+            }
+        });
+
+        observer.observe(sidebarRef.current);
+        return () => observer.disconnect();
+    }, [layout, isMapExpanded]);
+    
     // Initial visible count should be PAGE_SIZE to avoid layout shift (CLS)
     const visibleCount = PAGE_SIZE;
 
@@ -115,8 +136,22 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         document.getElementById('results-list')?.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // Reset map expansion when layout changes
+    useEffect(() => {
+        setIsMapExpanded(false);
+        setCanExpand(true);
+    }, [layout]);
+
+    const handleResultsListMouseEnter = () => {
+        // Reset map expansion when hovering back to the listings list
+        setIsMapExpanded(false);
+        setCanExpand(true);
+    };
+
     return (
-        <div className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-white">
+        <div
+            className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-white"
+        >
             <div className="flex-1 flex flex-col overflow-hidden relative">
                 {/* On mobile: only show toolbar after first search or if province is set.
                     On desktop: always show. This prevents the toolbar being hidden under
@@ -134,13 +169,16 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                     />
                 </div>
 
-                <div className="flex-1 flex overflow-hidden lg:flex-row flex-col">
+                <div className="flex-1 flex overflow-hidden lg:flex-row flex-col relative">
                     <div
                         id="results-list"
-                        className={`flex-1 overflow-y-auto scroll-smooth bg-premium-50/20 transition-all duration-300 scrollbar-subtle mobile-safe-padding lg:pb-0
+                        ref={sidebarRef}
+                        onMouseEnter={handleResultsListMouseEnter}
+                        className={`overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-500 ease-in-out scrollbar-subtle mobile-safe-padding lg:pb-0 relative z-10
                             ${layout === 'map' ? 'hidden' :
-                                layout === 'list' ? 'w-full' :
-                                    'w-full lg:w-1/2 lg:shrink-0 border-r border-premium-100'}`}
+                                layout === 'list' ? 'flex-1 w-full bg-premium-50/20' :
+                                    isMapExpanded ? 'w-full lg:w-[30%] lg:flex-none border-r border-premium-100 bg-white shadow-2xl shadow-black/5' :
+                                        'w-full lg:w-[50%] lg:flex-none border-r border-premium-100 bg-white shadow-xl shadow-black/5'}`}
                     >
                         <SearchResults
                             listings={displayListings}
@@ -163,10 +201,15 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                         </div>
                     </div>
 
-                    <div className={`relative bg-premium-100 transition-all duration-300 min-w-0 overflow-hidden
-                        ${layout === 'list' ? 'hidden' :
-                            layout === 'map' ? 'w-full flex-1' :
-                                'hidden lg:block lg:flex-1'}`}
+                    <div
+                        className={`absolute inset-0 z-0 h-full w-full bg-premium-100 overflow-hidden
+                        ${layout === 'list' ? 'hidden' : 'block'}`}
+                        onMouseEnter={() => {
+                            if (layout === 'split' && canExpand) {
+                                setIsMapExpanded(true);
+                                setCanExpand(false);
+                            }
+                        }}
                     >
                         {mapActivated && (
                             <GoongMapViewer
@@ -174,6 +217,8 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                                 currentPageIds={currentPageIds}
                                 hoveredListingId={hoveredId}
                                 onMarkerClick={setHoveredId}
+                                paddingLeft={layout === 'split' ? sidebarWidth : 0}
+                                layout={layout}
                             />
                         )}
                     </div>

@@ -6,8 +6,10 @@ declare namespace goongjs {
         remove(): void;
         setCenter(center: [number, number]): void;
         getBounds(): { contains: (lngLat: [number, number]) => boolean };
-        fitBounds(bounds: any, options?: { padding?: number; maxZoom?: number; duration?: number }): void;
+        fitBounds(bounds: any, options?: { padding?: number | { top: number; bottom: number; left: number; right: number }; maxZoom?: number; duration?: number }): void;
         resize(): void;
+        project(lngLat: [number, number]): { x: number; y: number };
+        getContainer(): HTMLElement;
     }
     class LngLatBounds {
         constructor();

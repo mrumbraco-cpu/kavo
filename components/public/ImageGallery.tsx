@@ -1,23 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import MiniMap from './MiniMap';
+import { useListingDetail } from '@/lib/context/ListingDetailContext';
 
 interface Props {
     images: string[];
     title: string;
+    latitude?: number;
+    longitude?: number;
+    fullAddress?: string;
 }
 
-export default function ImageGallery({ images, title }: Props) {
+export default function ImageGallery({ images, title, latitude, longitude, fullAddress }: Props) {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+    const [hasError, setHasError] = useState(false);
+    const { setIsTopMapVisible } = useListingDetail();
 
     const openLightbox = (i: number) => setLightboxIndex(i);
     const closeLightbox = () => setLightboxIndex(null);
     const prevPhoto = () => setLightboxIndex(i => (i! - 1 + images.length) % images.length);
     const nextPhoto = () => setLightboxIndex(i => (i! + 1) % images.length);
 
-    if (!images || images.length === 0) {
-        return null;
+    const isShowingMap = !images || images.length === 0 || hasError;
+
+    useEffect(() => {
+        setIsTopMapVisible(isShowingMap);
+    }, [isShowingMap, setIsTopMapVisible]);
+
+    if (isShowingMap) {
+        if (!latitude || !longitude) return null;
+        return (
+            <div className="w-full">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Vị trí trên bản đồ</h2>
+                <div className="rounded-2xl overflow-hidden border border-gray-100 mb-4 h-52">
+                    <MiniMap
+                        latitude={latitude}
+                        longitude={longitude}
+                        className="w-full h-full"
+                    />
+                </div>
+                {fullAddress && (
+                    <div className="flex items-start gap-2 text-[15px] text-gray-600">
+                        <svg className="w-5 h-5 flex-shrink-0 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="leading-relaxed">Gần {fullAddress}</span>
+                    </div>
+                )}
+            </div>
+        );
     }
 
     const hasMultiple = images.length > 1;
@@ -32,13 +66,29 @@ export default function ImageGallery({ images, title }: Props) {
                         className="relative w-full aspect-[16/7] cursor-pointer"
                         onClick={() => openLightbox(0)}
                     >
-                        <Image src={images[0]} alt={title} fill className="object-cover" sizes="100vw" priority />
+                        <Image
+                            src={images[0]}
+                            alt={title}
+                            fill
+                            className="object-cover"
+                            sizes="100vw"
+                            priority
+                            onError={() => setHasError(true)}
+                        />
                     </div>
                 ) : images.length === 2 ? (
                     <div className="grid grid-cols-2 gap-2 aspect-[16/7]">
                         {images.slice(0, 2).map((src, i) => (
                             <div key={i} className="relative cursor-pointer overflow-hidden" onClick={() => openLightbox(i)}>
-                                <Image src={src} alt={`${title} ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" priority={i === 0} />
+                                <Image
+                                    src={src}
+                                    alt={`${title} ${i + 1}`}
+                                    fill
+                                    className="object-cover hover:scale-105 transition-transform duration-300"
+                                    sizes="50vw"
+                                    priority={i === 0}
+                                    onError={i === 0 ? () => setHasError(true) : undefined}
+                                />
                             </div>
                         ))}
                     </div>
@@ -49,7 +99,15 @@ export default function ImageGallery({ images, title }: Props) {
                             className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden"
                             onClick={() => openLightbox(0)}
                         >
-                            <Image src={images[0]} alt={title} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="50vw" priority />
+                            <Image
+                                src={images[0]}
+                                alt={title}
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-300"
+                                sizes="50vw"
+                                priority
+                                onError={() => setHasError(true)}
+                            />
                         </div>
                         {/* Side images */}
                         {images.slice(1, 5).map((src, i) => (

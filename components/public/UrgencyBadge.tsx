@@ -23,7 +23,8 @@ const UrgencyBadge: React.FC<UrgencyBadgeProps> = ({ unlockCount, threshold }) =
                         Hiếm khi còn chỗ!
                     </p>
                     <p className="text-sm text-gray-700 mt-0.5">
-                        Vị trí này thường kín chỗ
+                        Nhanh tay liên hệ chủ ngay
+
                     </p>
                 </div>
             </div>
@@ -42,7 +43,7 @@ const UrgencyBadge: React.FC<UrgencyBadgeProps> = ({ unlockCount, threshold }) =
                     Còn 1 slot
                 </p>
                 <p className="text-sm text-gray-500 mt-0.5">
-                    Hãy nhanh tay liên hệ chủ ngay
+                    Nhanh tay liên hệ chủ ngay
                 </p>
             </div>
         </div>

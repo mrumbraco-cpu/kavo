@@ -11,6 +11,8 @@ import ShareButton from '@/components/public/ShareButton';
 import ReportButton from '@/components/public/ReportButton';
 import UrgencyBadge from '@/components/public/UrgencyBadge';
 import MiniMap from '@/components/public/MiniMap';
+import ListingBottomMap from '@/components/public/ListingBottomMap';
+import { ListingDetailProvider } from '@/lib/context/ListingDetailContext';
 import { getProvinceById, getDistrictById, getWardById } from '@/lib/constants/geography';
 import { cache } from 'react';
 
@@ -227,8 +229,9 @@ export default async function ListingDetailPage({ params }: Props) {
     );
 
     return (
-        <div className="min-h-screen bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+        <ListingDetailProvider>
+            <div className="min-h-screen bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
 
                 {/* ── Main 2-column layout ────────────────────────────── */}
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-x-14 gap-y-10">
@@ -293,79 +296,100 @@ export default async function ListingDetailPage({ params }: Props) {
 
                         {/* Image Gallery */}
                         <div className="mb-8">
-                            <ImageGallery images={typedListing.images ?? []} title={typedListing.title} />
+                            <ImageGallery 
+                                images={typedListing.images ?? []} 
+                                title={typedListing.title} 
+                                latitude={typedListing.latitude ?? undefined}
+                                longitude={typedListing.longitude ?? undefined}
+                                fullAddress={fullAddress}
+                            />
                         </div>
 
                         {/* Price section */}
-                        <div className="pb-8 border-b border-gray-100">
-                            <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Giá thuê theo buổi</p>
-                            {typedListing.price_min > 0 || typedListing.price_max > 0 ? (
-                                <p className="text-3xl font-bold text-gray-900">
-                                    {typedListing.price_min > 0 && (typedListing.price_max <= 0 || typedListing.price_min === typedListing.price_max)
-                                        ? `${typedListing.price_min.toLocaleString('vi-VN')} ₫`
-                                        : typedListing.price_min === 0 && typedListing.price_max > 0
-                                            ? `Đến ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
-                                            : `${typedListing.price_min.toLocaleString('vi-VN')} – ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
-                                    }
-                                </p>
-                            ) : (
-                                <p className="text-3xl font-bold text-gray-900">Miễn phí</p>
-                            )}
+                        <div className="pb-8 border-b border-gray-100 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+                            <div>
+                                <p className="text-[11px] text-gray-400 uppercase tracking-widest font-bold mb-1">Giá thuê theo buổi</p>
+                                {typedListing.price_min > 0 || typedListing.price_max > 0 ? (
+                                    <p className="text-2xl font-bold text-gray-900 tracking-tight">
+                                        {typedListing.price_min > 0 && (typedListing.price_max <= 0 || typedListing.price_min === typedListing.price_max)
+                                            ? `${typedListing.price_min.toLocaleString('vi-VN')} ₫`
+                                            : typedListing.price_min === 0 && typedListing.price_max > 0
+                                                ? `Đến ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
+                                                : `${typedListing.price_min.toLocaleString('vi-VN')} – ${typedListing.price_max.toLocaleString('vi-VN')} ₫`
+                                        }
+                                    </p>
+                                ) : (
+                                    <p className="text-2xl font-bold text-gray-900 tracking-tight">Miễn phí</p>
+                                )}
+                            </div>
+                            
                             {parsedTimeSlots.length > 0 && (
-                                <div className="mt-3 flex flex-col gap-1.5">
-                                    {parsedTimeSlots.map((slot, i) => (
-                                        <div key={i} className="flex items-center gap-2">
-                                            <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            <span className="text-sm text-gray-600">{slot}</span>
-                                        </div>
-                                    ))}
+                                <div className="flex flex-col gap-1.5 sm:items-end">
+                                    <p className="text-[11px] text-gray-400 uppercase tracking-widest font-bold mb-0.5 sm:text-right">Thời gian có sẵn</p>
+                                    <div className="flex flex-wrap gap-2 sm:justify-end">
+                                        {parsedTimeSlots.map((slot, i) => (
+                                            <div key={i} className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
+                                                <svg className="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span className="text-xs font-medium text-gray-600 truncate">{slot}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
 
                         {/* Space & Location Details */}
-                        <div className="py-8 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-8">
-                            <div className="group">
-                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Loại hình không gian</p>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="py-10 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-x-0">
+                            {/* Space type */}
+                            <div className="flex flex-col gap-3 sm:pr-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-premium-600">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
-                                        {typedListing.space_type?.map(id => getSpaceTypeLabel(id)).join(', ')}
-                                    </span>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Loại hình không gian</p>
                                 </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.space_type?.length > 0 ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {typedListing.space_type?.length > 0 
+                                        ? typedListing.space_type.map(id => getSpaceTypeLabel(id)).join(', ')
+                                        : 'Chưa cập nhật'}
+                                </span>
                             </div>
-                            <div className="group">
-                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Vị trí mặt bằng</p>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            {/* Location type */}
+                            <div className="flex flex-col gap-3 sm:border-l sm:border-gray-100 sm:px-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-premium-600">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
-                                        {getLocationTypeLabel(typedListing.location_type)}
-                                    </span>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Vị trí mặt bằng</p>
                                 </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.location_type ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {getLocationTypeLabel(typedListing.location_type) || 'Chưa cập nhật'}
+                                </span>
                             </div>
-                            <div className="group">
-                                <p className="text-[11px] text-premium-400 font-bold uppercase tracking-widest mb-2">Hình thức cho thuê</p>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-premium-50 flex items-center justify-center text-premium-900 group-hover:bg-premium-100 transition-colors">
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                            {/* Rental mode */}
+                            <div className="flex flex-col gap-3 sm:border-l sm:border-gray-100 sm:pl-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-premium-600">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-bold text-premium-900 group-hover:text-premium-700 transition-colors">
-                                        {typedListing.rental_modes?.map(id => getRentalModeLabel(id)).join(', ') || 'Chưa cập nhật'}
-                                    </span>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Hình thức cho thuê</p>
                                 </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.rental_modes?.length > 0 ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {typedListing.rental_modes?.length > 0 
+                                        ? typedListing.rental_modes.map(id => getRentalModeLabel(id)).join(', ')
+                                        : 'Chưa cập nhật'}
+                                </span>
                             </div>
                         </div>
 
@@ -396,77 +420,67 @@ export default async function ListingDetailPage({ params }: Props) {
                             </div>
                         )}
 
-                        {/* Suitable for */}
-                        {(typedListing.suitable_for?.length > 0 || typedListing.not_suitable_for?.length > 0) && (
-                            <div className="py-8 border-b border-gray-100">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-6">Phù hợp</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                                    {typedListing.suitable_for?.length > 0 && (
-                                        <div>
-                                            <p className="text-xs font-semibold text-green-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                Phù hợp với
-                                            </p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {typedListing.suitable_for.map(id => (
-                                                    <span key={id} className="px-3 py-1.5 bg-green-50 text-green-700 text-sm rounded-full border border-green-100 font-medium">{getSuitableLabel(id)}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {typedListing.not_suitable_for?.length > 0 && (
-                                        <div>
-                                            <p className="text-xs font-semibold text-red-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                                Không phù hợp với
-                                            </p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {typedListing.not_suitable_for.map(id => (
-                                                    <span key={id} className="px-3 py-1.5 bg-red-50 text-red-600 text-sm rounded-full border border-red-100 font-medium">{getNotSuitableLabel(id)}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                        {/* Suitability & Nearby features */}
+                        <div className="py-10 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-y-10 sm:gap-x-0">
+                            {/* Suitable for */}
+                            <div className="flex flex-col gap-3 sm:pr-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-emerald-600">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Phù hợp với</p>
                                 </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.suitable_for?.length > 0 ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {typedListing.suitable_for?.length > 0 
+                                        ? typedListing.suitable_for.map(id => getSuitableLabel(id)).join(', ')
+                                        : 'Chưa cập nhật'}
+                                </span>
                             </div>
-                        )}
 
-                        {/* Nearby features */}
-                        {typedListing.nearby_features?.length > 0 && (
-                            <div className="py-8 border-b border-gray-100">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-4">Đặc điểm xung quanh</h2>
-                                <div className="flex flex-wrap gap-2">
-                                    {typedListing.nearby_features.map(id => (
-                                        <span key={id} className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-100 font-medium">{getNearbyFeatureLabel(id)}</span>
-                                    ))}
+                            {/* Not suitable for */}
+                            <div className="flex flex-col gap-3 sm:border-l sm:border-gray-100 sm:px-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-red-500">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Không phù hợp cho</p>
                                 </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.not_suitable_for?.length > 0 ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {typedListing.not_suitable_for?.length > 0 
+                                        ? typedListing.not_suitable_for.map(id => getNotSuitableLabel(id)).join(', ')
+                                        : 'Chưa cập nhật'}
+                                </span>
                             </div>
-                        )}
+
+                            {/* Nearby Features */}
+                            <div className="flex flex-col gap-3 sm:border-l sm:border-gray-100 sm:pl-8">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <div className="flex-shrink-0 text-blue-500">
+                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Đặc điểm xung quanh</p>
+                                </div>
+                                <span className={`text-[15px] font-semibold leading-snug ${typedListing.nearby_features?.length > 0 ? 'text-gray-900' : 'text-gray-400 italic font-normal'}`}>
+                                    {typedListing.nearby_features?.length > 0 
+                                        ? typedListing.nearby_features.map((id: string) => getNearbyFeatureLabel(id)).join(', ')
+                                        : 'Chưa cập nhật'}
+                                </span>
+                            </div>
+                        </div>
 
                         {/* Mini Map */}
-                        {(typedListing.latitude && typedListing.longitude) || fullAddress ? (
-                            <div className="py-8">
-                                <h2 className="text-xl font-semibold text-gray-900 mb-4">Vị trí trên bản đồ</h2>
-                                {typedListing.latitude && typedListing.longitude && (
-                                    <div className="rounded-2xl overflow-hidden border border-gray-100 mb-4">
-                                        <MiniMap latitude={typedListing.latitude} longitude={typedListing.longitude} />
-                                    </div>
-                                )}
-                                {fullAddress && (
-                                    <div className="flex items-start gap-2 text-[15px] text-gray-600">
-                                        <svg className="w-5 h-5 flex-shrink-0 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        <span className="leading-relaxed">Gần {fullAddress}</span>
-                                    </div>
-                                )}
-                            </div>
-                        ) : null}
+                        <ListingBottomMap 
+                            latitude={typedListing.latitude}
+                            longitude={typedListing.longitude}
+                            fullAddress={fullAddress}
+                        />
                     </div>
 
                     {/* ────── RIGHT COLUMN (sticky sidebar) ────────────── */}
@@ -587,7 +601,8 @@ export default async function ListingDetailPage({ params }: Props) {
                         }),
                     }}
                 />
+                </div>
             </div>
-        </div>
+        </ListingDetailProvider>
     );
 }

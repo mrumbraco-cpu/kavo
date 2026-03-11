@@ -7,11 +7,12 @@ import { useEffect, useRef } from 'react';
 interface Props {
     latitude: number;
     longitude: number;
+    className?: string;
 }
 
 const MAP_STYLE = 'https://tiles.goong.io/assets/goong_map_web.json';
 
-export default function MiniMap({ latitude, longitude }: Props) {
+export default function MiniMap({ latitude, longitude, className }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<goongjs.Map | null>(null);
     const isInitRef = useRef(false);
@@ -96,7 +97,7 @@ export default function MiniMap({ latitude, longitude }: Props) {
     return (
         <div
             ref={containerRef}
-            className="w-full h-52 rounded-xl overflow-hidden border border-premium-100"
+            className={className || "w-full h-52 rounded-xl overflow-hidden border border-premium-100"}
         />
     );
 }

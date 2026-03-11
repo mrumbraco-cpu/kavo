@@ -12,6 +12,8 @@ interface Props {
     currentPageIds: Set<string>;      // IDs of listings on current page
     hoveredListingId: string | null;  // ID being hovered in result panel
     onMarkerClick?: (id: string) => void;
+    paddingLeft?: number;
+    layout: string;
 }
 
 const MAP_STYLE = 'https://tiles.goong.io/assets/goong_map_web.json';
@@ -23,7 +25,7 @@ const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 
 import { formatPriceRange } from '@/lib/utils/format';
 
-export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick }: Props) {
+export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, paddingLeft = 0, layout }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<goongjs.Map | null>(null);
     const markersRef = useRef<Map<string, goongjs.Marker>>(new Map());
@@ -32,6 +34,11 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     const prevHoveredIdRef = useRef<string | null>(null);
     const prevPageIdsRef = useRef<Set<string>>(new Set());
     const [isLoaded, setIsLoaded] = useState(false);
+    const paddingLeftRef = useRef(paddingLeft);
+
+    useEffect(() => {
+        paddingLeftRef.current = paddingLeft;
+    }, [paddingLeft]);
 
     const getMarkerColor = useCallback((id: string, hovered: string | null): string => {
         if (id === hovered) return MARKER_HOVERED_COLOR;
@@ -246,8 +253,13 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         });
 
         if (hasValidCoords) {
-            mapRef.current.fitBounds(bounds, {
-                padding: 50,
+            (mapRef.current as any).fitBounds(bounds, {
+                padding: {
+                    top: 50,
+                    bottom: 50,
+                    right: 50,
+                    left: paddingLeftRef.current + 50
+                },
                 maxZoom: 15,
                 duration: 1000
             });
@@ -340,17 +352,32 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
 
         const listing = allListings.find(l => l.id === hoveredListingId);
         if (listing && listing.latitude && listing.longitude) {
-            const map = mapRef.current;
-            const bounds = map.getBounds();
+            const map = mapRef.current as any;
             const coords: [number, number] = [listing.longitude, listing.latitude];
 
-            // User Rule: Only re-center if the marker is OUTSIDE the current viewport.
-            // Requirement update: re-center by fitting bounds for all results instead of zooming to one marker.
-            if (!bounds.contains(coords)) {
+            // Project point to pixel coordinates to check visibility
+            const point = map.project(coords);
+            const containerWidth = map.getContainer().clientWidth;
+
+            // Only re-center if the marker is OUTSIDE the current VISIBLE viewport.
+            // Requirement: account for paddingLeft (sidebar width)
+            const margin = 40;
+            if (point.x < paddingLeftRef.current + margin || point.x > containerWidth - margin) {
                 fitMarkers();
             }
         }
     }, [isLoaded, hoveredListingId, allListings, fitMarkers]);
+
+    // Re-center when layout changes (e.g. Map -> Split or Split -> Map)
+    // But NOT when expanding (30/70)
+    useEffect(() => {
+        if (isLoaded) {
+            const timer = setTimeout(() => {
+                fitMarkers();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [layout, isLoaded, fitMarkers]);
 
     // Inject global styles for Goong Map Popups to eliminate white space and fix design
     useEffect(() => {
@@ -441,7 +468,10 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         <div className="relative w-full h-full">
             <div ref={containerRef} className="w-full h-full" id="goong-map-viewer" />
             {allListings.length === 0 && (
-                <div className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none">
+                <div 
+                    className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none transition-all duration-500 ease-in-out"
+                    style={{ paddingLeft: paddingLeft }}
+                >
                     <div className="text-center">
                         <svg className="w-12 h-12 text-premium-300 mx-auto mb-3" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 13l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4" />
