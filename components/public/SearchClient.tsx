@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/lib/context/SearchContext';
 import dynamic from 'next/dynamic';
 import ListingCard from './ListingCard';
@@ -30,9 +31,10 @@ interface SearchClientProps {
     ssrListings?: Listing[];
     ssrMarkers?: Listing[];
     ssrTotal?: number;
+    initialPage?: number;
 }
 
-export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTotal = 0 }: SearchClientProps) {
+export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTotal = 0, initialPage = 1 }: SearchClientProps) {
     const {
         globalListings: listings,
         allMarkers,
@@ -52,14 +54,27 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     const displayTotal = (total > 0 || contextHasSearched) ? total : ssrTotal;
     const hasSearched = contextHasSearched || (ssrListings.length > 0);
 
+    const searchParams = useSearchParams();
+    const urlPage = useMemo(() => {
+        const p = searchParams.get('page');
+        return p ? parseInt(p, 10) : initialPage;
+    }, [searchParams, initialPage]);
+
+    const [currentPage, setCurrentPage] = useState(urlPage);
+    
+    // Sync currentPage with URL if it changes (e.g. back navigation or URL update)
+    useEffect(() => {
+        if (urlPage !== currentPage) {
+            setCurrentPage(urlPage);
+        }
+    }, [urlPage, currentPage]);
+
     // Filter sync
     useEffect(() => {
         if (isInitialized && !hasSearched && !isLoading && filters.province && ssrListings.length === 0) {
-            executeSearch(filters);
+            executeSearch(filters, urlPage);
         }
-    }, [isInitialized, hasSearched, isLoading, filters, executeSearch, ssrListings.length]);
-
-    const [currentPage, setCurrentPage] = useState(1);
+    }, [isInitialized, hasSearched, isLoading, filters, executeSearch, ssrListings.length, urlPage]);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split');
     const [mapActivated, setMapActivated] = useState(false);

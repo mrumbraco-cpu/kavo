@@ -19,6 +19,7 @@ import { cache } from 'react';
 import { parseListingIdFromSlug, getListingUrl } from '@/lib/utils/url';
 import { getAmenityLabel, getNearbyFeatureLabel } from '@/lib/constants/facilities';
 import { getSpaceTypeLabel, getLocationTypeLabel, getSuitableLabel, getNotSuitableLabel, getRentalModeLabel } from '@/lib/constants/listing-options';
+import BackButton from '@/components/public/BackButton';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -241,16 +242,15 @@ export default async function ListingDetailPage({ params }: Props) {
 
                         {/* Top Actions */}
                         <div className="flex items-center justify-between pb-5 border-b border-gray-100 mb-5">
-                            <Link
-                                href="/search"
+                            <BackButton
+                                fallbackHref="/search"
                                 className="flex items-center gap-1.5 px-4 py-2 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md hover:bg-white transition-all duration-300 active:scale-95 rounded-full border border-gray-100 group"
-                                title="Quay lại tìm kiếm"
                             >
                                 <svg className="w-4 h-4 text-gray-500 group-hover:text-amber-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
                                 <span className="text-[13px] font-bold text-gray-600 group-hover:text-amber-600">Quay lại</span>
-                            </Link>
+                            </BackButton>
 
                             <div className="flex flex-shrink-0 items-center gap-2">
                                 <ShareButton title={typedListing.title} />
