@@ -48,54 +48,21 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     }, [currentPageIds]);
 
     const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
-        // Wrapper container (also serves as the goong marker element)
-        const wrapper = document.createElement('div');
-        wrapper.style.cssText = `
-            position: relative;
-            width: ${24 * scale}px;
-            height: ${24 * scale}px;
-            cursor: pointer;
-        `;
-
-        // If urgent: pulsing ring behind the dot
-        if (isUrgent) {
-            const ring = document.createElement('div');
-            ring.className = 'marker-urgent-ring';
-            ring.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: ${32 * scale}px;
-                height: ${32 * scale}px;
-                border-radius: 50%;
-                border: 2px solid #f43f5e;
-                opacity: 0;
-                animation: markerPulse 2s ease-out infinite;
-                pointer-events: none;
-            `;
-            wrapper.appendChild(ring);
-        }
-
-        // The main dot
-        const dot = document.createElement('div');
-        dot.dataset.markerDot = '1';
-        dot.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        const el = document.createElement('div');
+        el.style.cssText = `
             width: ${24 * scale}px;
             height: ${24 * scale}px;
             border-radius: 50%;
             background: ${color};
             border: 2px solid white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: all 0.15s ease;
+            cursor: pointer;
+            transition: background 0.15s ease, width 0.15s ease, height 0.15s ease;
         `;
-        wrapper.appendChild(dot);
-
-        return wrapper;
+        if (isUrgent) {
+            el.classList.add('marker-dot-urgent');
+        }
+        return el;
     }, []);
 
     const buildPopupHTML = (listing: Listing): string => {
@@ -218,17 +185,12 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
 
                     if (markersRef.current.has(listing.id)) {
                         const marker = markersRef.current.get(listing.id)!;
-                        const wrapper = marker.getElement();
-                        const dot = wrapper.querySelector('[data-marker-dot]') as HTMLElement | null;
-                        if (dot) {
-                            if (dot.style.background !== color) dot.style.background = color;
-                            const sizeStr = `${24 * scale}px`;
-                            if (dot.style.width !== sizeStr) {
-                                dot.style.width = sizeStr;
-                                dot.style.height = sizeStr;
-                                wrapper.style.width = sizeStr;
-                                wrapper.style.height = sizeStr;
-                            }
+                        const el = marker.getElement();
+                        if (el.style.background !== color) el.style.background = color;
+                        const sizeStr = `${24 * scale}px`;
+                        if (el.style.width !== sizeStr) {
+                            el.style.width = sizeStr;
+                            el.style.height = sizeStr;
                         }
                     } else {
                         const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
@@ -435,11 +397,14 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         }
 
         style.innerHTML = `
-            /* Urgent marker pulsing ring animation */
-            @keyframes markerPulse {
-                0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
-                70% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
-                100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            /* Urgent marker pulsing glow animation */
+            @keyframes markerGlow {
+                0%   { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 0px rgba(244,63,94,0.6); }
+                60%  { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 8px rgba(244,63,94,0); }
+                100% { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 0px rgba(244,63,94,0); }
+            }
+            .marker-dot-urgent {
+                animation: markerGlow 2s ease-out infinite;
             }
 
             /* Core reset for the popup bubble */
