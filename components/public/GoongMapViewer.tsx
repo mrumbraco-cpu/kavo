@@ -37,6 +37,24 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     const prevPageIdsRef = useRef<Set<string>>(new Set());
     const [isLoaded, setIsLoaded] = useState(false);
     const paddingLeftRef = useRef(paddingLeft);
+    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleHover = useCallback((id: string | null) => {
+        if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+            hoverTimeoutRef.current = null;
+        }
+
+        if (id) {
+            onHover?.(id);
+        } else {
+            // Delay closing to allow moving to popup
+            hoverTimeoutRef.current = setTimeout(() => {
+                onHover?.(null);
+                hoverTimeoutRef.current = null;
+            }, 300);
+        }
+    }, [onHover]);
 
     useEffect(() => {
         paddingLeftRef.current = paddingLeft;
@@ -201,11 +219,11 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             .addTo(map);
 
                         el.addEventListener('mouseenter', () => {
-                            onHover?.(listing.id);
+                            handleHover(listing.id);
                         });
 
                         el.addEventListener('mouseleave', () => {
-                            onHover?.(null);
+                            handleHover(null);
                         });
 
                         el.addEventListener('click', (e) => {
@@ -248,7 +266,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 setTimeout(task, 100);
             }
         }
-    }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick, onHover]);
+    }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick, handleHover]);
 
     // Sync popup with hoveredId
     useEffect(() => {
@@ -275,9 +293,19 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 .setHTML(buildPopupHTML(listing))
                 .addTo(map);
 
+            const popupEl = popup.getElement();
+            if (popupEl) {
+                popupEl.addEventListener('mouseenter', () => {
+                    handleHover(listing.id);
+                });
+                popupEl.addEventListener('mouseleave', () => {
+                    handleHover(null);
+                });
+            }
+
             popupRef.current = popup;
         }
-    }, [hoveredListingId, isLoaded, allListings]);
+    }, [hoveredListingId, isLoaded, allListings, handleHover]);
 
     // Fit bounds to markers
     const fitMarkers = useCallback(() => {
