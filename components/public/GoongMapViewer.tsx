@@ -12,6 +12,7 @@ interface Props {
     currentPageIds: Set<string>;      // IDs of listings on current page
     hoveredListingId: string | null;  // ID being hovered in result panel
     onMarkerClick?: (id: string) => void;
+    onHover?: (id: string | null) => void;
     paddingLeft?: number;
     layout: string;
 }
@@ -26,7 +27,7 @@ const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD
 
 import { formatPriceRange } from '@/lib/utils/format';
 
-export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, paddingLeft = 0, layout }: Props) {
+export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<goongjs.Map | null>(null);
     const markersRef = useRef<Map<string, goongjs.Marker>>(new Map());
@@ -199,6 +200,14 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             .setLngLat([listing.longitude, listing.latitude])
                             .addTo(map);
 
+                        el.addEventListener('mouseenter', () => {
+                            onHover?.(listing.id);
+                        });
+
+                        el.addEventListener('mouseleave', () => {
+                            onHover?.(null);
+                        });
+
                         el.addEventListener('click', (e) => {
                             e.stopPropagation();
 
@@ -239,7 +248,36 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 setTimeout(task, 100);
             }
         }
-    }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick]);
+    }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick, onHover]);
+
+    // Sync popup with hoveredId
+    useEffect(() => {
+        if (!isLoaded || !mapRef.current) return;
+        const map = mapRef.current;
+
+        // remove existing popup if any
+        if (popupRef.current) {
+            popupRef.current.remove();
+            popupRef.current = null;
+        }
+
+        if (!hoveredListingId) return;
+
+        const listing = allListings.find(l => l.id === hoveredListingId);
+        if (listing && listing.latitude && listing.longitude) {
+            const popup = new (window.goongjs!.Popup as any)({
+                closeButton: true,
+                closeOnClick: true,
+                offset: 20,
+                maxWidth: 'none'
+            })
+                .setLngLat([listing.longitude, listing.latitude])
+                .setHTML(buildPopupHTML(listing))
+                .addTo(map);
+
+            popupRef.current = popup;
+        }
+    }, [hoveredListingId, isLoaded, allListings]);
 
     // Fit bounds to markers
     const fitMarkers = useCallback(() => {

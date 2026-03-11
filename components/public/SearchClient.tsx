@@ -216,6 +216,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                                 allListings={displayMarkers}
                                 currentPageIds={currentPageIds}
                                 hoveredListingId={hoveredId}
+                                onHover={setHoveredId}
                                 onMarkerClick={setHoveredId}
                                 paddingLeft={layout === 'split' ? sidebarWidth : 0}
                                 layout={layout}
