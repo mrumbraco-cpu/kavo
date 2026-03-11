@@ -233,7 +233,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             if (popupRef.current) popupRef.current.remove();
 
                             const popup = new (window.goongjs!.Popup as any)({
-                                closeButton: true,
+                                closeButton: false,
                                 closeOnClick: true,
                                 offset: 20,
                                 maxWidth: 'none'
@@ -284,7 +284,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         const listing = allListings.find(l => l.id === hoveredListingId);
         if (listing && listing.latitude && listing.longitude) {
             const popup = new (window.goongjs!.Popup as any)({
-                closeButton: true,
+                closeButton: false,
                 closeOnClick: true,
                 offset: 20,
                 maxWidth: 'none'
@@ -492,38 +492,6 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             .mapboxgl-popup-content > div {
                 margin: 0 !important;
                 padding: 0 !important;
-            }
-
-            /* Move close button to overlay the image/content */
-            .goongjs-popup-close-button,
-            .mapboxgl-popup-close-button {
-                position: absolute !important;
-                top: 8px !important;
-                right: 8px !important;
-                color: white !important;
-                background: rgba(0, 0, 0, 0.4) !important;
-                width: 28px !important;
-                height: 28px !important;
-                border-radius: 50% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                z-index: 100 !important;
-                border: 2px solid rgba(255, 255, 255, 0.2) !important;
-                cursor: pointer !important;
-                font-size: 16px !important;
-                line-height: 1 !important;
-                padding: 0 !important;
-                backdrop-filter: blur(4px) !important;
-                transition: all 0.2s !important;
-                outline: none !important;
-            }
-
-            .goongjs-popup-close-button:hover,
-            .mapboxgl-popup-close-button:hover {
-                background: rgba(0, 0, 0, 0.7) !important;
-                transform: scale(1.1);
-                color: white !important;
             }
 
             /* Hide the arrow tip because it creates an offset gap */
