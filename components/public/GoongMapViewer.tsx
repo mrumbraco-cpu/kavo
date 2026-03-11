@@ -22,6 +22,7 @@ const DEFAULT_ZOOM = 11;
 const MARKER_PRIMARY_COLOR = '#0f172a';   // premium-900
 const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
+const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || 5);
 
 import { formatPriceRange } from '@/lib/utils/format';
 
@@ -46,19 +47,55 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return MARKER_SECONDARY_COLOR;
     }, [currentPageIds]);
 
-    const createMarkerEl = useCallback((color: string, scale: number = 1): HTMLElement => {
-        const el = document.createElement('div');
-        el.style.cssText = `
+    const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
+        // Wrapper container (also serves as the goong marker element)
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = `
+            position: relative;
+            width: ${24 * scale}px;
+            height: ${24 * scale}px;
+            cursor: pointer;
+        `;
+
+        // If urgent: pulsing ring behind the dot
+        if (isUrgent) {
+            const ring = document.createElement('div');
+            ring.className = 'marker-urgent-ring';
+            ring.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: ${32 * scale}px;
+                height: ${32 * scale}px;
+                border-radius: 50%;
+                border: 2px solid #f43f5e;
+                opacity: 0;
+                animation: markerPulse 2s ease-out infinite;
+                pointer-events: none;
+            `;
+            wrapper.appendChild(ring);
+        }
+
+        // The main dot
+        const dot = document.createElement('div');
+        dot.dataset.markerDot = '1';
+        dot.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: ${24 * scale}px;
             height: ${24 * scale}px;
             border-radius: 50%;
             background: ${color};
             border: 2px solid white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            cursor: pointer;
             transition: all 0.15s ease;
         `;
-        return el;
+        wrapper.appendChild(dot);
+
+        return wrapper;
     }, []);
 
     const buildPopupHTML = (listing: Listing): string => {
@@ -181,15 +218,21 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
 
                     if (markersRef.current.has(listing.id)) {
                         const marker = markersRef.current.get(listing.id)!;
-                        const el = marker.getElement();
-                        if (el.style.background !== color) el.style.background = color;
-                        const sizeStr = `${24 * scale}px`;
-                        if (el.style.width !== sizeStr) {
-                            el.style.width = sizeStr;
-                            el.style.height = sizeStr;
+                        const wrapper = marker.getElement();
+                        const dot = wrapper.querySelector('[data-marker-dot]') as HTMLElement | null;
+                        if (dot) {
+                            if (dot.style.background !== color) dot.style.background = color;
+                            const sizeStr = `${24 * scale}px`;
+                            if (dot.style.width !== sizeStr) {
+                                dot.style.width = sizeStr;
+                                dot.style.height = sizeStr;
+                                wrapper.style.width = sizeStr;
+                                wrapper.style.height = sizeStr;
+                            }
                         }
                     } else {
-                        const el = createMarkerEl(color, scale);
+                        const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
+                        const el = createMarkerEl(color, scale, isUrgent);
                         const marker = new window.goongjs.Marker({ element: el })
                             .setLngLat([listing.longitude, listing.latitude])
                             .addTo(map);
@@ -392,6 +435,13 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         }
 
         style.innerHTML = `
+            /* Urgent marker pulsing ring animation */
+            @keyframes markerPulse {
+                0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+                70% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+                100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            }
+
             /* Core reset for the popup bubble */
             .goongjs-popup-content, 
             .mapboxgl-popup-content {
