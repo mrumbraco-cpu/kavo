@@ -55,7 +55,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             border-radius: 50%;
             background: ${color};
             border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            ${isUrgent ? '' : 'box-shadow: 0 2px 6px rgba(0,0,0,0.3);'}
             cursor: pointer;
             transition: background 0.15s ease, width 0.15s ease, height 0.15s ease;
         `;
@@ -404,7 +404,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 100% { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 0px rgba(244,63,94,0); }
             }
             .marker-dot-urgent {
-                animation: markerGlow 2s ease-out infinite;
+                animation: markerGlow 2s ease-out infinite !important;
             }
 
             /* Core reset for the popup bubble */
