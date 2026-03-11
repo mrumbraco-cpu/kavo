@@ -35,7 +35,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
 
     let dbQuery = supabase
         .from('listings')
-        .select('id, title, description, status, is_hidden, space_type, location_type, province_old, district_old, province_new, ward_new, detailed_address, price_min, price_max, suitable_for, not_suitable_for, rental_modes, amenities, nearby_features, time_slots, images, latitude, longitude')
+        .select('id, title, description, status, is_hidden, space_type, location_type, province_old, district_old, province_new, ward_new, detailed_address, price_min, price_max, suitable_for, not_suitable_for, rental_modes, amenities, nearby_features, time_slots, images, latitude, longitude, unlock_count')
         .in('status', ['approved', 'expired'])
         .eq('is_hidden', false);
 
@@ -133,7 +133,8 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         price_min: listing.price_min,
         price_max: listing.price_max,
         images: listing.images,
-        rental_modes: listing.rental_modes
+        rental_modes: listing.rental_modes,
+        unlock_count: listing.unlock_count ?? 0
     }));
 
     // Slicing for pagination
