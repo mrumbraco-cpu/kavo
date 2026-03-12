@@ -5,6 +5,8 @@ import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { verifyCaptcha } from '@/lib/security/captcha'
 import { logError } from '@/lib/utils/error-logger'
 
+import { headers } from 'next/headers'
+
 export async function forgotPasswordAction(formData: FormData) {
     // 0. CAPTCHA Check
     const captchaToken = formData.get('captcha_token') as string
@@ -21,8 +23,11 @@ export async function forgotPasswordAction(formData: FormData) {
 
     const email = formData.get('email') as string
 
-    // In a real production app, you might want to get the origin from headers or env
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    // Dynamically determine the origin from request headers
+    const headersList = await headers()
+    const host = headersList.get('host')
+    const protocol = headersList.get('x-forwarded-proto') || (process.env.NODE_ENV === 'production' ? 'https' : 'http')
+    const origin = host ? `${protocol}://${host}` : (process.env.NEXT_PUBLIC_SITE_URL || 'https://choban.vn')
 
     const supabase = await createServerSupabaseClient()
 
