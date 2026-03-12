@@ -352,11 +352,18 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         map.on('load', () => {
             mapRef.current = map;
             map.resize();
-            // We don't set isLoaded here yet. 
-            // We wait for the first fitMarkers to finish if there are listings.
+            // We don't set isLoaded here yet if there are listings, 
+            // but we trigger a re-render to let the fitBounds effect catch the mapRef.
+            setIsLoaded(prev => prev); // Force re-render once mapRef is set
+            
             if (allListings.length === 0) {
                 setIsLoaded(true);
             }
+            
+            // Safety timeout: Always show the map after 3 seconds even if fitBounds fails
+            setTimeout(() => {
+                setIsLoaded(true);
+            }, 3000);
         });
     }, [syncMarkers, fitMarkers, allListings.length]);
 
@@ -451,7 +458,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             prevListingsCountRef.current = allListings.length;
             prevListingsIdsHashRef.current = currentIdsHash;
         }
-    }, [allListings, fitMarkers, isInitializedRef.current]); // Rely on ref to know map exists
+    }, [allListings, fitMarkers, isLoaded]); // Adding isLoaded as dependency to re-check after map load re-render
 
     // Smart hover re-center: Only move map if the marker is NOT in the current view
     useEffect(() => {
