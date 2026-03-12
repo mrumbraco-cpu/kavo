@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { Listing } from '@/types/listing';
 import { getListingUrl } from '@/lib/utils/url';
 import { getRentalModeLabel } from '@/lib/constants/listing-options';
+import { getMapSingleton } from '@/lib/map/mapSingleton';
 
 // Types are now handled via types/goong.d.ts
 
@@ -28,16 +29,36 @@ const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD
 import { formatPriceRange } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const mapRef = useRef<goongjs.Map | null>(null);
-    const markersRef = useRef<Map<string, goongjs.Marker>>(new Map());
-    const isInitializedRef = useRef(false);
-    const scriptLoadedRef = useRef(false);
-    const prevHoveredIdRef = useRef<string | null>(null);
-    const prevPageIdsRef = useRef<Set<string>>(new Set());
-    const [isLoaded, setIsLoaded] = useState(false);
+    // React ref for the wrapper div (placeholder that receives the persistent map DOM node)
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    // Singleton state (persists across mount/unmount)
+    const singleton = getMapSingleton();
+
+    // Local React state for fade-in only – derives from singleton
+    const [isLoaded, setIsLoaded] = useState(singleton.isLoaded);
+
     const paddingLeftRef = useRef(paddingLeft);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Closures over latest prop values – used inside stable callbacks
+    const allListingsRef = useRef(allListings);
+    const currentPageIdsRef = useRef(currentPageIds);
+    const hoveredListingIdRef = useRef(hoveredListingId);
+    const onHoverRef = useRef(onHover);
+    const onMarkerClickRef = useRef(onMarkerClick);
+
+    useEffect(() => { allListingsRef.current = allListings; }, [allListings]);
+    useEffect(() => { currentPageIdsRef.current = currentPageIds; }, [currentPageIds]);
+    useEffect(() => { hoveredListingIdRef.current = hoveredListingId; }, [hoveredListingId]);
+    useEffect(() => { onHoverRef.current = onHover; }, [onHover]);
+    useEffect(() => { onMarkerClickRef.current = onMarkerClick; }, [onMarkerClick]);
+
+    useEffect(() => {
+        paddingLeftRef.current = paddingLeft;
+    }, [paddingLeft]);
+
+    // ─── Stable helpers (no deps on allListings/currentPageIds to keep refs stable) ───
 
     const handleHover = useCallback((id: string | null) => {
         if (hoverTimeoutRef.current) {
@@ -46,25 +67,20 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         }
 
         if (id) {
-            onHover?.(id);
+            onHoverRef.current?.(id);
         } else {
-            // Delay closing to allow moving to popup
             hoverTimeoutRef.current = setTimeout(() => {
-                onHover?.(null);
+                onHoverRef.current?.(null);
                 hoverTimeoutRef.current = null;
             }, 300);
         }
-    }, [onHover]);
-
-    useEffect(() => {
-        paddingLeftRef.current = paddingLeft;
-    }, [paddingLeft]);
+    }, []);
 
     const getMarkerColor = useCallback((id: string, hovered: string | null): string => {
         if (id === hovered) return MARKER_HOVERED_COLOR;
-        if (currentPageIds.has(id)) return MARKER_PRIMARY_COLOR;
+        if (currentPageIdsRef.current.has(id)) return MARKER_PRIMARY_COLOR;
         return MARKER_SECONDARY_COLOR;
-    }, [currentPageIds]);
+    }, []);
 
     const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
         const el = document.createElement('div');
@@ -141,69 +157,72 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         `;
     };
 
-    const popupRef = useRef<goongjs.Popup | null>(null);
+    // ─── Sync markers using singleton.markers ───────────────────────────────────
 
     const syncMarkers = useCallback(() => {
-        if (!mapRef.current || !window.goongjs) return;
+        if (!singleton.map || !window.goongjs) return;
 
         const task = () => {
-            const map = mapRef.current;
+            const map = singleton.map;
             if (!map || !window.goongjs) return;
 
-            const hoveredChanged = hoveredListingId !== prevHoveredIdRef.current;
+            const listings = allListingsRef.current;
+            const hovered = hoveredListingIdRef.current;
+            const pageIds = currentPageIdsRef.current;
 
-            let pageIdsChanged = currentPageIds.size !== prevPageIdsRef.current.size;
+            const hoveredChanged = hovered !== singleton.prevHoveredId;
+
+            let pageIdsChanged = pageIds.size !== singleton.prevPageIds.size;
             if (!pageIdsChanged) {
-                for (let id of currentPageIds) {
-                    if (!prevPageIdsRef.current.has(id)) {
+                for (let id of pageIds) {
+                    if (!singleton.prevPageIds.has(id)) {
                         pageIdsChanged = true;
                         break;
                     }
                 }
             }
 
-            const currentDataIds = new Set(allListings.map(l => l.id));
-            markersRef.current.forEach((marker, id) => {
+            const currentDataIds = new Set(listings.map(l => l.id));
+            singleton.markers.forEach((marker, id) => {
                 if (!currentDataIds.has(id)) {
                     marker.remove();
-                    markersRef.current.delete(id);
+                    singleton.markers.delete(id);
                 }
             });
 
-            // Batch marker creation to avoid long tasks
             const CHUNK_SIZE = 20;
             let index = 0;
 
             const processNextBatch = () => {
-                if (index >= allListings.length) {
-                    prevHoveredIdRef.current = hoveredListingId;
-                    prevPageIdsRef.current = new Set(currentPageIds);
+                if (index >= listings.length) {
+                    singleton.prevHoveredId = hovered;
+                    singleton.prevPageIds = new Set(pageIds);
                     return;
                 }
 
-                const end = Math.min(index + CHUNK_SIZE, allListings.length);
-                const batch = allListings.slice(index, end);
+                const end = Math.min(index + CHUNK_SIZE, listings.length);
+                const batch = listings.slice(index, end);
 
                 batch.forEach(listing => {
                     if (!listing.latitude || !listing.longitude) return;
 
-                    const isCurrentHovered = listing.id === hoveredListingId;
-                    const wasPrevHovered = listing.id === prevHoveredIdRef.current;
-                    const isCurrentPage = currentPageIds.has(listing.id);
-                    const wasPrevPage = prevPageIdsRef.current.has(listing.id);
+                    const isCurrentHovered = listing.id === hovered;
+                    const wasPrevHovered = listing.id === singleton.prevHoveredId;
+                    const isCurrentPage = pageIds.has(listing.id);
+                    const wasPrevPage = singleton.prevPageIds.has(listing.id);
 
                     const needsVisualUpdate =
-                        !markersRef.current.has(listing.id) ||
+                        !singleton.markers.has(listing.id) ||
                         isCurrentHovered || wasPrevHovered ||
                         isCurrentPage !== wasPrevPage;
 
                     if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
 
-                    const color = getMarkerColor(listing.id, hoveredListingId);
+                    const color = getMarkerColor(listing.id, hovered);
                     const scale = isCurrentPage ? 1.2 : 0.9;
 
-                    if (markersRef.current.has(listing.id)) {
-                        const marker = markersRef.current.get(listing.id)!;
+                    if (singleton.markers.has(listing.id)) {
+                        const marker = singleton.markers.get(listing.id)!;
                         const el = marker.getElement();
                         if (el.style.background !== color) el.style.background = color;
                         const sizeStr = `${24 * scale}px`;
@@ -229,8 +248,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                         el.addEventListener('click', (e) => {
                             e.stopPropagation();
 
-                            // Single lazy popup logic
-                            if (popupRef.current) popupRef.current.remove();
+                            if (singleton.popup) singleton.popup.remove();
 
                             const popup = new (window.goongjs!.Popup as any)({
                                 closeButton: false,
@@ -242,16 +260,16 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                                 .setHTML(buildPopupHTML(listing))
                                 .addTo(map);
 
-                            popupRef.current = popup;
-                            onMarkerClick?.(listing.id);
+                            singleton.popup = popup;
+                            onMarkerClickRef.current?.(listing.id);
                         });
 
-                        markersRef.current.set(listing.id, marker);
+                        singleton.markers.set(listing.id, marker);
                     }
                 });
 
                 index = end;
-                if (index < allListings.length) {
+                if (index < listings.length) {
                     requestAnimationFrame(processNextBatch);
                 }
             };
@@ -266,17 +284,167 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 setTimeout(task, 100);
             }
         }
-    }, [allListings, currentPageIds, hoveredListingId, createMarkerEl, getMarkerColor, onMarkerClick, handleHover]);
+    }, [createMarkerEl, getMarkerColor, handleHover]);
 
-    // Sync popup with hoveredId
+    // ─── Fit bounds to markers ──────────────────────────────────────────────────
+
+    const fitMarkers = useCallback(() => {
+        if (!singleton.map || allListingsRef.current.length === 0) return;
+        const goongjs = window.goongjs;
+        if (!goongjs) return;
+
+        const bounds = new goongjs.LngLatBounds();
+        let hasValidCoords = false;
+
+        allListingsRef.current.forEach(l => {
+            if (l.longitude && l.latitude) {
+                bounds.extend([l.longitude, l.latitude]);
+                hasValidCoords = true;
+            }
+        });
+
+        if (hasValidCoords) {
+            (singleton.map as any).fitBounds(bounds, {
+                padding: {
+                    top: 50,
+                    bottom: 50,
+                    right: 50,
+                    left: paddingLeftRef.current + 50
+                },
+                maxZoom: 15,
+                duration: 1000
+            });
+        }
+    }, []);
+
+    // ─── Map init (only runs once per session) ──────────────────────────────────
+
+    const initMap = useCallback(() => {
+        if (singleton.isInitialized || !singleton.mapDOMContainer || !window.goongjs) return;
+        singleton.isInitialized = true;
+
+        window.goongjs.accessToken = process.env.NEXT_PUBLIC_GOONG_MAP_KEY!;
+        const map = new window.goongjs.Map({
+            container: singleton.mapDOMContainer,
+            style: MAP_STYLE,
+            center: DEFAULT_CENTER,
+            zoom: DEFAULT_ZOOM,
+        });
+
+        singleton.map = map;
+
+        map.on('load', () => {
+            map.resize();
+            if (allListingsRef.current.length === 0) {
+                singleton.isLoaded = true;
+                setIsLoaded(true);
+            }
+        });
+
+        // Guarantee visibility after 3 seconds
+        setTimeout(() => {
+            singleton.isLoaded = true;
+            setIsLoaded(true);
+        }, 3000);
+    }, []);
+
+    // ─── Load Goong JS script (once per session) ────────────────────────────────
+
+    const loadScript = useCallback(() => {
+        if (singleton.scriptLoaded) {
+            // Script already loaded – map might already be initialized too
+            if (singleton.isInitialized && singleton.map) {
+                // Map exists: no init needed
+            } else {
+                initMap();
+            }
+            return;
+        }
+        singleton.scriptLoaded = true;
+
+        if (window.goongjs) {
+            initMap();
+            return;
+        }
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css';
+        document.head.appendChild(link);
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js';
+        script.async = true;
+        script.onload = () => initMap();
+        document.head.appendChild(script);
+    }, [initMap]);
+
+    // ─── Mount / Remount effect ─────────────────────────────────────────────────
+    // On every mount (including remounts after navigation away and back):
+    // 1. Ensure the persistent DOM container exists.
+    // 2. Attach/reattach it to the React wrapper div.
+    // 3. Tell the map to resize (container dimensions may have changed).
+    // 4. Sync loaded state from singleton to local React state.
+
     useEffect(() => {
-        if (!isLoaded || !mapRef.current) return;
-        const map = mapRef.current;
+        if (!wrapperRef.current) return;
 
-        // remove existing popup if any
-        if (popupRef.current) {
-            popupRef.current.remove();
-            popupRef.current = null;
+        // Create the persistent map DOM container once
+        if (!singleton.mapDOMContainer) {
+            const div = document.createElement('div');
+            div.style.width = '100%';
+            div.style.height = '100%';
+            singleton.mapDOMContainer = div;
+        }
+
+        // Attach (or reattach) the persistent container into the React wrapper
+        if (!wrapperRef.current.contains(singleton.mapDOMContainer)) {
+            wrapperRef.current.appendChild(singleton.mapDOMContainer);
+        }
+
+        // Sync loaded state
+        if (singleton.isLoaded && !isLoaded) {
+            setIsLoaded(true);
+        }
+
+        // Initialize map (or just load script) if not already done
+        loadScript();
+
+        // After reattach, trigger resize so map fills the container correctly
+        if (singleton.map) {
+            // Small delay to let the browser paint the layout
+            const resizeTimer = setTimeout(() => {
+                singleton.map?.resize();
+            }, 50);
+            return () => clearTimeout(resizeTimer);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Empty deps: runs only on mount/remount
+
+    // ─── Update map size when container resizes ─────────────────────────────────
+
+    useEffect(() => {
+        if (!wrapperRef.current) return;
+
+        const resizeObserver = new ResizeObserver(() => {
+            if (singleton.map) {
+                singleton.map.resize();
+            }
+        });
+
+        resizeObserver.observe(wrapperRef.current);
+        return () => resizeObserver.disconnect();
+    }, []);
+
+    // ─── Sync popup with hoveredListingId ───────────────────────────────────────
+
+    useEffect(() => {
+        if (!isLoaded || !singleton.map) return;
+        const map = singleton.map;
+
+        if (singleton.popup) {
+            singleton.popup.remove();
+            singleton.popup = null;
         }
 
         if (!hoveredListingId) return;
@@ -303,129 +471,33 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 });
             }
 
-            popupRef.current = popup;
+            singleton.popup = popup;
         }
     }, [hoveredListingId, isLoaded, allListings, handleHover]);
 
-    // Fit bounds to markers
-    const fitMarkers = useCallback(() => {
-        if (!mapRef.current || allListings.length === 0) return;
-        const goongjs = window.goongjs;
-        if (!goongjs) return;
+    // ─── Sync markers when data changes or map is ready ─────────────────────────
+    // Deps include allListings, currentPageIds, hoveredListingId so markers update
+    // whenever search results change, pagination changes, or hover changes.
 
-        const bounds = new goongjs.LngLatBounds();
-        let hasValidCoords = false;
-
-        allListings.forEach(l => {
-            if (l.longitude && l.latitude) {
-                bounds.extend([l.longitude, l.latitude]);
-                hasValidCoords = true;
-            }
-        });
-
-        if (hasValidCoords) {
-            (mapRef.current as any).fitBounds(bounds, {
-                padding: {
-                    top: 50,
-                    bottom: 50,
-                    right: 50,
-                    left: paddingLeftRef.current + 50
-                },
-                maxZoom: 15,
-                duration: 1000
-            });
-        }
-    }, [allListings]);
-
-    const initMap = useCallback(() => {
-        if (isInitializedRef.current || !containerRef.current || !window.goongjs) return;
-        isInitializedRef.current = true;
-
-        window.goongjs.accessToken = process.env.NEXT_PUBLIC_GOONG_MAP_KEY!;
-        const map = new window.goongjs.Map({
-            container: containerRef.current,
-            style: MAP_STYLE,
-            center: DEFAULT_CENTER,
-            zoom: DEFAULT_ZOOM,
-        });
-
-        map.on('load', () => {
-            mapRef.current = map;
-            map.resize();
-            setIsLoaded(prev => prev);
-            
-            if (allListings.length === 0) {
-                setIsLoaded(true);
-            }
-        });
-
-        // Hard rule: Always show the map after 3 seconds to guarantee user doesn't get stuck
-        setTimeout(() => {
-            setIsLoaded(true);
-        }, 3000);
-    }, [syncMarkers, fitMarkers, allListings.length]);
-
-    // Load Goong script once
-    useEffect(() => {
-        if (scriptLoadedRef.current) return;
-        scriptLoadedRef.current = true;
-
-        if (window.goongjs) {
-            initMap();
-            return;
-        }
-
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/@goongmaps/goong-js@1.0.9/dist/goong-js.js';
-        script.async = true;
-        script.onload = () => initMap();
-        document.head.appendChild(script);
-    }, [initMap]);
-
-    // Update map size when container resize
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        const resizeObserver = new ResizeObserver(() => {
-            if (mapRef.current) {
-                mapRef.current.resize();
-            }
-        });
-
-        resizeObserver.observe(containerRef.current);
-        return () => resizeObserver.disconnect();
-    }, []);
-
-    // Sync markers (visuals) only when data changes or map is ready
     useEffect(() => {
         if (!isLoaded) return;
         syncMarkers();
-    }, [isLoaded, syncMarkers]);
+    }, [isLoaded, syncMarkers, allListings, currentPageIds, hoveredListingId]);
 
-    // Fit bounds ONLY when map is ready or results change (NOT on page change)
-    const prevListingsCountRef = useRef(0);
-    const prevListingsIdsHashRef = useRef('');
-    const initialFitDoneRef = useRef(false);
+
+    // ─── Fit bounds when result set changes ─────────────────────────────────────
 
     useEffect(() => {
-        const map = mapRef.current;
+        const map = singleton.map;
         if (!map || allListings.length === 0) return;
 
-        // Generate a simple hash of IDs to see if the result SET changed
         const currentIdsHash = allListings.map(l => l.id).sort().join(',');
-        const resultDelta = allListings.length !== prevListingsCountRef.current ||
-            currentIdsHash !== prevListingsIdsHashRef.current;
+        const resultDelta = allListings.length !== singleton.prevListingsCount ||
+            currentIdsHash !== singleton.prevListingsIdsHash;
 
         if (resultDelta) {
-            const isFirstLoad = !initialFitDoneRef.current;
-            
-            // If it's the first time the map has markers, we do a silent fit (duration 0)
-            // BEFORE showing the map to the user (isLoaded = true)
+            const isFirstLoad = !singleton.initialFitDone;
+
             if (isFirstLoad) {
                 const goongjs = window.goongjs;
                 if (goongjs) {
@@ -442,38 +514,36 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             left: paddingLeftRef.current + 50
                         },
                         maxZoom: 15,
-                        duration: 0 // No animation for the very first fit
+                        duration: 0 // Silent initial fit
                     });
 
-                    initialFitDoneRef.current = true;
-                    // Now that we are at the right position, fade in!
+                    singleton.initialFitDone = true;
+                    singleton.isLoaded = true;
                     setIsLoaded(true);
                 }
             } else {
                 fitMarkers();
             }
 
-            prevListingsCountRef.current = allListings.length;
-            prevListingsIdsHashRef.current = currentIdsHash;
+            singleton.prevListingsCount = allListings.length;
+            singleton.prevListingsIdsHash = currentIdsHash;
         }
-    }, [allListings, fitMarkers, isLoaded]); // Adding isLoaded as dependency to re-check after map load re-render
+    }, [allListings, fitMarkers, isLoaded]);
 
-    // Smart hover re-center: Only move map if the marker is NOT in the current view
+    // ─── Smart hover re-center ──────────────────────────────────────────────────
+
     useEffect(() => {
-        if (!isLoaded || !hoveredListingId || !mapRef.current) return;
+        if (!isLoaded || !hoveredListingId || !singleton.map) return;
 
         const listing = allListings.find(l => l.id === hoveredListingId);
         if (listing && listing.latitude && listing.longitude) {
-            const map = mapRef.current as any;
+            const map = singleton.map as any;
             const coords: [number, number] = [listing.longitude, listing.latitude];
 
-            // Project point to pixel coordinates to check visibility
             const point = map.project(coords);
             const containerWidth = map.getContainer().clientWidth;
             const containerHeight = map.getContainer().clientHeight;
 
-            // Only re-center if the marker is OUTSIDE the current VISIBLE viewport.
-            // Requirement: account for paddingLeft (sidebar width)
             const margin = 40;
             if (
                 point.x < paddingLeftRef.current + margin ||
@@ -486,8 +556,8 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         }
     }, [isLoaded, hoveredListingId, allListings, fitMarkers]);
 
-    // Re-center when layout changes (e.g. Map -> Split or Split -> Map)
-    // But NOT when expanding (30/70)
+    // ─── Re-center when layout changes ─────────────────────────────────────────
+
     useEffect(() => {
         if (isLoaded) {
             const timer = setTimeout(() => {
@@ -497,7 +567,8 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         }
     }, [layout, isLoaded, fitMarkers]);
 
-    // Inject global styles for Goong Map Popups to eliminate white space and fix design
+    // ─── Inject global styles for Goong Map Popups ─────────────────────────────
+
     useEffect(() => {
         const styleId = 'goong-map-custom-styles';
         if (typeof document === 'undefined') return;
@@ -564,35 +635,33 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             }
         `;
 
-        return () => {
-            const el = document.getElementById(styleId);
-            if (el) el.remove();
-        };
+        // NOTE: Do NOT remove this style on unmount – it needs to persist across navigations
+        // since the map DOM container persists too.
     }, []);
 
     return (
         <div className="relative w-full h-full bg-slate-50 overflow-hidden">
-            {/* Map Container with Fade-in effect */}
-            <div 
-                ref={containerRef} 
+            {/* Wrapper div – the persistent map DOM node is appended here on mount */}
+            <div
+                ref={wrapperRef}
                 className={`w-full h-full transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-                id="goong-map-viewer" 
+                id="goong-map-viewer"
             />
 
             {/* Premium Skeleton Loader */}
             {!isLoaded && (
-                <div 
+                <div
                     className="absolute inset-0 z-20 flex flex-col bg-[#f8fafc] overflow-hidden"
                     style={{ paddingLeft: paddingLeft }}
                 >
                     {/* Shimmering Grid Background Simulation */}
-                    <div className="absolute inset-0 opacity-[0.4]" 
-                         style={{ 
+                    <div className="absolute inset-0 opacity-[0.4]"
+                         style={{
                             backgroundImage: `linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)`,
-                            backgroundSize: '40px 40px' 
-                         }} 
+                            backgroundSize: '40px 40px'
+                         }}
                     />
-                    
+
                     {/* Animated Shimmer Effect */}
                     <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 translate-x-[-100%] animate-[shimmer_2s_infinite]" />
 
@@ -619,7 +688,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
 
             {/* No Results Empty State */}
             {isLoaded && allListings.length === 0 && (
-                <div 
+                <div
                     className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none transition-all duration-500 ease-in-out z-10"
                     style={{ paddingLeft: paddingLeft }}
                 >

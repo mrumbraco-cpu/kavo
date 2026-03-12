@@ -24,15 +24,6 @@ interface SearchContextType {
     isModalOpen: boolean;
     setModalOpen: (open: boolean) => void;
     isInitialized: boolean;
-    // UI State for Persistent Map
-    layout: 'split' | 'map' | 'list';
-    setLayout: (layout: 'split' | 'map' | 'list') => void;
-    isMapExpanded: boolean;
-    setIsMapExpanded: (expanded: boolean) => void;
-    sidebarWidth: number;
-    setSidebarWidth: (width: number) => void;
-    hoveredId: string | null;
-    setHoveredId: (id: string | null) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -49,19 +40,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const [hasSearched, setHasSearched] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
-
-    // Persistent UI State
-    const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split');
-    const [isMapExpanded, setIsMapExpanded] = useState(false);
-    const [sidebarWidth, setSidebarWidth] = useState(0);
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-    // Initial layout check
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-            setLayout('list');
-        }
-    }, []);
 
     // Initialize from localStorage AND URL on mount
     useEffect(() => {
@@ -193,14 +171,6 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         isModalOpen,
         setModalOpen,
         isInitialized,
-        layout,
-        setLayout,
-        isMapExpanded,
-        setIsMapExpanded,
-        sidebarWidth,
-        setSidebarWidth,
-        hoveredId,
-        setHoveredId,
     }), [
         filters,
         globalListings,
@@ -211,11 +181,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         hasSearched,
         executeSearch,
         isModalOpen,
-        isInitialized,
-        layout,
-        isMapExpanded,
-        sidebarWidth,
-        hoveredId
+        isInitialized
     ]);
 
     return (
