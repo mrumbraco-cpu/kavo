@@ -511,6 +511,16 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             .goongjs-popup, .mapboxgl-popup {
                 z-index: 30 !important;
             }
+
+            /* Custom animations for skeleton */
+            @keyframes shimmer {
+                0% { transform: translateX(-100%) skewX(-12deg); }
+                100% { transform: translateX(200%) skewX(-12deg); }
+            }
+            @keyframes loading {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
         `;
 
         return () => {
@@ -520,11 +530,56 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     }, []);
 
     return (
-        <div className="relative w-full h-full">
-            <div ref={containerRef} className="w-full h-full" id="goong-map-viewer" />
-            {allListings.length === 0 && (
+        <div className="relative w-full h-full bg-slate-50 overflow-hidden">
+            {/* Map Container with Fade-in effect */}
+            <div 
+                ref={containerRef} 
+                className={`w-full h-full transition-opacity duration-1000 ease-in-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                id="goong-map-viewer" 
+            />
+
+            {/* Premium Skeleton Loader */}
+            {!isLoaded && (
                 <div 
-                    className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none transition-all duration-500 ease-in-out"
+                    className="absolute inset-0 z-20 flex flex-col bg-[#f8fafc] overflow-hidden"
+                    style={{ paddingLeft: paddingLeft }}
+                >
+                    {/* Shimmering Grid Background Simulation */}
+                    <div className="absolute inset-0 opacity-[0.4]" 
+                         style={{ 
+                            backgroundImage: `linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)`,
+                            backgroundSize: '40px 40px' 
+                         }} 
+                    />
+                    
+                    {/* Animated Shimmer Effect */}
+                    <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 translate-x-[-100%] animate-[shimmer_2s_infinite]" />
+
+                    <div className="relative z-10 m-auto flex flex-col items-center">
+                        <div className="w-16 h-16 mb-4 rounded-full bg-slate-200 flex items-center justify-center animate-bounce shadow-sm">
+                            <svg className="w-8 h-8 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div className="h-2 w-32 bg-slate-200 rounded-full mb-2 overflow-hidden relative">
+                            <div className="absolute inset-0 bg-blue-500/20 animate-[loading_1.5s_ease-in-out_infinite]" />
+                        </div>
+                        <p className="text-[13px] font-medium text-slate-400 tracking-wide uppercase">Đang tải bản đồ...</p>
+                    </div>
+
+                    {/* Faux Controls */}
+                    <div className="absolute bottom-6 right-6 space-y-2">
+                        <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-100" />
+                        <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-100" />
+                    </div>
+                </div>
+            )}
+
+            {/* No Results Empty State */}
+            {isLoaded && allListings.length === 0 && (
+                <div 
+                    className="absolute inset-0 flex items-center justify-center bg-premium-50/80 pointer-events-none transition-all duration-500 ease-in-out z-10"
                     style={{ paddingLeft: paddingLeft }}
                 >
                     <div className="text-center">
