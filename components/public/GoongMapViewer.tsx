@@ -429,11 +429,17 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             // Project point to pixel coordinates to check visibility
             const point = map.project(coords);
             const containerWidth = map.getContainer().clientWidth;
+            const containerHeight = map.getContainer().clientHeight;
 
             // Only re-center if the marker is OUTSIDE the current VISIBLE viewport.
             // Requirement: account for paddingLeft (sidebar width)
             const margin = 40;
-            if (point.x < paddingLeftRef.current + margin || point.x > containerWidth - margin) {
+            if (
+                point.x < paddingLeftRef.current + margin ||
+                point.x > containerWidth - margin ||
+                point.y < margin ||
+                point.y > containerHeight - margin
+            ) {
                 fitMarkers();
             }
         }
