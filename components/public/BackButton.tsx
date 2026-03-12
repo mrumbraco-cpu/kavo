@@ -21,10 +21,16 @@ export default function BackButton({ fallbackHref = '/search', className, childr
         
         // Note: window.history.length > 1 is a decent but not perfect indicator.
         // If it's 1, it might be a direct entry.
-        if (typeof window !== 'undefined' && window.history.length > 1) {
-            router.back();
-        } else {
-            router.push(fallbackHref);
+        // Check history length and referrer to decide whether to go back or push fallback
+        if (typeof window !== 'undefined') {
+            const hasHistory = window.history.length > 2;
+            const isFromOwnDomain = document.referrer && document.referrer.includes(window.location.origin);
+            
+            if (hasHistory && isFromOwnDomain) {
+                router.back();
+            } else {
+                router.push(fallbackHref);
+            }
         }
     };
 
