@@ -352,9 +352,13 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         map.on('load', () => {
             mapRef.current = map;
             map.resize();
-            setIsLoaded(true);
+            // We don't set isLoaded here yet. 
+            // We wait for the first fitMarkers to finish if there are listings.
+            if (allListings.length === 0) {
+                setIsLoaded(true);
+            }
         });
-    }, [syncMarkers, fitMarkers]);
+    }, [syncMarkers, fitMarkers, allListings.length]);
 
     // Load Goong script once
     useEffect(() => {
@@ -401,9 +405,11 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     // Fit bounds ONLY when map is ready or results change (NOT on page change)
     const prevListingsCountRef = useRef(0);
     const prevListingsIdsHashRef = useRef('');
+    const initialFitDoneRef = useRef(false);
 
     useEffect(() => {
-        if (!isLoaded || allListings.length === 0) return;
+        const map = mapRef.current;
+        if (!map || allListings.length === 0) return;
 
         // Generate a simple hash of IDs to see if the result SET changed
         const currentIdsHash = allListings.map(l => l.id).sort().join(',');
@@ -411,11 +417,41 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             currentIdsHash !== prevListingsIdsHashRef.current;
 
         if (resultDelta) {
-            fitMarkers();
+            const isFirstLoad = !initialFitDoneRef.current;
+            
+            // If it's the first time the map has markers, we do a silent fit (duration 0)
+            // BEFORE showing the map to the user (isLoaded = true)
+            if (isFirstLoad) {
+                const goongjs = window.goongjs;
+                if (goongjs) {
+                    const bounds = new goongjs.LngLatBounds();
+                    allListings.forEach(l => {
+                        if (l.longitude && l.latitude) bounds.extend([l.longitude, l.latitude]);
+                    });
+
+                    (map as any).fitBounds(bounds, {
+                        padding: {
+                            top: 50,
+                            bottom: 50,
+                            right: 50,
+                            left: paddingLeftRef.current + 50
+                        },
+                        maxZoom: 15,
+                        duration: 0 // No animation for the very first fit
+                    });
+
+                    initialFitDoneRef.current = true;
+                    // Now that we are at the right position, fade in!
+                    setIsLoaded(true);
+                }
+            } else {
+                fitMarkers();
+            }
+
             prevListingsCountRef.current = allListings.length;
             prevListingsIdsHashRef.current = currentIdsHash;
         }
-    }, [isLoaded, allListings, fitMarkers]);
+    }, [allListings, fitMarkers, isInitializedRef.current]); // Rely on ref to know map exists
 
     // Smart hover re-center: Only move map if the marker is NOT in the current view
     useEffect(() => {
