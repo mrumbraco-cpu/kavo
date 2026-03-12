@@ -34,6 +34,7 @@ function LoginContent() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+    const [captchaKey, setCaptchaKey] = useState(0)
     const [error, setError] = useState<string | null>(null)
     const [message, setMessage] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
@@ -76,6 +77,8 @@ function LoginContent() {
 
         if (result.error) {
             setError(translateAuthMessage(result.error))
+            setCaptchaToken(null)
+            setCaptchaKey(prev => prev + 1)
             setLoading(false)
         } else {
             const next = searchParams.get('next')
@@ -182,6 +185,7 @@ function LoginContent() {
                     </div>
 
                     <Turnstile
+                        key={captchaKey}
                         onVerify={(token) => setCaptchaToken(token)}
                         onExpire={() => setCaptchaToken(null)}
                         onError={() => setCaptchaToken(null)}

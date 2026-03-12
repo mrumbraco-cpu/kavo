@@ -35,6 +35,7 @@ function RegisterContent() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+    const [captchaKey, setCaptchaKey] = useState(0)
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
@@ -62,6 +63,8 @@ function RegisterContent() {
 
         if (result.error) {
             setError(translateAuthMessage(result.error))
+            setCaptchaToken(null)
+            setCaptchaKey(prev => prev + 1)
             setLoading(false)
         } else if (result.redirect) {
             router.push(result.redirect)
@@ -156,6 +159,7 @@ function RegisterContent() {
                     </div>
 
                     <Turnstile
+                        key={captchaKey}
                         onVerify={(token) => setCaptchaToken(token)}
                         onExpire={() => setCaptchaToken(null)}
                         onError={() => setCaptchaToken(null)}

@@ -11,6 +11,7 @@ export default function ResetPasswordForm() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+    const [captchaKey, setCaptchaKey] = useState(0)
     const [error, setError] = useState<string | null>(null)
     const [message, setMessage] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
@@ -40,6 +41,8 @@ export default function ResetPasswordForm() {
 
         if (result.error) {
             setError(translateAuthMessage(result.error))
+            setCaptchaToken(null)
+            setCaptchaKey(prev => prev + 1)
             setLoading(false)
         } else {
             setMessage('Mật khẩu đã được thay đổi thành công! Đang chuyển hướng...')
@@ -108,6 +111,7 @@ export default function ResetPasswordForm() {
                     </div>
 
                     <Turnstile
+                        key={captchaKey}
                         onVerify={(token) => setCaptchaToken(token)}
                         onExpire={() => setCaptchaToken(null)}
                         onError={() => setCaptchaToken(null)}
