@@ -3,20 +3,11 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/lib/context/SearchContext';
-import dynamic from 'next/dynamic';
-import ListingCard from './ListingCard';
-import ListingCardSkeleton from './ListingCardSkeleton';
 import { Listing } from '@/types/listing';
-
 
 import SearchToolbar from './SearchToolbar';
 import SearchResults from './SearchResults';
 import PublicFooter from '@/components/public/PublicFooter';
-
-const GoongMapViewer = dynamic(() => import('./GoongMapViewer'), {
-    ssr: false,
-    loading: () => <div className="w-full h-full bg-[#f8fafc]" />
-});
 
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || 12);
 
@@ -38,12 +29,19 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         setModalOpen,
         isInitialized,
         filters,
-        executeSearch
+        executeSearch,
+        layout,
+        setLayout,
+        isMapExpanded,
+        setIsMapExpanded,
+        sidebarWidth,
+        setSidebarWidth,
+        hoveredId,
+        setHoveredId
     } = useSearch();
 
     // SSR fallback Logic
     const displayListings = (listings.length > 0 || contextHasSearched) ? listings : ssrListings;
-    const displayMarkers = (allMarkers.length > 0 || contextHasSearched) ? allMarkers : ssrMarkers;
     const displayTotal = (total > 0 || contextHasSearched) ? total : ssrTotal;
     const hasSearched = contextHasSearched || (ssrListings.length > 0);
 
@@ -68,12 +66,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
             executeSearch(filters, urlPage);
         }
     }, [isInitialized, hasSearched, isLoading, filters, executeSearch, ssrListings.length, urlPage]);
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
-    const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split');
-    const [mapActivated, setMapActivated] = useState(false);
-    const [isMapExpanded, setIsMapExpanded] = useState(false);
-    const [canExpand, setCanExpand] = useState(true);
-    const [sidebarWidth, setSidebarWidth] = useState(0);
+    
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     // Track sidebar width for map padding
@@ -91,34 +84,16 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
         observer.observe(sidebarRef.current);
         return () => observer.disconnect();
-    }, [layout, isMapExpanded]);
+    }, [layout, isMapExpanded, setSidebarWidth]);
     
     // Initial visible count should be PAGE_SIZE to avoid layout shift (CLS)
     const visibleCount = PAGE_SIZE;
 
-    // Set initial layout based on window size.
-    // We use split as default to avoid jump on desktop, and only switch to list if on mobile.
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-            setLayout('list');
-        }
-    }, []);
-
-    // Activate map if layout is not 'list', with a slight deferral to reduce TBT
-    useEffect(() => {
-        if (layout !== 'list' && !mapActivated) {
-            const timer = setTimeout(() => {
-                setMapActivated(true);
-            }, 300);
-            return () => clearTimeout(timer);
-        }
-    }, [layout, mapActivated]);
+    const [canExpand, setCanExpand] = useState(true);
 
     // Prevent double scrollbars: hide outer body scroll on all devices for the search page.
-    // The footer will be rendered inside the scrollable results-list.
     useEffect(() => {
         const handleResize = () => {
-            // Block scroll entirely on body so it acts like an app layout (100vh)
             document.body.style.overflow = 'hidden';
             document.documentElement.classList.remove('hide-outer-scrollbar');
         };
@@ -132,9 +107,6 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         };
     }, []);
 
-
-    // Pagination
-    const currentPageIds = useMemo(() => new Set(displayListings.map(l => l.id)), [displayListings]);
     const totalPages = Math.ceil(displayTotal / PAGE_SIZE);
 
     const handlePageChange = (page: number) => {
@@ -148,22 +120,18 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     useEffect(() => {
         setIsMapExpanded(false);
         setCanExpand(true);
-    }, [layout]);
+    }, [layout, setIsMapExpanded]);
 
     const handleResultsListMouseEnter = () => {
-        // Reset map expansion when hovering back to the listings list
         setIsMapExpanded(false);
         setCanExpand(true);
     };
 
     return (
         <div
-            className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-white"
+            className="flex h-[calc(100dvh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden bg-transparent"
         >
             <div className="flex-1 flex flex-col overflow-hidden relative">
-                {/* On mobile: only show toolbar after first search or if province is set.
-                    On desktop: always show. This prevents the toolbar being hidden under
-                    the fixed header on real mobile devices before the viewport is stable. */}
                 <div className={`${(!hasSearched && !filters.province) ? 'hidden lg:block' : 'block'}`}>
                     <SearchToolbar
                         total={displayTotal}
@@ -210,7 +178,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                     </div>
 
                     <div
-                        className={`absolute inset-0 z-0 h-full w-full bg-premium-100 overflow-hidden
+                        className={`absolute inset-0 z-0 h-full w-full bg-transparent overflow-hidden
                         ${layout === 'list' ? 'hidden' : 'block'}`}
                         onMouseEnter={() => {
                             if (layout === 'split' && canExpand) {
@@ -218,19 +186,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                                 setCanExpand(false);
                             }
                         }}
-                    >
-                        {mapActivated && (
-                            <GoongMapViewer
-                                allListings={displayMarkers}
-                                currentPageIds={currentPageIds}
-                                hoveredListingId={hoveredId}
-                                onHover={setHoveredId}
-                                onMarkerClick={setHoveredId}
-                                paddingLeft={layout === 'split' ? sidebarWidth : 0}
-                                layout={layout}
-                            />
-                        )}
-                    </div>
+                    />
                 </div>
             </div>
         </div>

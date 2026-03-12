@@ -2,6 +2,7 @@ import PublicNavbar from '@/components/public/PublicNavbar';
 import { SearchProvider } from '@/lib/context/SearchContext';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import PersistentMap from '@/components/public/PersistentMap';
 
 const FooterWrapper = dynamic(() => import('./FooterWrapper').then(mod => mod.FooterWrapper), {
     ssr: true,
@@ -25,6 +26,7 @@ export default function PublicLayout({
                 <main className="flex-1 pt-16 flex flex-col">
                     {children}
                 </main>
+                <PersistentMap />
                 <FooterWrapper />
             </div>
         </SearchProvider>
