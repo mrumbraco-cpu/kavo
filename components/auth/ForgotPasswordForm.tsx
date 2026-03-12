@@ -1,18 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, ArrowLeft, AlertCircle, CheckCircle2, Loader2, Send } from 'lucide-react'
 import { forgotPasswordAction } from '@/app/auth/forgot-password/actions'
 import Turnstile from './Turnstile'
 import { translateAuthMessage } from '@/lib/utils/auth-translations'
 
-export default function ForgotPasswordForm() {
+function ForgotPasswordContent() {
     const [email, setEmail] = useState('')
     const [captchaToken, setCaptchaToken] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [message, setMessage] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+        const errorParam = searchParams.get('error')
+        const messageParam = searchParams.get('message')
+
+        if (errorParam) {
+            setError(translateAuthMessage(errorParam))
+        }
+
+        if (messageParam) {
+            setMessage(translateAuthMessage(messageParam))
+        }
+    }, [searchParams])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -24,6 +40,7 @@ export default function ForgotPasswordForm() {
 
         setLoading(true)
         setError(null)
+        setMessage(null)
 
         const formData = new FormData()
         formData.append('email', email)
@@ -78,6 +95,13 @@ export default function ForgotPasswordForm() {
                     <p className="text-sm text-gray-500">Đừng lo, chúng tôi sẽ gởi link khôi phục cho bạn</p>
                 </div>
 
+                {message && (
+                    <div className="mb-5 p-3.5 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-2.5 text-blue-700 text-xs animate-in zoom-in duration-300">
+                        <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span>{message}</span>
+                    </div>
+                )}
+
                 {error && (
                     <div className="mb-5 p-3.5 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2.5 text-red-700 text-xs animate-in shake duration-500">
                         <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -125,5 +149,17 @@ export default function ForgotPasswordForm() {
                 </form>
             </div>
         </div>
+    )
+}
+
+export default function ForgotPasswordForm() {
+    return (
+        <Suspense fallback={
+            <div className="w-full flex justify-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-gray-300" />
+            </div>
+        }>
+            <ForgotPasswordContent />
+        </Suspense>
     )
 }

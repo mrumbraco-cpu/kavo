@@ -64,9 +64,16 @@ export async function GET(request: Request) {
 
         // --- PKCE Resilience Logic ---
         // If the error is related to PKCE (verifier not found), it means the link
-        // was opened in a different browser. At this point, the email IS confirmed
-        // but we couldn't create a session.
+        // was opened in a different browser/session. 
         if (error.message.includes('code verifier') || error.message.includes('PKCE')) {
+            const isResetPassword = nextPath.includes('reset-password')
+            
+            if (isResetPassword) {
+                return NextResponse.redirect(
+                    `${origin}/auth/forgot-password?message=${encodeURIComponent('Liên kết đặt lại mật khẩu phải được mở trong cùng trình duyệt mà bạn đã yêu cầu. Vui lòng thử lại hoặc sao chép liên kết vào trình duyệt cũ.')}`
+                )
+            }
+
             return NextResponse.redirect(
                 `${origin}/auth/login?message=${encodeURIComponent('Email đã được xác thực thành công. Vui lòng đăng nhập để bắt đầu.')}`
             )
