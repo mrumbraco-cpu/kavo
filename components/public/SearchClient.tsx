@@ -15,14 +15,7 @@ import PublicFooter from '@/components/public/PublicFooter';
 
 const GoongMapViewer = dynamic(() => import('./GoongMapViewer'), {
     ssr: false,
-    loading: () => (
-        <div className="w-full h-full bg-premium-100 animate-pulse flex items-center justify-center lg:pl-[50%]">
-            <div className="text-center">
-                <div className="w-10 h-10 border-4 border-premium-200 border-t-premium-900 rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-sm font-semibold text-premium-400">Đang tải bản đồ…</p>
-            </div>
-        </div>
-    )
+    loading: () => <div className="w-full h-full bg-[#f8fafc]" />
 });
 
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_LISTINGS_PER_PAGE || 12);
