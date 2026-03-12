@@ -56,12 +56,24 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
     const [currentPage, setCurrentPage] = useState(urlPage);
     
-    // Sync currentPage with URL if it changes (e.g. back navigation or URL update)
+    // On mount: read page directly from the browser URL to handle Next.js router cache edge cases.
+    // router.back() restores the browser URL correctly, but Next.js may serve the cached RSC payload
+    // with stale searchParams props. Reading window.location.search is always authoritative.
     useEffect(() => {
-        if (urlPage !== currentPage) {
-            setCurrentPage(urlPage);
+        const browserPage = new URLSearchParams(window.location.search).get('page');
+        const pageFromBrowser = browserPage ? parseInt(browserPage, 10) : initialPage;
+        if (pageFromBrowser !== currentPage) {
+            setCurrentPage(pageFromBrowser);
         }
-    }, [urlPage, currentPage]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Only on mount
+
+    // Sync currentPage whenever urlPage changes (after mount: URL changes from navigation or replaceState).
+    // NOTE: currentPage intentionally NOT in deps – we only want to react to urlPage changes.
+    useEffect(() => {
+        setCurrentPage(urlPage);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlPage]);
 
     // Filter sync
     useEffect(() => {
