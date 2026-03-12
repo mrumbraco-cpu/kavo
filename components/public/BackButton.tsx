@@ -19,11 +19,11 @@ export default function BackButton({ fallbackHref = '/search', className, childr
         // If there's no history (e.g. direct link), fallbackHref will be used via the <a> link if we didn't prevent default,
         // but since we want to try going back first, we'll check if we can.
         
-        // Note: window.history.length > 1 is a decent but not perfect indicator.
-        // If it's 1, it might be a direct entry.
+        // Note: window.history.length > 1 is the correct indicator that there is a previous page in this tab's history.
+        // If it's 1, it implies this is the very first page loaded in this tab.
         // Check history length and referrer to decide whether to go back or push fallback
         if (typeof window !== 'undefined') {
-            const hasHistory = window.history.length > 2;
+            const hasHistory = window.history.length > 1;
             const isFromOwnDomain = document.referrer && document.referrer.includes(window.location.origin);
             
             if (hasHistory && isFromOwnDomain) {
