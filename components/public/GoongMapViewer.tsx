@@ -352,19 +352,17 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         map.on('load', () => {
             mapRef.current = map;
             map.resize();
-            // We don't set isLoaded here yet if there are listings, 
-            // but we trigger a re-render to let the fitBounds effect catch the mapRef.
-            setIsLoaded(prev => prev); // Force re-render once mapRef is set
+            setIsLoaded(prev => prev);
             
             if (allListings.length === 0) {
                 setIsLoaded(true);
             }
-            
-            // Safety timeout: Always show the map after 3 seconds even if fitBounds fails
-            setTimeout(() => {
-                setIsLoaded(true);
-            }, 3000);
         });
+
+        // Hard rule: Always show the map after 3 seconds to guarantee user doesn't get stuck
+        setTimeout(() => {
+            setIsLoaded(true);
+        }, 3000);
     }, [syncMarkers, fitMarkers, allListings.length]);
 
     // Load Goong script once
