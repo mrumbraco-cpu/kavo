@@ -70,7 +70,7 @@ export async function GET(request: Request) {
             
             if (isResetPassword) {
                 return NextResponse.redirect(
-                    `${origin}/auth/forgot-password?message=${encodeURIComponent('Liên kết đặt lại mật khẩu phải được mở trong cùng trình duyệt mà bạn đã yêu cầu. Vui lòng thử lại hoặc sao chép liên kết vào trình duyệt cũ.')}`
+                    `${origin}/auth/forgot-password?message=${encodeURIComponent('Để bảo mật, vui lòng quay lại Email, SAO CHÉP LIÊN KẾT gốc và dán vào cửa sổ trình duyệt ẩn danh bạn đang dùng. Hoặc bạn có thể nhập lại email bên dưới để nhận mã mới.')}`
                 )
             }
 

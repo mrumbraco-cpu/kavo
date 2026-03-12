@@ -96,9 +96,17 @@ function ForgotPasswordContent() {
                 </div>
 
                 {message && (
-                    <div className="mb-5 p-3.5 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-2.5 text-blue-700 text-xs animate-in zoom-in duration-300">
-                        <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>{message}</span>
+                    <div className={`mb-5 p-3.5 border rounded-xl flex items-start gap-2.5 text-xs animate-in zoom-in duration-300 ${
+                        message.includes('bảo mật') 
+                        ? 'bg-amber-50 border-amber-100 text-amber-800' 
+                        : 'bg-blue-50 border-blue-100 text-blue-700'
+                    }`}>
+                        {message.includes('bảo mật') ? (
+                            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        ) : (
+                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                        )}
+                        <span className="leading-relaxed">{message}</span>
                     </div>
                 )}
 
