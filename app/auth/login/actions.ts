@@ -1,6 +1,7 @@
 'use server'
 
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { bootstrapProfile } from '@/lib/auth/bootstrapProfile'
 import { checkAuthRateLimit, logAuthEvent } from '@/lib/security/authRateLimit'
 import { verifyCaptcha } from '@/lib/security/captcha'
 import { logError } from '@/lib/utils/error-logger'
@@ -34,6 +35,9 @@ export async function loginAction(formData: FormData) {
         await logError('auth_login_error', error.message, { email }, null)
         return { error: error.message }
     }
+
+    // Ensure profile exists
+    await bootstrapProfile(supabase)
 
     // Log success
     await logAuthEvent('login', 'success', data.user?.id)
