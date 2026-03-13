@@ -75,8 +75,9 @@ const ListingCard = memo(function ListingCard({
             onMouseEnter={() => onHover?.(listing.id)}
             onMouseLeave={() => onHover?.(null)}
         >
-            {/* Image Section - 16:9 Aspect Ratio */}
-            <div className="relative w-full aspect-video overflow-hidden bg-slate-50">
+            {/* Image Section - Matching Map Popup Aspect Ratio (16/9) */}
+            <div className="relative w-full aspect-[16/9] overflow-hidden" 
+                 style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)' }}>
                 {thumbnail ? (
                     <Image
                         src={thumbnail}
