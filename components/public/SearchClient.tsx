@@ -239,7 +239,9 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                             onPageChange={handlePageChange}
                         />
                         <div className="hidden lg:block border-t border-premium-100 bg-white">
-                            <PublicFooter />
+                            <div className="w-[50vw]">
+                                <PublicFooter />
+                            </div>
                         </div>
                     </div>
 
