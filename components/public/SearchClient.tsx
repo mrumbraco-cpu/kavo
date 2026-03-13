@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/lib/context/SearchContext';
 import { getMapSingleton } from '@/lib/map/mapSingleton';
@@ -50,54 +50,39 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
     const searchParams = useSearchParams();
     
-    // Initialize current page directly from the browser URL to bypass Next.js router cache edge cases.
-    // When using window.history.replaceState, Next.js router cache becomes stale, so falling back
-    // to window.location.search guarantees we use the real URL the browser restored after a Back action.
-    const [currentPage, setCurrentPage] = useState(() => {
+    // Always use window.location.search as the absolute source of truth to bypass Next.js 
+    // caching edge cases where router.back() restores the URL but serves stale searchParams props.
+    const getTruePage = useCallback(() => {
         if (typeof window !== 'undefined') {
-            const browserPage = new URLSearchParams(window.location.search).get('page');
-            if (browserPage) return parseInt(browserPage, 10);
+            const p = new URLSearchParams(window.location.search).get('page');
+            if (p) return parseInt(p, 10);
         }
-        // Fallback to Next.js searchParams or initialPage
         const p = searchParams.get('page');
         return p ? parseInt(p, 10) : initialPage;
-    });
+    }, [searchParams, initialPage]);
 
-    // Listen to browser navigation events (Back/Forward) robustly
+    const [currentPage, setCurrentPage] = useState(getTruePage);
+    
+    // Sync currentPage whenever Next.js reports a param change OR filters change.
+    // By re-evaluating getTruePage(), we guarantee we read the real browser URL.
     useEffect(() => {
-        const handlePopState = () => {
-            const browserPageStr = new URLSearchParams(window.location.search).get('page');
-            const browserPage = browserPageStr ? parseInt(browserPageStr, 10) : initialPage;
-            if (browserPage !== currentPage) {
-                setCurrentPage(browserPage);
-            }
-        };
+        const truePage = getTruePage();
+        setCurrentPage(truePage);
         
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
-    }, [initialPage, currentPage]);
-
-    // Also securely sync with Next.js navigation if it pushes a new param natively
-    useEffect(() => {
-        const p = searchParams.get('page');
-        const nextjsPage = p ? parseInt(p, 10) : initialPage;
-        
-        // Ensure browser URL actually matches what Next.js thinks, before accepting it
-        // (This prevents stale Next.js RSC cache from overriding the true URL).
-        const browserPageStr = new URLSearchParams(window.location.search).get('page');
-        const browserPage = browserPageStr ? parseInt(browserPageStr, 10) : initialPage;
-        
-        if (nextjsPage === browserPage && nextjsPage !== currentPage) {
-            setCurrentPage(nextjsPage);
+        // Store the full search URL so BackButton can confidently return here
+        // instead of dropping params if it falls back.
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('last_search_url', window.location.href);
         }
-    }, [searchParams, initialPage, currentPage]);
+    }, [getTruePage, filters]);
 
-    // Filter sync (use currentPage instead of removed urlPage variable)
+
+    // Filter sync
     useEffect(() => {
         if (isInitialized && !hasSearched && !isLoading && filters.province && ssrListings.length === 0) {
-            executeSearch(filters, currentPage);
+            executeSearch(filters, getTruePage());
         }
-    }, [isInitialized, hasSearched, isLoading, filters, executeSearch, ssrListings.length, currentPage]);
+    }, [isInitialized, hasSearched, isLoading, filters, executeSearch, ssrListings.length, getTruePage]);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [layout, setLayout] = useState<'split' | 'map' | 'list'>('split');
     // If the singleton already has a map (returning from another page), activate immediately.

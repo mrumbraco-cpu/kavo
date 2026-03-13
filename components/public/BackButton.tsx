@@ -15,23 +15,25 @@ export default function BackButton({ fallbackHref = '/search', className, childr
     const handleBack = (e: React.MouseEvent) => {
         e.preventDefault();
         
-        // Use router.back() which will preserve the previous page's state (including search params/pagination)
-        // If there's no history (e.g. direct link), fallbackHref will be used via the <a> link if we didn't prevent default,
-        // but since we want to try going back first, we'll check if we can.
-        
-        // Note: window.history.length > 1 is the correct indicator that there is a previous page in this tab's history.
-        // If it's 1, it implies this is the very first page loaded in this tab.
-        // Check history length and referrer to decide whether to go back or push fallback
         if (typeof window !== 'undefined') {
-            const hasHistory = window.history.length > 1;
-            const isFromOwnDomain = document.referrer && document.referrer.includes(window.location.origin);
+            // Next.js App Router injects 'idx' into window.history.state to track internal history depth
+            const state = window.history.state;
+            const hasInternalHistory = state && typeof state === 'object' && 'idx' in state && state.idx > 0;
             
-            if (hasHistory && isFromOwnDomain) {
+            if (hasInternalHistory) {
+                // Safe to go back, we will stay within the app
                 router.back();
             } else {
-                router.push(fallbackHref);
+                // Direct link, new tab, or external referrer. Fallback to the last known search URL if available.
+                const lastSearchUrl = sessionStorage.getItem('last_search_url');
+                if (lastSearchUrl) {
+                    router.push(lastSearchUrl);
+                } else {
+                    router.push(fallbackHref);
+                }
             }
         }
+
     };
 
     return (
