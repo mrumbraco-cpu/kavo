@@ -24,6 +24,7 @@ interface SearchContextType {
     isModalOpen: boolean;
     setModalOpen: (open: boolean) => void;
     isInitialized: boolean;
+    lastSearchedPage: number;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -40,6 +41,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     const [hasSearched, setHasSearched] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
+    const [lastSearchedPage, setLastSearchedPage] = useState<number>(1);
 
     // Initialize from localStorage AND URL on mount
     useEffect(() => {
@@ -150,6 +152,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
             setAllMarkers(data.markers);
             setTotal(data.total);
             setHasSearched(true);
+            setLastSearchedPage(page);
             setModalOpen(false); // Close modal on success
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi.');
@@ -171,6 +174,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         isModalOpen,
         setModalOpen,
         isInitialized,
+        lastSearchedPage,
     }), [
         filters,
         globalListings,
@@ -181,7 +185,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
         hasSearched,
         executeSearch,
         isModalOpen,
-        isInitialized
+        isInitialized,
+        lastSearchedPage
     ]);
 
     return (

@@ -39,7 +39,8 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         setModalOpen,
         isInitialized,
         filters,
-        executeSearch
+        executeSearch,
+        lastSearchedPage
     } = useSearch();
 
     // SSR fallback Logic
@@ -58,8 +59,15 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
             if (p) return parseInt(p, 10);
         }
         const p = searchParams.get('page');
-        return p ? parseInt(p, 10) : initialPage;
-    }, [searchParams, initialPage]);
+        if (p) return parseInt(p, 10);
+        
+        // If the URL has no explicit page parameter, but we've already searched,
+        // it means we navigated back to a "clean" /search URL but state is still preserved.
+        // Therefore, we MUST use the deeply preserved lastSearchedPage to match the displayed listings.
+        if (contextHasSearched) return lastSearchedPage;
+
+        return initialPage;
+    }, [searchParams, initialPage, contextHasSearched, lastSearchedPage]);
 
     const [currentPage, setCurrentPage] = useState(getTruePage);
     
