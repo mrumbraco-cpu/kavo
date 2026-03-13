@@ -178,12 +178,14 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
     // Reset map expansion when layout changes
     useEffect(() => {
-        setIsMapExpanded(false);
+        // Default to Sidebar 30% (Map 70%) on desktop split mode
+        // isMapExpanded = true means Map is 70% (Sidebar is 30%)
+        setIsMapExpanded(true); 
         setCanExpand(true);
     }, [layout]);
 
     const handleResultsListMouseEnter = () => {
-        // Reset map expansion when hovering back to the listings list
+        // Expand results list back to 50% when hovering back to the listings list
         setIsMapExpanded(false);
         setCanExpand(true);
     };
