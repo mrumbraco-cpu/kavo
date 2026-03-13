@@ -65,23 +65,9 @@ function ForgotPasswordContent() {
                         <CheckCircle2 className="w-8 h-8 text-green-600" />
                     </div>
                     <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-3">Kiểm tra email của bạn</h2>
-                    <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-                        Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến <strong>{email}</strong>.
+                    <p className="text-sm text-gray-500 mb-8 leading-relaxed">
+                        Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến <strong>{email}</strong>. Vui lòng kiểm tra hộp thư (bao gồm cả thư rác) và làm theo hướng dẫn.
                     </p>
-
-                    <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
-                        <div className="flex items-start gap-3 text-amber-900">
-                            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
-                            <div className="space-y-2">
-                                <p className="text-[13px] font-bold">LƯU Ý QUAN TRỌNG ĐỂ TRÁNH LỖI:</p>
-                                <ul className="text-xs space-y-2 list-disc ml-4 opacity-90 leading-relaxed">
-                                    <li>Nếu bạn đang dùng <b>Trình duyệt ẩn danh</b> hoặc <b>Điện thoại</b>, vui lòng <b>SAO CHÉP LIÊN KẾT</b> trong email (đừng bấm trực tiếp).</li>
-                                    <li>Sau đó <b>DÁN trực tiếp</b> vào thanh địa chỉ của chính trình duyệt này để tiếp tục.</li>
-                                    <li>Việc bấm trực tiếp có thể làm liên kết bị vô hiệu hóa ngay lập tức.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
                     <Link
                         href="/auth/login"

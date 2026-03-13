@@ -92,11 +92,10 @@ export async function GET(request: Request) {
             const isResetPassword = nextPath.includes('reset-password')
             
             if (isResetPassword) {
-                // For password reset, we MUST be in the same session. 
-                // Redirect back with a specialized message.
-                const message = 'Để bảo mật, vui lòng nhập lại email bên dưới để nhận mã mới. Lưu ý: Hãy mở link trực tiếp trong cửa sổ trình duyệt này (đừng mở ở app email khác).'
+                // Since we now support token_hash, a PKCE failure usually means
+                // the user is using an old confirmation link.
                 return NextResponse.redirect(
-                    `${origin}/auth/forgot-password?message=${encodeURIComponent(message)}`
+                    `${origin}/auth/forgot-password?message=${encodeURIComponent('Để bảo mật, vui lòng nhập lại email bên dưới để nhận liên kết mới.')}`
                 )
             }
 
