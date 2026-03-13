@@ -41,20 +41,21 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     const [isLoaded, setIsLoaded] = useState(singleton.isLoaded);
 
     const paddingLeftRef = useRef(paddingLeft);
-    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Closures over latest prop values – used inside stable callbacks
+    // Sync props to singleton handlers on every change
+    useEffect(() => {
+        singleton.onHover = onHover;
+        singleton.onMarkerClick = onMarkerClick;
+    }, [onHover, onMarkerClick, singleton]);
+
+    // Closures over latest prop values – used inside stable sync logic
     const allListingsRef = useRef(allListings);
     const currentPageIdsRef = useRef(currentPageIds);
     const hoveredListingIdRef = useRef(hoveredListingId);
-    const onHoverRef = useRef(onHover);
-    const onMarkerClickRef = useRef(onMarkerClick);
 
     useEffect(() => { allListingsRef.current = allListings; }, [allListings]);
     useEffect(() => { currentPageIdsRef.current = currentPageIds; }, [currentPageIds]);
     useEffect(() => { hoveredListingIdRef.current = hoveredListingId; }, [hoveredListingId]);
-    useEffect(() => { onHoverRef.current = onHover; }, [onHover]);
-    useEffect(() => { onMarkerClickRef.current = onMarkerClick; }, [onMarkerClick]);
 
     useEffect(() => {
         paddingLeftRef.current = paddingLeft;
@@ -63,17 +64,19 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
     // ─── Stable helpers (no deps on allListings/currentPageIds to keep refs stable) ───
 
     const handleHover = useCallback((id: string | null) => {
-        if (hoverTimeoutRef.current) {
-            clearTimeout(hoverTimeoutRef.current);
-            hoverTimeoutRef.current = null;
+        const state = getMapSingleton();
+        if (state.hoverTimeout) {
+            clearTimeout(state.hoverTimeout);
+            state.hoverTimeout = null;
         }
 
         if (id) {
-            onHoverRef.current?.(id);
+            state.onHover?.(id);
         } else {
-            hoverTimeoutRef.current = setTimeout(() => {
-                onHoverRef.current?.(null);
-                hoverTimeoutRef.current = null;
+            state.hoverTimeout = setTimeout(() => {
+                const s = getMapSingleton();
+                s.onHover?.(null);
+                s.hoverTimeout = null;
             }, 300);
         }
     }, []);
@@ -277,7 +280,8 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                                 .addTo(map);
 
                             singleton.popup = popup;
-                            onMarkerClickRef.current?.(listing.id);
+                            const state = getMapSingleton();
+                            state.onMarkerClick?.(listing.id);
                         });
 
                         singleton.markers.set(listing.id, marker);

@@ -23,6 +23,9 @@ interface MapSingletonState {
     prevListingsIdsHash: string;
     initialFitDone: boolean;
     popup: any | null;                        // Current open popup
+    onHover: ((id: string | null) => void) | null | undefined;
+    onMarkerClick: ((id: string) => void) | null | undefined;
+    hoverTimeout: NodeJS.Timeout | null;
 }
 
 const state: MapSingletonState = {
@@ -38,6 +41,9 @@ const state: MapSingletonState = {
     prevListingsIdsHash: '',
     initialFitDone: false,
     popup: null,
+    onHover: null,
+    onMarkerClick: null,
+    hoverTimeout: null,
 };
 
 export function getMapSingleton(): MapSingletonState {
@@ -61,4 +67,10 @@ export function resetMapSingleton(): void {
     state.prevListingsIdsHash = '';
     state.initialFitDone = false;
     state.popup = null;
+    state.onHover = null;
+    state.onMarkerClick = null;
+    if (state.hoverTimeout) {
+        clearTimeout(state.hoverTimeout);
+        state.hoverTimeout = null;
+    }
 }
