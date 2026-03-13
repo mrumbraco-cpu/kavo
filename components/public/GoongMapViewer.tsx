@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Listing } from '@/types/listing';
 import { getListingUrl } from '@/lib/utils/url';
 import { getRentalModeLabel } from '@/lib/constants/listing-options';
@@ -29,6 +30,7 @@ const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD
 import { formatPriceRange } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
+    const router = useRouter();
     // React ref for the wrapper div (placeholder that receives the persistent map DOM node)
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -148,7 +150,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                         <span style="font-size:14px;font-weight:700;color:${isFree ? '#10b981' : '#0f172a'};">
                             ${priceDisplay}
                         </span>
-                        <a href="${getListingUrl(listing)}" style="padding:6px 12px;background:#0f172a;color:white;font-size:11px;font-weight:700;border-radius:8px;text-decoration:none;transition:background 0.2s;">
+                        <a href="${getListingUrl(listing)}" class="goong-popup-link" style="padding:6px 12px;background:#0f172a;color:white;font-size:11px;font-weight:700;border-radius:8px;text-decoration:none;transition:background 0.2s;">
                             Xem chi tiết
                         </a>
                     </div>
@@ -156,6 +158,20 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             </div>
         `;
     };
+
+    const buildPopupNode = useCallback((listing: Listing) => {
+        const popupNode = document.createElement('div');
+        popupNode.innerHTML = buildPopupHTML(listing);
+        const link = popupNode.querySelector('.goong-popup-link');
+        if (link) {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                if (href) router.push(href);
+            });
+        }
+        return popupNode;
+    }, [router]);
 
     // ─── Sync markers using singleton.markers ───────────────────────────────────
 
@@ -257,7 +273,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                                 maxWidth: 'none'
                             })
                                 .setLngLat([listing.longitude!, listing.latitude!])
-                                .setHTML(buildPopupHTML(listing))
+                                .setDOMContent(buildPopupNode(listing))
                                 .addTo(map);
 
                             singleton.popup = popup;
@@ -284,7 +300,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 setTimeout(task, 100);
             }
         }
-    }, [createMarkerEl, getMarkerColor, handleHover]);
+    }, [createMarkerEl, getMarkerColor, handleHover, buildPopupNode]);
 
     // ─── Fit bounds to markers ──────────────────────────────────────────────────
 
@@ -476,7 +492,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 maxWidth: 'none'
             })
                 .setLngLat([listing.longitude, listing.latitude])
-                .setHTML(buildPopupHTML(listing))
+                .setDOMContent(buildPopupNode(listing))
                 .addTo(map);
 
             const popupEl = popup.getElement();
