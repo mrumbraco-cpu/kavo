@@ -9,6 +9,8 @@ export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
 
     const code = requestUrl.searchParams.get('code')
+    const tokenHash = requestUrl.searchParams.get('token_hash')
+    const type = requestUrl.searchParams.get('type')
     const nextParam = requestUrl.searchParams.get('next')
     const nextPath = nextParam && nextParam.startsWith('/') && nextParam !== '/' ? nextParam : '/dashboard'
 
@@ -21,6 +23,27 @@ export async function GET(request: Request) {
     const origin = hostHeader
         ? `${protocol}://${hostHeader}`
         : requestUrl.origin
+
+    if (tokenHash && type) {
+        const supabase = await createServerSupabaseClient()
+        const { error } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: type as any,
+        })
+
+        if (!error) {
+            return NextResponse.redirect(`${origin}${nextPath}`)
+        }
+
+        await logError('auth_callback_otp_error', error.message, { tokenHash, type, nextPath }, null)
+        
+        const isResetPassword = nextPath.includes('reset-password')
+        if (isResetPassword) {
+            return NextResponse.redirect(
+                `${origin}/auth/forgot-password?error=${encodeURIComponent('Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.')}`
+            )
+        }
+    }
 
     if (code) {
         const supabase = await createServerSupabaseClient()
@@ -64,13 +87,16 @@ export async function GET(request: Request) {
 
         // --- PKCE Resilience Logic ---
         // If the error is related to PKCE (verifier not found), it means the link
-        // was opened in a different browser/session. 
+        // was opened in a different browser/session or the cookie was lost.
         if (error.message.includes('code verifier') || error.message.includes('PKCE')) {
             const isResetPassword = nextPath.includes('reset-password')
             
             if (isResetPassword) {
+                // For password reset, we MUST be in the same session. 
+                // Redirect back with a specialized message.
+                const message = 'Để bảo mật, vui lòng nhập lại email bên dưới để nhận mã mới. Lưu ý: Hãy mở link trực tiếp trong cửa sổ trình duyệt này (đừng mở ở app email khác).'
                 return NextResponse.redirect(
-                    `${origin}/auth/forgot-password?message=${encodeURIComponent('Để bảo mật, vui lòng quay lại Email, SAO CHÉP LIÊN KẾT gốc và dán vào cửa sổ trình duyệt ẩn danh bạn đang dùng. Hoặc bạn có thể nhập lại email bên dưới để nhận mã mới.')}`
+                    `${origin}/auth/forgot-password?message=${encodeURIComponent(message)}`
                 )
             }
 
@@ -83,21 +109,47 @@ export async function GET(request: Request) {
         await logAuthEvent('login', 'failure')
         await logError('auth_callback_error', error.message, { code, nextPath }, null)
 
+        // If it's a reset password attempt that failed for other reasons, still prefer forgot-password page
+        if (nextPath.includes('reset-password')) {
+            return NextResponse.redirect(
+                `${origin}/auth/forgot-password?error=${encodeURIComponent(translateAuthMessage(error.message))}`
+            )
+        }
+
         return NextResponse.redirect(
             `${origin}/auth/login?error=${encodeURIComponent(translateAuthMessage(error.message))}`
         )
     }
 
-    // Check if there are error query parameters sent by Supabase
+    // Check if there are error query parameters sent by Supabase 
+    // (This happens BEFORE code exchange if Supabase detects an issue like expired token)
     const errorDescription = requestUrl.searchParams.get('error_description')
-    if (errorDescription) {
-        await logError('auth_callback_provider_error', errorDescription, { searchParams: Object.fromEntries(requestUrl.searchParams.entries()) }, null)
+    const errorCode = requestUrl.searchParams.get('error_code')
+
+    if (errorDescription || errorCode) {
+        await logError('auth_callback_provider_error', errorDescription || errorCode, { searchParams: Object.fromEntries(requestUrl.searchParams.entries()) }, null)
+        
+        const isResetPassword = nextPath.includes('reset-password')
+        const translatedError = translateAuthMessage(errorDescription || errorCode)
+
+        if (isResetPassword) {
+            // Improve message for expired/invalid reset links
+            let customMessage = translatedError
+            if (errorCode === 'otp_expired' || (errorDescription && errorDescription.includes('expired'))) {
+                customMessage = 'Liên kết đã hết hạn hoặc đã được sử dụng. Vui lòng nhập lại email bên dưới để nhận liên kết mới.'
+            }
+            
+            return NextResponse.redirect(
+                `${origin}/auth/forgot-password?error=${encodeURIComponent(customMessage)}`
+            )
+        }
+
         return NextResponse.redirect(
-            `${origin}/auth/login?error=${encodeURIComponent(translateAuthMessage(errorDescription))}`
+            `${origin}/auth/login?error=${encodeURIComponent(translatedError)}`
         )
     }
 
     return NextResponse.redirect(
-        `${origin}/auth/login?error=${encodeURIComponent('Liên kết đã hết hạn hoặc đã được sử dụng. Vui lòng thử đăng ký lại.')}`
+        `${origin}/auth/login?error=${encodeURIComponent('Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.')}`
     )
 }
