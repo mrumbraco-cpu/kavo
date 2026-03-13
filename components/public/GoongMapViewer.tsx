@@ -379,13 +379,6 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         document.head.appendChild(script);
     }, [initMap]);
 
-    // ─── Mount / Remount effect ─────────────────────────────────────────────────
-    // On every mount (including remounts after navigation away and back):
-    // 1. Ensure the persistent DOM container exists.
-    // 2. Attach/reattach it to the React wrapper div.
-    // 3. Tell the map to resize (container dimensions may have changed).
-    // 4. Sync loaded state from singleton to local React state.
-
     useEffect(() => {
         if (!wrapperRef.current) return;
 
@@ -396,6 +389,9 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             div.style.height = '100%';
             singleton.mapDOMContainer = div;
         }
+
+        // Always ensure it is visible when reattached (because we hide it on unmount)
+        singleton.mapDOMContainer.style.display = 'block';
 
         // Attach (or reattach) the persistent container into the React wrapper
         if (!wrapperRef.current.contains(singleton.mapDOMContainer)) {
@@ -416,8 +412,30 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             const resizeTimer = setTimeout(() => {
                 singleton.map?.resize();
             }, 50);
-            return () => clearTimeout(resizeTimer);
+            
+            return () => {
+                clearTimeout(resizeTimer);
+                // CRUCIAL: Prevent WebGL context loss. 
+                // When navigating away from the page while the map is actively rendering (display: block), 
+                // removing it abruptly from the DOM causes WebGL to reload/crash (appearing as a re-initialization).
+                // By hiding it first, we inform the browser/engine to pause rendering.
+                if (singleton.mapDOMContainer) {
+                    singleton.mapDOMContainer.style.display = 'none';
+                    if (wrapperRef.current?.contains(singleton.mapDOMContainer)) {
+                        wrapperRef.current.removeChild(singleton.mapDOMContainer);
+                    }
+                }
+            };
         }
+
+        return () => {
+            if (singleton.mapDOMContainer) {
+                singleton.mapDOMContainer.style.display = 'none';
+                if (wrapperRef.current?.contains(singleton.mapDOMContainer)) {
+                    wrapperRef.current.removeChild(singleton.mapDOMContainer);
+                }
+            }
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty deps: runs only on mount/remount
 
