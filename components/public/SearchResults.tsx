@@ -64,7 +64,7 @@ export default function SearchResults({
     }
 
     const gridClasses = layout === 'split'
-        ? 'grid grid-cols-2 lg:w-[45vw] bg-slate-50 gap-5 p-5 content-start'
+        ? 'grid grid-cols-2 lg:w-[55vw] bg-slate-50 gap-5 p-5 content-start'
         : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 bg-slate-50 gap-5 p-5 content-start';
 
     if ((isLoading || (isInitialized && filters.province && !hasSearched))) {
