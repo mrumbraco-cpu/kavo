@@ -129,14 +129,15 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return `
             <div style="width:260px;display:flex;flex-direction:column;background:white;font-family:inherit;">
                 <!-- Image Section -->
-                <div style="position:relative;width:100%;aspect-ratio:16/9;background:#f8fafc;overflow:hidden;">
+                <div style="position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);overflow:hidden;">
                     ${thumb ? `
                         <img src="${thumb}" style="width:100%;height:100%;object-fit:cover;" alt="" />
                     ` : `
-                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                            <svg style="width:40px;height:40px;color:#e2e8f0;" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;">
+                             <div style="position:absolute;inset:0;opacity:0.03;pointer-events:none;background-image:radial-gradient(#000 0.5px, transparent 0.5px);background-size:8px 8px;"></div>
+                             <svg style="width:40px;height:40px;color:#e2e8f0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-3h.75m-.75 3h.75m3-3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                             </svg>
                         </div>
                     `}
                     ${rentalBadges}

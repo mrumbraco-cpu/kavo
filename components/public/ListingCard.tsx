@@ -66,7 +66,7 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
             onMouseLeave={() => onHover?.(null)}
         >
             {/* Thumbnail – vuông bên trái */}
-            <div className="relative flex-shrink-0 w-[88px] h-[88px] rounded-xl overflow-hidden bg-gray-100">
+            <div className="relative flex-shrink-0 w-[88px] h-[88px] rounded-xl overflow-hidden bg-slate-50 border border-gray-100/50">
                 {thumbnail ? (
                     <Image
                         src={thumbnail}
@@ -74,14 +74,18 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                         fill
                         priority={priority}
                         quality={75}
-                        className={`object-cover group-hover:scale-105 transition-transform duration-500 ease-out ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
+                        className={`object-cover group-hover:scale-105 transition-transform duration-700 ease-out-expo ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
                             }`}
                         sizes="88px"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <svg className="w-8 h-8 text-gray-300" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100/80">
+                        {/* Abstract Neutral Placeholder */}
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+                             style={{ backgroundImage: `radial-gradient(#000 0.5px, transparent 0.5px)`, backgroundSize: '8px 8px' }} 
+                        />
+                        <svg className="w-8 h-8 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-3h.75m-.75 3h.75m3-3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
                         </svg>
                     </div>
                 )}
