@@ -67,8 +67,10 @@ const ListingCard = memo(function ListingCard({
     return (
         <Link
             href={getListingUrl(listing)}
-            className={`group flex flex-col h-full transition-all duration-300 cursor-pointer overflow-hidden rounded-2xl border border-gray-100/80 shadow-sm ${
-                isHighlighted ? 'bg-blue-50/40 ring-2 ring-blue-500/20 z-10 border-blue-200' : 'bg-white hover:shadow-xl hover:border-gray-200 hover:-translate-y-0.5'
+            className={`group flex flex-col h-full transition-all duration-300 cursor-pointer overflow-hidden rounded-xl border ${
+                isHighlighted 
+                    ? 'bg-blue-50/50 border-blue-200 ring-1 ring-blue-100' 
+                    : 'bg-white border-gray-100 hover:border-gray-300 hover:shadow-md'
             }`}
             onMouseEnter={() => onHover?.(listing.id)}
             onMouseLeave={() => onHover?.(null)}
@@ -102,13 +104,13 @@ const ListingCard = memo(function ListingCard({
                         {rentalModes.slice(0, 3).map((mode) => (
                             <span 
                                 key={mode.id}
-                                className="px-2.5 py-1 bg-white/90 backdrop-blur-md text-[#475569] text-[10px] font-bold rounded-md shadow-sm border border-white/20 whitespace-nowrap"
+                                className="px-2 py-0.5 bg-white/95 text-slate-600 text-[9px] font-bold rounded uppercase tracking-wider shadow-sm border border-gray-100"
                             >
                                 {mode.label}
                             </span>
                         ))}
                         {rentalModes.length > 3 && (
-                            <span className="px-2 py-1 bg-white/90 backdrop-blur-md text-[#475569] text-[10px] font-bold rounded-md shadow-sm border border-white/20">
+                            <span className="px-2 py-0.5 bg-white/95 text-slate-600 text-[9px] font-bold rounded shadow-sm border border-gray-100">
                                 +{rentalModes.length - 3}
                             </span>
                         )}
@@ -126,47 +128,37 @@ const ListingCard = memo(function ListingCard({
             </div>
 
             {/* Content Section */}
-            <div className="p-4 flex flex-col gap-2.5">
-                {/* 1. Title - Max 2 lines with min-height to avoid "trồi sụt" */}
-                <h3 className={`text-[15px] font-semibold leading-snug line-clamp-2 min-h-[2.5em] transition-colors duration-150 ${
-                    isHighlighted ? 'text-blue-700' : 'text-[#0f172a] group-hover:text-blue-600'
+            <div className="p-3.5 flex flex-col gap-1.5">
+                {/* 1. Title - Minimalist clean typography */}
+                <h3 className={`text-[14px] font-medium leading-normal line-clamp-2 min-h-[2.8em] transition-colors duration-200 ${
+                    isHighlighted ? 'text-blue-700' : 'text-slate-800 group-hover:text-blue-600'
                     }`}>
                     {listing.title}
                 </h3>
 
-                {/* 2. Primary Details - Price & Time */}
-                <div className="flex items-baseline justify-between gap-2 mt-0.5">
-                    <span className={`text-[16px] font-bold ${isFree ? 'text-emerald-600' : 'text-[#0f172a]'}`}>
+                {/* 2. Primary Details - Clean price display */}
+                <div className="flex items-center justify-between gap-2">
+                    <span className={`text-[14px] font-bold ${isFree ? 'text-emerald-600' : 'text-slate-900'}`}>
                         {priceDisplay}
                     </span>
                     {timeLabels.length > 0 && (
-                        <span className="text-[12px] text-slate-500 font-medium">
-                            {timeLabels.join(', ')}
+                        <span className="text-[11px] text-slate-400 font-normal">
+                            {timeLabels[0]}
                         </span>
                     )}
                 </div>
 
-                {/* 3. Footer Divider */}
-                <div className="h-px bg-slate-100 my-0.5" />
-
-                {/* 4. Secondary Data - Nearby & Amenities */}
-                <div className="flex flex-col gap-1.5">
+                {/* 3. Secondary Data - Clean icons and smaller text */}
+                <div className="flex flex-col gap-1 mt-1 border-t border-gray-50 pt-2">
                     {nearbyTags.length > 0 && (
-                        <div className="flex items-center gap-1.5 text-[12px] text-slate-600">
-                            <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span className="truncate">Gần {nearbyTags.join(' · ')}</span>
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                            <span className="truncate opacity-80">{nearbyTags.join(' · ')}</span>
                         </div>
                     )}
                     
                     {amenityTags.length > 0 && (
-                        <div className="flex items-center gap-1.5 text-[12px] text-slate-600">
-                            <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span className="truncate">Tiện ích: {amenityTags.join(', ')}</span>
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                            <span className="truncate opacity-80 italic">{amenityTags.slice(0, 2).join(', ')}{amenityTags.length > 2 ? '...' : ''}</span>
                         </div>
                     )}
                 </div>
