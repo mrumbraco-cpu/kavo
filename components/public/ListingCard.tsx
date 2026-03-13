@@ -74,8 +74,7 @@ const ListingCard = memo(function ListingCard({ listing, isHighlighted = false, 
                         fill
                         priority={priority}
                         quality={75}
-                        className={`object-cover group-hover:scale-105 transition-transform duration-700 ease-out-expo ${listing.status === 'expired' ? 'grayscale opacity-75' : ''
-                            }`}
+                        className={`object-cover group-hover:scale-105 transition-transform duration-700 ease-out ${listing.status === 'expired' ? 'grayscale opacity-75' : ''}`}
                         sizes="88px"
                     />
                 ) : (
