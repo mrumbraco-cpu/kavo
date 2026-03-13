@@ -219,7 +219,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                         className={`overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-500 ease-in-out scrollbar-subtle mobile-safe-padding lg:pb-0 relative z-10
                             ${layout === 'map' ? 'hidden' :
                                 layout === 'list' ? 'flex-1 w-full bg-premium-50/20' :
-                                    isMapExpanded ? 'w-full lg:w-[30%] lg:flex-none border-r border-premium-100 bg-white shadow-2xl shadow-black/5' :
+                                            isMapExpanded ? 'w-full lg:w-[45%] lg:flex-none border-r border-premium-100 bg-white shadow-2xl shadow-black/5' :
                                         'w-full lg:w-[50%] lg:flex-none border-r border-premium-100 bg-white shadow-xl shadow-black/5'}`}
                     >
                         <SearchResults
@@ -239,7 +239,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                             onPageChange={handlePageChange}
                         />
                         <div className="hidden lg:block border-t border-premium-100 bg-white">
-                            <div className="w-[50vw]">
+                            <div className="w-[45vw]">
                                 <PublicFooter />
                             </div>
                         </div>

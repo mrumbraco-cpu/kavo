@@ -63,11 +63,15 @@ export default function SearchResults({
         );
     }
 
+    const gridClasses = layout === 'split'
+        ? 'grid grid-cols-2 lg:w-[45vw] bg-slate-50 gap-5 p-5 content-start'
+        : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 bg-slate-50 gap-5 p-5 content-start';
+
     if ((isLoading || (isInitialized && filters.province && !hasSearched))) {
         return (
-            <div className="divide-y divide-gray-100">
+            <div className={gridClasses}>
                 {Array.from({ length: 10 }).map((_, i) => (
-                    <ListingCardSkeleton key={i} layout={layout} />
+                    <ListingCardSkeleton key={i} layout={layout} noBorder />
                 ))}
             </div>
         );
@@ -104,8 +108,8 @@ export default function SearchResults({
 
     return (
         <>
-            {/* Results list – vertical, divider-separated like Google Maps Places */}
-            <div className="divide-y divide-gray-100">
+            {/* Results list – Grid layout with responsive columns */}
+            <div className={gridClasses}>
                 {listings.slice(0, visibleCount).map((listing, index) => (
                     <ListingCard
                         key={listing.id}
@@ -113,6 +117,7 @@ export default function SearchResults({
                         isHighlighted={listing.id === hoveredId}
                         onHover={onHover}
                         priority={index < 4}
+                        noBorder
                     />
                 ))}
             </div>

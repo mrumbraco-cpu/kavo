@@ -156,6 +156,7 @@ export async function getSearchResults(filters: Partial<SearchFilters>, page: nu
         time_slots: listing.time_slots,
         nearby_features: listing.nearby_features,
         rental_modes: listing.rental_modes,
+        amenities: listing.amenities,
     }));
 
     return { listings: listings as unknown as Listing[], markers: markers as unknown as Listing[], total };
