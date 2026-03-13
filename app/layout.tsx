@@ -51,8 +51,8 @@ export const metadata: Metadata = {
         follow: true,
     },
     icons: {
-        icon: '/logo-choban.png',
-        apple: '/logo-choban.png',
+        icon: '/favicon-transparent.png',
+        apple: '/favicon-transparent.png',
     },
 };
 
