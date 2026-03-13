@@ -1,22 +1,30 @@
 'use client';
 
-export default function ListingCardSkeleton({ layout = 'split' }: { layout?: 'grid' | 'split' | 'list' | 'map' }) {
+export default function ListingCardSkeleton({ layout = 'list' }: { layout?: 'grid' | 'split' | 'list' | 'map' }) {
+    const isGrid = layout === 'grid';
     return (
-        <div className="flex flex-row gap-3 px-4 py-3.5 border-b border-gray-100 last:border-b-0 animate-pulse bg-white">
+        <div className={`animate-pulse bg-white transition-all duration-300 ${
+            isGrid 
+                ? 'flex flex-col rounded-2xl border border-premium-100 h-full overflow-hidden' 
+                : 'flex flex-row gap-4 px-4 py-4 border-b border-gray-100 last:border-b-0'
+        }`}>
             {/* Thumbnail placeholder */}
-            <div className="flex-shrink-0 w-[88px] h-[88px] rounded-xl bg-gray-100" />
+            <div className={`flex-shrink-0 bg-gray-100 transition-all ${
+                isGrid ? 'aspect-[4/3] w-full' : 'w-[100px] h-[100px] rounded-xl'
+            }`} />
 
             {/* Content placeholder */}
-            <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-                <div className="space-y-1.5">
-                    <div className="h-3.5 bg-gray-200 rounded w-4/5" />
-                    <div className="h-3 bg-gray-100 rounded w-3/5" />
+            <div className={`flex-1 min-w-0 flex flex-col ${isGrid ? 'p-4 gap-3' : 'py-1 gap-2'}`}>
+                <div className="space-y-2">
+                    <div className="h-4 bg-gray-100 rounded-full w-4/5" />
+                    <div className="h-3.5 bg-gray-50 rounded-full w-2/5" />
                 </div>
-                <div className="h-3 bg-gray-200 rounded w-1/3" />
-                <div className="h-2.5 bg-gray-100 rounded w-1/2" />
-                <div className="flex gap-1 mt-1">
-                    <div className="h-4 bg-gray-100 rounded-md w-12" />
-                    <div className="h-4 bg-gray-100 rounded-md w-16" />
+                
+                {!isGrid && <div className="h-4 bg-gray-100 rounded-full w-1/4 mt-auto" />}
+                
+                <div className="space-y-1.5 mt-auto">
+                    <div className="h-2.5 bg-gray-50 rounded-full w-1/2" />
+                    <div className="h-2.5 bg-gray-50 rounded-full w-2/3" />
                 </div>
             </div>
         </div>

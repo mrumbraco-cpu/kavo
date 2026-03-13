@@ -237,6 +237,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                             currentPage={currentPage}
                             totalPages={totalPages}
                             onPageChange={handlePageChange}
+                            parentWidth={sidebarWidth}
                         />
                         <div className="hidden lg:block border-t border-premium-100 bg-white">
                             <div className="w-[50vw]">

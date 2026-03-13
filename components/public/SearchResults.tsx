@@ -20,6 +20,7 @@ interface SearchResultsProps {
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+    parentWidth?: number; // Added to handle responsive grid logic
 }
 
 export default function SearchResults({
@@ -36,8 +37,17 @@ export default function SearchResults({
     onOpenFilters,
     currentPage,
     totalPages,
-    onPageChange
+    onPageChange,
+    parentWidth = 0
 }: SearchResultsProps) {
+    // Determine view mode and grid columns based on container width
+    // Thresholds:
+    // Narrow (< 500px): 1 column, list mode (Small sidebar)
+    // Medium (500px - 900px): 2 columns, grid mode (Tablet or 50% Split)
+    // Wide (> 900px): 3 columns, grid mode (Full page list)
+    const columns = parentWidth > 900 ? 3 : parentWidth > 500 ? 2 : 1;
+    const viewMode = columns > 1 ? 'grid' : 'list';
+
     if (!hasSearched && !isLoading && !filters.province) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-8 animate-fade-in">
@@ -65,9 +75,11 @@ export default function SearchResults({
 
     if ((isLoading || (isInitialized && filters.province && !hasSearched))) {
         return (
-            <div className="divide-y divide-gray-100">
-                {Array.from({ length: 10 }).map((_, i) => (
-                    <ListingCardSkeleton key={i} layout={layout} />
+            <div className={`grid gap-5 p-5 ${
+                columns === 3 ? 'grid-cols-3' : columns === 2 ? 'grid-cols-2' : 'grid-cols-1 divide-y divide-gray-100 p-0'
+            }`}>
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <ListingCardSkeleton key={i} layout={viewMode} />
                 ))}
             </div>
         );
@@ -75,8 +87,8 @@ export default function SearchResults({
 
     if (error) {
         return (
-            <div className="m-5 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm flex items-start gap-3">
-                <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">!</div>
+            <div className="m-5 p-5 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm flex items-start gap-3">
+                <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">!</div>
                 {error}
             </div>
         );
@@ -85,16 +97,18 @@ export default function SearchResults({
     if (hasSearched && !isLoading && listings.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-8">
-                <svg className="w-10 h-10 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h3 className="text-base font-semibold text-gray-800">Không tìm thấy kết quả</h3>
-                <p className="text-gray-500 text-sm mt-1.5 max-w-xs">
-                    Hãy thử điều chỉnh bộ lọc hoặc mở rộng phạm vi tìm kiếm.
+                <div className="w-20 h-20 bg-premium-50 rounded-full flex items-center justify-center mb-6">
+                    <svg className="w-10 h-10 text-premium-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <h3 className="text-lg font-bold text-premium-900">Không tìm thấy kết quả</h3>
+                <p className="text-premium-500 text-sm mt-2 max-w-xs">
+                    Hãy thử điều chỉnh bộ lọc hoặc mở rộng phạm vi tìm kiếm của bạn.
                 </p>
                 <button
                     onClick={onOpenFilters}
-                    className="mt-5 px-5 py-2 bg-gray-900 text-white rounded-full text-sm font-semibold hover:bg-gray-700 transition-colors cursor-pointer"
+                    className="mt-8 px-8 py-3 bg-premium-900 text-white rounded-full text-sm font-bold hover:bg-premium-800 transition-all shadow-lg shadow-premium-900/10 cursor-pointer"
                 >
                     Điều chỉnh bộ lọc
                 </button>
@@ -103,9 +117,13 @@ export default function SearchResults({
     }
 
     return (
-        <>
-            {/* Results list – vertical, divider-separated like Google Maps Places */}
-            <div className="divide-y divide-gray-100">
+        <div className="flex flex-col h-full">
+            {/* Results Grid/List */}
+            <div className={`flex-1 transition-all duration-500 ${
+                columns === 3 ? 'grid grid-cols-3 gap-6 p-6' : 
+                columns === 2 ? 'grid grid-cols-2 gap-5 p-5' : 
+                'flex flex-col divide-y divide-gray-100'
+            }`}>
                 {listings.slice(0, visibleCount).map((listing, index) => (
                     <ListingCard
                         key={listing.id}
@@ -113,9 +131,11 @@ export default function SearchResults({
                         isHighlighted={listing.id === hoveredId}
                         onHover={onHover}
                         priority={index < 4}
+                        viewMode={viewMode}
                     />
                 ))}
             </div>
+
 
             {/* Pagination */}
             {totalPages > 1 && !isLoading && (
@@ -152,6 +172,6 @@ export default function SearchResults({
                     </button>
                 </div>
             )}
-        </>
+        </div>
     );
 }
