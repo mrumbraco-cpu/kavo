@@ -51,7 +51,10 @@ export const metadata: Metadata = {
         follow: true,
     },
     icons: {
-        icon: '/favicon-transparent.png',
+        icon: [
+            { url: '/favicon.svg', type: 'image/svg+xml' },
+            { url: '/favicon-transparent.png', type: 'image/png' },
+        ],
         apple: '/favicon-transparent.png',
     },
 };
