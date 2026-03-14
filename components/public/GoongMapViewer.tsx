@@ -318,7 +318,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             const hovered = hoveredListingIdRef.current;
             const pageIds = currentPageIdsRef.current;
 
-            // Remove stale markers
+            // Remove markers for listings no longer in the result set
             const currentDataIds = new Set(listings.map(l => l.id));
             singleton.markers.forEach((marker, id) => {
                 if (!currentDataIds.has(id)) {
@@ -350,30 +350,26 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     const isUrgent         = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
                     const priceDisplay     = formatPriceRange(listing.price_min, listing.price_max);
 
-                    const needsUpdate =
-                        !singleton.markers.has(listing.id) ||
-                        isCurrentHovered !== wasPrevHovered ||
-                        isCurrentPage !== wasPrevPage;
+                    const markerExists = singleton.markers.has(listing.id);
+                    const typeChanged  = isCurrentPage !== wasPrevPage;
+                    const hoverChanged = isCurrentHovered !== wasPrevHovered;
 
-                    if (!needsUpdate) return;
+                    // Nothing to do – marker is stable
+                    if (markerExists && !typeChanged && !hoverChanged) return;
 
-                    if (singleton.markers.has(listing.id)) {
-                        // Try to mutate the existing element in-place
-                        const marker = singleton.markers.get(listing.id)!;
-                        const el = marker.getElement();
-                        const mutated = applyMarkerStyle(el, isCurrentPage, isCurrentHovered, priceDisplay);
-
-                        if (!mutated) {
-                            // Type changed (primary ↔ secondary): recreate element
-                            marker.remove();
-                            singleton.markers.delete(listing.id);
-                            // Fall through to creation below
-                        } else {
-                            return;
-                        }
+                    if (markerExists && !typeChanged && hoverChanged) {
+                        // ── Hover-only change: mutate DOM in-place, NEVER remove/recreate ──
+                        const el = singleton.markers.get(listing.id)!.getElement();
+                        applyMarkerStyle(el, isCurrentPage, isCurrentHovered, priceDisplay);
+                        return;
                     }
 
-                    // ─── Create new marker ──────────────────────────────────
+                    // ── Type changed OR first render: remove old marker then create new one ──
+                    if (markerExists) {
+                        singleton.markers.get(listing.id)!.remove();
+                        singleton.markers.delete(listing.id);
+                    }
+
                     const el = isCurrentPage
                         ? createPrimaryMarkerEl(priceDisplay, isCurrentHovered, isUrgent)
                         : createSecondaryMarkerEl(priceDisplay, isCurrentHovered, isUrgent);
@@ -398,8 +394,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                             .setDOMContent(buildPopupNode(listing))
                             .addTo(map);
                         singleton.popup = popup;
-                        const state = getMapSingleton();
-                        state.onMarkerClick?.(listing.id);
+                        getMapSingleton().onMarkerClick?.(listing.id);
                     });
 
                     singleton.markers.set(listing.id, marker);
@@ -422,6 +417,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             }
         }
     }, [createPrimaryMarkerEl, createSecondaryMarkerEl, applyMarkerStyle, handleHover, buildPopupNode]);
+
 
     // ─── Fit bounds to markers ──────────────────────────────────────────────────
 
