@@ -27,7 +27,7 @@ const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || 5);
 
-import { formatPriceRange } from '@/lib/utils/format';
+import { formatPriceRange, formatCompactPrice } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
     const router = useRouter();
@@ -87,19 +87,45 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return MARKER_SECONDARY_COLOR;
     }, []);
 
-    const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
+    const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false, priceLabel?: string): HTMLElement => {
         const el = document.createElement('div');
-        el.style.cssText = `
-            width: ${24 * scale}px;
-            height: ${24 * scale}px;
-            border-radius: 50%;
-            background: ${color};
-            border: 2px solid white;
-            ${isUrgent ? '' : 'box-shadow: 0 2px 6px rgba(0,0,0,0.3);'}
-            cursor: pointer;
-            transition: background 0.15s ease, width 0.15s ease, height 0.15s ease;
-        `;
-        if (isUrgent) {
+        if (priceLabel) {
+            el.className = 'price-marker-el';
+            el.style.cssText = `
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 4px 10px;
+                background: ${color};
+                color: white;
+                font-size: 11px;
+                font-weight: 800;
+                border-radius: 8px;
+                border: 2px solid white;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+                cursor: pointer;
+                transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease;
+                white-space: nowrap;
+                transform: scale(${scale});
+                z-index: 20;
+            `;
+            el.textContent = priceLabel;
+        } else {
+            el.className = 'dot-marker-el';
+            el.style.cssText = `
+                width: ${22 * scale}px;
+                height: ${22 * scale}px;
+                border-radius: 50%;
+                background: ${color};
+                border: 2px solid white;
+                ${isUrgent ? '' : 'box-shadow: 0 2px 6px rgba(0,0,0,0.3);'}
+                cursor: pointer;
+                transition: background 0.15s ease, transform 0.15s ease, width 0.15s ease, height 0.15s ease;
+                z-index: 10;
+            `;
+        }
+        
+        if (isUrgent && !priceLabel) {
             el.classList.add('marker-dot-urgent');
         }
         return el;
@@ -239,20 +265,39 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
 
                     const color = getMarkerColor(listing.id, hovered);
-                    const scale = isCurrentPage ? 1.2 : 0.9;
+                    const scale = isCurrentPage ? 1.1 : 0.85;
+                    const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
+                    const priceLabel = isCurrentPage ? (listing.price_min === 0 ? 'Free' : formatCompactPrice(listing.price_min)) : undefined;
 
                     if (singleton.markers.has(listing.id)) {
                         const marker = singleton.markers.get(listing.id)!;
                         const el = marker.getElement();
-                        if (el.style.background !== color) el.style.background = color;
-                        const sizeStr = `${24 * scale}px`;
-                        if (el.style.width !== sizeStr) {
-                            el.style.width = sizeStr;
-                            el.style.height = sizeStr;
+                        
+                        // Detect type mismatch (switching between dot and price label)
+                        const isCurrentlyPrice = el.classList.contains('price-marker-el');
+                        if (isCurrentlyPrice !== !!priceLabel) {
+                            marker.remove();
+                            singleton.markers.delete(listing.id);
+                            // Fall through to creation logic below
+                        } else {
+                            if (el.style.background !== color) el.style.background = color;
+                            if (priceLabel) {
+                                const transformStr = `scale(${scale})`;
+                                if (el.style.transform !== transformStr) el.style.transform = transformStr;
+                                if (el.textContent !== priceLabel) el.textContent = priceLabel;
+                            } else {
+                                const sizeStr = `${22 * scale}px`;
+                                if (el.style.width !== sizeStr) {
+                                    el.style.width = sizeStr;
+                                    el.style.height = sizeStr;
+                                }
+                            }
+                            return; 
                         }
-                    } else {
-                        const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
-                        const el = createMarkerEl(color, scale, isUrgent);
+                    }
+
+                    if (!singleton.markers.has(listing.id)) {
+                        const el = createMarkerEl(color, scale, isUrgent, priceLabel);
                         const marker = new window.goongjs.Marker({ element: el })
                             .setLngLat([listing.longitude, listing.latitude])
                             .addTo(map);
