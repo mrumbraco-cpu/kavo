@@ -50,7 +50,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     const hasSearched = contextHasSearched || (ssrListings.length > 0);
 
     const searchParams = useSearchParams();
-    
+
     // Always use window.location.search as the absolute source of truth to bypass Next.js 
     // caching edge cases where router.back() restores the URL but serves stale searchParams props.
     const getTruePage = useCallback(() => {
@@ -60,7 +60,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         }
         const p = searchParams.get('page');
         if (p) return parseInt(p, 10);
-        
+
         // If the URL has no explicit page parameter, but we've already searched,
         // it means we navigated back to a "clean" /search URL but state is still preserved.
         // Therefore, we MUST use the deeply preserved lastSearchedPage to match the displayed listings.
@@ -70,13 +70,13 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     }, [searchParams, initialPage, contextHasSearched, lastSearchedPage]);
 
     const [currentPage, setCurrentPage] = useState(getTruePage);
-    
+
     // Sync currentPage whenever Next.js reports a param change OR filters change.
     // By re-evaluating getTruePage(), we guarantee we read the real browser URL.
     useEffect(() => {
         const truePage = getTruePage();
         setCurrentPage(truePage);
-        
+
         // Store the full search URL so BackButton can confidently return here
         // instead of dropping params if it falls back.
         if (typeof window !== 'undefined') {
@@ -96,7 +96,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
     // If the singleton already has a map (returning from another page), activate immediately.
     // Otherwise defer by 300ms to reduce Total Blocking Time on first load.
     const [mapActivated, setMapActivated] = useState(() => getMapSingleton().isInitialized);
-    const [isMapExpanded, setIsMapExpanded] = useState(false);
+    const [isMapExpanded, setIsMapExpanded] = useState<boolean | null>(null);
     const [canExpand, setCanExpand] = useState(true);
     const [sidebarWidth, setSidebarWidth] = useState(0);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -117,7 +117,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
         observer.observe(sidebarRef.current);
         return () => observer.disconnect();
     }, [layout, isMapExpanded]);
-    
+
     // Initial visible count should be PAGE_SIZE to avoid layout shift (CLS)
     const visibleCount = PAGE_SIZE;
 
@@ -178,9 +178,8 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
 
     // Reset map expansion when layout changes
     useEffect(() => {
-        // Default to Sidebar 30% (Map 70%) on desktop split mode
-        // isMapExpanded = true means Map is 70% (Sidebar is 30%)
-        setIsMapExpanded(true); 
+        // Default to Sidebar 50/50 on desktop split mode (null)
+        setIsMapExpanded(null);
         setCanExpand(true);
     }, [layout]);
 
@@ -219,8 +218,8 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                         className={`overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-500 ease-in-out scrollbar-subtle mobile-safe-padding lg:pb-0 relative z-10
                             ${layout === 'map' ? 'hidden' :
                                 layout === 'list' ? 'flex-1 w-full bg-premium-50/20' :
-                                    isMapExpanded ? 'w-full lg:w-[45%] lg:flex-none border-r border-premium-100 bg-white shadow-2xl shadow-black/5' :
-                                        'w-full lg:w-[55%] lg:flex-none border-r border-premium-100 bg-white shadow-xl shadow-black/5'}`}
+                                    isMapExpanded === true ? 'w-full lg:w-[45%] lg:flex-none border-r border-premium-100 bg-white shadow-2xl shadow-black/5' :
+                                    'w-full lg:w-[50%] lg:flex-none border-r border-premium-100 bg-white shadow-xl shadow-black/5'}`}
                     >
                         <SearchResults
                             listings={displayListings}
@@ -239,7 +238,7 @@ export default function SearchClient({ ssrListings = [], ssrMarkers = [], ssrTot
                             onPageChange={handlePageChange}
                         />
                         <div className="hidden lg:block border-t border-premium-100 bg-white">
-                            <div className="w-[55vw]">
+                            <div className="w-[50vw]">
                                 <PublicFooter />
                             </div>
                         </div>
