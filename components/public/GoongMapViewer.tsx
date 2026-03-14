@@ -87,23 +87,151 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return MARKER_SECONDARY_COLOR;
     }, []);
 
-    const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
+    // ─── Marker element factories ───────────────────────────────────────────────
+
+    /**
+     * PRIMARY: pill with price always visible.
+     */
+    const createPrimaryMarkerEl = useCallback((
+        priceDisplay: string,
+        hovered: boolean,
+        isUrgent: boolean
+    ): HTMLElement => {
+        const color = hovered ? MARKER_HOVERED_COLOR : MARKER_PRIMARY_COLOR;
         const el = document.createElement('div');
+        el.dataset.markerType = 'primary';
+        el.dataset.price = priceDisplay;
         el.style.cssText = `
-            width: ${24 * scale}px;
-            height: ${24 * scale}px;
-            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 9px;
+            border-radius: 999px;
             background: ${color};
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
             border: 2px solid white;
-            ${isUrgent ? '' : 'box-shadow: 0 2px 6px rgba(0,0,0,0.3);'}
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
             cursor: pointer;
-            transition: background 0.15s ease, width 0.15s ease, height 0.15s ease;
+            transition: background 0.15s ease, transform 0.15s ease;
+            transform: ${hovered ? 'scale(1.15)' : 'scale(1)'};
+            position: relative;
+            z-index: ${hovered ? 10 : 1};
         `;
-        if (isUrgent) {
-            el.classList.add('marker-dot-urgent');
-        }
+        if (isUrgent) el.classList.add('marker-primary-urgent');
+        el.textContent = priceDisplay;
         return el;
     }, []);
+
+    /**
+     * SECONDARY: dot only. When hovered it shows price.
+     */
+    const createSecondaryMarkerEl = useCallback((
+        priceDisplay: string,
+        hovered: boolean,
+        isUrgent: boolean
+    ): HTMLElement => {
+        const el = document.createElement('div');
+        el.dataset.markerType = 'secondary';
+        el.dataset.price = priceDisplay;
+        if (hovered) {
+            // Show price pill like primary but slightly muted
+            el.style.cssText = `
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 9px;
+                border-radius: 999px;
+                background: ${MARKER_HOVERED_COLOR};
+                color: white;
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+                border: 2px solid white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+                cursor: pointer;
+                transition: background 0.15s ease, transform 0.15s ease;
+                transform: scale(1.15);
+                position: relative;
+                z-index: 10;
+            `;
+            el.textContent = priceDisplay;
+        } else {
+            // Plain dot
+            el.style.cssText = `
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: ${MARKER_SECONDARY_COLOR};
+                border: 2px solid white;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+                cursor: pointer;
+                transition: background 0.15s ease;
+            `;
+        }
+        if (isUrgent) el.classList.add('marker-dot-urgent');
+        return el;
+    }, []);
+
+    /** Mutates an existing element in-place according to the new hover/type state.
+     *  Returns false if the element type needs to change (dot ↔ pill) so the
+     *  caller knows to recreate the full marker.
+     */
+    const applyMarkerStyle = useCallback((
+        el: HTMLElement,
+        isPrimary: boolean,
+        hovered: boolean,
+        priceDisplay: string
+    ): boolean => {
+        const currentType = el.dataset.markerType;
+        if (isPrimary && currentType !== 'primary') return false;
+        if (!isPrimary && currentType !== 'secondary') return false;
+
+        if (isPrimary) {
+            const color = hovered ? MARKER_HOVERED_COLOR : MARKER_PRIMARY_COLOR;
+            el.style.background = color;
+            el.style.transform = hovered ? 'scale(1.15)' : 'scale(1)';
+            el.style.zIndex = hovered ? '10' : '1';
+        } else {
+            if (hovered) {
+                // Transition dot → pill
+                el.style.cssText = `
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 4px 9px;
+                    border-radius: 999px;
+                    background: ${MARKER_HOVERED_COLOR};
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                    border: 2px solid white;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+                    cursor: pointer;
+                    transform: scale(1.15);
+                    position: relative;
+                    z-index: 10;
+                `;
+                el.textContent = priceDisplay;
+            } else {
+                // Transition pill → dot
+                el.style.cssText = `
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: ${MARKER_SECONDARY_COLOR};
+                    border: 2px solid white;
+                    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+                    cursor: pointer;
+                    transition: background 0.15s ease;
+                `;
+                el.textContent = '';
+            }
+            el.dataset.markerType = 'secondary';
+        }
+        return true;
+    }, []);
+
 
     const buildPopupHTML = (listing: Listing): string => {
         const thumb = listing.images?.[0] ?? null;
@@ -190,18 +318,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             const hovered = hoveredListingIdRef.current;
             const pageIds = currentPageIdsRef.current;
 
-            const hoveredChanged = hovered !== singleton.prevHoveredId;
-
-            let pageIdsChanged = pageIds.size !== singleton.prevPageIds.size;
-            if (!pageIdsChanged) {
-                for (let id of pageIds) {
-                    if (!singleton.prevPageIds.has(id)) {
-                        pageIdsChanged = true;
-                        break;
-                    }
-                }
-            }
-
+            // Remove stale markers
             const currentDataIds = new Set(listings.map(l => l.id));
             singleton.markers.forEach((marker, id) => {
                 if (!currentDataIds.has(id)) {
@@ -227,66 +344,65 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     if (!listing.latitude || !listing.longitude) return;
 
                     const isCurrentHovered = listing.id === hovered;
-                    const wasPrevHovered = listing.id === singleton.prevHoveredId;
-                    const isCurrentPage = pageIds.has(listing.id);
-                    const wasPrevPage = singleton.prevPageIds.has(listing.id);
+                    const wasPrevHovered   = listing.id === singleton.prevHoveredId;
+                    const isCurrentPage    = pageIds.has(listing.id);
+                    const wasPrevPage      = singleton.prevPageIds.has(listing.id);
+                    const isUrgent         = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
+                    const priceDisplay     = formatPriceRange(listing.price_min, listing.price_max);
 
-                    const needsVisualUpdate =
+                    const needsUpdate =
                         !singleton.markers.has(listing.id) ||
-                        isCurrentHovered || wasPrevHovered ||
+                        isCurrentHovered !== wasPrevHovered ||
                         isCurrentPage !== wasPrevPage;
 
-                    if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
-
-                    const color = getMarkerColor(listing.id, hovered);
-                    const scale = isCurrentPage ? 1.2 : 0.9;
+                    if (!needsUpdate) return;
 
                     if (singleton.markers.has(listing.id)) {
+                        // Try to mutate the existing element in-place
                         const marker = singleton.markers.get(listing.id)!;
                         const el = marker.getElement();
-                        if (el.style.background !== color) el.style.background = color;
-                        const sizeStr = `${24 * scale}px`;
-                        if (el.style.width !== sizeStr) {
-                            el.style.width = sizeStr;
-                            el.style.height = sizeStr;
+                        const mutated = applyMarkerStyle(el, isCurrentPage, isCurrentHovered, priceDisplay);
+
+                        if (!mutated) {
+                            // Type changed (primary ↔ secondary): recreate element
+                            marker.remove();
+                            singleton.markers.delete(listing.id);
+                            // Fall through to creation below
+                        } else {
+                            return;
                         }
-                    } else {
-                        const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
-                        const el = createMarkerEl(color, scale, isUrgent);
-                        const marker = new window.goongjs.Marker({ element: el })
-                            .setLngLat([listing.longitude, listing.latitude])
-                            .addTo(map);
-
-                        el.addEventListener('mouseenter', () => {
-                            handleHover(listing.id);
-                        });
-
-                        el.addEventListener('mouseleave', () => {
-                            handleHover(null);
-                        });
-
-                        el.addEventListener('click', (e) => {
-                            e.stopPropagation();
-
-                            if (singleton.popup) singleton.popup.remove();
-
-                            const popup = new (window.goongjs!.Popup as any)({
-                                closeButton: false,
-                                closeOnClick: true,
-                                offset: 20,
-                                maxWidth: 'none'
-                            })
-                                .setLngLat([listing.longitude!, listing.latitude!])
-                                .setDOMContent(buildPopupNode(listing))
-                                .addTo(map);
-
-                            singleton.popup = popup;
-                            const state = getMapSingleton();
-                            state.onMarkerClick?.(listing.id);
-                        });
-
-                        singleton.markers.set(listing.id, marker);
                     }
+
+                    // ─── Create new marker ──────────────────────────────────
+                    const el = isCurrentPage
+                        ? createPrimaryMarkerEl(priceDisplay, isCurrentHovered, isUrgent)
+                        : createSecondaryMarkerEl(priceDisplay, isCurrentHovered, isUrgent);
+
+                    const marker = new window.goongjs.Marker({ element: el })
+                        .setLngLat([listing.longitude, listing.latitude])
+                        .addTo(map);
+
+                    el.addEventListener('mouseenter', () => handleHover(listing.id));
+                    el.addEventListener('mouseleave', () => handleHover(null));
+
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (singleton.popup) singleton.popup.remove();
+                        const popup = new (window.goongjs!.Popup as any)({
+                            closeButton: false,
+                            closeOnClick: true,
+                            offset: 20,
+                            maxWidth: 'none'
+                        })
+                            .setLngLat([listing.longitude!, listing.latitude!])
+                            .setDOMContent(buildPopupNode(listing))
+                            .addTo(map);
+                        singleton.popup = popup;
+                        const state = getMapSingleton();
+                        state.onMarkerClick?.(listing.id);
+                    });
+
+                    singleton.markers.set(listing.id, marker);
                 });
 
                 index = end;
@@ -305,7 +421,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 setTimeout(task, 100);
             }
         }
-    }, [createMarkerEl, getMarkerColor, handleHover, buildPopupNode]);
+    }, [createPrimaryMarkerEl, createSecondaryMarkerEl, applyMarkerStyle, handleHover, buildPopupNode]);
 
     // ─── Fit bounds to markers ──────────────────────────────────────────────────
 
@@ -627,6 +743,9 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                 100% { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 0px rgba(244,63,94,0); }
             }
             .marker-dot-urgent {
+                animation: markerGlow 2s ease-out infinite !important;
+            }
+            .marker-primary-urgent {
                 animation: markerGlow 2s ease-out infinite !important;
             }
 
