@@ -5,9 +5,9 @@ import { redirect, notFound } from 'next/navigation'
 import { decrypt } from '@/lib/utils/encryption'
 
 interface EditListingPageProps {
-    params: {
+    params: Promise<{
         id: string
-    }
+    }>
 }
 
 export default async function EditListingPage({ params }: EditListingPageProps) {
