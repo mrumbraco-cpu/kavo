@@ -260,9 +260,6 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
 
                     const color = getMarkerColor(listing.id, hovered);
-                    const isCurrentHovered = listing.id === hovered;
-                    const isCurrentPage = pageIds.has(listing.id);
-                    
                     const scale = isCurrentPage ? 1.15 : 1.0;
                     const priceText = getMarkerPrice(listing);
                     // Priority: Hovered (10) > Primary (5) > Secondary (1)
