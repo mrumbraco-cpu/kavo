@@ -60,47 +60,54 @@ export default function Home() {
 
                             {/* Stats row */}
                             <div className="mt-10 pt-8 border-t border-slate-100 w-full animate-premium-fade-up" style={{ animationDelay: '200ms' }}>
-                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
-                                    {[
-                                        { 
-                                            value: "10.000+", 
-                                            label: "Vị trí",
-                                            icon: (
-                                                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                </svg>
-                                            )
-                                        },
-                                        { 
-                                            value: "20+", 
-                                            label: "Tỉnh thành",
-                                            icon: (
-                                                <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2 2 2 0 012 2v.656c0 .53.21 1.039.586 1.414l.344.344m-7.344-9.344a9 9 0 1111.314 0" />
-                                                </svg>
-                                            )
-                                        },
-                                        { 
-                                            value: "20.000+", 
-                                            label: "Kết nối",
-                                            icon: (
-                                                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            )
-                                        },
-                                    ].map((stat, i) => (
-                                        <div key={i} className="flex items-center gap-2.5 px-4 py-2.5 bg-white/60 backdrop-blur-md rounded-xl border border-slate-200/50 shadow-sm hover:shadow-md hover:border-blue-200/50 transition-all duration-300 group">
-                                            <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                                                {stat.icon}
-                                            </div>
-                                            <div className="flex flex-col items-start">
-                                                <div className="text-lg md:text-xl font-bold text-slate-900 font-outfit leading-none tracking-tight">{stat.value}</div>
-                                                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1">{stat.label}</div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="flex items-center justify-center lg:justify-start">
+                                    <div className="flex items-center gap-1 sm:gap-4 md:gap-8 overflow-x-auto no-scrollbar py-1">
+                                        {[
+                                            { 
+                                                value: "10.000+", 
+                                                label: "Vị trí",
+                                                icon: (
+                                                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                )
+                                            },
+                                            { 
+                                                value: "20+", 
+                                                label: "Tỉnh thành",
+                                                icon: (
+                                                    <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2 2 2 0 012 2v.656c0 .53.21 1.039.586 1.414l.344.344m-7.344-9.344a9 9 0 1111.314 0" />
+                                                    </svg>
+                                                )
+                                            },
+                                            { 
+                                                value: "20.000+", 
+                                                label: "Kết nối",
+                                                icon: (
+                                                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                    </svg>
+                                                )
+                                            },
+                                        ].map((stat, i, arr) => (
+                                            <React.Fragment key={i}>
+                                                <div className="flex items-center gap-2 sm:gap-3 px-1">
+                                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 shadow-sm">
+                                                        {stat.icon}
+                                                    </div>
+                                                    <div className="flex flex-col items-start whitespace-nowrap">
+                                                        <div className="text-base sm:text-xl font-bold text-slate-900 font-outfit leading-none">{stat.value}</div>
+                                                        <div className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">{stat.label}</div>
+                                                    </div>
+                                                </div>
+                                                {i < arr.length - 1 && (
+                                                    <div className="h-8 w-[1px] bg-slate-200 mx-1 sm:mx-2 md:mx-4" />
+                                                )}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
