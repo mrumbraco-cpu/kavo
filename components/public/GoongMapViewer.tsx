@@ -97,7 +97,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return min;
     }, []);
 
-    const createMarkerEl = useCallback((color: string, priceText: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
+    const createMarkerEl = useCallback((color: string, priceText: string, scale: number = 1, isUrgent: boolean = false, zIndex: number = 1): HTMLElement => {
         const el = document.createElement('div');
         el.style.cssText = `
             display: flex;
@@ -117,6 +117,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
             font-family: inherit;
+            z-index: ${zIndex};
         `;
         el.innerText = priceText;
         if (isUrgent) {
@@ -259,13 +260,19 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
 
                     const color = getMarkerColor(listing.id, hovered);
+                    const isCurrentHovered = listing.id === hovered;
+                    const isCurrentPage = pageIds.has(listing.id);
+                    
                     const scale = isCurrentPage ? 1.15 : 1.0;
                     const priceText = getMarkerPrice(listing);
+                    // Priority: Hovered (10) > Primary (5) > Secondary (1)
+                    const zIndex = isCurrentHovered ? 10 : (isCurrentPage ? 5 : 1);
 
                     if (singleton.markers.has(listing.id)) {
                         const marker = singleton.markers.get(listing.id)!;
                         const el = marker.getElement();
                         if (el.style.background !== color) el.style.background = color;
+                        if (el.style.zIndex !== zIndex.toString()) el.style.zIndex = zIndex.toString();
                         
                         const heightStr = `${24 * scale}px`;
                         if (el.style.height !== heightStr) {
@@ -278,7 +285,7 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                         if (el.innerText !== priceText) el.innerText = priceText;
                     } else {
                         const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
-                        const el = createMarkerEl(color, priceText, scale, isUrgent);
+                        const el = createMarkerEl(color, priceText, scale, isUrgent, zIndex);
                         const marker = new window.goongjs.Marker({ element: el })
                             .setLngLat([listing.longitude, listing.latitude])
                             .addTo(map);
