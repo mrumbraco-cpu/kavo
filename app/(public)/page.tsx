@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -92,7 +93,7 @@ export default function Home() {
                                                 )
                                             },
                                         ].map((stat, i, arr) => (
-                                            <React.Fragment key={i}>
+                                            <>
                                                 <div className="flex items-center gap-2 sm:gap-3 px-1">
                                                     <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 shadow-sm">
                                                         {stat.icon}
@@ -105,7 +106,7 @@ export default function Home() {
                                                 {i < arr.length - 1 && (
                                                     <div className="h-8 w-[1px] bg-slate-200 mx-1 sm:mx-2 md:mx-4" />
                                                 )}
-                                            </React.Fragment>
+                                            </>
                                         ))}
                                     </div>
                                 </div>
