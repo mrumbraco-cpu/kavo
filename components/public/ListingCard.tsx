@@ -153,7 +153,7 @@ const ListingCard = memo(function ListingCard({
                 <div className="flex flex-col gap-1 mt-1 border-t border-gray-50 pt-2">
                     {nearbyTags.length > 0 && (
                         <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                            <span className="truncate opacity-80">{nearbyTags.join(' · ')}</span>
+                            <span className="truncate opacity-80">Gần {nearbyTags.join(' · ')}</span>
                         </div>
                     )}
                     
