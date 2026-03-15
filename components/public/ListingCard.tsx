@@ -159,7 +159,7 @@ const ListingCard = memo(function ListingCard({
                     
                     {amenityTags.length > 0 && (
                         <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                            <span className="truncate opacity-80 italic">{amenityTags.slice(0, 2).join(', ')}{amenityTags.length > 2 ? '...' : ''}</span>
+                            <span className="truncate opacity-80 italic">Có {amenityTags.slice(0, 2).join(', ')}{amenityTags.length > 2 ? '...' : ''}</span>
                         </div>
                     )}
                 </div>
