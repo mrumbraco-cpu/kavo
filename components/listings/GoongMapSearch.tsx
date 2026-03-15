@@ -106,6 +106,8 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
 
                 if (mapRef.current && markerRef.current) {
                     markerRef.current.setLngLat([lng, lat])
+                    // Ensure marker is added to map on selection
+                    markerRef.current.addTo(mapRef.current)
                     mapRef.current.flyTo({ center: [lng, lat], zoom: 16 })
                     onLocationSelect(lat, lng, description)
                 }
@@ -129,6 +131,8 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
                 const { latitude, longitude } = position.coords
                 if (mapRef.current && markerRef.current) {
                     markerRef.current.setLngLat([longitude, latitude])
+                    // Ensure marker is added to map on getting current location
+                    markerRef.current.addTo(mapRef.current)
                     mapRef.current.flyTo({ center: [longitude, latitude], zoom: 16 })
                     const address = await reverseGeocode(latitude, longitude)
                     onLocationSelect(latitude, longitude, address)
@@ -185,7 +189,11 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
             color: "#EA4335"
         })
             .setLngLat([initialLng || 106.6297, initialLat || 10.8231])
-            .addTo(map)
+
+        // Only add marker to map if initial coordinates are provided (edit mode or saved progress)
+        if (typeof initialLat === 'number' && typeof initialLng === 'number') {
+            marker.addTo(map)
+        }
 
         markerRef.current = marker
 
@@ -203,14 +211,22 @@ export default function GoongMapSearch({ onLocationSelect, initialLat, initialLn
 
     }, [onLocationSelect, initialLat, initialLng])
 
-    // Sync external changes
     useEffect(() => {
-        if (isLoaded && markerRef.current && mapRef.current && initialLat && initialLng) {
+        if (!isLoaded || !markerRef.current || !mapRef.current) return
+
+        if (typeof initialLat === 'number' && typeof initialLng === 'number') {
             const currentPos = markerRef.current.getLngLat()
             if (Math.abs(currentPos.lat - initialLat) > 0.00001 || Math.abs(currentPos.lng - initialLng) > 0.00001) {
                 markerRef.current.setLngLat([initialLng, initialLat])
+                
+                // Ensure marker is added to map when coordinates are synced (e.g. manual input or edit mode)
+                markerRef.current.addTo(mapRef.current)
+                
                 mapRef.current.easeTo({ center: [initialLng, initialLat] })
             }
+        } else {
+            // Remove marker if coordinates are cleared (e.g. user deletes manual input)
+            markerRef.current.remove()
         }
     }, [initialLat, initialLng, isLoaded])
 
