@@ -6,6 +6,7 @@ import { Listing } from '@/types/listing';
 import { getListingUrl } from '@/lib/utils/url';
 import { getRentalModeLabel } from '@/lib/constants/listing-options';
 import { getMapSingleton } from '@/lib/map/mapSingleton';
+import { formatPriceRange, formatCompactPrice } from '@/lib/utils/format';
 
 // Types are now handled via types/goong.d.ts
 
@@ -27,7 +28,6 @@ const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || 5);
 
-import { formatPriceRange, formatCompactPrice } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
     const router = useRouter();
