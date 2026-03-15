@@ -27,7 +27,7 @@ const MARKER_SECONDARY_COLOR = '#94a3b8'; // premium-400
 const MARKER_HOVERED_COLOR = '#d4af37';   // accent-gold
 const UNLOCK_THRESHOLD = Number(process.env.NEXT_PUBLIC_LISTING_UNLOCK_THRESHOLD || 5);
 
-import { formatPriceRange } from '@/lib/utils/format';
+import { formatPriceRange, formatCompactPrice } from '@/lib/utils/format';
 
 export default function GoongMapViewer({ allListings, currentPageIds, hoveredListingId, onMarkerClick, onHover, paddingLeft = 0, layout }: Props) {
     const router = useRouter();
@@ -87,18 +87,38 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
         return MARKER_SECONDARY_COLOR;
     }, []);
 
-    const createMarkerEl = useCallback((color: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
+    const getMarkerPrice = useCallback((listing: Listing): string => {
+        if (listing.price_min === 0 && listing.price_max === 0) return 'Miễn phí';
+        if (listing.price_min === 0 && listing.price_max > 0) return `<${formatCompactPrice(listing.price_max)}`;
+        const min = formatCompactPrice(listing.price_min);
+        if (listing.price_max > listing.price_min) {
+            return `${min}+`;
+        }
+        return min;
+    }, []);
+
+    const createMarkerEl = useCallback((color: string, priceText: string, scale: number = 1, isUrgent: boolean = false): HTMLElement => {
         const el = document.createElement('div');
         el.style.cssText = `
-            width: ${24 * scale}px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: ${32 * scale}px;
             height: ${24 * scale}px;
-            border-radius: 50%;
+            padding: 0 ${8 * scale}px;
+            border-radius: ${20 * scale}px;
             background: ${color};
+            color: white;
+            font-size: ${11 * scale}px;
+            font-weight: 700;
             border: 2px solid white;
-            ${isUrgent ? '' : 'box-shadow: 0 2px 6px rgba(0,0,0,0.3);'}
+            ${isUrgent ? '' : 'box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);'}
             cursor: pointer;
-            transition: background 0.15s ease, width 0.15s ease, height 0.15s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            font-family: inherit;
         `;
+        el.innerText = priceText;
         if (isUrgent) {
             el.classList.add('marker-dot-urgent');
         }
@@ -239,20 +259,26 @@ export default function GoongMapViewer({ allListings, currentPageIds, hoveredLis
                     if (!needsVisualUpdate && !hoveredChanged && !pageIdsChanged) return;
 
                     const color = getMarkerColor(listing.id, hovered);
-                    const scale = isCurrentPage ? 1.2 : 0.9;
+                    const scale = isCurrentPage ? 1.15 : 1.0;
+                    const priceText = getMarkerPrice(listing);
 
                     if (singleton.markers.has(listing.id)) {
                         const marker = singleton.markers.get(listing.id)!;
                         const el = marker.getElement();
                         if (el.style.background !== color) el.style.background = color;
-                        const sizeStr = `${24 * scale}px`;
-                        if (el.style.width !== sizeStr) {
-                            el.style.width = sizeStr;
-                            el.style.height = sizeStr;
+                        
+                        const heightStr = `${24 * scale}px`;
+                        if (el.style.height !== heightStr) {
+                            el.style.height = heightStr;
+                            el.style.minWidth = `${32 * scale}px`;
+                            el.style.fontSize = `${11 * scale}px`;
+                            el.style.padding = `0 ${8 * scale}px`;
+                            el.style.borderRadius = `${20 * scale}px`;
                         }
+                        if (el.innerText !== priceText) el.innerText = priceText;
                     } else {
                         const isUrgent = (listing.unlock_count ?? 0) >= UNLOCK_THRESHOLD;
-                        const el = createMarkerEl(color, scale, isUrgent);
+                        const el = createMarkerEl(color, priceText, scale, isUrgent);
                         const marker = new window.goongjs.Marker({ element: el })
                             .setLngLat([listing.longitude, listing.latitude])
                             .addTo(map);
